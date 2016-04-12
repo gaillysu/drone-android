@@ -1,9 +1,9 @@
-package com.drone.drone.drone.activity;
+package com.dayton.drone.activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 
-import com.drone.drone.drone.application.ApplicationModel;
+import com.dayton.drone.application.ApplicationModel;
 
 /**
  * Created by karl-john on 18/3/16.

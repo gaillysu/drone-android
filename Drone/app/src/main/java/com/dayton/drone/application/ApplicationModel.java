@@ -1,4 +1,4 @@
-package com.drone.drone.drone.application;
+package com.dayton.drone.application;
 
 import android.app.Application;
 
