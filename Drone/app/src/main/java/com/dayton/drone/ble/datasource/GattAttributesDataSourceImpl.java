@@ -1,7 +1,7 @@
 package com.dayton.drone.ble.datasource;
 
 import android.content.Context;
-import com.drone.drone.drone.R;
+import com.dayton.drone.R;
 
 import net.medcorp.library.ble.datasource.GattAttributesDataSource;
 

@@ -1,4 +1,4 @@
-package com.dayton.drone.activity;
+package com.dayton.drone.activity.base;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
