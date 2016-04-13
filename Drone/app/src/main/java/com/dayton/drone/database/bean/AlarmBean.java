@@ -7,44 +7,64 @@ import com.j256.ormlite.field.DatabaseField;
  */
 public class AlarmBean {
 
+    public static final String iDString = "ID";
     @DatabaseField(generatedId = true)
-    private int id = 1;
-    @DatabaseField(columnName = "alarmName")
-    private String alarmName ="";
-    @DatabaseField(columnName = "lable")
-    private String lable;
-    @DatabaseField(columnName = "enable")
-    private boolean anable;
+    private int ID;
 
-    public int getId() {
-        return id;
+    public static final String alarmString= "alarm";
+    @DatabaseField
+    private String Alarm;
+
+    public static final String labelString = "label";
+    @DatabaseField
+    private String Label;
+
+    public static final String enabledString = "enabled";
+    @DatabaseField
+    private boolean Enabled;
+
+    public static String getiDString() {
+        return iDString;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public int getID() {
+        return ID;
     }
 
-    public String getAlarmName() {
-        return alarmName;
+    public void setID(int ID) {
+        this.ID = ID;
     }
 
-    public void setAlarmName(String alarmName) {
-        this.alarmName = alarmName;
+    public static String getLabelString() {
+        return labelString;
     }
 
-    public String getLable() {
-        return lable;
+
+    public static String getEnabledString() {
+        return enabledString;
     }
 
-    public void setLable(String lable) {
-        this.lable = lable;
+    public boolean isEnabled() {
+        return Enabled;
     }
 
-    public boolean isAnlable() {
-        return anable;
+    public void setEnabled(boolean enabled) {
+        Enabled = enabled;
     }
 
-    public void setAnlable(boolean anlable) {
-        this.anable = anlable;
+    public String getAlarm() {
+        return Alarm;
+    }
+
+    public void setAlarm(String alarm) {
+        Alarm = alarm;
+    }
+
+    public String getLabel() {
+        return Label;
+    }
+
+    public void setLabel(String label) {
+        Label = label;
     }
 }

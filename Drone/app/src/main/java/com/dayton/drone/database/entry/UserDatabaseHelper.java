@@ -21,7 +21,9 @@ public class UserDatabaseHelper implements iEntryDatabaseHelper<User> {
     private DatabaseHelperBase databaseHelper;
 
     private UserDatabaseHelper(Context context) {
-        databaseHelper = DatabaseHelperBase.getHelperInstance(context);
+        if (databaseHelper == null) {
+            databaseHelper = DatabaseHelperBase.getHelperInstance(context);
+        }
     }
 
     @Override
@@ -79,8 +81,8 @@ public class UserDatabaseHelper implements iEntryDatabaseHelper<User> {
         List<Optional<User>> list = new ArrayList<>();
         try {
             List<UserBean> userList = databaseHelper.getUserBean()
-                    .queryBuilder().where().eq(UserBean.fNevoUserID,userId).query();
-            for(UserBean userBean:userList){
+                    .queryBuilder().where().eq(UserBean.fNevoUserID, userId).query();
+            for (UserBean userBean : userList) {
                 Optional<User> optional = new Optional<>();
                 optional.set(convertToNormal(userBean));
                 list.add(optional);
@@ -95,7 +97,7 @@ public class UserDatabaseHelper implements iEntryDatabaseHelper<User> {
     @Override
     public Optional<User> get(String userId, Date date) {
         List<Optional<User>> userList = get(userId);
-        return userList.isEmpty()?new Optional<User>():userList.get(0);
+        return userList.isEmpty() ? new Optional<User>() : userList.get(0);
     }
 
     // find all
@@ -109,9 +111,9 @@ public class UserDatabaseHelper implements iEntryDatabaseHelper<User> {
     @Override
     public List<User> convertToNormalList(List<Optional<User>> optionals) {
         List<User> list = new ArrayList<>(3);
-        for(Optional<User> userOptional :optionals){
-            if(userOptional.notEmpty())
-            list.add(userOptional.get());
+        for (Optional<User> userOptional : optionals) {
+            if (userOptional.notEmpty())
+                list.add(userOptional.get());
         }
         return list;
     }
