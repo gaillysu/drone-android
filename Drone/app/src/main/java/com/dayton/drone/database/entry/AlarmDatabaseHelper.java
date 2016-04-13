@@ -2,7 +2,7 @@ package com.dayton.drone.database.entry;
 
 import android.content.Context;
 
-import com.dayton.drone.database.DatabaseHelperBase;
+import com.dayton.drone.database.DatabaseHelper;
 import com.dayton.drone.database.bean.AlarmBean;
 import com.dayton.drone.modle.Alarm;
 
@@ -18,11 +18,11 @@ import java.util.List;
  */
 public class AlarmDatabaseHelper implements DatabaseWieldMode<Alarm> {
 
-    DatabaseHelperBase databaseHelper;
+    DatabaseHelper databaseHelper;
 
     public AlarmDatabaseHelper(Context context) {
         if (databaseHelper == null) {
-            databaseHelper = DatabaseHelperBase.getHelperInstance(context);
+            databaseHelper = DatabaseHelper.getHelperInstance(context);
         }
     }
 

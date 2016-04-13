@@ -2,7 +2,7 @@ package com.dayton.drone.database.entry;
 
 import android.content.Context;
 
-import com.dayton.drone.database.DatabaseHelperBase;
+import com.dayton.drone.database.DatabaseHelper;
 import com.dayton.drone.database.bean.UserBean;
 import com.dayton.drone.modle.User;
 
@@ -18,11 +18,11 @@ import java.util.List;
  */
 public class UserDatabaseHelper implements iEntryDatabaseHelper<User> {
 
-    private DatabaseHelperBase databaseHelper;
+    private DatabaseHelper databaseHelper;
 
     private UserDatabaseHelper(Context context) {
         if (databaseHelper == null) {
-            databaseHelper = DatabaseHelperBase.getHelperInstance(context);
+            databaseHelper = DatabaseHelper.getHelperInstance(context);
         }
     }
 
