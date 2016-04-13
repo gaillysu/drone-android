@@ -4,68 +4,78 @@ package com.dayton.drone.modle;
  * Created by boy on 2016/4/13.
  */
 public class Alarm {
-    private int id = 1;
-    private byte hour;
-    private byte mintue;
+    private int id = -1;
+    private int hour;
+    private int minute;
     private boolean enable;
-    private String lable;
+    private String label;
 
-    private Alarm(int id, byte hour, byte mintue, String lable, boolean enable) {
-        this.id = id;
-        this.enable = enable;
-        this.lable = lable;
+    public Alarm(int hour, int minute,boolean enable,String label)
+    {
         this.hour = hour;
-        this.mintue = mintue;
-    }
-
-    @Override
-    public String toString() {
-        return "Alarm{" +
-                "id=" + id +
-                ", hour=" + hour +
-                ", mintue=" + mintue +
-                ", enlable=" + enable +
-                ", lable='" + lable + '\'' +
-                '}';
-    }
-
-    public int getId() {
-        return id;
+        this.minute = minute;
+        this.enable = enable;
+        this.label = label;
     }
 
     public void setId(int id) {
         this.id = id;
     }
 
-    public byte getHour() {
+    public int getId() {
+        return id;
+    }
+
+    public int getHour() {
         return hour;
     }
 
-    public void setHour(byte hour) {
-        this.hour = hour;
+    public int getMinute() {
+        return minute;
     }
 
-    public byte getMintue() {
-        return mintue;
-    }
-
-    public void setMintue(byte mintue) {
-        this.mintue = mintue;
-    }
-
-    public boolean isEnlable() {
+    public boolean isEnable() {
         return enable;
     }
 
-    public void setEnlable(boolean enlable) {
-        this.enable = enlable;
+    public void setHour(int hour) {
+        this.hour = hour;
     }
 
-    public String getLable() {
-        return lable;
+    public void setMinute(int minute) {
+        this.minute = minute;
     }
 
-    public void setLable(String lable) {
-        this.lable = lable;
+    public void setEnable(boolean enable) {
+        this.enable = enable;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        if (hour == 0){
+            builder.append("00");
+        } else if (hour < 10){
+            builder.append("0" + hour);
+        }else{
+            builder.append(hour);
+        }
+        builder.append(":");
+        if (minute== 0){
+            builder.append("00");
+        } else if (minute< 10){
+            builder.append("0" + minute);
+        }else{
+            builder.append(minute);
+        }
+        return builder.toString();
     }
 }

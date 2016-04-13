@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.dayton.drone.application.ApplicationModel;
+import com.dayton.drone.database.bean.AlarmBean;
 import com.dayton.drone.database.bean.UserBean;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
@@ -22,6 +23,7 @@ public class DatabaseHelperBase extends OrmLiteSqliteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     private Dao<UserBean, Integer> userBean = null;
+    private Dao<AlarmBean,Integer> alarmBean = null;
     public static DatabaseHelperBase instance;
 
     public static synchronized DatabaseHelperBase getHelperInstance(Context context) {
@@ -44,6 +46,7 @@ public class DatabaseHelperBase extends OrmLiteSqliteOpenHelper {
         try {
 
             TableUtils.createTable(connectionSource, UserBean.class);
+            TableUtils.clearTable(connectionSource,AlarmBean.class);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -61,5 +64,12 @@ public class DatabaseHelperBase extends OrmLiteSqliteOpenHelper {
             userBean = getDao(UserBean.class);
         }
         return  userBean;
+    }
+
+    public Dao<AlarmBean,Integer> getAlarmBean() throws SQLException {
+        if(alarmBean== null){
+                alarmBean = getDao(AlarmBean.class);
+        }
+        return alarmBean;
     }
 }
