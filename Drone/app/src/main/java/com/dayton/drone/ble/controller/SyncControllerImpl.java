@@ -8,7 +8,7 @@ import android.util.Log;
 import com.dayton.drone.application.ApplicationModel;
 import com.dayton.drone.ble.datasource.GattAttributesDataSourceImpl;
 import com.dayton.drone.ble.model.packet.DronePacket;
-import com.dayton.drone.ble.model.request.SetRTCRequest;
+import com.dayton.drone.ble.model.request.init.SetRTCRequest;
 
 import net.medcorp.library.ble.controller.ConnectionController;
 import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
