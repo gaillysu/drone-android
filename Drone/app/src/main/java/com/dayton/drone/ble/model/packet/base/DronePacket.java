@@ -1,4 +1,6 @@
-package com.dayton.drone.ble.model.packet;
+package com.dayton.drone.ble.model.packet.base;
+
+import com.dayton.drone.ble.model.packet.SystemStatusPacket;
 
 import net.medcorp.library.ble.model.response.MEDRawData;
 import net.medcorp.library.ble.util.HexUtils;
@@ -28,5 +30,9 @@ public class DronePacket {
 
     public boolean isVaildPackets() {
         return (mPackets.size() == 1 && mPackets.get(0).getRawData()[0] == (byte)0x80);
+    }
+
+    public SystemStatusPacket newSystemStatusPacket() {
+        return new SystemStatusPacket(mPackets);
     }
 }

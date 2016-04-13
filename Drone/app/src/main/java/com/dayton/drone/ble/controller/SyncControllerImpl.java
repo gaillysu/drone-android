@@ -7,8 +7,13 @@ import android.util.Log;
 
 import com.dayton.drone.application.ApplicationModel;
 import com.dayton.drone.ble.datasource.GattAttributesDataSourceImpl;
-import com.dayton.drone.ble.model.packet.DronePacket;
+import com.dayton.drone.ble.model.packet.SystemStatusPacket;
+import com.dayton.drone.ble.model.packet.base.DronePacket;
+import com.dayton.drone.ble.model.request.init.GetSystemStatus;
+import com.dayton.drone.ble.model.request.init.SetAppConfigRequest;
 import com.dayton.drone.ble.model.request.init.SetRTCRequest;
+import com.dayton.drone.ble.model.request.init.SetSystemConfig;
+import com.dayton.drone.ble.model.request.setting.SetUserProfileRequest;
 
 import net.medcorp.library.ble.controller.ConnectionController;
 import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
@@ -126,9 +131,29 @@ public class SyncControllerImpl implements  SyncController{
                     packetsBuffer.clear();
                     return;
                 }
+                if((byte) GetSystemStatus.HEADER == droneData.getRawData()[1])
+                {
+                    SystemStatusPacket systemStatusPacket = packet.newSystemStatusPacket();
+                    if(systemStatusPacket.getStatus()==GetSystemStatus.SystemStatus.SystemReset.rawValue())
+                    {
+                        sendRequest(new SetRTCRequest(application));
+                        sendRequest(new SetSystemConfig(application));
+                        sendRequest(new SetAppConfigRequest(application));
+                        sendRequest(new SetUserProfileRequest(application));
+                    }
+                    if(systemStatusPacket.getStatus()==GetSystemStatus.SystemStatus.InvalidTime.rawValue())
+                    {
+                        sendRequest(new SetRTCRequest(application));
+                    }
+                    if(systemStatusPacket.getStatus()==GetSystemStatus.SystemStatus.ActivityDataAvailable.rawValue())
+                    {
+
+                    }
+
+                }
                 if((byte) SetRTCRequest.HEADER == droneData.getRawData()[1])
                 {
-                    //set Profile
+
 
                 }
                 packetsBuffer.clear();
@@ -143,7 +168,7 @@ public class SyncControllerImpl implements  SyncController{
                 @Override
                 public void run() {
                     packetsBuffer.clear();
-                    sendRequest(new SetRTCRequest((Context) application));
+                    sendRequest(new GetSystemStatus(application));
                 }
             }, 2000);
         } else {

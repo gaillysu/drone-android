@@ -26,9 +26,12 @@ public class GetSystemStatus extends RequestBase {
         super(context);
     }
 
+
     @Override
-    public byte[] getRawData() {
-        return new byte[]{(byte)0x80,HEADER};
+    public byte[][] getRawDataEx() {
+        return new byte[][]{
+                {(byte)0x80,HEADER}
+        };
     }
 
     @Override

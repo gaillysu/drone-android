@@ -9,7 +9,9 @@ import net.medcorp.library.ble.model.request.BLERequestData;
 
 /**
  * Created by med on 16/4/12.
- * for Drone project, getRawDataEx() must return null, Drone package is only one raw.
+ * for Drone project, the packet length is not fixed, and the number of packet also not fixed,
+ * so you must override  getRawDataEx()
+ * now getRawData() is no useful
  */
 public abstract  class RequestBase extends BLERequestData {
 
@@ -18,7 +20,10 @@ public abstract  class RequestBase extends BLERequestData {
     }
 
     @Override
-    public byte[][] getRawDataEx() {
+    public byte[] getRawData() {
         return null;
     }
+
+    @Override
+    abstract public byte[][] getRawDataEx();
 }
