@@ -8,3 +8,5 @@ Drone/.idea
 /build
 /captures
 
+Drone/build/generated/
+Drone/local.properties

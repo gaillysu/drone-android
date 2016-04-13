@@ -9,6 +9,7 @@ import com.dayton.drone.modle.User;
 import net.medcorp.library.ble.util.Optional;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -37,37 +38,85 @@ public class UserDatabaseHelper implements iEntryDatabaseHelper<User> {
         return userOptional;
     }
 
+
     @Override
     public boolean update(User object) {
-        return false;
+        int result = -1;
+        try {
+            List<UserBean> userList = databaseHelper.getUserBean().queryBuilder()
+                    .where().eq(UserBean.fNevoUserID, object.getDroneUserID()).query();
+            if (userList.isEmpty()) {
+                return add(object) != null;
+            }
+            UserBean userBean = convertToBean(object);
+            userBean.setID(userList.get(0).getID());
+            result = userList.get(0).getID();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result >= 0;
     }
 
     @Override
     public boolean remove(String userId, Date date) {
+        try {
+            List<UserBean> userList = databaseHelper.getUserBean().queryBuilder()
+                    .where().eq(UserBean.fNevoUserID, userId).query();
+            if (userList.isEmpty()) {
+                return databaseHelper.getUserBean().delete(userList) >= 0;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
+    //single find
     @Override
     public List<Optional<User>> get(String userId) {
-        return null;
+
+        List<Optional<User>> list = new ArrayList<>();
+        try {
+            List<UserBean> userList = databaseHelper.getUserBean()
+                    .queryBuilder().where().eq(UserBean.fNevoUserID,userId).query();
+            for(UserBean userBean:userList){
+                Optional<User> optional = new Optional<>();
+                optional.set(convertToNormal(userBean));
+                list.add(optional);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
+    //find table
     @Override
     public Optional<User> get(String userId, Date date) {
-        return null;
+        List<Optional<User>> userList = get(userId);
+        return userList.isEmpty()?new Optional<User>():userList.get(0);
     }
 
+    // find all
     @Override
     public List<Optional<User>> getAll(String userId) {
-        return null;
+        List<Optional<User>> userList = get(userId);
+        return userList;
     }
 
+    // convert list
     @Override
     public List<User> convertToNormalList(List<Optional<User>> optionals) {
-        return null;
+        List<User> list = new ArrayList<>(3);
+        for(Optional<User> userOptional :optionals){
+            if(userOptional.notEmpty())
+            list.add(userOptional.get());
+        }
+        return list;
     }
 
-    private User convertToNormal(UserBean userDAO){
+    private User convertToNormal(UserBean userDAO) {
         User user = new User(userDAO.getCreatedDate());
         user.setId(userDAO.getID());
         user.setAge(userDAO.getAge());
@@ -78,17 +127,17 @@ public class UserDatabaseHelper implements iEntryDatabaseHelper<User> {
         user.setFirstName(userDAO.getFirstName());
         user.setLastName(userDAO.getLastName());
         user.setSex(userDAO.getSex());
-        user.setDroneUserEmail(userDAO.getDroenUserEmail());
-        user.setDroneUserID(userDAO.getDroneUserId());
-        user.setDroneUserToken(userDAO.getDroneUserToken());
+        user.setDroneUserEmail(userDAO.getUserEmail());
+        user.setDroneUserID(userDAO.getUserID());
+        user.setDroneUserToken(userDAO.getUserToken());
         user.setValidicUserID(userDAO.getValidicUserID());
         user.setValidicUserToken(userDAO.getValidicUserToken());
-        user.setIsLogin(userDAO.isDroneUserIsLogin());
+        user.setIsLogin(userDAO.isUserIsLogin());
         user.setIsConnectValidic(userDAO.isValidicUserIsConnected());
         return user;
     }
 
-    public UserBean convertToBean(User user){
+    public UserBean convertToBean(User user) {
         UserBean userDAO = new UserBean();
         userDAO.setCreatedDate(user.getCreatedDate());
         userDAO.setHeight(user.getHeight());
@@ -99,12 +148,12 @@ public class UserDatabaseHelper implements iEntryDatabaseHelper<User> {
         userDAO.setFirstName(user.getFirstName());
         userDAO.setLastName(user.getLastName());
         userDAO.setSex(user.getSex());
-        userDAO.setDroenUserEmail(user.getDroneUserEmail());
-        userDAO.setDroneUserId(user.getDroneUserID());
-        userDAO.setDroneUserToken(user.getDroneUserToken());
+        userDAO.setUserEmail(user.getDroneUserEmail());
+        userDAO.setUserID(user.getDroneUserID());
+        userDAO.setUserToken(user.getDroneUserToken());
         userDAO.setValidicUserID(user.getValidicUserID());
         userDAO.setValidicUserToken(user.getValidicUserToken());
-        userDAO.setDroneUserIsLogin(user.isLogin());
+        userDAO.setUserIsLogin(user.isLogin());
         userDAO.setValidicUserIsConnected(user.isConnectValidic());
         return userDAO;
     }
