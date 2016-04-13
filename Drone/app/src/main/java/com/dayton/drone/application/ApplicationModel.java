@@ -22,4 +22,12 @@ public class ApplicationModel extends Application {
         syncController = new SyncControllerImpl(this);
         otaController  = new OtaControllerImpl(this);
     }
+
+    public SyncController getSyncController() {
+        return syncController;
+    }
+
+    public OtaController getOtaController() {
+        return otaController;
+    }
 }
