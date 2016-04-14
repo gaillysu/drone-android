@@ -1,5 +1,8 @@
 package com.dayton.drone.ble.model.packet.base;
 
+import com.dayton.drone.ble.model.packet.ActivityPacket;
+import com.dayton.drone.ble.model.packet.GetStepsGoalPacket;
+import com.dayton.drone.ble.model.packet.SystemEventPacket;
 import com.dayton.drone.ble.model.packet.SystemStatusPacket;
 
 import net.medcorp.library.ble.model.response.MEDRawData;
@@ -34,5 +37,14 @@ public class DronePacket {
 
     public SystemStatusPacket newSystemStatusPacket() {
         return new SystemStatusPacket(mPackets);
+    }
+    public SystemEventPacket newSystemEventPacket() {
+        return new SystemEventPacket(mPackets);
+    }
+    public ActivityPacket newActivityPacket() {
+        return new ActivityPacket(mPackets);
+    }
+    public GetStepsGoalPacket newGetStepsGoalPacket() {
+        return new GetStepsGoalPacket(mPackets);
     }
 }

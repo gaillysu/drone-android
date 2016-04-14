@@ -7,13 +7,25 @@ import android.util.Log;
 
 import com.dayton.drone.application.ApplicationModel;
 import com.dayton.drone.ble.datasource.GattAttributesDataSourceImpl;
+import com.dayton.drone.ble.model.packet.ActivityPacket;
+import com.dayton.drone.ble.model.packet.GetStepsGoalPacket;
+import com.dayton.drone.ble.model.packet.SystemEventPacket;
 import com.dayton.drone.ble.model.packet.SystemStatusPacket;
 import com.dayton.drone.ble.model.packet.base.DronePacket;
+import com.dayton.drone.ble.model.request.battery.GetBatteryRequest;
 import com.dayton.drone.ble.model.request.init.GetSystemStatus;
 import com.dayton.drone.ble.model.request.init.SetAppConfigRequest;
 import com.dayton.drone.ble.model.request.init.SetRTCRequest;
 import com.dayton.drone.ble.model.request.init.SetSystemConfig;
 import com.dayton.drone.ble.model.request.setting.SetUserProfileRequest;
+import com.dayton.drone.ble.model.request.sync.GetActivityRequest;
+import com.dayton.drone.ble.model.request.sync.GetStepsGoalRequest;
+import com.dayton.drone.ble.util.Constants;
+import com.dayton.drone.event.BatteryStatusChangedEvent;
+import com.dayton.drone.event.BigSyncEvent;
+import com.dayton.drone.event.GoalCompletedEvent;
+import com.dayton.drone.event.LittleSyncEvent;
+import com.dayton.drone.event.LowMemoryEvent;
 
 import net.medcorp.library.ble.controller.ConnectionController;
 import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
@@ -119,44 +131,103 @@ public class SyncControllerImpl implements  SyncController{
             final MEDRawData droneData = (MEDRawData) data;
 
             packetsBuffer.add(droneData);
+            //packet format: 0x80 HEADER .......  , no fixed length
             if((byte)0x80 == droneData.getRawData()[0])
             {
-                QueuedMainThreadHandler.getInstance(QueuedMainThreadHandler.QueueType.SyncController).next();
-
                 DronePacket packet = new DronePacket(packetsBuffer);
                 //if packets invaild, discard them, and reset buffer
                 if(!packet.isVaildPackets())
                 {
                     Log.e("Nevo Error","InVaild Packets Received!");
                     packetsBuffer.clear();
+                    QueuedMainThreadHandler.getInstance(QueuedMainThreadHandler.QueueType.SyncController).next();
                     return;
                 }
-                if((byte) GetSystemStatus.HEADER == droneData.getRawData()[1])
+                if((byte) GetSystemStatus.HEADER == packet.getHeader())
                 {
                     SystemStatusPacket systemStatusPacket = packet.newSystemStatusPacket();
-                    if(systemStatusPacket.getStatus()==GetSystemStatus.SystemStatus.SystemReset.rawValue())
+                    Log.i(TAG,"GetSystemStatus return status value: " + systemStatusPacket.getStatus());
+                    if(systemStatusPacket.getStatus()== Constants.SystemStatus.SystemReset.rawValue()
+                            || systemStatusPacket.getStatus()==Constants.SystemStatus.InvalidTime.rawValue())
                     {
-                        sendRequest(new SetRTCRequest(application));
                         sendRequest(new SetSystemConfig(application));
+                        sendRequest(new SetRTCRequest(application));
                         sendRequest(new SetAppConfigRequest(application));
                         sendRequest(new SetUserProfileRequest(application));
                     }
-                    if(systemStatusPacket.getStatus()==GetSystemStatus.SystemStatus.InvalidTime.rawValue())
+
+                    if(systemStatusPacket.getStatus()==Constants.SystemStatus.InvalidTime.rawValue())
                     {
                         sendRequest(new SetRTCRequest(application));
                     }
-                    if(systemStatusPacket.getStatus()==GetSystemStatus.SystemStatus.ActivityDataAvailable.rawValue())
+                    else if(systemStatusPacket.getStatus()==Constants.SystemStatus.GoalCompleted.rawValue())
                     {
-
+                        EventBus.getDefault().post(new GoalCompletedEvent());
+                        sendRequest(new GetActivityRequest(application));
                     }
-
+                    else if(systemStatusPacket.getStatus()==Constants.SystemStatus.ActivityDataAvailable.rawValue())
+                    {
+                        EventBus.getDefault().post(new BigSyncEvent(BigSyncEvent.BIG_SYNC_EVENT.STARTED));
+                        sendRequest(new GetActivityRequest(application));
+                    }
                 }
-                if((byte) SetRTCRequest.HEADER == droneData.getRawData()[1])
+                else if((byte) SetRTCRequest.HEADER == packet.getHeader())
                 {
-
-
+                    sendRequest(new SetAppConfigRequest(application));
                 }
+                else if((byte) SetAppConfigRequest.HEADER == packet.getHeader())
+                {
+                    sendRequest(new SetUserProfileRequest(application));
+                }
+                else if((byte) GetActivityRequest.HEADER == packet.getHeader())
+                {
+                    ActivityPacket activityPacket = packet.newActivityPacket();
+                    Log.i(TAG,activityPacket.getDate().toString() + " steps: " + activityPacket.getSteps());
+                    //TODO, save it to "steps" table
+
+                    if(activityPacket.getMore()==Constants.ActivityDataStatus.MoreData.rawValue())
+                    {
+                        sendRequest(new GetActivityRequest(application));
+                    }
+                    else
+                    {
+                        EventBus.getDefault().post(new BigSyncEvent(BigSyncEvent.BIG_SYNC_EVENT.STOPPED));
+                    }
+                }
+                else if((byte) GetStepsGoalRequest.HEADER == packet.getHeader())
+                {
+                    GetStepsGoalPacket getStepsGoalPacket = packet.newGetStepsGoalPacket();
+                    int steps = getStepsGoalPacket.getSteps();
+                    int goal  = getStepsGoalPacket.getGoal();
+                    Log.i(TAG,"steps: " + steps + ",goal: " + goal);
+                    //TODO, update "steps" table, and refresh screen
+
+                    EventBus.getDefault().post(new LittleSyncEvent(steps, goal));
+                }
+                else if((byte) SystemEventPacket.HEADER == packet.getHeader())
+                {
+                    SystemEventPacket systemEventPacket = packet.newSystemEventPacket();
+                    Log.i(TAG,"SystemEventPacket return event value: " + systemEventPacket.getEvent());
+
+                    if(systemEventPacket.getEvent() == Constants.SystemEvent.BatteryStatusChanged.rawValue()) {
+                        sendRequest(new GetBatteryRequest(application));
+                        EventBus.getDefault().post(new BatteryStatusChangedEvent());
+                    }
+                    else if(systemEventPacket.getEvent() == Constants.SystemEvent.GoalCompleted.rawValue()) {
+                        sendRequest(new GetActivityRequest(application));
+                        EventBus.getDefault().post(new GoalCompletedEvent());
+                    }
+                    else if(systemEventPacket.getEvent() == Constants.SystemEvent.LowMemory.rawValue()) {
+                        EventBus.getDefault().post(new LowMemoryEvent());
+                    }
+                    else if(systemEventPacket.getEvent() == Constants.SystemEvent.ActivityDataAvailable.rawValue()) {
+                        EventBus.getDefault().post(new BigSyncEvent(BigSyncEvent.BIG_SYNC_EVENT.STARTED));
+                        sendRequest(new GetActivityRequest(application));
+                    }
+                }
+                //process done current cmd's response, request next cmd
                 packetsBuffer.clear();
+                QueuedMainThreadHandler.getInstance(QueuedMainThreadHandler.QueueType.SyncController).next();
             }
         }
     }
