@@ -7,32 +7,27 @@
     <android.support.v4.view.ViewPager
         android:id="@+id/activity_login_vp"
         android:layout_width="match_parent"
-        android:background="@null"
         android:layout_height="match_parent">
     </android.support.v4.view.ViewPager>
 
     <LinearLayout
-        android:layout_gravity="bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="40dp"
         android:orientation="vertical"
-        android:background="@null"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginBottom="30dp">
-        <Button
-            android:id="@+id/login_user_name_ed"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:hint="@string/login"/>
+        >
 
         <Button
-            android:id="@+id/login_user_password_ed"
+            android:id="@+id/login_bt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/login_registe"
-            />
+            android:text="@string/login"/>
+
+        <Button
+            android:id="@+id/registe_bt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/login_registe"/>
     </LinearLayout>
 </FrameLayout>

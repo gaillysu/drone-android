@@ -31,14 +31,17 @@ public class SplashActivtiy extends BaseActivity {
         } else {
             long newTime = System.currentTimeMillis();
             if ((newTime - time) >= 3000) {
-                startActivity(LoginActivtiy.class);
+                startActivity(TutorialActivtiy.class);
+                finish();
             } else {
                 try {
                     Thread.sleep(3000 - (newTime - time));
-                    startActivity(LoginActivtiy.class);
+                    startActivity(TutorialActivtiy.class);
+                    finish();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                    startActivity(LoginActivtiy.class);
+                    startActivity(TutorialActivtiy.class);
+                    finish();
                 }
             }
         }
@@ -54,7 +57,8 @@ public class SplashActivtiy extends BaseActivity {
         builder.setNegativeButton(R.string.cancel_update, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                startActivity(LoginActivtiy.class);
+                startActivity(TutorialActivtiy.class);
+                finish();
             }
         });
 
@@ -73,7 +77,8 @@ public class SplashActivtiy extends BaseActivity {
      */
     private void downLoadUpdateVersion() {
         //TODO
-        startActivity(LoginActivtiy.class);
+        startActivity(TutorialActivtiy.class);
+        finish();
     }
 
     /**
