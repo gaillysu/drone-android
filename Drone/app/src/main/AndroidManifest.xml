@@ -39,7 +39,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.base.LoginActivtiy"
+        <activity android:name=".activity.LoginActivtiy"
             android:launchMode="singleTop"/>
     </application>
 </manifest>

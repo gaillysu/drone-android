@@ -1,12 +1,13 @@
 package com.dayton.drone.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
-import com.dayton.drone.activity.base.LoginActivtiy;
 
 /**
  * Created by boy on 2016/4/13.
@@ -14,21 +15,26 @@ import com.dayton.drone.activity.base.LoginActivtiy;
 public class SplashActivtiy extends BaseActivity {
     private long time;
     private int currentVersion;
+    private String newVersionDescription = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activtiy_splash);
         localVersion();
-        if(checkVersion(currentVersion)){
-            startActivity(LoginActivtiy.class);
-        }else{
+        isNotUpdate();
+    }
+
+    private void isNotUpdate() {
+        if (checkVersion(currentVersion)) {
+            clueUserVersionUpdate();
+        } else {
             long newTime = System.currentTimeMillis();
-            if(( newTime - time)>=3000){
+            if ((newTime - time) >= 3000) {
                 startActivity(LoginActivtiy.class);
-            }else{
+            } else {
                 try {
-                    Thread.sleep(3000 -(newTime-time) );
+                    Thread.sleep(3000 - (newTime - time));
                     startActivity(LoginActivtiy.class);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -38,6 +44,41 @@ public class SplashActivtiy extends BaseActivity {
         }
     }
 
+    /**
+     * dialog clue user
+     */
+    private void clueUserVersionUpdate() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.clue_update_dialog);
+        builder.setMessage(newVersionDescription);
+        builder.setNegativeButton(R.string.cancel_update, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(LoginActivtiy.class);
+            }
+        });
+
+        builder.setPositiveButton(R.string.update, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                downLoadUpdateVersion();
+            }
+        });
+        builder.show();
+    }
+
+
+    /**
+     * download new version and install
+     */
+    private void downLoadUpdateVersion() {
+        //TODO
+        startActivity(LoginActivtiy.class);
+    }
+
+    /**
+     * app now local version
+     */
     private void localVersion() {
         PackageManager manager = getPackageManager();
         try {
@@ -48,15 +89,19 @@ public class SplashActivtiy extends BaseActivity {
             e.printStackTrace();
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         time = System.currentTimeMillis();
     }
 
-    public boolean checkVersion(int currentVersion){
-
-        return false;
+    /**
+     *  network check the app version
+     */
+    public boolean checkVersion(int currentVersion) {
+        newVersionDescription = "" ;
+        return true;
     }
 
 }
