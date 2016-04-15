@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:textColor=""
+        android:textColor="#55000000"
         android:textSize="15sp"
         android:text="@string/user_info_share"/>
     <LinearLayout

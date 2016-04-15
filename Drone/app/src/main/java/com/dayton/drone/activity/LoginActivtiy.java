@@ -38,7 +38,7 @@ public class LoginActivtiy extends BaseActivity {
                 String account = ed_account.getText().toString();
                 String password = ed_password.getText().toString();
 
-                if(TextUtils.isEmpty(account) && TextUtils.isEmpty(password)){
+                if( !(TextUtils.isEmpty(account) && TextUtils.isEmpty(password))){
                     //login
                    if(userLogin(account , password)){
                        startActivity(MainActivity.class);
