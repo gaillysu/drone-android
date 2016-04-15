@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <include layout="@layout/registe_control_button"/>
+
+    <TextView
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:textSize="18sp"
+        android:text="@string/user_info_clue"/>
+    <TextView
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textColor=""
+        android:textSize="15sp"
+        android:text="@string/user_info_share"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        >
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:background="@drawable/registe_edit_bg"
+            android:text="@string/user_sex_female"/>
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:background="@drawable/registe_edit_bg"
+            android:text="@string/user_sex_male"/>
+    </LinearLayout>
+</LinearLayout>

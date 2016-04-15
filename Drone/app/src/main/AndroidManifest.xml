@@ -46,11 +46,20 @@
             android:launchMode="singleTop"/>
         <activity
             android:name=".activity.LoginActivtiy"
-            android:configChanges="screenLayout|orientation"
+            android:configChanges="screenLayout|orientation|keyboardHidden"
             android:launchMode="singleTop"/>
         <activity
             android:name=".activity.RegisteActivity"
             android:configChanges="screenLayout|orientation"
+            android:launchMode="singleTop"/>
+        <activity
+            android:name=".activity.MainActivity"
+            android:configChanges="keyboardHidden|orientation|screenLayout"
+            android:launchMode="singleTop"
+            />
+        <activity
+            android:name=".activity.UserInfoActivity"
+            android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleTop"/>
     </application>
 </manifest>

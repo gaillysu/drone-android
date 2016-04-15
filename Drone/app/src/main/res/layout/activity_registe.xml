@@ -2,88 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@android:color/white">
+                android:background="@android:color/white"
+                android:orientation="vertical">
+    <include layout="@layout/registe_control_button"/>
 
-    <TextView
-        android:id="@+id/registe_tx"
+    <include
+        layout="@layout/registe_table_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="150dp"
-        android:text="@string/reiste_email"
-        android:textColor="#88000000"
-        android:textSize="20sp"/>
-
-    <LinearLayout
-        android:id="@+id/registe_ll"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/registe_tx"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="50dp"
-        android:background="@null"
-        android:orientation="vertical"
-        >
-
-        <EditText
-            android:id="@+id/email_ed"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@drawable/registe_edit_bg"
-            android:inputType="textEmailAddress"
-            android:hint="Email"
-            android:paddingLeft="5dp"
-            android:textSize="20sp"/>
-
-        <EditText
-            android:id="@+id/password_ed"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@drawable/registe_edit_bg"
-            android:hint="password"
-            android:inputType="textPassword"
-            android:paddingLeft="5dp"
-            android:focusable="false"
-            android:textSize="20sp"/>
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/registe_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/registe_ll"
-        android:textColor="#88000000"
-        android:layout_marginTop="50dp"
-        android:layout_centerHorizontal="true"
-        android:textSize="25sp"
-        android:text="@string/third_party_login"/>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/registe_tv"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:gravity="center_horizontal"
-        >
-        <ImageView
-            android:id="@+id/google_account_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/smile"/>
-        <ImageView
-            android:id="@+id/face_book_account_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
-            android:src="@mipmap/smile"/>
-        <ImageView
-            android:id="@+id/Twitter_account_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
-            android:src="@mipmap/smile"/>
-    </LinearLayout>
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="100dp"/>
 </RelativeLayout>
