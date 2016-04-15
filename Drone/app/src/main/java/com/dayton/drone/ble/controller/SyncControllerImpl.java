@@ -26,6 +26,7 @@ import com.dayton.drone.event.BigSyncEvent;
 import com.dayton.drone.event.GoalCompletedEvent;
 import com.dayton.drone.event.LittleSyncEvent;
 import com.dayton.drone.event.LowMemoryEvent;
+import com.dayton.drone.event.TimerEvent;
 
 import net.medcorp.library.ble.controller.ConnectionController;
 import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
@@ -40,6 +41,8 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by med on 16/4/12.
@@ -51,10 +54,26 @@ public class SyncControllerImpl implements  SyncController{
     private ConnectionController connectionController;
     private List<MEDRawData> packetsBuffer = new ArrayList<MEDRawData>();
 
+    private Timer autoSyncTimer = null;
+
+    private void startAutoSyncTimer() {
+        if(autoSyncTimer!=null)autoSyncTimer.cancel();
+        autoSyncTimer = new Timer();
+        autoSyncTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                sendRequest(new GetStepsGoalRequest(application));
+                EventBus.getDefault().post(new TimerEvent());
+                startAutoSyncTimer();
+            }
+        },10000);
+    }
+
     public  SyncControllerImpl(ApplicationModel application){
         this.application = application;
         connectionController = ConnectionController.Singleton.getInstance(application,new GattAttributesDataSourceImpl(application));
         EventBus.getDefault().register(this);
+        startAutoSyncTimer();
     }
 
     @Override
