@@ -13,4 +13,7 @@
     <string name= "user_info_share">我们共同分享...</string>
     <string name="user_sex_female">女性</string>
     <string name="user_sex_male">男性</string>
+    <string name="user_info_brithday">出生年月</string>
+    <string name="user_info_height">身高(cm)</string>
+    <string name="user_info_weight">体重(kg)</string>
 </resources>
