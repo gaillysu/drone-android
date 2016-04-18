@@ -62,8 +62,8 @@ public class SyncControllerImpl implements  SyncController{
         autoSyncTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                sendRequest(new GetStepsGoalRequest(application));
-                EventBus.getDefault().post(new TimerEvent());
+                //sendRequest(new GetStepsGoalRequest(application));
+                //EventBus.getDefault().post(new TimerEvent());
                 startAutoSyncTimer();
             }
         },10000);
