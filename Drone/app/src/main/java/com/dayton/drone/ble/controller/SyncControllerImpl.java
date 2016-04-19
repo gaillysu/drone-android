@@ -1,8 +1,19 @@
 package com.dayton.drone.ble.controller;
 
+import android.app.Activity;
+import android.app.Service;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
+import android.os.Binder;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Looper;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.dayton.drone.application.ApplicationModel;
@@ -62,7 +73,8 @@ public class SyncControllerImpl implements  SyncController{
         autoSyncTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                sendRequest(new GetStepsGoalRequest(application));
+                //TODO : connected with watch is idle status, enable this little sync request.
+                //sendRequest(new GetStepsGoalRequest(application));
                 EventBus.getDefault().post(new TimerEvent());
                 startAutoSyncTimer();
             }
@@ -73,6 +85,7 @@ public class SyncControllerImpl implements  SyncController{
         this.application = application;
         connectionController = ConnectionController.Singleton.getInstance(application,new GattAttributesDataSourceImpl(application));
         EventBus.getDefault().register(this);
+        application.getApplicationContext().bindService(new Intent(application,LocalService.class), serviceConnection, Activity.BIND_AUTO_CREATE);
         startAutoSyncTimer();
     }
 
@@ -81,7 +94,7 @@ public class SyncControllerImpl implements  SyncController{
         if(forceScan){
             connectionController.forgetSavedAddress();
         }
-        connectionController.connect();
+        connectionController.scan();
     }
 
     @Override
@@ -149,6 +162,11 @@ public class SyncControllerImpl implements  SyncController{
         {
             final MEDRawData droneData = (MEDRawData) data;
 
+            if(droneData.getRawData().length==1 && (byte)0xFF == droneData.getRawData()[0])
+            {
+                //discard dummy packet "FF"
+                return;
+            }
             packetsBuffer.add(droneData);
             //packet format: 0x80 HEADER .......  , no fixed length
             if((byte)0x80 == droneData.getRawData()[0])
@@ -266,4 +284,72 @@ public class SyncControllerImpl implements  SyncController{
             packetsBuffer.clear();
         }
     }
+
+    //local service
+    static public class LocalService extends Service
+    {
+        BroadcastReceiver myReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if(intent.getAction().equals(Intent.ACTION_SCREEN_ON))
+                {
+                    Log.i("LocalService","Screen On");
+                    if(!ConnectionController.Singleton.getInstance(context, new GattAttributesDataSourceImpl(context)).isConnected())
+                    {
+                        ConnectionController.Singleton.getInstance(context,new GattAttributesDataSourceImpl(context)).scan();
+                    }
+                }
+                if(intent.getAction().equals(BluetoothDevice.ACTION_BOND_STATE_CHANGED))
+                {
+                    BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                    int connectState = device.getBondState();
+                    //TODO , set up watch here when paired success, should macth address with the saved.
+                    if(BluetoothDevice.BOND_BONDED == connectState ) {
+
+                    }
+                }
+
+            }
+        };
+
+        @Nullable
+        @Override
+        public IBinder onBind(Intent intent) {
+            return new LocalBinder();
+        }
+
+        @Override
+        public void onCreate() {
+            super.onCreate();
+            registerReceiver(myReceiver, new IntentFilter(Intent.ACTION_SCREEN_ON));
+            registerReceiver(myReceiver, new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
+        }
+
+        @Override
+        public void onDestroy() {
+            super.onDestroy();
+            unregisterReceiver(myReceiver);
+        }
+
+        public class LocalBinder extends Binder {
+            //todo .you can add some functions here
+        }
+
+    }
+    private LocalService.LocalBinder localBinder = null;
+
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            Log.v(TAG, name+" Service disconnected");
+            localBinder = null;
+        }
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            Log.v(TAG, name+" Service connected");
+            localBinder = (LocalService.LocalBinder)service;
+        }
+    };
 }
