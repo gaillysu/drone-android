@@ -23,7 +23,7 @@ public class UserBean {
      */
     public static final String fBirthday = "Birthday";
     @DatabaseField
-    private long Birthday;
+    private String Birthday;
 
     /**
      * default age
@@ -130,11 +130,11 @@ public class UserBean {
         this.ID = ID;
     }
 
-    public long getBirthday() {
+    public String getBirthday() {
         return Birthday;
     }
 
-    public void setBirthday(long birthday) {
+    public void setBirthday(String birthday) {
         Birthday = birthday;
     }
 

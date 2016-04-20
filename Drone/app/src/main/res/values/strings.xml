@@ -1,19 +1,34 @@
 <resources>
     <string name="app_name">Drone</string>
-    <string name="clue_update_dialog">更新提示:</string>
-    <string name="update">更新</string>
-    <string name="cancel_update">取消</string>
-    <string name="login">登陆</string>
-    <string name="login_registe">注册</string>
-    <string name="reiste_email">使用电子邮件注册</string>
-    <string name="third_party_login">第三方登录</string>
-    <string name="tips_user_account_password">密码或者账号不能为空</string>
-    <string name="user_account_error">账号或者密码错误...</string>
-    <string name="user_info_clue">告诉我们一点关于你的...</string>
-    <string name= "user_info_share">我们共同分享...</string>
-    <string name="user_sex_female">女性</string>
-    <string name="user_sex_male">男性</string>
-    <string name="user_info_brithday">出生年月</string>
-    <string name="user_info_height">身高(cm)</string>
-    <string name="user_info_weight">体重(kg)</string>
+    <string name="clue_update_dialog">Clue Update:</string>
+    <string name="update">Update</string>
+    <string name="cancel_update">Cancel</string>
+    <string name="login">Login</string>
+    <string name="login_registe">Registe</string>
+    <string name="reiste_email"> Registe with your email</string>
+    <string name="third_party_login">Or registe with your social media</string>
+    <string name="tips_user_account_password">Account of password is not null</string>
+    <string name="user_account_error">Account of password is error</string>
+    <string name="user_info_clue">Tell us little bit about your self.</string>
+    <string name="user_info_share">We promissed we will share this info</string>
+    <string name="user_sex_female">Female</string>
+    <string name="user_sex_male">Male</string>
+    <string name="user_info_brithday">Birth</string>
+    <string name="user_info_height">Height(cm)</string>
+    <string name="user_info_weight">Weight(kg)</string>
+    <string name="user_device_select">Setting up your device.</string>
+    <string name="user_info_about">About your info is not null</string>
+    <string name="user_select_dec">Don\'t have a device here</string>
+    <string name = "user_device_drone">Buy you drone here</string>
+    <array name="user_select_dec_arr">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+</array>
 </resources>

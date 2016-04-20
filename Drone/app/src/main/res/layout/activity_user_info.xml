@@ -69,7 +69,7 @@
                 android:layout_height="40dp"
                 android:gravity="center_vertical"
                 android:paddingLeft="5dp"
-                android:text="@string/user_info_brithday"
+                android:hint="@string/user_info_brithday"
                 />
         </LinearLayout>
 
@@ -89,7 +89,7 @@
                 android:layout_height="40dp"
                 android:gravity="center_vertical"
                 android:paddingLeft="5dp"
-                android:text="@string/user_info_height"
+                android:hint="@string/user_info_height"
                 />
         </LinearLayout>
 
@@ -108,7 +108,7 @@
                 android:layout_height="40dp"
                 android:gravity="center_vertical"
                 android:paddingLeft="5dp"
-                android:text="@string/user_info_weight"
+                android:hint="@string/user_info_weight"
                 />
         </LinearLayout>
 
