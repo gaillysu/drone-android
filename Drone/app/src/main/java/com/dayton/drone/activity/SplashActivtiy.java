@@ -17,6 +17,8 @@ public class SplashActivtiy extends BaseActivity {
     private int currentVersion;
     private String newVersionDescription = null;
 
+    private AlertDialog dialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,20 +31,25 @@ public class SplashActivtiy extends BaseActivity {
         if (checkVersion(currentVersion)) {
             clueUserVersionUpdate();
         } else {
-            long newTime = System.currentTimeMillis();
-            if ((newTime - time) >= 3000) {
+            next();
+        }
+
+    }
+
+    public void next() {
+        long newTime = System.currentTimeMillis();
+        if ((newTime - time) >= 3000) {
+            startActivity(TutorialActivtiy.class);
+            finish();
+        } else {
+            try {
+                Thread.sleep(3000 - (newTime - time));
                 startActivity(TutorialActivtiy.class);
                 finish();
-            } else {
-                try {
-                    Thread.sleep(3000 - (newTime - time));
-                    startActivity(TutorialActivtiy.class);
-                    finish();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    startActivity(TutorialActivtiy.class);
-                    finish();
-                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                startActivity(TutorialActivtiy.class);
+                finish();
             }
         }
     }
@@ -58,6 +65,7 @@ public class SplashActivtiy extends BaseActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 startActivity(TutorialActivtiy.class);
+                dialog.dismiss();
                 finish();
             }
         });
@@ -65,10 +73,13 @@ public class SplashActivtiy extends BaseActivity {
         builder.setPositiveButton(R.string.update, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
                 downLoadUpdateVersion();
             }
         });
-        builder.show();
+        dialog =  builder.create();
+        dialog.setCancelable(false);
+        dialog.show();
     }
 
 
@@ -102,10 +113,10 @@ public class SplashActivtiy extends BaseActivity {
     }
 
     /**
-     *  network check the app version
+     * network check the app version
      */
     public boolean checkVersion(int currentVersion) {
-        newVersionDescription = "" ;
+        newVersionDescription = "";
         return true;
     }
 

@@ -4,7 +4,7 @@ public class User {
 
     private  int id;
 
-    private long birthday;
+    private String birthday;
 
     private int age = 18;
 
@@ -39,7 +39,10 @@ public class User {
     public User(long createdDate) {
         this.createdDate = createdDate;
     }
-    public User(String firstName, String lastName, int sex, long birthday, int age, int weight, int height, long createdDate, String remarks) {
+    public User(String firstName, String lastName, int sex,
+                String birthday, int age, int weight, int height
+                , long createdDate, String remarks) {
+
         this.firstName = firstName;
         this.lastName = lastName;
         this.sex = sex;
@@ -121,11 +124,11 @@ public class User {
         this.lastName = lastName;
     }
 
-    public long getBirthday() {
+    public String getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(long birthday) {
+    public void setBirthday(String birthday) {
         this.birthday = birthday;
     }
 

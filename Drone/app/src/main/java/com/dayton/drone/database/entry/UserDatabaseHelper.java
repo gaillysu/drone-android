@@ -20,7 +20,7 @@ public class UserDatabaseHelper implements iEntryDatabaseHelper<User> {
 
     private DatabaseHelper databaseHelper;
 
-    private UserDatabaseHelper(Context context) {
+    public UserDatabaseHelper(Context context) {
         if (databaseHelper == null) {
             databaseHelper = DatabaseHelper.getHelperInstance(context);
         }

@@ -61,10 +61,15 @@
             android:name=".activity.UserInfoActivity"
             android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleTop"/>
+        <activity
+            android:name=".activity.SelectDevice"
+            android:configChanges="keyboardHidden|screenLayout|orientation"
+            android:launchMode="singleTop"
+            />
 
         <!-- register all services used in the application -->
         <service
             android:name="net.medcorp.library.ble.ble.MEDBTService"
-            android:enabled="true" />
+            android:enabled="true"/>
     </application>
 </manifest>
