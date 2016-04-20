@@ -32,6 +32,7 @@ import com.dayton.drone.ble.model.request.setting.SetUserProfileRequest;
 import com.dayton.drone.ble.model.request.sync.GetActivityRequest;
 import com.dayton.drone.ble.model.request.sync.GetStepsGoalRequest;
 import com.dayton.drone.ble.util.Constants;
+import com.dayton.drone.event.BLEPairStatusChangedEvent;
 import com.dayton.drone.event.BatteryStatusChangedEvent;
 import com.dayton.drone.event.BigSyncEvent;
 import com.dayton.drone.event.GoalCompletedEvent;
@@ -85,8 +86,8 @@ public class SyncControllerImpl implements  SyncController{
         this.application = application;
         connectionController = ConnectionController.Singleton.getInstance(application,new GattAttributesDataSourceImpl(application));
         EventBus.getDefault().register(this);
-        application.getApplicationContext().bindService(new Intent(application,LocalService.class), serviceConnection, Activity.BIND_AUTO_CREATE);
-        startAutoSyncTimer();
+        application.getApplicationContext().bindService(new Intent(application, LocalService.class), serviceConnection, Activity.BIND_AUTO_CREATE);
+        //startAutoSyncTimer();
     }
 
     @Override
@@ -100,6 +101,11 @@ public class SyncControllerImpl implements  SyncController{
     @Override
     public boolean isConnected() {
         return connectionController.isConnected();
+    }
+
+    @Override
+    public void disConnect() {
+        connectionController.disconnect();
     }
 
     @Override
@@ -165,6 +171,7 @@ public class SyncControllerImpl implements  SyncController{
             if(droneData.getRawData().length==1 && (byte)0xFF == droneData.getRawData()[0])
             {
                 //discard dummy packet "FF"
+                Log.e("Nevo Error","dummy Packets Received!");
                 return;
             }
             packetsBuffer.add(droneData);
@@ -175,7 +182,7 @@ public class SyncControllerImpl implements  SyncController{
                 //if packets invaild, discard them, and reset buffer
                 if(!packet.isVaildPackets())
                 {
-                    Log.e("Nevo Error","InVaild Packets Received!");
+                    Log.e(TAG,"InVaild Packets Received!");
                     packetsBuffer.clear();
                     QueuedMainThreadHandler.getInstance(QueuedMainThreadHandler.QueueType.SyncController).next();
                     return;
@@ -184,8 +191,7 @@ public class SyncControllerImpl implements  SyncController{
                 {
                     SystemStatusPacket systemStatusPacket = packet.newSystemStatusPacket();
                     Log.i(TAG,"GetSystemStatus return status value: " + systemStatusPacket.getStatus());
-                    if(systemStatusPacket.getStatus()== Constants.SystemStatus.SystemReset.rawValue()
-                            || systemStatusPacket.getStatus()==Constants.SystemStatus.InvalidTime.rawValue())
+                    if(systemStatusPacket.getStatus()== Constants.SystemStatus.SystemReset.rawValue())
                     {
                         sendRequest(new SetSystemConfig(application));
                         sendRequest(new SetRTCRequest(application));
@@ -285,6 +291,24 @@ public class SyncControllerImpl implements  SyncController{
         }
     }
 
+    @Subscribe
+    public void onEvent(BLEPairStatusChangedEvent pairStateChangedEvent) {
+        if(pairStateChangedEvent.getStatus() == BluetoothDevice.BOND_BONDED
+                || pairStateChangedEvent.getStatus() == BluetoothDevice.BOND_NONE) {
+            //THIS BELOW CODE SPEND MY 2 HOURS,DIRECTLY INVOKING WILL LEAD TO "NO FOUND SERVICES" ISSUE.
+            //onEvent() is invoked by other thread
+            //here when got paired, need restart connect, we should excute these code in the main thread
+            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    disConnect();
+                    //IMPORT here has a risk: startLeScan() can't find the watch
+                    startConnect(false);
+                }
+            },2000);
+        }
+    }
+
     //local service
     static public class LocalService extends Service
     {
@@ -303,9 +327,9 @@ public class SyncControllerImpl implements  SyncController{
                 {
                     BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                     int connectState = device.getBondState();
-                    //TODO , set up watch here when paired success, should macth address with the saved.
-                    if(BluetoothDevice.BOND_BONDED == connectState ) {
-
+                    Log.i("LocalService","Ble pair state got changed:" + connectState + ",device:" + device.getAddress());
+                    if(BluetoothDevice.BOND_BONDED == connectState || BluetoothDevice.BOND_NONE == connectState ) {
+                        EventBus.getDefault().post(new BLEPairStatusChangedEvent(connectState));
                     }
                 }
 
@@ -332,7 +356,7 @@ public class SyncControllerImpl implements  SyncController{
         }
 
         public class LocalBinder extends Binder {
-            //todo .you can add some functions here
+            //you can add some functions here
         }
 
     }

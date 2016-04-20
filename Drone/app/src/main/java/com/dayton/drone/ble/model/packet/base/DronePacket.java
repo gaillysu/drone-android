@@ -32,7 +32,7 @@ public class DronePacket {
     }
 
     public boolean isVaildPackets() {
-        return (mPackets.size() == 1 && mPackets.get(0).getRawData()[0] == (byte)0x80);
+        return (mPackets.size() == 1 && mPackets.get(0).getRawData().length>2 && mPackets.get(0).getRawData()[0] == (byte)0x80);
     }
 
     public SystemStatusPacket newSystemStatusPacket() {

@@ -23,11 +23,11 @@ public class SetSystemConfig extends RequestBase{
         return new byte[][] {
                 {(byte) 0x80,HEADER,0x08,0x01,0x01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
                 {(byte) 0x80,HEADER,0x04,0x01,0x01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-                {(byte) 0x80,HEADER,0x09,0x05,(byte)(startTimestamp&0xFF),
+                {(byte) 0x80,HEADER,0x09,0x05,0x01,(byte)(startTimestamp&0xFF),
                         (byte)((startTimestamp>>8)&0xFF),
                         (byte)(endTimestamp&0xFF),
                         (byte)((endTimestamp>>8)&0xFF),
-                        0,0,0,0,0,0,0,0,0,0,0,0}
+                        0,0,0,0,0,0,0,0,0,0,0}
         };
     }
 

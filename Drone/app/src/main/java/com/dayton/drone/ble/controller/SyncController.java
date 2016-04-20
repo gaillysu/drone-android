@@ -10,6 +10,7 @@ public interface SyncController {
 
     void startConnect(boolean forceScan);
     boolean isConnected();
+    void disConnect();
 
     /**
      *
