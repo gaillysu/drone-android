@@ -32,7 +32,6 @@
             android:text="@string/user_device_drone"
             />
     </LinearLayout>
-    />
     <GridView
         android:id="@+id/select_user_device"
         android:layout_width="match_parent"

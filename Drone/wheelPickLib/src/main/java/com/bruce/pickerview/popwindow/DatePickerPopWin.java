@@ -408,7 +408,7 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if (v == contentView) {
+        if (v == contentView   ) {
             dismissPopWin();
         }
         if (null != mListener) {

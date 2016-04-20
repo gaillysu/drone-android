@@ -20,15 +20,20 @@
     <string name="user_info_about">About your info is not null</string>
     <string name="user_select_dec">Don\'t have a device here</string>
     <string name = "user_device_drone">Buy you drone here</string>
-    <array name="user_select_dec_arr">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-</array>
+    <string name="bluetooth_connecting">Connecting</string>
+    <string name="retry_connecting">Retry</string>
+    <string name="watch_name">Drone Watch</string>
+    <string name="watch_version">version 1.0.3</string>
+    <string name = "watch_buletooth_id">IMEI 156420156233</string>
+    <string name="connecting_fail">Fail</string>
+    <string-array name="user_select_dec_arr">
+        <item>bcbs</item>
+        <item>akbdkjb</item>
+        <item>bsdhjbh</item>
+        <item>abjhb</item>
+        <item>jhbdjhbsah</item>
+        <item>kjbajkbd</item>
+        <item>bjahhb</item>
+        <item>kbjsbdka</item>
+</string-array>
 </resources>

@@ -1,6 +1,5 @@
 package com.dayton.drone.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -11,8 +10,6 @@ import android.widget.Toast;
 import com.bruce.pickerview.popwindow.DatePickerPopWin;
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
-import com.dayton.drone.database.entry.UserDatabaseHelper;
-import com.dayton.drone.modle.User;
 
 /**
  * Created by boy on 2016/4/15.
@@ -131,24 +128,24 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 String weight = tv_userWeight.getText().toString();
                 if (!(TextUtils.isEmpty(birthday)&&TextUtils.isEmpty(height)&&TextUtils.isEmpty(weight))){
 
-                    Intent intent = getIntent();
-                    String account = intent.getStringExtra("account");
-                    String password = intent.getStringExtra("password");
-                    UserDatabaseHelper database = new UserDatabaseHelper(UserInfoActivity.this);
-                    User us = new User(System.currentTimeMillis());
-                    int h = new Integer(height.substring(0, 3));
-                    int w = new Integer(weight.substring(0, weight.length() - 2));
-                    us.setBirthday(birthday);
-                    us.setDroneUserEmail(account);
-                    us.setHeight(h);
-                    us.setWeight(w);
-                    if (mUserSex.equals("famale")) {
-                        us.setSex(1);
-                    } else {
-                        us.setSex(2);
-                    }
-                    database.add(us);
-
+//                    Intent intent = getIntent();
+                    //                    String account = intent.getStringExtra("account");
+                    //                    String password = intent.getStringExtra("password");
+                    //                    UserDatabaseHelper database = new UserDatabaseHelper(UserInfoActivity.this);
+                    //                    User us = new User(System.currentTimeMillis());
+                    //                    int h = new Integer(height.substring(0, 3));
+                    //                    int w = new Integer(weight.substring(0, weight.length() - 2));
+                    //                    us.setBirthday(birthday);
+                    //                    us.setDroneUserEmail(account);
+                    //                    us.setHeight(h);
+                    //                    us.setWeight(w);
+                    //                    if (mUserSex.equals("famale")) {
+                    //                        us.setSex(1);
+                    //                    } else {
+                    //                        us.setSex(2);
+                    //                    }
+                    //                    database.add(us);
+                    //                    us = null;
                     startActivity(SelectDevice.class);
 
                 } else {

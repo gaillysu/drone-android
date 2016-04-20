@@ -1,5 +1,6 @@
 package com.dayton.drone.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 
@@ -23,10 +25,10 @@ public class SelectDevice extends BaseActivity {
 
     private String[] mDec;
     private int[] arr = {
-            R.mipmap.guide_3, R.mipmap.guide_3,
-            R.mipmap.guide_3, R.mipmap.guide_3,
-            R.mipmap.guide_3, R.mipmap.guide_3,
-            R.mipmap.guide_3, R.mipmap.guide_3,
+            R.mipmap.icon_04,R.mipmap.icon_04,
+            R.mipmap.icon_04,R.mipmap.icon_04,
+            R.mipmap.icon_04,R.mipmap.icon_04,
+            R.mipmap.icon_04,R.mipmap.icon_04,
     };
 
     @Override
@@ -94,7 +96,18 @@ public class SelectDevice extends BaseActivity {
         gv_selectDevice.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(SelectDevice.this ,ShowWatchActivity.class);
+                intent.putExtra("image_id",arr[position]);
+                intent.putExtra("watch_name",mDec[position]);
+                startActivity(intent);
 
+            }
+        });
+
+        iv_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }
