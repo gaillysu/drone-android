@@ -197,6 +197,8 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
             case 3:
 
                 rightLoopView.setVisibility(View.GONE);
+                leftLoopView.setMinimumWidth(30);
+                middleLoopView.setMinimumWidth(30);
                 tv_pickerRight.setVisibility(View.VISIBLE);
                 tv_pickerRight.setTextSize(viewTextSize);
                 tv_pickerRight.setText("kg");

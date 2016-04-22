@@ -20,9 +20,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/registe_tx"
         android:layout_centerHorizontal="true"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginRight="80dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginBottom="60dp"
         android:background="@drawable/registe_edit_bg"
         android:orientation="vertical"
         >
@@ -59,17 +60,17 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/registe_ll"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
+
         android:text="@string/third_party_login"
         android:textColor="#88000000"
-        android:textSize="20sp"/>
+        android:textSize="14sp"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/registe_tv"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="25dp"
         android:gravity="center_horizontal"
         >
 
@@ -77,20 +78,20 @@
             android:id="@+id/google_account_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/smile"/>
+            android:src="@mipmap/google_l00"/>
 
         <ImageView
             android:id="@+id/face_book_account_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
-            android:src="@mipmap/smile"/>
+            android:layout_marginLeft="30dp"
+            android:src="@mipmap/facebookll100"/>
 
         <ImageView
             android:id="@+id/Twitter_account_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
-            android:src="@mipmap/smile"/>
+            android:layout_marginLeft="30dp"
+            android:src="@mipmap/t100w"/>
     </LinearLayout>
 </RelativeLayout>

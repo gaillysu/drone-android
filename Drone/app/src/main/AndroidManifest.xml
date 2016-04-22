@@ -27,11 +27,11 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:replace="android:theme">
 
         <activity
-            android:name=".activity.SplashActivtiy"
+            android:name=".activity.base.tutorial.SplashActivtiy"
             android:configChanges="screenLayout|orientation"
             android:label="@string/app_name">
             <intent-filter>
@@ -41,38 +41,40 @@
         </activity>
 
         <activity
-            android:name=".activity.TutorialActivtiy"
+            android:name=".activity.base.tutorial.TutorialActivtiy"
             android:configChanges="screenLayout|orientation"
             android:launchMode="singleTop"
             />
         <activity
-            android:name=".activity.LoginActivtiy"
+            android:name=".activity.base.tutorial.LoginActivtiy"
             android:configChanges="screenLayout|orientation|keyboardHidden"
             android:launchMode="singleTop"
             />
         <activity
-            android:name=".activity.RegisteActivity"
+            android:name=".activity.base.tutorial.RegisteActivity"
             android:configChanges="screenLayout|orientation"
             android:launchMode="singleTop"
             />
         <activity
-            android:name=".activity.MainActivity"
-            android:configChanges="keyboardHidden|orientation|screenLayout"
-            android:launchMode="singleTop"
-            />
-        <activity
-            android:name=".activity.UserInfoActivity"
+            android:name=".activity.base.tutorial.UserInfoActivity"
             android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleTop"
            />
         <activity
-            android:name=".activity.SelectDevice"
+            android:name=".activity.base.tutorial.SelectDevice"
             android:configChanges="keyboardHidden|screenLayout|orientation"
             android:launchMode="singleTop"
             />
-        <activity android:name=".activity.ShowWatchActivity"
+        <activity android:name=".activity.base.tutorial.ShowWatchActivity"
                   android:configChanges="keyboardHidden|screenLayout|orientation"
                   android:launchMode="singleTop"/>
+        <activity android:name=".activity.MainActivity"
+                  android:configChanges="keyboardHidden|screenLayout|orientation"
+                  android:launchMode="singleTop"/>
+        <activity android:name=".activity.HomeActivity"
+                  android:configChanges="keyboardHidden|screenLayout|orientation"
+                  android:launchMode="singleTop"/>
+
         <!-- register all services used in the application -->
         <service
             android:name="net.medcorp.library.ble.ble.MEDBTService"

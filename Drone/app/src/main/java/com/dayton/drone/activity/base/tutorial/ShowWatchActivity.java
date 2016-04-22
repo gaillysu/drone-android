@@ -1,4 +1,4 @@
-package com.dayton.drone.activity;
+package com.dayton.drone.activity.base.tutorial;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dayton.drone.R;
+import com.dayton.drone.activity.MainActivity;
 import com.dayton.drone.activity.base.BaseActivity;
 
 /**

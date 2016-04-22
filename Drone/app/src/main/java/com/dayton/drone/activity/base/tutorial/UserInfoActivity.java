@@ -1,4 +1,4 @@
-package com.dayton.drone.activity;
+package com.dayton.drone.activity.base.tutorial;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -129,7 +129,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 String birthday = tv_userBirth.getText().toString();
                 String height = tv_userHeight.getText().toString();
                 String weight = tv_userWeight.getText().toString();
-                if (!(TextUtils.isEmpty(birthday) && TextUtils.isEmpty(height) && TextUtils.isEmpty(weight))) {
+                if (!(TextUtils.isEmpty(birthday)&&TextUtils.isEmpty(height)&&TextUtils.isEmpty(weight))){
 
                     Intent intent = getIntent();
                     String account = intent.getStringExtra("account");
@@ -148,6 +148,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                         us.setSex(2);
                     }
                     database.add(us);
+
                     startActivity(SelectDevice.class);
 
                 } else {

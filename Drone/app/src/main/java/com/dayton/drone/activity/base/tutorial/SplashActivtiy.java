@@ -1,4 +1,4 @@
-package com.dayton.drone.activity;
+package com.dayton.drone.activity.base.tutorial;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
+import com.dayton.drone.activity.base.tutorial.TutorialActivtiy;
 
 /**
  * Created by boy on 2016/4/13.

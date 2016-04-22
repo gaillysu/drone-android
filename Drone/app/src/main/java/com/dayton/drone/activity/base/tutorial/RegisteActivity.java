@@ -1,4 +1,4 @@
-package com.dayton.drone.activity;
+package com.dayton.drone.activity.base.tutorial;
 
 import android.content.Intent;
 import android.os.Bundle;

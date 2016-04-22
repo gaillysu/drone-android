@@ -1,6 +1,5 @@
-package com.dayton.drone.activity;
+package com.dayton.drone.activity.base.tutorial;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
-import com.dayton.drone.activity.base.tutorial.ShowWatchActivity;
 
 /**
  * Created by boy on 2016/4/19.
@@ -25,11 +22,11 @@ public class SelectDevice extends BaseActivity {
     private SelectAdapter mAdapter;
 
     private String[] mDec;
-    private int[] arr = new int[]{
-            R.mipmap.icon_04, R.mipmap.icon_04,
-            R.mipmap.icon_04, R.mipmap.icon_04,
-            R.mipmap.icon_04, R.mipmap.icon_04,
-            R.mipmap.icon_04, R.mipmap.icon_04,
+    private int[] arr = {
+            R.mipmap.guide_3, R.mipmap.guide_3,
+            R.mipmap.guide_3, R.mipmap.guide_3,
+            R.mipmap.guide_3, R.mipmap.guide_3,
+            R.mipmap.guide_3, R.mipmap.guide_3,
     };
 
     @Override
@@ -86,7 +83,7 @@ public class SelectDevice extends BaseActivity {
         }
     }
 
-    static class HolderView {
+    class HolderView {
         ImageView iv_drone;
         TextView tv_name;
     }
@@ -97,18 +94,7 @@ public class SelectDevice extends BaseActivity {
         gv_selectDevice.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(SelectDevice.this, ShowWatchActivity.class);
-                intent.putExtra("image_id", arr[position]);
-                intent.putExtra("watch_name", mDec[position]);
-                startActivity(intent);
 
-            }
-        });
-
-        iv_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
             }
         });
     }
