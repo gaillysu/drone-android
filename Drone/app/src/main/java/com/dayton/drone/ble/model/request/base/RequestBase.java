@@ -10,8 +10,8 @@ import net.medcorp.library.ble.model.request.BLERequestData;
 /**
  * Created by med on 16/4/12.
  * for Drone project, the packet length is not fixed, and the number of packet also not fixed,
- * so you must override  getRawDataEx()
- * now getRawData() is no useful
+ * so you must override one of getRawDataEx() and getRawData()
+ * if you both override them, only the getRawData() is enable, getRawDataEx() will get ignored
  */
 public abstract  class RequestBase extends BLERequestData {
 
@@ -25,5 +25,7 @@ public abstract  class RequestBase extends BLERequestData {
     }
 
     @Override
-    abstract public byte[][] getRawDataEx();
+    public byte[][] getRawDataEx(){
+        return null;
+    }
 }
