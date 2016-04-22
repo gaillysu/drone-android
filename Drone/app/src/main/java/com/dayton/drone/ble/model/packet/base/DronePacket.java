@@ -2,6 +2,7 @@ package com.dayton.drone.ble.model.packet.base;
 
 import com.dayton.drone.ble.model.packet.ActivityPacket;
 import com.dayton.drone.ble.model.packet.GetStepsGoalPacket;
+import com.dayton.drone.ble.model.packet.GetWorldClockPacket;
 import com.dayton.drone.ble.model.packet.SystemEventPacket;
 import com.dayton.drone.ble.model.packet.SystemStatusPacket;
 
@@ -46,5 +47,8 @@ public class DronePacket {
     }
     public GetStepsGoalPacket newGetStepsGoalPacket() {
         return new GetStepsGoalPacket(mPackets);
+    }
+    public GetWorldClockPacket newGetWorldClockPacket() {
+        return new GetWorldClockPacket(mPackets);
     }
 }
