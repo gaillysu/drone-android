@@ -1,42 +1,47 @@
 package com.dayton.drone.fragment;
 
-import android.app.Fragment;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+
+import com.dayton.drone.R;
 
 /**
  * Created by boy on 2016/4/22.
  */
-public class HomeContentFragment extends Fragment {
+public class HomeContentFragment extends BaseFragment implements View.OnClickListener {
 
-    private String mArgument;
-    private static final String ARGUMENT = "argument";
+    private ImageView mIvBack,mIvMonthBack,mIvMonthNext,mIvNext;
+    private LinearLayout mShowDate;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Bundle bundle = getArguments();
-        if(bundle != null){
-            mArgument = bundle.getString(ARGUMENT);
-        }
+    protected View initView() {
+        View view = View.inflate(mActivity,R.layout.fragment_home_content,null);
+        mIvBack = (ImageView) view.findViewById(R.id.back_page);
+        mIvMonthBack = (ImageView) view.findViewById(R.id.back_month);
+        mShowDate = (LinearLayout) view.findViewById(R.id.table_date);
+        mIvMonthNext = (ImageView) view.findViewById(R.id.next_month);
+        mIvNext = (ImageView) view.findViewById(R.id.table_next_page);
+        mIvBack.setVisibility(View.GONE);
+        mIvMonthBack.setVisibility(View.GONE);
+        mIvMonthNext.setVisibility(View.GONE);
+        mIvNext.setVisibility(View.GONE);
+        addListener();
+        return view;
     }
 
-    public static HomeContentFragment newInstance(String argument){
-        Bundle bundle = new Bundle();
-        bundle.putString(ARGUMENT,argument);
-        HomeContentFragment fragment = new HomeContentFragment();
-        fragment.setArguments(bundle);
-        return fragment;
+    private void addListener() {
+        mShowDate.setOnClickListener(this);
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public void onClick(View v) {
 
-        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+
+    @Override
+    protected void initData() {
+
     }
 }

@@ -28,11 +28,9 @@
     <string name="connecting_fail">Fail</string>
     <string name="main_table_date">APR 12</string>
     <string name="start_smart_watch">Open</string>
-    <string name="home_guide_clock">WORLD</string>
-    <string name="home_guide_clock_1">CLOCK</string>
+    <string name="home_guide_clock">WORLD\n\tCLOCK</string>
     <string name="home_guide_analysis">ANALYISIS</string>
-    <string name="home_guide_setting">WATCH</string>
-    <string name="home_guide_setting_1">SETTING</string>
+    <string name="home_guide_setting">WATCH\n\tSETTING</string>
     <string name="home_guide_profile">PROFILE</string>
     <string-array name="user_select_dec_arr">
         <item>bcbs</item>

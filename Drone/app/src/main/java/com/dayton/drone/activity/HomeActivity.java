@@ -1,78 +1,87 @@
 package com.dayton.drone.activity;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.dayton.drone.R;
+import com.dayton.drone.fragment.AnalYisisFragment;
+import com.dayton.drone.fragment.HomeContentFragment;
+import com.dayton.drone.fragment.ProfileFragment;
+import com.dayton.drone.fragment.WatchSettingFragment;
+import com.dayton.drone.fragment.WorldClockFragment;
 
 /**
  * Created by boy on 2016/4/21.
  */
-public class HomeActivity extends FragmentActivity implements View.OnClickListener {
+public class HomeActivity extends Activity {
 
-    private ImageView mIvBack,mIvMonthBack,mIvMonthNext,mIvNext;
-    private LinearLayout mShowDate;
+
     private TextView mMonthTv;
-    private LinearLayout guide_1,guide_2,guide_3,guide_4,guide_5;
     private FrameLayout mContentFragment;
+    private RadioGroup mRadioGroup;
+    private Bundle savedInstance;
 
     @Override
-    protected void onCreate( Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        savedInstance = savedInstanceState;
         initView();
-        addClickListener();
     }
 
     private void initView() {
-        mIvBack = (ImageView) findViewById(R.id.back_page);
-        mIvMonthBack = (ImageView) findViewById(R.id.back_month);
-        mShowDate = (LinearLayout) findViewById(R.id.table_date);
-        mIvMonthNext = (ImageView) findViewById(R.id.next_month);
-        mIvNext = (ImageView) findViewById(R.id.table_next_page);
+
         mMonthTv = (TextView) findViewById(R.id.table_date_tv);
         mContentFragment = (FrameLayout) findViewById(R.id.home_middle_content);
-        guide_1 = (LinearLayout) findViewById(R.id.home_guide_noe);
-        guide_2 = (LinearLayout) findViewById(R.id.home_guide_two);
-        guide_3 = (LinearLayout) findViewById(R.id.home_guide_three);
-        guide_4  = (LinearLayout) findViewById(R.id.home_guide_four);
-        guide_5 = (LinearLayout) findViewById(R.id.home_guide_five);
+        mRadioGroup = (RadioGroup) findViewById(R.id.home_guide_group);
+        mRadioGroup.setOnCheckedChangeListener(new MyRadioGroupCheckeedChangeListeren());
+        getFragmentManager().beginTransaction()
+                .replace(R.id.home_middle_content, new HomeContentFragment()).commit();
 
-        mIvBack.setVisibility(View.GONE);
-        mIvMonthBack.setVisibility(View.GONE);
-        mIvMonthNext.setVisibility(View.GONE);
-        mIvNext.setVisibility(View.GONE);
     }
 
-    private void addClickListener() {
-        guide_1.setOnClickListener(this);
-        guide_2.setOnClickListener(this);
-        guide_3.setOnClickListener(this);
-        guide_4.setOnClickListener(this);
-        guide_5.setOnClickListener(this);
-    }
+    private class MyRadioGroupCheckeedChangeListeren implements RadioGroup.OnCheckedChangeListener {
 
-    @Override
-    public void onClick(View v) {
-        switch(v.getId()){
-            case R.id.home_guide_noe:
+        @Override
+        public void onCheckedChanged(RadioGroup group, int checkedId) {
 
-                break;
-            case R.id.home_guide_two:
-                break;
-            case R.id.home_guide_three:
-
-                break;
-            case R.id.home_guide_four:
-                break;
-            case R.id.home_guide_five:
-                break;
+            switch (checkedId) {
+                case R.id.home_guide_noe:
+                    if (savedInstance == null) {
+                        getFragmentManager().beginTransaction().
+                                replace(R.id.home_middle_content, new WorldClockFragment()).commit();
+                    }
+                    break;
+                case R.id.home_guide_two:
+                    if (savedInstance == null) {
+                        getFragmentManager().beginTransaction()
+                                .replace(R.id.home_middle_content, new AnalYisisFragment()).commit();
+                    }
+                    break;
+                case R.id.home_guide_three:
+                    if (savedInstance == null) {
+                        getFragmentManager().beginTransaction()
+                                .replace(R.id.home_middle_content, new HomeContentFragment()).commit();
+                    }
+                    break;
+                case R.id.home_guide_four:
+                    if (savedInstance == null) {
+                        getFragmentManager().beginTransaction()
+                                .replace(R.id.home_middle_content, new WatchSettingFragment()).commit();
+                    }
+                    break;
+                case R.id.home_guide_five:
+                    if (savedInstance == null) {
+                        getFragmentManager().beginTransaction()
+                                .replace(R.id.home_middle_content, new ProfileFragment()).commit();
+                    }
+                    break;
+            }
         }
+
 
     }
 }

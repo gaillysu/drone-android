@@ -4,123 +4,69 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <include
-        layout="@layout/main_table"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        />
-
     <FrameLayout
         android:id="@+id/home_middle_content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>
 
-    <LinearLayout
+    <RadioGroup
+        android:id="@+id/home_guide_group"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:gravity="center"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <LinearLayout
+        <RadioButton
             android:id="@+id/home_guide_noe"
             android:layout_width="0dp"
             android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:drawableTop="@mipmap/ic_launcher"
+            android:button="@null"
             android:gravity="center"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:text="@string/home_guide_clock"
+            />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/home_guide_clock"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/home_guide_clock_1"/>
-        </LinearLayout>
-
-        <LinearLayout
+        <RadioButton
             android:id="@+id/home_guide_two"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:drawableTop="@mipmap/ic_launcher"
+            android:button="@null"
+            android:gravity="center_horizontal"
+            android:text="@string/home_guide_analysis"
+            />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/home_guide_analysis"/>
-        </LinearLayout>
-
-        <LinearLayout
+        <RadioButton
             android:id="@+id/home_guide_three"
             android:layout_width="0dp"
             android:layout_weight="1"
-
-            android:gravity="center_horizontal"
             android:layout_height="match_parent"
-            android:paddingTop="5dp"
-            android:orientation="vertical">
+            android:drawableTop="@mipmap/ic_launcher"
+            android:button="@null"
+            />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/iconfont_dingwei"
-                android:scaleType="fitXY"/>
-        </LinearLayout>
-
-        <LinearLayout
+        <RadioButton
             android:id="@+id/home_guide_four"
             android:layout_width="0dp"
             android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:drawableTop="@mipmap/ic_launcher"
+            android:button="@null"
             android:gravity="center"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:text="@string/home_guide_setting"
+            />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/img4"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/home_guide_setting"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/home_guide_setting_1"/>
-        </LinearLayout>
-
-        <LinearLayout
+        <RadioButton
             android:id="@+id/home_guide_five"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:gravity="center"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/home_guide_profile"/>
-        </LinearLayout>
-    </LinearLayout>
-
+            android:layout_height="match_parent"
+            android:drawableTop="@mipmap/ic_launcher"
+            android:button="@null"
+            android:gravity="center_horizontal"
+            android:text="@string/home_guide_profile"
+            />
+    </RadioGroup>
 </LinearLayout>
