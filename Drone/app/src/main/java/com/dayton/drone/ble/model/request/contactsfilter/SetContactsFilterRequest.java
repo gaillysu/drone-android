@@ -1,4 +1,4 @@
-package com.dayton.drone.ble.model.request.contacts;
+package com.dayton.drone.ble.model.request.contactsfilter;
 
 import android.content.Context;
 

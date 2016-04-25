@@ -1,4 +1,4 @@
-package com.dayton.drone.ble.model.request.notification;
+package com.dayton.drone.ble.model.request.notificationfilter;
 
 import android.content.Context;
 
