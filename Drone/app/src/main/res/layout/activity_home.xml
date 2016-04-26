@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/home_middle_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <RadioGroup
+        android:id="@+id/home_guide_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/home_guide_noe"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:drawableTop="@mipmap/ic_launcher"
+            android:button="@null"
+            android:gravity="center"
+            android:text="@string/home_guide_clock"
+            />
+
+        <RadioButton
+            android:id="@+id/home_guide_two"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:drawableTop="@mipmap/ic_launcher"
+            android:button="@null"
+            android:gravity="center_horizontal"
+            android:text="@string/home_guide_analysis"
+            />
+
+        <RadioButton
+            android:id="@+id/home_guide_three"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:drawableTop="@mipmap/ic_launcher"
+            android:button="@null"
+            />
+
+        <RadioButton
+            android:id="@+id/home_guide_four"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:drawableTop="@mipmap/ic_launcher"
+            android:button="@null"
+            android:gravity="center"
+            android:text="@string/home_guide_setting"
+            />
+
+        <RadioButton
+            android:id="@+id/home_guide_five"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:drawableTop="@mipmap/ic_launcher"
+            android:button="@null"
+            android:gravity="center_horizontal"
+            android:text="@string/home_guide_profile"
+            />
+    </RadioGroup>
+</LinearLayout>

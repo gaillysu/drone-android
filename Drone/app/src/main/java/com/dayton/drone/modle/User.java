@@ -8,7 +8,7 @@ public class User {
 
     private int age = 18;
 
-    private int weight = 77;//kg
+    private double weight = 77;//kg
 
     private int height = 175;//cm
 
@@ -59,7 +59,7 @@ public class User {
         this.age = age;
     }
 
-    public void setWeight(int weight) {
+    public void setWeight(double weight) {
         this.weight = weight;
     }
 
@@ -84,7 +84,7 @@ public class User {
         return age;
     }
 
-    public int getWeight() {
+    public double getWeight() {
         return weight;
     }
 

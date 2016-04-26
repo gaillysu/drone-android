@@ -26,6 +26,12 @@
     <string name="watch_version">version 1.0.3</string>
     <string name = "watch_buletooth_id">IMEI 156420156233</string>
     <string name="connecting_fail">Fail</string>
+    <string name="main_table_date">APR</string>
+    <string name="start_smart_watch">Open</string>
+    <string name="home_guide_clock">WORLD\n\tCLOCK</string>
+    <string name="home_guide_analysis">ANALYISIS</string>
+    <string name="home_guide_setting">WATCH\n\tSETTING</string>
+    <string name="home_guide_profile">PROFILE</string>
     <string-array name="user_select_dec_arr">
         <item>bcbs</item>
         <item>akbdkjb</item>

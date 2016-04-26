@@ -1,4 +1,4 @@
-package com.dayton.drone.activity;
+package com.dayton.drone.activity.base.tutorial;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -72,7 +72,6 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 tv_sexMale.setBackgroundColor(R.color.colorPrimary);
                 break;
 
-            //userinfo
             case R.id.user_barthday:
                 viewType = 1;
                 DatePickerPopWin pickerPopWin = new DatePickerPopWin.Builder(UserInfoActivity.this,
@@ -129,7 +128,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 String birthday = tv_userBirth.getText().toString();
                 String height = tv_userHeight.getText().toString();
                 String weight = tv_userWeight.getText().toString();
-                if (!(TextUtils.isEmpty(birthday) && TextUtils.isEmpty(height) && TextUtils.isEmpty(weight))) {
+                if (!(TextUtils.isEmpty(birthday)&&TextUtils.isEmpty(height)&&TextUtils.isEmpty(weight))){
 
                     Intent intent = getIntent();
                     String account = intent.getStringExtra("account");
@@ -137,7 +136,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                     UserDatabaseHelper database = new UserDatabaseHelper(UserInfoActivity.this);
                     User us = new User(System.currentTimeMillis());
                     int h = new Integer(height.substring(0, 3));
-                    int w = new Integer(weight.substring(0, weight.length() - 2));
+                    double w = new Integer(weight.substring(0, weight.length() - 2));
                     us.setBirthday(birthday);
                     us.setDroneUserEmail(account);
                     us.setHeight(h);
@@ -148,8 +147,9 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                         us.setSex(2);
                     }
                     database.add(us);
-                    startActivity(SelectDevice.class);
 
+                    startActivity(SelectDevice.class);
+                    finish();
                 } else {
                     Toast.makeText(UserInfoActivity.this,
                             R.string.user_info_about, Toast.LENGTH_SHORT).show();

@@ -37,7 +37,7 @@ public class UserBean {
      */
     public static final String fWeight = "Weight";
     @DatabaseField
-    private int Weight = 75;
+    private double Weight = 75;
 
     /**
      * default height, 175cm
@@ -146,11 +146,11 @@ public class UserBean {
         Age = age;
     }
 
-    public int getWeight() {
+    public double getWeight() {
         return Weight;
     }
 
-    public void setWeight(int weight) {
+    public void setWeight(double weight) {
         Weight = weight;
     }
 

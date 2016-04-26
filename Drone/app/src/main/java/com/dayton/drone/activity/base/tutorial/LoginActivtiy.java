@@ -1,4 +1,4 @@
-package com.dayton.drone.activity;
+package com.dayton.drone.activity.base.tutorial;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.dayton.drone.R;
+import com.dayton.drone.activity.MainActivity;
 import com.dayton.drone.activity.base.BaseActivity;
 
 /**
