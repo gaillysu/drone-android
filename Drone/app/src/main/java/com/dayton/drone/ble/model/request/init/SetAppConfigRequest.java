@@ -18,14 +18,9 @@ public class SetAppConfigRequest extends RequestBase{
     }
     @Override
     public byte[][] getRawDataEx() {
-        byte  isActivityTracking = 1;
-        byte  appState = 1;
         return new byte[][] {
-                {(byte) 0x80,HEADER,
-                        isActivityTracking,
-                        appState,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-                {(byte) 0x80,HEADER,0x02,
-                        appState,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+                {(byte) 0x80,HEADER,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                {(byte) 0x80,HEADER,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
         };
     }
 }

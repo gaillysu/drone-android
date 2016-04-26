@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.dayton.drone.ble.model.request.base.RequestBase;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -21,14 +22,14 @@ public class SetRTCRequest extends RequestBase {
     public byte[][] getRawDataEx() {
         Date theDay = new Date();
         int  timezone = TimeZone.getDefault().getRawOffset()/1000/3600 * 15;
-        long timestamp = theDay.getTime()/1000 + 3600 * 2;
+        long timestamp = theDay.getTime()/1000 + 2*3600;
         return new byte[][]{
                 {
                         (byte)0x80,HEADER,
                         (byte) (timestamp&0xFF),
                         (byte) ((timestamp>>8)&0xFF),
-                        (byte) (timestamp&0xFF),
-                        (byte) (timestamp&0xFF),
+                        (byte) ((timestamp>>16)&0xFF),
+                        (byte) ((timestamp>>24)&0xFF),
                         (byte) (timezone&0xFF)
                 }
         };
