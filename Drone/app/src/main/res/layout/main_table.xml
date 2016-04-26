@@ -3,14 +3,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:gravity="center_vertical"
-                android:background="@mipmap/juxingtu"
+                android:background="#66CCCC"
                 android:orientation="horizontal">
 
-    <ImageView
+    <ImageButton
         android:id="@+id/back_page"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:src="@mipmap/ssdk_recomm_title_back"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_centerVertical="true"
+        android:background="@mipmap/ssdk_recomm_back"
         />
 
     <LinearLayout
@@ -20,12 +21,12 @@
         android:gravity="center_vertical"
         >
 
-        <ImageView
+        <ImageButton
             android:id="@+id/back_month"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginRight="30dp"
-            android:src="@mipmap/ssdk_recomm_title_back"
+            android:background="@mipmap/ssdk_recomm_back"
             />
 
         <LinearLayout
@@ -44,26 +45,28 @@
                 android:id="@+id/table_date_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
                 android:layout_gravity="center_vertical"
                 android:text="@string/main_table_date"
                 android:textColor="@android:color/white"
                 android:textSize="19sp"/>
         </LinearLayout>
 
-        <ImageView
+        <ImageButton
             android:id="@+id/next_month"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginLeft="30dp"
-            android:src="@mipmap/right_arrow"
+            android:background="@mipmap/right_arrow"
             />
     </LinearLayout>
 
-    <ImageView
+    <ImageButton
         android:id="@+id/table_next_page"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_alignParentRight="true"
-        android:src="@mipmap/right_arrow"
+        android:layout_centerVertical="true"
+        android:background="@mipmap/right_arrow"
         />
 </RelativeLayout>
