@@ -8,15 +8,15 @@ public class TrainingRecordModel {
     /**
      * SUMMARY HEADER 32 bytes
      */
-    int trainingStartStamp; //Unit: "s", if use "ms", it shall use "long" type save it
-    int trainingDuration;
-    int trainingDistance;
+    private int trainingStartStamp; //Unit: "s", if use "ms", it shall use "long" type save it
+    private int trainingDuration;
+    private int trainingDistance;
     //dummy 20 bytes
 
-    short sampleDataCount;
-    byte [] sampleData; //Sets of 8 bytes data
-    short[] sampleSpeed;
-    byte statusFIFO;
+    private short sampleDataCount;
+    private byte [] sampleData; //Sets of 8 bytes data
+    private short[] sampleSpeed;
+    private byte statusFIFO;
 
 
     public int getTrainingStartStamp() {

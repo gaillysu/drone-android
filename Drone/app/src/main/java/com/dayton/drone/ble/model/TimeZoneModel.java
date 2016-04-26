@@ -4,8 +4,8 @@ package com.dayton.drone.ble.model;
  * Created by med on 16/4/22.
  */
 public class TimeZoneModel {
-    int timeZone; //for example: Bei jing Zone: +8 ,New York: -5
-    String timeZoneName;
+    private int timeZone; //for example: Bei jing Zone: +8 ,New York: -5
+    private String timeZoneName;
     public TimeZoneModel(int timeZone,String timeZoneName)
     {
         this.timeZone = timeZone;
