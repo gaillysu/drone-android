@@ -1,87 +1,91 @@
 package com.dayton.drone.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.FrameLayout;
-import android.widget.RadioGroup;
-import android.widget.TextView;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 import com.dayton.drone.R;
-import com.dayton.drone.fragment.AnalYisisFragment;
-import com.dayton.drone.fragment.HomeContentFragment;
-import com.dayton.drone.fragment.ProfileFragment;
-import com.dayton.drone.fragment.WatchSettingFragment;
-import com.dayton.drone.fragment.WorldClockFragment;
+import com.dayton.drone.adapter.MyHomeMenuAdapter;
+import com.dayton.drone.bean.MenuBean;
+import com.dayton.drone.utils.UIUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by boy on 2016/4/21.
  */
 public class HomeActivity extends Activity {
 
+    private List<MenuBean> mListData;
+    private int[] mHomeMenuIconArray={R.mipmap.icon_04,
+            R.mipmap.icon_04,R.mipmap.icon_04,
+            R.mipmap.icon_04,R.mipmap.icon_04};
+    private String[] mHomeMenuTextArray;
+    private final String activities = "ACTIVITIES";
+    private final String sleep = "SLEEP";
+    private final String clock = "WORLD\nCLOCK";
+    private final String setting = "SETTINGS";
+    private final String gallery = "GALLERY";
+    private int type = 0;
 
-    private TextView mMonthTv;
-    private FrameLayout mContentFragment;
-    private RadioGroup mRadioGroup;
-    private Bundle savedInstance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        savedInstance = savedInstanceState;
-        initView();
-    }
-
-    private void initView() {
-
-        mMonthTv = (TextView) findViewById(R.id.table_date_tv);
-        mContentFragment = (FrameLayout) findViewById(R.id.home_middle_content);
-        mRadioGroup = (RadioGroup) findViewById(R.id.home_guide_group);
-        mRadioGroup.setOnCheckedChangeListener(new MyRadioGroupCheckeedChangeListeren());
-        getFragmentManager().beginTransaction()
-                .replace(R.id.home_middle_content, new HomeContentFragment()).commit();
-
-    }
-
-    private class MyRadioGroupCheckeedChangeListeren implements RadioGroup.OnCheckedChangeListener {
-
-        @Override
-        public void onCheckedChanged(RadioGroup group, int checkedId) {
-
-            switch (checkedId) {
-                case R.id.home_guide_noe:
-                    if (savedInstance == null) {
-                        getFragmentManager().beginTransaction().
-                                replace(R.id.home_middle_content, new WorldClockFragment()).commit();
-                    }
-                    break;
-                case R.id.home_guide_two:
-                    if (savedInstance == null) {
-                        getFragmentManager().beginTransaction()
-                                .replace(R.id.home_middle_content, new AnalYisisFragment()).commit();
-                    }
-                    break;
-                case R.id.home_guide_three:
-                    if (savedInstance == null) {
-                        getFragmentManager().beginTransaction()
-                                .replace(R.id.home_middle_content, new HomeContentFragment()).commit();
-                    }
-                    break;
-                case R.id.home_guide_four:
-                    if (savedInstance == null) {
-                        getFragmentManager().beginTransaction()
-                                .replace(R.id.home_middle_content, new WatchSettingFragment()).commit();
-                    }
-                    break;
-                case R.id.home_guide_five:
-                    if (savedInstance == null) {
-                        getFragmentManager().beginTransaction()
-                                .replace(R.id.home_middle_content, new ProfileFragment()).commit();
-                    }
-                    break;
+        initData();
+        ListView listView = (ListView) findViewById(R.id.home_meun_list);
+        listView.setAdapter(new MyHomeMenuAdapter(mListData));
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String content = mHomeMenuTextArray[position];
+                switch(content){
+                    case activities:
+                        type = 1;
+                        opneFragmentManage(1);
+                        break;
+                    case sleep:
+                        type = 2;
+                        opneFragmentManage(2);
+                        break;
+                    case clock:
+                        type = 3;
+                        opneFragmentManage(3);
+                        break;
+                    case setting:
+                        type = 4;
+                        opneFragmentManage(4);
+                        break;
+                    case gallery:
+                        type  =5;
+                        opneFragmentManage(5);
+                        break;
+                }
             }
-        }
-
-
+        });
     }
+
+    private void initData() {
+        mListData = new ArrayList<>(3);
+        mHomeMenuTextArray = UIUtils.getStringArray(R.array.home_menu_text_data);
+        for(int i=0;i<mHomeMenuIconArray.length;i++){
+            MenuBean bean = new MenuBean();
+            bean.setIconId(mHomeMenuIconArray[i]);
+            bean.setDec(mHomeMenuTextArray[i]);
+            mListData.add(bean);
+        }
+    }
+
+
+    public void opneFragmentManage(int type){
+        Intent intent = new Intent(this ,ManagerHomeFragmentActivity.class);
+        intent.putExtra("type",type);
+        startActivity(intent);
+    }
+
 }

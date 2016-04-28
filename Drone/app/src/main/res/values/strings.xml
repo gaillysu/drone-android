@@ -19,12 +19,12 @@
     <string name="user_device_select">Setting up your device.</string>
     <string name="user_info_about">About your info is not null</string>
     <string name="user_select_dec">Don\'t have a device here</string>
-    <string name = "user_device_drone">Buy you drone here</string>
+    <string name="user_device_drone">Buy you drone here</string>
     <string name="bluetooth_connecting">Connecting</string>
     <string name="retry_connecting">Retry</string>
     <string name="watch_name">Drone Watch</string>
     <string name="watch_version">version 1.0.3</string>
-    <string name = "watch_buletooth_id">IMEI 156420156233</string>
+    <string name="watch_buletooth_id">IMEI 156420156233</string>
     <string name="connecting_fail">Fail</string>
     <string name="main_table_date">APR</string>
     <string name="start_smart_watch">Open</string>
@@ -32,6 +32,7 @@
     <string name="home_guide_analysis">ANALYISIS</string>
     <string name="home_guide_setting">WATCH\n\tSETTING</string>
     <string name="home_guide_profile">PROFILE</string>
+    <string name="home_title_back_text">Back</string>
     <string-array name="user_select_dec_arr">
         <item>bcbs</item>
         <item>akbdkjb</item>
@@ -41,5 +42,12 @@
         <item>kjbajkbd</item>
         <item>bjahhb</item>
         <item>kbjsbdka</item>
-</string-array>
+    </string-array>
+    <string-array name="home_menu_text_data">
+        <item>ACTIVITIES</item>
+        <item> SLEEP </item>
+        <item>GALLERY</item>
+        <item>SETTINGS</item>
+        <item>WORLD\nCLOCK</item>
+    </string-array>
 </resources>

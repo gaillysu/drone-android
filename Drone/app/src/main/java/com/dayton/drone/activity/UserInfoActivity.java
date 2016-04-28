@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.bruce.pickerview.popwindow.DatePickerPopWin;
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
+import com.dayton.drone.activity.base.tutorial.SelectDeviceActivity;
 import com.dayton.drone.database.entry.UserDatabaseHelper;
 import com.dayton.drone.modle.User;
 
@@ -148,7 +149,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                         us.setSex(2);
                     }
                     database.add(us);
-                    startActivity(SelectDevice.class);
+                    startActivity(SelectDeviceActivity.class);
 
                 } else {
                     Toast.makeText(UserInfoActivity.this,
