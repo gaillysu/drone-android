@@ -2,18 +2,19 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="wrap_content"
-              android:layout_height="wrap_content">
-    <ImageView
+              android:layout_height="wrap_content"
+                android:layout_margin="5dp">
+    <ImageButton
         android:id="@+id/registe_back_iv"
-        android:src="@mipmap/smile"
-        android:layout_width="wrap_content"
+        android:layout_width="40dp"
         android:padding="10dp"
-        android:layout_height="wrap_content"/>
-    <ImageView
+        android:background="@mipmap/left_arrow"
+        android:layout_height="40dp"/>
+    <ImageButton
         android:id="@+id/registe_next_iv"
         android:layout_alignParentRight="true"
-        android:src="@mipmap/smile"
         android:padding="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:background="@mipmap/right_arrow"
+        android:layout_width="40dp"
+        android:layout_height="40dp"/>
 </RelativeLayout>

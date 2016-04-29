@@ -4,4 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="line_color">#20000000</color>
+    <color name="userinfo_sex_bg">#D19D42</color>
+    <color name="progress_start_color">#614777</color>
+    <color name="progress_end_color">#C19149</color>
 </resources>

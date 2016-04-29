@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,8 +24,8 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     private String mUserSex;
     private TextView tv_userBirth, tv_userHeight, tv_userWeight;
     private int viewType = 1;
-    private ImageView iv_back;
-    private ImageView iv_next;
+    private ImageButton ivBack;
+    private ImageButton ivNext;
     private String userSex;
 
     @Override
@@ -44,8 +44,8 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         tv_userWeight = (TextView) findViewById(R.id.user_weight);
         tv_sexFamale.setBackgroundColor(R.color.colorPrimary);
         mUserSex = tv_sexFamale.getText().toString();
-        iv_back = (ImageView) findViewById(R.id.registe_back_iv);
-        iv_next = (ImageView) findViewById(R.id.registe_next_iv);
+        ivBack = (ImageButton) findViewById(R.id.registe_back_iv);
+        ivNext = (ImageButton) findViewById(R.id.registe_next_iv);
     }
 
     private void addListener() {
@@ -54,8 +54,8 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         tv_userBirth.setOnClickListener(this);
         tv_userHeight.setOnClickListener(this);
         tv_userWeight.setOnClickListener(this);
-        iv_back.setOnClickListener(this);
-        iv_next.setOnClickListener(this);
+        ivBack.setOnClickListener(this);
+        ivNext.setOnClickListener(this);
     }
 
     @Override
@@ -63,13 +63,13 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         switch (v.getId()) {
             case R.id.user_sex_fmale:
                 mUserSex = tv_sexFamale.getText().toString();
-                tv_sexFamale.setBackgroundColor(R.color.colorPrimary);
+                tv_sexFamale.setBackgroundColor(R.color.userinfo_sex_bg);
                 tv_sexMale.setBackgroundColor(android.R.color.transparent);
                 break;
             case R.id.user_sex_male:
                 mUserSex = tv_sexMale.getText().toString();
                 tv_sexFamale.setBackgroundColor(android.R.color.transparent);
-                tv_sexMale.setBackgroundColor(R.color.colorPrimary);
+                tv_sexMale.setBackgroundColor(R.color.userinfo_sex_bg);
                 break;
 
             case R.id.user_barthday:
@@ -136,7 +136,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                     UserDatabaseHelper database = new UserDatabaseHelper(UserInfoActivity.this);
                     User us = new User(System.currentTimeMillis());
                     int h = new Integer(height.substring(0, 3));
-                    double w = new Integer(weight.substring(0, weight.length() - 2));
+                    double w = Double.parseDouble(weight.substring(0, weight.length() - 2));
                     us.setBirthday(birthday);
                     us.setDroneUserEmail(account);
                     us.setHeight(h);
@@ -148,7 +148,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                     }
                     database.add(us);
 
-                    startActivity(SelectDevice.class);
+                    startActivity(SelectDeviceActivity.class);
                     finish();
                 } else {
                     Toast.makeText(UserInfoActivity.this,

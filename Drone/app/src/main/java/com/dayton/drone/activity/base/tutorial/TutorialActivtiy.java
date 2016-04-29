@@ -14,34 +14,35 @@ import com.dayton.drone.activity.base.BaseActivity;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 /**
  * Created by boy on 2016/4/13.
  */
 public class TutorialActivtiy extends BaseActivity {
 
-    private ViewPager vp_loginPage;
+    @Bind(R.id.activity_login_vp)
+    ViewPager vp_loginPage;
     private List<ImageView> mVpList;
-    private Button mLogin;
-    private Button mRegiste;
+    @Bind(R.id.login_bt)
+    Button mLogin;
+    @Bind(R.id.registe_bt)
+    Button mRegiste;
+
     private int[] vp_data = new int[]{R.mipmap.guide_1, R.mipmap.guide_2, R.mipmap.guide_3};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activtiy_login_tutorial);
-        initView();
+        ButterKnife.bind(this);
         initDate();
-        addListener();
-    }
-
-    private void initView() {
-        vp_loginPage = (ViewPager) findViewById(R.id.activity_login_vp);
-        mLogin = (Button) findViewById(R.id.login_bt);
-        mRegiste = (Button) findViewById(R.id.registe_bt);
-        mVpList = new ArrayList<>(3);
     }
 
     private void initDate() {
+        mVpList = new ArrayList<>(3);
         for (int iv : vp_data) {
             ImageView imageView = new ImageView(this);
             imageView.setBackgroundResource(iv);
@@ -50,20 +51,14 @@ public class TutorialActivtiy extends BaseActivity {
         vp_loginPage.setAdapter(new MyViewPagerAdapter());
     }
 
-    private void addListener() {
-        mLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(LoginActivtiy.class);
-            }
-        });
+    @OnClick(R.id.login_bt)
+    public void openLoginActivity() {
+        startActivity(LoginActivtiy.class);
+    }
 
-        mRegiste.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(RegisteActivity.class);
-            }
-        });
+    @OnClick(R.id.registe_bt)
+    public void openRegisteActivity() {
+        startActivity(RegisteActivity.class);
     }
 
     public class MyViewPagerAdapter extends PagerAdapter {

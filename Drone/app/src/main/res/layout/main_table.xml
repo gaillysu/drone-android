@@ -2,35 +2,42 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
+                android:background="@color/userinfo_sex_bg"
                 android:gravity="center_vertical"
-                android:background="#66CCCC"
                 android:orientation="horizontal">
 
-    <ImageButton
-        android:id="@+id/back_page"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_centerVertical="true"
-        android:background="@mipmap/ssdk_recomm_back"
-        />
-
-    <LinearLayout
+    <Button
+        android:id="@+id/home_fragment_title_back"
+        android:background="@android:color/transparent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:text="@string/home_title_back_text"
+        android:textColor="@android:color/white"/>
+    <TextView
+        android:id="@+id/home_title_middle_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+    <LinearLayout
+
+        android:id="@+id/home_fragment_title_middle_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:gravity="center_vertical"
         >
 
         <ImageButton
-            android:id="@+id/back_month"
+            android:id="@+id/home_fragment_calendar_back_day"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginRight="30dp"
-            android:background="@mipmap/ssdk_recomm_back"
+            android:layout_marginRight="18dp"
+            android:background="@mipmap/left_arrpw_1"
             />
 
         <LinearLayout
-            android:id="@+id/table_date"
+            android:id="@+id/home_fragment_title_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -38,35 +45,26 @@
             <ImageView
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:src="@mipmap/ic_launcher"
+                android:src="@mipmap/calendar_title_icon"
                 />
 
             <TextView
-                android:id="@+id/table_date_tv"
+                android:id="@+id/home_fragment_title_date_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
                 android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
                 android:text="@string/main_table_date"
                 android:textColor="@android:color/white"
                 android:textSize="19sp"/>
         </LinearLayout>
 
         <ImageButton
-            android:id="@+id/next_month"
+            android:id="@+id/home_fragmet_title_next_day"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginLeft="30dp"
-            android:background="@mipmap/right_arrow"
+            android:layout_marginLeft="20dp"
+            android:background="@mipmap/right_arrow_1"
             />
     </LinearLayout>
-
-    <ImageButton
-        android:id="@+id/table_next_page"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:background="@mipmap/right_arrow"
-        />
 </RelativeLayout>

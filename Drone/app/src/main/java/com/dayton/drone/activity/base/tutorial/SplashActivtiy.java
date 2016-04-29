@@ -8,7 +8,6 @@ import android.os.Bundle;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
-import com.dayton.drone.activity.base.tutorial.TutorialActivtiy;
 
 /**
  * Created by boy on 2016/4/13.
@@ -17,7 +16,6 @@ public class SplashActivtiy extends BaseActivity {
     private long time;
     private int currentVersion;
     private String newVersionDescription = null;
-
     private AlertDialog dialog;
 
     @Override

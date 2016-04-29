@@ -47,8 +47,6 @@
             />
         <activity
             android:name=".activity.base.tutorial.LoginActivtiy"
-            android:configChanges="screenLayout|orientation|keyboardHidden"
-            android:launchMode="singleTop"
             />
         <activity
             android:name=".activity.base.tutorial.RegisteActivity"
@@ -61,19 +59,19 @@
             android:launchMode="singleTop"
            />
         <activity
-            android:name=".activity.base.tutorial.SelectDevice"
+            android:name=".activity.base.tutorial.SelectDeviceActivity"
             android:configChanges="keyboardHidden|screenLayout|orientation"
-            android:launchMode="singleTop"
-            />
+            android:launchMode="singleTop" />
         <activity android:name=".activity.base.tutorial.ShowWatchActivity"
-                  android:configChanges="keyboardHidden|screenLayout|orientation"
-                  android:launchMode="singleTop"/>
-        <activity android:name=".activity.MainActivity"
                   android:configChanges="keyboardHidden|screenLayout|orientation"
                   android:launchMode="singleTop"/>
         <activity android:name=".activity.HomeActivity"
                   android:configChanges="keyboardHidden|screenLayout|orientation"
                   android:launchMode="singleTop"/>
+        <activity android:name=".activity.ManagerHomeFragmentActivity"
+                  android:configChanges="keyboardHidden|screenLayout|orientation"
+                  android:launchMode="singleTop"
+            />
 
         <!-- register all services used in the application -->
         <service

@@ -1,6 +1,8 @@
 package com.dayton.drone.fragment;
 
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.dayton.drone.R;
 
@@ -10,7 +12,7 @@ import com.dayton.drone.R;
 public class WatchSettingFragment extends BaseFragment {
 
     @Override
-    protected View initView() {
+    protected View initView(LayoutInflater inflater, ViewGroup container) {
      View view  = View.inflate(mActivity, R.layout.fragment_setting_content,null);
         return view;
     }

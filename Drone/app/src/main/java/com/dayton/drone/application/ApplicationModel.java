@@ -2,6 +2,8 @@ package com.dayton.drone.application;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.dayton.drone.ble.controller.OtaControllerImpl;
 import com.dayton.drone.ble.controller.SyncController;
@@ -14,25 +16,60 @@ import net.medcorp.library.ble.controller.OtaController;
  */
 public class ApplicationModel extends Application {
 
-    public static Context context;
-
-    public static Context getContext() {
-        if (context != null) {
-            return context;
-        } else {
-            return ApplicationModel.getContext();
-        }
-    }
+    private static Context mContext;
+    private static Thread	mMainThread;
+    private static long		mMainThreadId;
+    private static Looper	mMainThreadLooper;
+    private static Handler mHandler;
 
     private SyncController syncController;
     private OtaController otaController;
 
+
     @Override
-    public void onCreate() {
+    public void onCreate()
+    {
         super.onCreate();
+
+        mContext = this;
+
+        mHandler = new Handler();
+
+        mMainThread = Thread.currentThread();
+
+        mMainThreadId = android.os.Process.myTid();
+
+        mMainThreadLooper = getMainLooper();
+
         syncController = new SyncControllerImpl(this);
         otaController  = new OtaControllerImpl(this);
     }
+
+    public static Context getContext()
+    {
+        return mContext;
+    }
+
+    public static Handler getHandler()
+    {
+        return mHandler;
+    }
+
+    public static Thread getMainThread()
+    {
+        return mMainThread;
+    }
+
+    public static long getMainThreadId()
+    {
+        return mMainThreadId;
+    }
+
+    public static Looper getMainThreadLooper()
+    {
+        return mMainThreadLooper;
+    }
+
 
     public SyncController getSyncController() {
         return syncController;
@@ -41,4 +78,5 @@ public class ApplicationModel extends Application {
     public OtaController getOtaController() {
         return otaController;
     }
+
 }
