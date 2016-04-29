@@ -31,7 +31,7 @@ public class TutorialActivtiy extends BaseActivity {
     @Bind(R.id.registe_bt)
     Button mRegiste;
 
-    private int[] vp_data = new int[]{R.mipmap.guide_1, R.mipmap.guide_2, R.mipmap.guide_3};
+    private int[] vp_data = new int[]{R.mipmap.drone1, R.mipmap.drone2, R.mipmap.drone3};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +42,7 @@ public class TutorialActivtiy extends BaseActivity {
     }
 
     private void initDate() {
-        mVpList = new ArrayList<>(3);
+        mVpList = new ArrayList<>(vp_data.length);
         for (int iv : vp_data) {
             ImageView imageView = new ImageView(this);
             imageView.setBackgroundResource(iv);

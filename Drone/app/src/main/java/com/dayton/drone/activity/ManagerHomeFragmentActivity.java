@@ -42,10 +42,9 @@ public class ManagerHomeFragmentActivity extends BaseActivity {
 
     private FrameLayout frameLayout;
     private View calendarView;
-    private Context mContext;
     private RelativeLayout titleView;
     private CalendarView calendar;
-    private LinearLayout showCaledar;
+    private LinearLayout showCalendar;
     private PopupWindow popupWindow;
 
     private TextView mTitleCalendarTextView;
@@ -61,7 +60,6 @@ public class ManagerHomeFragmentActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_manager);
         ButterKnife.bind(this);
-        mContext = UIUtils.getContext();
         initView();
         initData();
         addListener();
@@ -106,8 +104,8 @@ public class ManagerHomeFragmentActivity extends BaseActivity {
         frameLayout = (FrameLayout) findViewById(R.id.manager_fragment_framelayout);
         mIvNextDay = (ImageButton) findViewById(home_fragmet_title_next_day);
         mIvBackDay = (ImageButton) findViewById(home_fragmet_title_next_day);
-        showCaledar = (LinearLayout) findViewById(R.id.home_fragment_title_date);
-        calendarView = View.inflate(mContext, R.layout.date_layout_popupwindow, null);
+        showCalendar = (LinearLayout) findViewById(R.id.home_fragment_title_date);
+        calendarView = View.inflate(getModel(), R.layout.date_layout_popupwindow, null);
         calendar = (CalendarView) calendarView.findViewById(R.id.calendar_popupwindow_layout);
         calendar.setSelectMore(false);
     }
@@ -153,10 +151,10 @@ public class ManagerHomeFragmentActivity extends BaseActivity {
             }
         });
 
-        showCaledar.setOnClickListener(new View.OnClickListener() {
+        showCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                popupWindow= new PopupWindow(calendarView, ViewGroup.LayoutParams.MATCH_PARENT
+                popupWindow = new PopupWindow(calendarView, ViewGroup.LayoutParams.MATCH_PARENT
                         , ViewGroup.LayoutParams.WRAP_CONTENT, true);
                 popupWindow.setFocusable(true);
                 popupWindow.setBackgroundDrawable(new BitmapDrawable());
