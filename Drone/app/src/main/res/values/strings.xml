@@ -33,6 +33,9 @@
     <string name="home_guide_setting">WATCH\n\tSETTING</string>
     <string name="home_guide_profile">PROFILE</string>
     <string name="home_title_back_text">Back</string>
+    <string name="fragment_home_title_calories">CALORIES</string>
+    <string name="fragment_home_title_active_time">ACTIVE\t\tTIME</string>
+    <string name="fragment_home_title_miles">MILES</string>
     <string-array name="user_select_dec_arr">
         <item>bcbs</item>
         <item>akbdkjb</item>

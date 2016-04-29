@@ -1,3 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<items version="2" />
+<items version="2" >
 
+    <item
+        jar="C:\Users\boy\Desktop\med\android-drone\Drone\app\build\intermediates\exploded-aar\cn.dreamtobe.percentsmoothhandler\library\0.1.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="b3c8f81c607700a598795b5bf6946a3b34e72952">
+        <dex dex="C:\Users\boy\Desktop\med\android-drone\Drone\app\build\intermediates\pre-dexed\debug\cn.dreamtobe.percentsmoothhandler-library-0.1.1_4ba4044cffcca89d3c0f899864d7de5ce8c15743.jar" />
+    </item>
+    <item
+        jar="C:\Users\boy\Desktop\med\android-drone\Drone\app\build\intermediates\exploded-aar\com.liulishuo.magicprogresswidget\library\1.0.9\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="7620d882c3faf10854575d8e4a215d90bd46af22">
+        <dex dex="C:\Users\boy\Desktop\med\android-drone\Drone\app\build\intermediates\pre-dexed\debug\com.liulishuo.magicprogresswidget-library-1.0.9_79d2bd27fe808b583c332cbaa6e5c7d46a94bc9e.jar" />
+    </item>
+
+</items>
