@@ -1,6 +1,5 @@
 package com.dayton.drone.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -16,16 +15,21 @@ import com.dayton.drone.utils.UIUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 /**
  * Created by boy on 2016/4/21.
  */
 public class HomeActivity extends BaseActivity {
 
-    private List<MenuBean> mListData;
-    private int[] mHomeMenuIconArray={R.mipmap.mainmenu_activity_icon,
+    @Bind(R.id.activity_home_meun_listview)
+    ListView homeMenuListView;
+
+    private List<MenuBean> listData;
+    private int[] homeMenuIconArray ={R.mipmap.mainmenu_activity_icon,
             R.mipmap.mainmenu_sleep_icon,R.mipmap.mainmenu_gallery_icon,
             R.mipmap.mainmenu_setting_icon,R.mipmap.mainmenu_worldclock_icon};
-    private String[] mHomeMenuTextArray;
+    private String[] homeMenuTextArray;
     private final String activities = "ACTIVITIES";
     private final String sleep = "SLEEP";
     private final String clock = "WORLD\nCLOCK";
@@ -38,14 +42,14 @@ public class HomeActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        ButterKnife.bind(this);
         initData();
-        ListView listView = (ListView) findViewById(R.id.home_meun_list);
-        listView.setAdapter(new MyHomeMenuAdapter(mListData));
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        homeMenuListView.setAdapter(new MyHomeMenuAdapter(listData));
+        homeMenuListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String content = mHomeMenuTextArray[position];
-                switch(content){
+                String content = homeMenuTextArray[position];
+                switch (content) {
                     case activities:
                         type = 1;
                         openFragmentManage(1);
@@ -63,7 +67,7 @@ public class HomeActivity extends BaseActivity {
                         openFragmentManage(4);
                         break;
                     case gallery:
-                        type  =5;
+                        type = 5;
                         openFragmentManage(5);
                         break;
                 }
@@ -72,13 +76,13 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void initData() {
-        mListData = new ArrayList<>(mHomeMenuIconArray.length);
-        mHomeMenuTextArray = UIUtils.getStringArray(R.array.home_menu_text_data);
-        for(int i=0;i<mHomeMenuIconArray.length;i++){
+        listData = new ArrayList<>(homeMenuIconArray.length);
+        homeMenuTextArray = UIUtils.getStringArray(R.array.home_menu_text_data);
+        for(int i=0;i< homeMenuIconArray.length;i++){
             MenuBean bean = new MenuBean();
-            bean.setIconId(mHomeMenuIconArray[i]);
-            bean.setDec(mHomeMenuTextArray[i]);
-            mListData.add(bean);
+            bean.setIconId(homeMenuIconArray[i]);
+            bean.setDec(homeMenuTextArray[i]);
+            listData.add(bean);
         }
     }
 
