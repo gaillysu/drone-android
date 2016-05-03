@@ -5,7 +5,10 @@
               android:orientation="vertical">
 
     <include layout="@layout/registe_control_button"/>
-
+    <!--<ImageView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="60dp"-->
+        <!--android:src="@mipmap/dronelogo"/>-->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -32,13 +35,14 @@
         >
 
         <LinearLayout
+
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/registe_edit_bg">
 
             <TextView
-                android:id="@+id/user_sex_fmale"
+                android:id="@+id/user_info_sex_famale_tv"
                 android:layout_width="80dp"
                 android:layout_height="40dp"
                 android:background="@color/userinfo_sex_bg"
@@ -53,10 +57,11 @@
             android:background="@drawable/registe_edit_bg">
 
             <TextView
-                android:id="@+id/user_sex_male"
+               android:id="@+id/user_info_sex_male_tv"
                 android:layout_width="80dp"
                 android:layout_height="40dp"
                 android:gravity="center"
+                android:background="@android:color/transparent"
                 android:text="@string/user_sex_male"/>
         </LinearLayout>
 

@@ -1,7 +1,6 @@
 package com.dayton.drone.activity;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -102,8 +101,8 @@ public class ManagerHomeFragmentActivity extends BaseActivity {
         titleView = (RelativeLayout) findViewById(R.id.fragment_title);
         mTitleCalendarTextView = (TextView) findViewById(R.id.home_fragment_title_date_tv);
         frameLayout = (FrameLayout) findViewById(R.id.manager_fragment_framelayout);
-        mIvNextDay = (ImageButton) findViewById(home_fragmet_title_next_day);
-        mIvBackDay = (ImageButton) findViewById(home_fragmet_title_next_day);
+        mIvNextDay = (ImageButton) findViewById(R.id.home_fragmet_title_next_day);
+        mIvBackDay = (ImageButton) findViewById(R.id.home_fragment_calendar_back_day);
         showCalendar = (LinearLayout) findViewById(R.id.home_fragment_title_date);
         calendarView = View.inflate(getModel(), R.layout.date_layout_popupwindow, null);
         calendar = (CalendarView) calendarView.findViewById(R.id.calendar_popupwindow_layout);
@@ -177,7 +176,9 @@ public class ManagerHomeFragmentActivity extends BaseActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(keyCode == KeyEvent.KEYCODE_BACK){
-            popupWindow.dismiss();
+            if(popupWindow != null) {
+                popupWindow.dismiss();
+            }
         }
         return super.onKeyDown(keyCode, event);
     }

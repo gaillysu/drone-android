@@ -3,7 +3,6 @@ package com.dayton.drone.activity.base.tutorial;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,147 +13,154 @@ import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.database.entry.UserDatabaseHelper;
 import com.dayton.drone.modle.User;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 /**
  * Created by boy on 2016/4/15.
  */
-public class UserInfoActivity extends BaseActivity implements View.OnClickListener {
+public class UserInfoActivity extends BaseActivity {
 
-    private TextView tv_sexFamale;
-    private TextView tv_sexMale;
-    private String mUserSex;
-    private TextView tv_userBirth, tv_userHeight, tv_userWeight;
-    private int viewType = 1;
-    private ImageButton ivBack;
-    private ImageButton ivNext;
+    @Bind(R.id.user_info_sex_famale_tv)
+    TextView tv_sexFamale;
+    @Bind(R.id.user_info_sex_male_tv)
+    TextView tv_sexMale;
+    @Bind(R.id.user_barthday)
+    TextView tv_userBirth;
+    @Bind(R.id.user_height)
+    TextView tv_userHeight;
+    @Bind(R.id.user_weight)
+    TextView tv_userWeight;
+    @Bind(R.id.registe_back_iv)
+    ImageButton ivBack;
+    @Bind(R.id.registe_next_iv)
+    ImageButton ivNext;
     private String userSex;
+    private int viewType = 1;
+    private String mUserSex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
-        initView();
-        addListener();
-    }
-
-    private void initView() {
-        tv_sexFamale = (TextView) findViewById(R.id.user_sex_fmale);
-        tv_sexMale = (TextView) findViewById(R.id.user_sex_male);
-        tv_userBirth = (TextView) findViewById(R.id.user_barthday);
-        tv_userHeight = (TextView) findViewById(R.id.user_height);
-        tv_userWeight = (TextView) findViewById(R.id.user_weight);
-        tv_sexFamale.setBackgroundColor(R.color.colorPrimary);
+        ButterKnife.bind(this);
+        tv_sexFamale.setBackgroundColor(R.color.userinfo_sex_bg);
         mUserSex = tv_sexFamale.getText().toString();
-        ivBack = (ImageButton) findViewById(R.id.registe_back_iv);
-        ivNext = (ImageButton) findViewById(R.id.registe_next_iv);
     }
 
-    private void addListener() {
-        tv_sexFamale.setOnClickListener(this);
-        tv_sexMale.setOnClickListener(this);
-        tv_userBirth.setOnClickListener(this);
-        tv_userHeight.setOnClickListener(this);
-        tv_userWeight.setOnClickListener(this);
-        ivBack.setOnClickListener(this);
-        ivNext.setOnClickListener(this);
+    @OnClick(R.id.user_info_sex_famale_tv)
+    public void selectUserSexFemale() {
+        mUserSex = tv_sexFamale.getText().toString();
+        tv_sexFamale.setBackgroundColor(R.color.userinfo_sex_bg);
+        tv_sexMale.setBackgroundColor(android.R.color.transparent);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.user_sex_fmale:
-                mUserSex = tv_sexFamale.getText().toString();
-                tv_sexFamale.setBackgroundColor(R.color.userinfo_sex_bg);
-                tv_sexMale.setBackgroundColor(android.R.color.transparent);
-                break;
-            case R.id.user_sex_male:
-                mUserSex = tv_sexMale.getText().toString();
-                tv_sexFamale.setBackgroundColor(android.R.color.transparent);
-                tv_sexMale.setBackgroundColor(R.color.userinfo_sex_bg);
-                break;
+    @OnClick(R.id.user_info_sex_male_tv)
+    public void selectUserSexMale() {
+        mUserSex = tv_sexMale.getText().toString();
+        tv_sexFamale.setBackgroundColor(android.R.color.transparent);
+        tv_sexMale.setBackgroundColor(R.color.userinfo_sex_bg);
+    }
 
-            case R.id.user_barthday:
-                viewType = 1;
-                DatePickerPopWin pickerPopWin = new DatePickerPopWin.Builder(UserInfoActivity.this,
-                        new DatePickerPopWin.OnDatePickedListener() {
-                            @Override
-                            public void onDatePickCompleted(int year, int month,
-                                                            int day, String dateDesc) {
-                                Toast.makeText(UserInfoActivity.this, dateDesc, 0).show();
-                                tv_userBirth.setText(dateDesc);
-                            }
-                        }).viewStyle(viewType)
-                        .viewTextSize(25) // pick view text size
-                        .minYear(1990) //min year in loop
-                        .maxYear(2550) // max year in loop
-                        .dateChose("2000-11-11") // date chose when init popwindow
-                        .build();
-                pickerPopWin.showPopWin(UserInfoActivity.this);
-                break;
-            case R.id.user_height:
-                viewType = 2;
-                DatePickerPopWin pickerPopWin2 = new DatePickerPopWin.Builder(UserInfoActivity.this,
-                        new DatePickerPopWin.OnDatePickedListener() {
-                            @Override
-                            public void onDatePickCompleted(int year, int month,
-                                                            int day, String dateDesc) {
-                                tv_userHeight.setText(dateDesc);
-                            }
-                        }).viewStyle(viewType)
-                        .viewTextSize(25) // pick view text size
-                        .dateChose("0-173-0") // date chose when init popwindow
-                        .build();
-                pickerPopWin2.showPopWin(UserInfoActivity.this);
-                break;
-            case R.id.user_weight:
-                viewType = 3;
-                DatePickerPopWin pickerPopWin3 = new DatePickerPopWin.Builder(UserInfoActivity.this,
-                        new DatePickerPopWin.OnDatePickedListener() {
-                            @Override
-                            public void onDatePickCompleted(int year, int month,
-                                                            int day, String dateDesc) {
-                                tv_userWeight.setText(dateDesc);
-                            }
-                        }).viewStyle(viewType)
-                        .viewTextSize(25) // pick view text size
-                        .dateChose("52-0-0") // date chose when init popwindow
-                        .build();
-                pickerPopWin3.showPopWin(UserInfoActivity.this);
-                break;
+    @OnClick(R.id.user_barthday)
+    public void putUserBarthday() {
 
-            case R.id.registe_back_iv:
-                finish();
-                break;
-            case R.id.registe_next_iv:
-                String birthday = tv_userBirth.getText().toString();
-                String height = tv_userHeight.getText().toString();
-                String weight = tv_userWeight.getText().toString();
-                if (!(TextUtils.isEmpty(birthday)&&TextUtils.isEmpty(height)&&TextUtils.isEmpty(weight))){
-
-                    Intent intent = getIntent();
-                    String account = intent.getStringExtra("account");
-                    String password = intent.getStringExtra("password");
-                    UserDatabaseHelper database = new UserDatabaseHelper(UserInfoActivity.this);
-                    User us = new User(System.currentTimeMillis());
-                    int h = new Integer(height.substring(0, 3));
-                    double w = Double.parseDouble(weight.substring(0, weight.length() - 2));
-                    us.setBirthday(birthday);
-                    us.setDroneUserEmail(account);
-                    us.setHeight(h);
-                    us.setWeight(w);
-                    if (mUserSex.equals("famale")) {
-                        us.setSex(1);
-                    } else {
-                        us.setSex(2);
+        viewType = 1;
+        DatePickerPopWin pickerPopWin = new DatePickerPopWin.Builder(UserInfoActivity.this,
+                new DatePickerPopWin.OnDatePickedListener() {
+                    @Override
+                    public void onDatePickCompleted(int year, int month,
+                                                    int day, String dateDesc) {
+                        Toast.makeText(UserInfoActivity.this, dateDesc, 0).show();
+                        tv_userBirth.setText(dateDesc);
                     }
-                    database.add(us);
-
-                    startActivity(SelectDeviceActivity.class);
-                    finish();
-                } else {
-                    Toast.makeText(UserInfoActivity.this,
-                            R.string.user_info_about, Toast.LENGTH_SHORT).show();
-                }
-        }
-
+                }).viewStyle(viewType)
+                .viewTextSize(25) // pick view text size
+                .minYear(1990) //min year in loop
+                .maxYear(2550) // max year in loop
+                .dateChose("2000-11-11") // date chose when init popwindow
+                .build();
+        pickerPopWin.showPopWin(UserInfoActivity.this);
     }
+
+    @OnClick(R.id.user_height)
+    public void putUserHeight() {
+        viewType = 2;
+        DatePickerPopWin pickerPopWin2 = new DatePickerPopWin.Builder(UserInfoActivity.this,
+                new DatePickerPopWin.OnDatePickedListener() {
+                    @Override
+                    public void onDatePickCompleted(int year, int month,
+                                                    int day, String dateDesc) {
+                        tv_userHeight.setText(dateDesc);
+                    }
+                }).viewStyle(viewType)
+                .viewTextSize(25) // pick view text size
+                .dateChose("0-173-0") // date chose when init popwindow
+                .build();
+        pickerPopWin2.showPopWin(UserInfoActivity.this);
+    }
+
+
+    @OnClick(R.id.user_weight)
+    public void putUserWeight() {
+        viewType = 3;
+        DatePickerPopWin pickerPopWin3 = new DatePickerPopWin.Builder(UserInfoActivity.this,
+                new DatePickerPopWin.OnDatePickedListener() {
+                    @Override
+                    public void onDatePickCompleted(int year, int month,
+                                                    int day, String dateDesc) {
+                        tv_userWeight.setText(dateDesc);
+                    }
+                }).viewStyle(viewType)
+                .viewTextSize(25) // pick view text size
+                .dateChose("52-0-0") // date chose when init popwindow
+                .build();
+        pickerPopWin3.showPopWin(UserInfoActivity.this);
+    }
+
+
+    @OnClick(R.id.registe_back_iv)
+    public void back() {
+        finish();
+    }
+
+    @OnClick(R.id.registe_next_iv)
+    public void next() {
+        String birthday = tv_userBirth.getText().toString();
+        String height = tv_userHeight.getText().toString();
+        String weight = tv_userWeight.getText().toString();
+        if (!(TextUtils.isEmpty(birthday) && TextUtils.isEmpty(height) && TextUtils.isEmpty(weight)))
+
+        {
+
+            Intent intent = getIntent();
+            String account = intent.getStringExtra("account");
+            String password = intent.getStringExtra("password");
+            UserDatabaseHelper database = new UserDatabaseHelper(UserInfoActivity.this);
+            User us = new User(System.currentTimeMillis());
+            int h = new Integer(height.substring(0, 3));
+            double w = Double.parseDouble(weight.substring(0, weight.length() - 2));
+            us.setBirthday(birthday);
+            us.setDroneUserEmail(account);
+            us.setHeight(h);
+            us.setWeight(w);
+            if (mUserSex.equals("famale")) {
+                us.setSex(1);
+            } else {
+                us.setSex(2);
+            }
+            database.add(us);
+
+            startActivity(SelectDeviceActivity.class);
+            finish();
+        } else
+
+        {
+            Toast.makeText(UserInfoActivity.this,
+                    R.string.user_info_about, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
 }

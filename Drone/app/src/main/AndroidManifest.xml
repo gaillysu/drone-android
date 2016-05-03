@@ -66,10 +66,8 @@
                   android:configChanges="keyboardHidden|screenLayout|orientation"
                   android:launchMode="singleTop"/>
         <activity android:name=".activity.HomeActivity"
-                  android:configChanges="keyboardHidden|screenLayout|orientation"
                   android:launchMode="singleTop"/>
         <activity android:name=".activity.ManagerHomeFragmentActivity"
-                  android:configChanges="keyboardHidden|screenLayout|orientation"
                   android:launchMode="singleTop"
             />
 
