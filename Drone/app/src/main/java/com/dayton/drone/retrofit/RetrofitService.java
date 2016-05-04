@@ -10,7 +10,7 @@ import retrofit.RestAdapter;
  */
 public class RetrofitService extends RetrofitGsonSpiceService {
     //TODO this url should be a public address
-    private final static String BASE_URL = "https://drone.karljohnchow.com";
+    private final static String BASE_URL = "http://drone.karljohnchow.com";
 
     @Override
     protected String getServerUrl() {

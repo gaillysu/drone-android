@@ -9,7 +9,6 @@ public class UserLocationModel {
     private String last_name;
     private String email;
     private float length;
-    private String[] watch_list;
     private String last_longitude;
     private String last_latitude;
 
@@ -52,14 +51,6 @@ public class UserLocationModel {
 
     public void setLength(float length) {
         this.length = length;
-    }
-
-    public String[] getWatch_list() {
-        return watch_list;
-    }
-
-    public void setWatch_list(String[] watch_list) {
-        this.watch_list = watch_list;
     }
 
     public String getLast_longitude() {

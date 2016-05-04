@@ -9,7 +9,6 @@ public class UserModel {
     private String last_name;
     private String email;
     private float length;
-    private String[] watch_list;
 
     public int getId() {
         return id;
@@ -51,11 +50,4 @@ public class UserModel {
         this.length = length;
     }
 
-    public String[] getWatch_list() {
-        return watch_list;
-    }
-
-    public void setWatch_list(String[] watch_list) {
-        this.watch_list = watch_list;
-    }
 }

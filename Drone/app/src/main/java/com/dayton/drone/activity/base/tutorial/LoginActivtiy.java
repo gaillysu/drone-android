@@ -1,5 +1,6 @@
 package com.dayton.drone.activity.base.tutorial;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
@@ -9,6 +10,11 @@ import android.widget.Toast;
 import com.dayton.drone.R;
 import com.dayton.drone.activity.HomeActivity;
 import com.dayton.drone.activity.base.BaseActivity;
+import com.dayton.drone.retrofit.model.UserLogin;
+import com.dayton.drone.retrofit.request.user.LoginUserModel;
+import com.dayton.drone.retrofit.request.user.LoginUserRequest;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -31,30 +37,68 @@ public class LoginActivtiy extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        //TODO this is test hardcode
+        ed_account.setText("test@med-corp.net");
+        ed_password.setText("123456");
     }
 
     @OnClick(R.id.login_user)
     public void loginClick(){
-        String account = ed_account.getText().toString();
-        String password = ed_password.getText().toString();
-        if (!(TextUtils.isEmpty(account) && TextUtils.isEmpty(password))) {
-            //login
-            if (userLogin(account, password)) {
-                startActivity(HomeActivity.class);
-                finish();
-            } else {
-                Toast.makeText(LoginActivtiy.this,
-                        R.string.user_account_error, Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            Toast.makeText(LoginActivtiy.this,
-                    R.string.tips_user_account_password, Toast.LENGTH_SHORT).show();
-        }
+         if(!validate()){
+             onLoginFailed();
+             return;
+         }
+        final ProgressDialog progressDialog = new ProgressDialog(LoginActivtiy.this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("logging in...");
+        progressDialog.show();
+
+         UserLogin userLogin = new UserLogin();
+         userLogin.setEmail(ed_account.getText().toString());
+         userLogin.setPassword(ed_password.getText().toString());
+         getModel().getRetrofitManager().execute(new LoginUserRequest(userLogin,getModel().getRetrofitManager().getAccessToken()),new RequestListener<LoginUserModel>(){
+
+             @Override
+             public void onRequestFailure(SpiceException spiceException) {
+                 progressDialog.dismiss();
+                 onLoginFailed();
+             }
+
+             @Override
+             public void onRequestSuccess(LoginUserModel loginUserModel) {
+                 progressDialog.dismiss();
+                 onLoginSuccess();
+             }
+         });
     }
 
+    private void onLoginSuccess() {
+        Toast.makeText(getBaseContext(), "log in success", Toast.LENGTH_LONG).show();
+        startActivity(HomeActivity.class);
+        finish();
+    }
 
-    public boolean userLogin(String account, String password) {
+    private void onLoginFailed() {
+        Toast.makeText(getBaseContext(), "log in got failed", Toast.LENGTH_LONG).show();
+    }
 
-        return true;
+    private boolean validate() {
+        boolean valid = true;
+        String email = ed_account.getText().toString();
+        String password = ed_password.getText().toString();
+        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            ed_account.setError(getString(R.string.tips_user_account_password));
+            valid = false;
+        } else {
+            ed_account.setError(null);
+        }
+        if (password.isEmpty()) {
+            ed_password.setError(getString(R.string.tips_user_account_password));
+            valid = false;
+        } else {
+            ed_password.setError(null);
+        }
+        return valid;
     }
 }

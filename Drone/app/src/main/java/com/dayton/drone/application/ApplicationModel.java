@@ -8,6 +8,7 @@ import android.os.Looper;
 import com.dayton.drone.ble.controller.OtaControllerImpl;
 import com.dayton.drone.ble.controller.SyncController;
 import com.dayton.drone.ble.controller.SyncControllerImpl;
+import com.dayton.drone.retrofit.RetrofitManager;
 
 import net.medcorp.library.ble.controller.OtaController;
 
@@ -24,7 +25,7 @@ public class ApplicationModel extends Application {
 
     private SyncController syncController;
     private OtaController otaController;
-
+    private RetrofitManager retrofitManager;
 
     @Override
     public void onCreate()
@@ -43,6 +44,7 @@ public class ApplicationModel extends Application {
 
         syncController = new SyncControllerImpl(this);
         otaController  = new OtaControllerImpl(this);
+        retrofitManager = new RetrofitManager(this);
     }
 
     public static Context getContext()
@@ -77,6 +79,10 @@ public class ApplicationModel extends Application {
 
     public OtaController getOtaController() {
         return otaController;
+    }
+
+    public RetrofitManager getRetrofitManager(){
+        return retrofitManager;
     }
 
 }

@@ -1,8 +1,11 @@
 package com.dayton.drone.retrofit.request.user;
 
+import android.util.Log;
+
 import com.dayton.drone.retrofit.model.UserLogin;
 import com.dayton.drone.retrofit.restapi.Drone;
 import com.dayton.drone.retrofit.request.BaseRetroRequest;
+import com.google.gson.Gson;
 
 /**
  * Created by med on 16/5/3.
@@ -30,6 +33,7 @@ public class LoginUserRequest extends BaseRetroRequest<LoginUserModel,Drone> imp
         LoginParameters parameters = new LoginParameters();
         parameters.setUser(user);
         loginUserObject.setParams(parameters);
+        Log.i(this.getClass().getSimpleName(), "loginUserObject: " + new Gson().toJson(loginUserObject));
         return loginUserObject;
     }
 }
