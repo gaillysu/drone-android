@@ -29,8 +29,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import butterknife.ButterKnife;
-
 import static com.dayton.drone.R.id.home_fragmet_title_next_day;
 
 /**
@@ -58,7 +56,6 @@ public class ManagerHomeFragmentActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_manager);
-        ButterKnife.bind(this);
         initView();
         initData();
         addListener();
