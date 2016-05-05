@@ -8,3 +8,5 @@ Drone/build/generated/mockable-android-23.jar
 Drone/wheelpicklib/pickerview.iml
 Drone/app/app.iml
 Drone/Drone.iml
+.idea/
+Drone/build/

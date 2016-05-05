@@ -371,11 +371,14 @@ public class CalendarView extends View implements View.OnTouchListener {
 							onItemClickListener.OnItemClick(selectedStartDate,selectedEndDate,downDate);
 						} else {
 							selectedStartDate = selectedEndDate = downDate;
+							curDate = downDate;
 							completed = false;
 						}
 					}else{
 						selectedStartDate = selectedEndDate = downDate;
 						onItemClickListener.OnItemClick(selectedStartDate,selectedEndDate,downDate);
+						curDate = downDate;
+
 					}
 					invalidate();
 				}
@@ -406,9 +409,9 @@ public class CalendarView extends View implements View.OnTouchListener {
 		private int textColor = Color.parseColor("#55000000");
 		private int btnColor = Color.parseColor("#FCFEFE");
 		private int borderColor = Color.parseColor("#00000000");
-		public int todayNumberColor = Color.WHITE;
+		public int todayNumberColor = Color.parseColor("#55000000");
 		public int cellDownColor = Color.parseColor("#FFFFFF");
-		public int cellSelectedColor = Color.parseColor("#542482");
+		public int cellSelectedColor = Color.parseColor("#C19149");
 		public Paint borderPaint;
 		public Paint monthPaint;
 		public Paint weekPaint;
