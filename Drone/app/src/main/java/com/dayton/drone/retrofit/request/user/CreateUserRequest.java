@@ -1,8 +1,11 @@
 package com.dayton.drone.retrofit.request.user;
 
+import android.util.Log;
+
 import com.dayton.drone.retrofit.model.User;
 import com.dayton.drone.retrofit.restapi.Drone;
 import com.dayton.drone.retrofit.request.BaseRetroRequest;
+import com.google.gson.Gson;
 
 /**
  * Created by med on 16/5/3.
@@ -25,11 +28,12 @@ public class CreateUserRequest extends BaseRetroRequest<CreateUserModel,Drone> i
 
     @Override
     public CreateUserObject buildRequestBody() {
-        CreateUserObject createUserObject = new CreateUserObject();
-        createUserObject.setToken(token);
+        CreateUserObject object = new CreateUserObject();
+        object.setToken(token);
         CreateParameters parameters = new CreateParameters();
         parameters.setUser(user);
-        createUserObject.setParams(parameters);
-        return createUserObject;
+        object.setParams(parameters);
+        Log.i(this.getClass().getSimpleName(), "object: " + new Gson().toJson(object));
+        return object;
     }
 }

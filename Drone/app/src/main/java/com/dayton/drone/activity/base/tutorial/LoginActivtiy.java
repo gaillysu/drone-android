@@ -68,7 +68,12 @@ public class LoginActivtiy extends BaseActivity {
              @Override
              public void onRequestSuccess(LoginUserModel loginUserModel) {
                  progressDialog.dismiss();
-                 onLoginSuccess();
+                 if(loginUserModel.getStatus()==1) {
+                     getModel().getUser().setDroneUserID(loginUserModel.getUser().getId()+"");
+                     getModel().getUser().setDroneUserEmail(loginUserModel.getUser().getEmail());
+                     getModel().getUser().setIsLogin(true);
+                     onLoginSuccess();
+                 }
              }
          });
     }

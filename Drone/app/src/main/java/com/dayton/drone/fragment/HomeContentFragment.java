@@ -2,16 +2,22 @@ package com.dayton.drone.fragment;
 
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.dayton.drone.R;
+import com.dayton.drone.event.LittleSyncEvent;
 import com.dayton.drone.utils.Constance;
 import com.dayton.drone.utils.SpUtils;
 import com.dayton.drone.utils.UIUtils;
 import com.liulishuo.magicprogresswidget.MagicProgressCircle;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.ButterKnife;
 
@@ -51,5 +57,25 @@ public class HomeContentFragment extends BaseFragment {
 
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
 
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+    @Subscribe
+    public void onEvent(final LittleSyncEvent event) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                demoTv.setText(event.getSteps()+"");
+                demoMpc.setSmoothPercent(1.0f * event.getSteps() / event.getGoal());
+            }
+        });
+    }
 }

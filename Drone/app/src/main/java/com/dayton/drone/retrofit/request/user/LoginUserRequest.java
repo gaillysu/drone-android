@@ -28,12 +28,12 @@ public class LoginUserRequest extends BaseRetroRequest<LoginUserModel,Drone> imp
 
     @Override
     public LoginUserObject buildRequestBody() {
-        LoginUserObject loginUserObject = new LoginUserObject();
-        loginUserObject.setToken(token);
+        LoginUserObject object = new LoginUserObject();
+        object.setToken(token);
         LoginParameters parameters = new LoginParameters();
         parameters.setUser(user);
-        loginUserObject.setParams(parameters);
-        Log.i(this.getClass().getSimpleName(), "loginUserObject: " + new Gson().toJson(loginUserObject));
-        return loginUserObject;
+        object.setParams(parameters);
+        Log.i(this.getClass().getSimpleName(), "object: " + new Gson().toJson(object));
+        return object;
     }
 }
