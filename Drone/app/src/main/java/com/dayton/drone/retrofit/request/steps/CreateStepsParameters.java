@@ -6,13 +6,13 @@ import com.dayton.drone.retrofit.model.Steps;
  * Created by med on 16/5/3.
  */
 public class CreateStepsParameters {
-    Steps[] steps;
+    Steps steps;
 
-    public Steps[] getSteps() {
+    public Steps getSteps() {
         return steps;
     }
 
-    public void setSteps(Steps[] steps) {
+    public void setSteps(Steps steps) {
         this.steps = steps;
     }
 }

@@ -1,21 +1,22 @@
 package com.dayton.drone.retrofit.request.steps;
 
+import com.dayton.drone.retrofit.model.StepsDetailModel;
 import com.dayton.drone.retrofit.model.StepsModel;
 
 /**
  * Created by med on 16/5/3.
  */
 public class CreateStepsModel {
-    private StepsModel[] steps;
+    private StepsDetailModel steps;
     private float version;
     private String message;
     private int status;
 
-    public StepsModel[] getSteps() {
+    public StepsDetailModel getSteps() {
         return steps;
     }
 
-    public void setSteps(StepsModel[] steps) {
+    public void setSteps(StepsDetailModel steps) {
         this.steps = steps;
     }
 

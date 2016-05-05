@@ -8,9 +8,19 @@ import android.os.Looper;
 import com.dayton.drone.ble.controller.OtaControllerImpl;
 import com.dayton.drone.ble.controller.SyncController;
 import com.dayton.drone.ble.controller.SyncControllerImpl;
+import com.dayton.drone.cloud.SyncActivityManager;
+import com.dayton.drone.event.LittleSyncEvent;
+import com.dayton.drone.modle.User;
 import com.dayton.drone.retrofit.RetrofitManager;
+import com.dayton.drone.retrofit.model.Steps;
 
 import net.medcorp.library.ble.controller.OtaController;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by karl-john on 18/3/16.
@@ -26,6 +36,8 @@ public class ApplicationModel extends Application {
     private SyncController syncController;
     private OtaController otaController;
     private RetrofitManager retrofitManager;
+    private SyncActivityManager syncActivityManager;
+    private User   user;
 
     @Override
     public void onCreate()
@@ -45,6 +57,12 @@ public class ApplicationModel extends Application {
         syncController = new SyncControllerImpl(this);
         otaController  = new OtaControllerImpl(this);
         retrofitManager = new RetrofitManager(this);
+        syncActivityManager = new SyncActivityManager(this);
+        user = new User(0);
+        user.setDroneUserID("0");//"0" means anyone user
+        //TODO read from user table to get the lastest logged in user
+        EventBus.getDefault().register(this);
+        syncController.startConnect(false);
     }
 
     public static Context getContext()
@@ -83,6 +101,21 @@ public class ApplicationModel extends Application {
 
     public RetrofitManager getRetrofitManager(){
         return retrofitManager;
+    }
+
+    public SyncActivityManager getSyncActivityManager(){
+        return syncActivityManager;
+    }
+
+    public User getUser(){return user;}
+
+    @Subscribe
+    public void onEvent(LittleSyncEvent event) {
+        Steps steps = new Steps();
+        steps.setUid(Integer.parseInt(getUser().getDroneUserID()));
+        steps.setDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+        steps.setSteps(event.getSteps());
+        getSyncActivityManager().launchSyncDailySteps(steps);
     }
 
 }
