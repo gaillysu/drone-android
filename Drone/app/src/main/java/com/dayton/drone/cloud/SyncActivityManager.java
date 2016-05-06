@@ -4,11 +4,14 @@ import android.content.Context;
 import android.util.Log;
 
 import com.dayton.drone.application.ApplicationModel;
+import com.dayton.drone.retrofit.Constants;
 import com.dayton.drone.retrofit.model.Steps;
 import com.dayton.drone.retrofit.model.StepsModel;
 import com.dayton.drone.retrofit.model.StepsWithID;
 import com.dayton.drone.retrofit.request.steps.CreateStepsModel;
 import com.dayton.drone.retrofit.request.steps.CreateStepsRequest;
+import com.dayton.drone.retrofit.request.steps.GetStepsModel;
+import com.dayton.drone.retrofit.request.steps.GetStepsRequest;
 import com.dayton.drone.retrofit.request.steps.UpdateStepsModel;
 import com.dayton.drone.retrofit.request.steps.UpdateStepsRequest;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -69,12 +72,10 @@ public class SyncActivityManager {
      * when user login, invoke it
      */
     public void launchSyncAll(){
-
-        //uploadSteps(new Date());
-        //downloadSteps();
-
-        //uploadSleep(new Date());
-        //downloadSleep()
+        uploadSteps(new Date());
+        downloadSteps(new Date(), new Date());
+        uploadSleep(new Date());
+        downloadSleep(new Date(), new Date());
     }
 
     private void uploadSteps( Date theDay)
@@ -83,7 +84,19 @@ public class SyncActivityManager {
     }
     private void downloadSteps(final Date startDate, final Date endDate)
     {
+        getModel().getRetrofitManager().execute(new GetStepsRequest(getModel().getUser().getDroneUserID()), new RequestListener<GetStepsModel>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                spiceException.printStackTrace();
+            }
 
+            @Override
+            public void onRequestSuccess(GetStepsModel getStepsModel) {
+                if(getStepsModel.getStatus() == Constants.STATUS_CODE.STATUS_SUCCESS) {
+                    Log.i(TAG,getStepsModel.getMessage());
+                }
+            }
+        });
     }
 
     private void uploadSleep(Date theDay)

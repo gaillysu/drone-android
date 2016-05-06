@@ -72,6 +72,7 @@ public class LoginActivtiy extends BaseActivity {
                      getModel().getUser().setDroneUserID(loginUserModel.getUser().getId()+"");
                      getModel().getUser().setDroneUserEmail(loginUserModel.getUser().getEmail());
                      getModel().getUser().setIsLogin(true);
+                     getModel().getSyncActivityManager().launchSyncAll();
                      onLoginSuccess();
                  }
              }
