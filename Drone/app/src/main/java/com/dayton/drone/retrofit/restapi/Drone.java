@@ -2,6 +2,7 @@ package com.dayton.drone.retrofit.restapi;
 
 import com.dayton.drone.retrofit.request.steps.CreateStepsModel;
 import com.dayton.drone.retrofit.request.steps.CreateStepsObject;
+import com.dayton.drone.retrofit.request.steps.GetStepsModel;
 import com.dayton.drone.retrofit.request.steps.UpdateStepsModel;
 import com.dayton.drone.retrofit.request.steps.UpdateStepsObject;
 import com.dayton.drone.retrofit.request.user.CreateUserModel;
@@ -13,6 +14,8 @@ import retrofit.http.Body;
 import retrofit.http.Header;
 import retrofit.http.POST;
 import retrofit.http.PUT;
+import retrofit.http.Path;
+import retrofit.http.GET;
 
 /**
  * Created by med on 16/4/29.
@@ -32,4 +35,6 @@ public interface Drone {
     @PUT("/steps/update")
     UpdateStepsModel stepsUpdate(@Body UpdateStepsObject object,@Header("Authorization") String auth,@Header("Content-Type") String type);
 
+    @GET("/steps/user/{USER_ID}")
+    GetStepsModel stepsGet(@Path("USER_ID") String userID,@Header("Authorization") String auth,@Header("Content-Type") String type);
 }
