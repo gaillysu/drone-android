@@ -2,11 +2,11 @@ package com.dayton.drone.activity;
 
 import android.app.Fragment;
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -18,7 +18,7 @@ import android.widget.TextView;
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.fragment.GalleryFragment;
-import com.dayton.drone.fragment.HomeContentFragment;
+import com.dayton.drone.fragment.HomeContentActivity;
 import com.dayton.drone.fragment.SleepFragment;
 import com.dayton.drone.fragment.WatchSettingFragment;
 import com.dayton.drone.fragment.WorldClockFragment;
@@ -28,8 +28,6 @@ import com.dayton.drone.view.CalendarView;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import static com.dayton.drone.R.id.home_fragmet_title_next_day;
 
 /**
  * Created by boy on 2016/4/28.
@@ -68,8 +66,9 @@ public class ManagerHomeFragmentActivity extends BaseActivity {
         int type = intent.getIntExtra("type", -1);
         switch (type) {
             case 1:
-                HomeContentFragment homeFragment = new HomeContentFragment();
-                loadFragment(homeFragment);
+//                HomeContentActivity homeFragment = new HomeContentActivity();
+//                loadFragment(homeFragment);
+                startActivity(HomeContentActivity.class);
                 break;
             case 2:
                 SleepFragment po = new SleepFragment();
@@ -92,9 +91,9 @@ public class ManagerHomeFragmentActivity extends BaseActivity {
 
     private void initView() {
 
-        mIvNextDay = (ImageButton) findViewById(home_fragmet_title_next_day);
-        mIvBackDay = (ImageButton) findViewById(home_fragmet_title_next_day);
-        mIvBack = (Button) findViewById(R.id.home_fragment_title_back);
+//        mIvNextDay = (ImageButton) findViewById(home_fragmet_title_next_day);
+//        mIvBackDay = (ImageButton) findViewById(home_fragmet_title_next_day);
+//        mIvBack = (Button) findViewById(R.id.home_fragment_title_back);
         titleView = (RelativeLayout) findViewById(R.id.fragment_title);
         mTitleCalendarTextView = (TextView) findViewById(R.id.home_fragment_title_date_tv);
         frameLayout = (FrameLayout) findViewById(R.id.manager_fragment_framelayout);
@@ -150,10 +149,12 @@ public class ManagerHomeFragmentActivity extends BaseActivity {
         showCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                popupWindow = new PopupWindow(calendarView, ViewGroup.LayoutParams.MATCH_PARENT
-                        , ViewGroup.LayoutParams.WRAP_CONTENT, true);
+                WindowManager manager = getWindowManager();
+                Display display = manager.getDefaultDisplay();
+                popupWindow = new PopupWindow(calendarView,display.getWidth(),display.getHeight());
                 popupWindow.setFocusable(true);
-                popupWindow.setBackgroundDrawable(new BitmapDrawable());
+                popupWindow.setTouchable(true);
+                popupWindow.setOutsideTouchable(true);
                 popupWindow.showAsDropDown(titleView);
 
             }

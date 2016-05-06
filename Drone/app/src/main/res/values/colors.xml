@@ -7,4 +7,5 @@
     <color name="userinfo_sex_bg">#D19D42</color>
     <color name="progress_start_color">#614777</color>
     <color name="progress_end_color">#C19149</color>
+    <color name="color_guide_bg">#55000000</color>
 </resources>

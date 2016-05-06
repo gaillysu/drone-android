@@ -10,3 +10,5 @@ Drone/app/app.iml
 Drone/Drone.iml
 .idea/
 Drone/build/
+Drone/progressbarlibrary/progressbarlibrary.iml
+Drone/wheelPickLib/wheelpicklib.iml
