@@ -2,15 +2,16 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-
+        android:background="@android:color/white"
     >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
-
+        <include
+            android:id="@+id/fragment_title"
+            layout="@layout/main_table"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -18,9 +19,11 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/fragment_home_title_guide_dec"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -60,7 +63,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/fragment_home_title_active_time"
                         android:textColor="@android:color/white"
-                        android:textSize="20sp"/>
+                        android:textSize="18sp"/>
 
                     <TextView
                         android:id="@+id/fragment_home_title_active_time"
@@ -97,6 +100,7 @@
             </LinearLayout>
 
             <RelativeLayout
+                android:id="@+id/home_content_bar"
                 android:layout_width="250dp"
                 android:layout_height="250dp"
                 android:layout_gravity="center_horizontal"
@@ -125,6 +129,8 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/home_content_histogram_ll"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="2">
@@ -135,8 +141,49 @@
         android:id="@+id/fragment_home_guide_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/transparent"
+        android:background="@color/color_guide_bg"
         android:visibility="gone"
         >
+        <TextView
+            android:id="@+id/home_fragement_guide_title_dec"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="48dp"
+            android:text="@string/fragment_home_guide_see_horisty_dec"
+            android:visibility="gone"
+            />
+        <TextView
+        android:id="@+id/home_fragement_guide_dec_actvies"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="68dp"
+        android:text="@string/fragment_home_guide_see_data_dec"
+        android:visibility="gone"
+        />
+        <TextView
+            android:id="@+id/home_fragement_guide_dec_bar"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="338dp"
+            android:text="@string/app_name"
+            android:visibility="gone"
+            />
+        <TextView
+            android:id="@+id/home_fragement_guide_dec_chart"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="180dp"
+            android:text="@string/fragment_home_guide_histogram_dec"
+            android:visibility="gone"
+            />
     </RelativeLayout>
 </FrameLayout>
