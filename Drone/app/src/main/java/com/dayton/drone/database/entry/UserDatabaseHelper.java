@@ -46,13 +46,13 @@ public class UserDatabaseHelper implements iEntryDatabaseHelper<User> {
         int result = -1;
         try {
             List<UserBean> userList = databaseHelper.getUserBean().queryBuilder()
-                    .where().eq(UserBean.fNevoUserID, object.getDroneUserID()).query();
+                    .where().eq(UserBean.fUserID, object.getUserID()).query();
             if (userList.isEmpty()) {
                 return add(object) != null;
             }
             UserBean userBean = convertToBean(object);
-            userBean.setID(userList.get(0).getID());
-            result = userList.get(0).getID();
+            userBean.setId(userList.get(0).getId());
+            result = databaseHelper.getUserBean().update(userBean);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -63,8 +63,8 @@ public class UserDatabaseHelper implements iEntryDatabaseHelper<User> {
     public boolean remove(String userId, Date date) {
         try {
             List<UserBean> userList = databaseHelper.getUserBean().queryBuilder()
-                    .where().eq(UserBean.fNevoUserID, userId).query();
-            if (userList.isEmpty()) {
+                    .where().eq(UserBean.fUserID, userId).query();
+            if (!userList.isEmpty()) {
                 return databaseHelper.getUserBean().delete(userList) >= 0;
             }
 
@@ -81,7 +81,7 @@ public class UserDatabaseHelper implements iEntryDatabaseHelper<User> {
         List<Optional<User>> list = new ArrayList<>();
         try {
             List<UserBean> userList = databaseHelper.getUserBean()
-                    .queryBuilder().where().eq(UserBean.fNevoUserID, userId).query();
+                    .queryBuilder().where().eq(UserBean.fUserID, userId).query();
             for (UserBean userBean : userList) {
                 Optional<User> optional = new Optional<>();
                 optional.set(convertToNormal(userBean));
@@ -110,7 +110,7 @@ public class UserDatabaseHelper implements iEntryDatabaseHelper<User> {
     // convert list
     @Override
     public List<User> convertToNormalList(List<Optional<User>> optionals) {
-        List<User> list = new ArrayList<>(3);
+        List<User> list = new ArrayList<>();
         for (Optional<User> userOptional : optionals) {
             if (userOptional.notEmpty())
                 list.add(userOptional.get());
@@ -119,44 +119,32 @@ public class UserDatabaseHelper implements iEntryDatabaseHelper<User> {
     }
 
     private User convertToNormal(UserBean userDAO) {
-        User user = new User(userDAO.getCreatedDate());
-        user.setId(userDAO.getID());
+        User user = new User();
         user.setAge(userDAO.getAge());
         user.setHeight(userDAO.getHeight());
-        user.setBirthday(userDAO.getBirthday());
         user.setWeight(userDAO.getWeight());
-        user.setRemarks(userDAO.getRemarks());
         user.setFirstName(userDAO.getFirstName());
         user.setLastName(userDAO.getLastName());
-        user.setSex(userDAO.getSex());
-        user.setDroneUserEmail(userDAO.getUserEmail());
-        user.setDroneUserID(userDAO.getUserID());
-        user.setDroneUserToken(userDAO.getUserToken());
-        user.setValidicUserID(userDAO.getValidicUserID());
-        user.setValidicUserToken(userDAO.getValidicUserToken());
-        user.setIsLogin(userDAO.isUserIsLogin());
-        user.setIsConnectValidic(userDAO.isValidicUserIsConnected());
+        user.setGender(userDAO.getGender());
+        user.setStrideLength(userDAO.getStrideLength());
+        user.setUserEmail(userDAO.getUserEmail());
+        user.setUserID(userDAO.getUserID());
+        user.setUserIsLogin(userDAO.isUserIsLogin());
         return user;
     }
 
     public UserBean convertToBean(User user) {
         UserBean userDAO = new UserBean();
-        userDAO.setCreatedDate(user.getCreatedDate());
         userDAO.setHeight(user.getHeight());
         userDAO.setAge(user.getAge());
-        userDAO.setBirthday(user.getBirthday());
         userDAO.setWeight(user.getWeight());
-        userDAO.setRemarks(user.getRemarks());
         userDAO.setFirstName(user.getFirstName());
         userDAO.setLastName(user.getLastName());
-        userDAO.setSex(user.getSex());
-        userDAO.setUserEmail(user.getDroneUserEmail());
-        userDAO.setUserID(user.getDroneUserID());
-        userDAO.setUserToken(user.getDroneUserToken());
-        userDAO.setValidicUserID(user.getValidicUserID());
-        userDAO.setValidicUserToken(user.getValidicUserToken());
-        userDAO.setUserIsLogin(user.isLogin());
-        userDAO.setValidicUserIsConnected(user.isConnectValidic());
+        userDAO.setGender(user.getGender());
+        userDAO.setStrideLength(user.getStrideLength());
+        userDAO.setUserEmail(user.getUserEmail());
+        userDAO.setUserID(user.getUserID());
+        userDAO.setUserIsLogin(user.isUserIsLogin());
         return userDAO;
     }
 

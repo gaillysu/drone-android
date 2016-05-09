@@ -2,6 +2,8 @@ package com.dayton.drone.database.bean;
 
 import com.j256.ormlite.field.DatabaseField;
 
+import java.util.Date;
+
 /**
  * Created by gaillysu on 15/11/17.
  */
@@ -9,340 +11,93 @@ public class StepsBean {
     /**
      * field name and initialize value, Primary field
      */
-    public static final String fID = "ID";
+    public static final String fID = "id";
     @DatabaseField(id = true)
-    private int ID = (int) Math.floor(Math.random()*Integer.MAX_VALUE);
-
-    /**
-     * this is created by saving validic record
-     */
-    public static final String fValidicRecordID = "validicRecordID";
-    @DatabaseField
-    private String validicRecordID;
+    private int id = (int) Math.floor(Math.random()*Integer.MAX_VALUE);
 
     /**
      * which user ID
      */
-    public static final String fNevoUserID = "nevoUserID";
+    public static final String fUserID = "userID";
     @DatabaseField
-    private String nevoUserID;
+    private String userID;
 
     /**
-     * created date
+     * unix timestamp of the start of the accumulation, created date ?
      */
-    public static final String fCreatedDate = "CreatedDate";
+    public static final String fTimeframe = "timeFrame";
     @DatabaseField
-    private long CreatedDate;
+    private long timeFrame = new Date().getTime();
 
     /**
      *  date, one day which is Year/Month/Day
      */
-    public static final String fDate = "Date";
+    public static final String fDate = "date";
     @DatabaseField
-    private long Date;
+    private long date;
 
 
     /**
-     * one day's total steps, include walk and run
+     * time frame total steps
      */
-    public static final String fSteps = "Steps";
+    public static final String fSteps = "steps";
     @DatabaseField
-    private int Steps;
-
-    /**
-     * one day's total walk steps
-     */
-    public static final String fWalkSteps = "WalkSteps";
-    @DatabaseField
-    private int WalkSteps;
-
-    /**
-     * one day's total run steps
-     */
-    public static final String fRunSteps = "RunSteps";
-    @DatabaseField
-    private int RunSteps;
+    private int steps;
 
     /**
      * one day's total distance ,unit is meter.
      */
-    public static final String fDistance = "Distance";
+    public static final String fDistance = "distance";
     @DatabaseField
-    private int Distance;
+    private int distance;
 
 
-    /**
-     * one day's total walk distance ,unit is meter.
-     */
-    public static final String fWalkDistance = "WalkDistance";
-    @DatabaseField
-    private int WalkDistance;
 
-    /**
-     * one day's total run distance ,unit is meter.
-     */
-    public static final String fRunDistance = "RunDistance";
-    @DatabaseField
-    private int RunDistance;
-
-    /**
-     * one day's total walk duration ,unit is minute.
-     */
-    public static final String fWalkDuration = "WalkDuration";
-    @DatabaseField
-    private int WalkDuration;
-
-    /**
-     * one day's total run duration ,unit is minute.
-     */
-    public static final String fRunDuration = "RunDuration";
-    @DatabaseField
-    private int RunDuration;
-
-
-    /**
-     * one day's total distance ,unit is calorie
-     */
-    public static final String fCalories = "Calories";
-    @DatabaseField
-    private int Calories;
-
-
-    /**
-     * one day's hourly steps, such as: int HourlySteps[n] = {0,2000,3000,...,1000}, here "n" is fixed to 24
-     * array to string  is "[0,2000,3000,...,1000]" that will be saved to the table
-     */
-    public static final String fHourlySteps = "HourlySteps";
-    @DatabaseField
-    private String HourlySteps;
-
-    /**
-     * one day's hourly distance, such as: int HourlyDistance[n] = {0,2000,3000,...,1000}, here "n" is fixed to 24
-     * array to string  is "[0,2000,3000,...,1000]" that will be saved to the table
-     */
-    public static final String fHourlyDistance = "HourlyDistance";
-    @DatabaseField
-    private String HourlyDistance;
-
-    /**
-     * one day's hourly calories, such as: int HourlyCalories[n] = {0,2000,3000,...,1000}, here "n" is fixed to 24
-     * array to string  is "[0,2000,3000,...,1000]" that will be saved to the table
-     */
-    public static final String fHourlyCalories = "HourlyCalories";
-    @DatabaseField
-    private String HourlyCalories;
-
-
-    /**
-     * match Zone duration, unit is minute
-     */
-    public static final String fInZoneTime = "InZoneTime";
-    @DatabaseField
-    private int InZoneTime;
-
-    /**
-     * out of Zone duration, unit is minute
-     */
-    public static final String fOutZoneTime = "OutZoneTime";
-    @DatabaseField
-    private int OutZoneTime;
-
-    /**
-     * no activity duration, unit is minute
-     */
-    public static final String fNoActivityTime = "NoActivityTime";
-    @DatabaseField
-    private int NoActivityTime;
-
-    /**
-     * goal value
-     */
-    public static final String fGoal = "Goal";
-    @DatabaseField
-    private int Goal;
-
-    /**
-     * remarks field, save extend  infomation
-     * it is a Json string
-     */
-
-    public static final String fRemarks = "Remarks";
-    @DatabaseField
-    private String Remarks;
-
-    public int getID() {
-        return ID;
+    public int getId() {
+        return id;
     }
 
-    public void setID(int ID) {
-        this.ID = ID;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getNevoUserID() {
-        return nevoUserID;
+    public String getUserID() {
+        return userID;
     }
 
-    public void setNevoUserID(String nevoUserID) {
-        this.nevoUserID = nevoUserID;
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 
-    public long getCreatedDate() {
-        return CreatedDate;
+    public long getTimeFrame() {
+        return timeFrame;
     }
 
-    public void setCreatedDate(long createdDate) {
-        CreatedDate = createdDate;
+    public void setTimeFrame(long timeFrame) {
+        this.timeFrame = timeFrame;
     }
 
     public long getDate() {
-        return Date;
+        return date;
     }
 
     public void setDate(long date) {
-        Date = date;
+        this.date = date;
     }
 
     public int getSteps() {
-        return Steps;
+        return steps;
     }
 
     public void setSteps(int steps) {
-        Steps = steps;
-    }
-
-    public int getWalkSteps() {
-        return WalkSteps;
-    }
-
-    public void setWalkSteps(int walkSteps) {
-        WalkSteps = walkSteps;
-    }
-
-    public int getRunSteps() {
-        return RunSteps;
-    }
-
-    public void setRunSteps(int runSteps) {
-        RunSteps = runSteps;
+        this.steps = steps;
     }
 
     public int getDistance() {
-        return Distance;
+        return distance;
     }
 
     public void setDistance(int distance) {
-        Distance = distance;
-    }
-
-    public int getCalories() {
-        return Calories;
-    }
-
-    public void setCalories(int calories) {
-        Calories = calories;
-    }
-
-    public String getHourlySteps() {
-        return HourlySteps;
-    }
-
-    public void setHourlySteps(String hourlySteps) {
-        HourlySteps = hourlySteps;
-    }
-
-    public String getHourlyDistance() {
-        return HourlyDistance;
-    }
-
-    public void setHourlyDistance(String hourlyDistance) {
-        HourlyDistance = hourlyDistance;
-    }
-
-    public String getHourlyCalories() {
-        return HourlyCalories;
-    }
-
-    public void setHourlyCalories(String hourlyCalories) {
-        HourlyCalories = hourlyCalories;
-    }
-
-    public int getInZoneTime() {
-        return InZoneTime;
-    }
-
-    public void setInZoneTime(int inZoneTime) {
-        InZoneTime = inZoneTime;
-    }
-
-    public int getOutZoneTime() {
-        return OutZoneTime;
-    }
-
-    public void setOutZoneTime(int outZoneTime) {
-        OutZoneTime = outZoneTime;
-    }
-
-    public int getNoActivityTime() {
-        return NoActivityTime;
-    }
-
-    public void setNoActivityTime(int noActivityTime) {
-        NoActivityTime = noActivityTime;
-    }
-
-    public int getGoal() {
-        return Goal;
-    }
-
-    public void setGoal(int goal) {
-        Goal = goal;
-    }
-
-    public String getRemarks() {
-        return Remarks;
-    }
-
-    public void setRemarks(String remarks) {
-        Remarks = remarks;
-    }
-
-    public int getWalkDistance() {
-        return WalkDistance;
-    }
-
-    public void setWalkDistance(int walkDistance) {
-        WalkDistance = walkDistance;
-    }
-
-    public int getRunDistance() {
-        return RunDistance;
-    }
-
-    public void setRunDistance(int runDistance) {
-        RunDistance = runDistance;
-    }
-
-    public int getWalkDuration() {
-        return WalkDuration;
-    }
-
-    public void setWalkDuration(int walkDuration) {
-        WalkDuration = walkDuration;
-    }
-
-    public int getRunDuration() {
-        return RunDuration;
-    }
-
-    public void setRunDuration(int runDuration) {
-        RunDuration = runDuration;
-    }
-
-    public String getValidicRecordID() {
-        return validicRecordID;
-    }
-
-    public void setValidicRecordID(String validicRecordID) {
-        this.validicRecordID = validicRecordID;
+        this.distance = distance;
     }
 }

@@ -131,8 +131,8 @@ public class HomeContentFragment extends BaseFragment implements OnChartValueSel
         //sample data
         for(int i=0;i<7;i++)
         {
-            Steps sampleSteps = new Steps(new Date().getTime());
-            sampleSteps.setDate(sampleSteps.getCreatedDate()-i*24*60*60*1000);
+            Steps sampleSteps = new Steps();
+            sampleSteps.setDate(sampleSteps.getTimeFrame()-i*24*60*60*1000);
             sampleSteps.setSteps(new Random().nextInt(10000));
             stepsList.add(sampleSteps);
         }

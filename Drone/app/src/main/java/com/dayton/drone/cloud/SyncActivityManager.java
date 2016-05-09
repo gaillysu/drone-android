@@ -84,7 +84,7 @@ public class SyncActivityManager {
     }
     private void downloadSteps(final Date startDate, final Date endDate)
     {
-        getModel().getRetrofitManager().execute(new GetStepsRequest(getModel().getUser().getDroneUserID()), new RequestListener<GetStepsModel>() {
+        getModel().getRetrofitManager().execute(new GetStepsRequest(getModel().getUser().getUserID()), new RequestListener<GetStepsModel>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 spiceException.printStackTrace();

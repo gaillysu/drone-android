@@ -138,17 +138,16 @@ public class UserInfoActivity extends BaseActivity{
             String account = intent.getStringExtra("account");
             String password = intent.getStringExtra("password");
             UserDatabaseHelper database = new UserDatabaseHelper(UserInfoActivity.this);
-            User us = new User(System.currentTimeMillis());
+            User us = new User();
             int h = new Integer(height.substring(0, 3));
             int w = new Integer(weight.substring(0, weight.length() - 2));
-            us.setBirthday(birthday);
-            us.setDroneUserEmail(account);
+            us.setUserEmail(account);
             us.setHeight(h);
             us.setWeight(w);
             if (mUserSex.equals("famale")) {
-                us.setSex(1);
+                us.setGender(0);
             } else {
-                us.setSex(2);
+                us.setGender(1);
             }
             database.add(us);
             startActivity(SelectDeviceActivity.class);
