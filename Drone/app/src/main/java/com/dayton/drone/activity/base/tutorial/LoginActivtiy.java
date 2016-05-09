@@ -1,14 +1,12 @@
 package com.dayton.drone.activity.base.tutorial;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.dayton.drone.R;
-import com.dayton.drone.activity.HomeActivity;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.retrofit.model.UserLogin;
 import com.dayton.drone.retrofit.request.user.LoginUserModel;
@@ -29,8 +27,7 @@ public class LoginActivtiy extends BaseActivity {
     EditText ed_account;
     @Bind(R.id.password_ed)
     EditText ed_password;
-    @Bind(R.id.login_user)
-    Button bt_Login;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +78,15 @@ public class LoginActivtiy extends BaseActivity {
 
     private void onLoginSuccess() {
         Toast.makeText(getBaseContext(), "log in success", Toast.LENGTH_LONG).show();
-        startActivity(HomeActivity.class);
+        Intent loginIntent = new Intent(this,SelectDeviceActivity.class);
+        int type = 2>>4;
+        loginIntent.putExtra("type",type);
+        startActivity(loginIntent);
+
+        Intent broadcastIntent = new Intent();
+        broadcastIntent.setAction("CLOSE_ACTIVITY");
+        sendBroadcast(broadcastIntent);
+
         finish();
     }
 
@@ -107,4 +112,5 @@ public class LoginActivtiy extends BaseActivity {
         }
         return valid;
     }
+
 }

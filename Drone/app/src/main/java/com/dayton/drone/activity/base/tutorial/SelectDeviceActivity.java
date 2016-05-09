@@ -20,6 +20,7 @@ public class SelectDeviceActivity extends BaseActivity {
     private ImageButton mIvNext;
     private GridView mShowWatchGridView;
     private SelectDeviceGridViewAdapter mGridViewAdapter;
+    private int type;
 
     private String[] watchNameArray;
     private int[] watchIconArray = {
@@ -37,10 +38,15 @@ public class SelectDeviceActivity extends BaseActivity {
     }
 
     private void initView() {
+        Intent intent = getIntent();
+        type = intent.getIntExtra("type",-1);
         mIvBack = (ImageButton) findViewById(R.id.registe_back_iv);
         mIvNext = (ImageButton) findViewById(R.id.registe_next_iv);
         mShowWatchGridView = (GridView) findViewById(R.id.select_user_device);
         mIvNext.setVisibility(View.GONE);
+        if(type == 2>>4){
+            mIvBack.setVisibility(View.GONE);
+        }
         watchNameArray = this.getResources().getStringArray(R.array.user_select_dec_arr);
         mGridViewAdapter = new SelectDeviceGridViewAdapter(watchIconArray,watchNameArray);
         mShowWatchGridView.setAdapter(mGridViewAdapter);
@@ -53,6 +59,14 @@ public class SelectDeviceActivity extends BaseActivity {
                 intent.putExtra("watchIconId",iconId);
                 intent.putExtra("selectWatchName",watchName);
                 startActivity(intent);
+                finish();
+            }
+        });
+
+        mIvBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
     }

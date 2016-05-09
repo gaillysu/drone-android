@@ -37,10 +37,10 @@ public class UserInfoActivity extends BaseActivity{
     @Bind(R.id.user_weight)
     TextView tv_userWeight;
     private int viewType = 1;
-    @Bind(R.id.registe_back_iv)
-    ImageButton iv_back;
-    @Bind(R.id.registe_next_iv)
-    ImageButton iv_next;
+//    @Bind(R.id.registe_back_iv)
+//    ImageButton mIvBack;
+//    @Bind(R.id.registe_next_iv)
+//    ImageButton mIv;
     private String userSex;
 
     @Override
@@ -58,6 +58,11 @@ public class UserInfoActivity extends BaseActivity{
         mUserSex = tv_sexFamale.getText().toString();
         tv_sexFamale.setBackgroundColor(R.color.userinfo_sex_bg);
         tv_sexMale.setBackgroundColor(android.R.color.transparent);
+    }
+
+    @OnClick(R.id.registe_back_iv)
+    public void back(){
+        finish();
     }
 
     @OnClick(R.id.user_info_sex_male_tv)
@@ -151,6 +156,9 @@ public class UserInfoActivity extends BaseActivity{
                 us.setSex(2);
             }
             database.add(us);
+            int type = 2>>3;
+            Intent nextIntent = new Intent(getModel(),SelectDeviceActivity.class);
+            nextIntent.putExtra("type",type);
             startActivity(SelectDeviceActivity.class);
 
         } else {

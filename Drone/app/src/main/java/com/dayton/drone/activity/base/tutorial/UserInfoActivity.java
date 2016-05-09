@@ -1,6 +1,9 @@
 package com.dayton.drone.activity.base.tutorial;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.ImageButton;
@@ -39,6 +42,13 @@ public class UserInfoActivity extends BaseActivity {
     private String userSex;
     private int viewType = 1;
     private String mUserSex;
+
+    private BroadcastReceiver broadcast = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            finish();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,8 +162,13 @@ public class UserInfoActivity extends BaseActivity {
             }
             database.add(us);
 
+            IntentFilter filter = new IntentFilter();
+            filter.addAction("CLOSE_ACTIVITY");
+            registerReceiver(broadcast,filter);
+            startActivity(RegisteActivity.class);
+
             startActivity(SelectDeviceActivity.class);
-            finish();
+
         } else
 
         {

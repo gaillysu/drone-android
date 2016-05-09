@@ -92,13 +92,4 @@ public class HomeActivity extends BaseActivity {
         intent.putExtra("type",type);
         startActivity(intent);
     }
-
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if(keyCode == KeyEvent.KEYCODE_BACK){
-//            System.exit(0);
-//            return true;
-//        }
-//        return super.onKeyDown(keyCode, event);
-//    }
 }

@@ -1,5 +1,9 @@
 package com.dayton.drone.activity.base.tutorial;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -33,6 +37,13 @@ public class TutorialActivtiy extends BaseActivity {
 
     private int[] vp_data = new int[]{R.mipmap.drone1, R.mipmap.drone2, R.mipmap.drone3};
 
+    private BroadcastReceiver broadcast = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            finish();
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,13 +64,23 @@ public class TutorialActivtiy extends BaseActivity {
 
     @OnClick(R.id.login_bt)
     public void openLoginActivity() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("CLOSE_ACTIVITY");
+        registerReceiver(broadcast,filter);
         startActivity(LoginActivtiy.class);
     }
 
     @OnClick(R.id.registe_bt)
     public void openRegisteActivity() {
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("CLOSE_ACTIVITY");
+        registerReceiver(broadcast,filter);
         startActivity(RegisteActivity.class);
+
     }
+
+
 
     public class MyViewPagerAdapter extends PagerAdapter {
 
