@@ -2,194 +2,177 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-        android:background="@android:color/white"
+             android:background="@android:color/white"
     >
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
+
         <include
             android:id="@+id/fragment_title"
             layout="@layout/main_table"/>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="4"
+            android:layout_height="match_parent"
+            android:layout_below="@id/fragment_title"
             android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/fragment_home_title_guide_dec"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:orientation="horizontal">
+                android:layout_height="0dp"
+                android:layout_weight="4"
+                android:background="@android:color/holo_blue_bright"
+                android:orientation="vertical">
 
                 <LinearLayout
-                    android:id="@+id/fragment_home_guide_calories"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/fragment_home_title_calories"
-                        android:textColor="@android:color/white"
-                        android:textSize="20sp"/>
-
-                    <TextView
-                        android:id="@+id/fragment_home_title_calories"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0"
-                        android:textColor="@color/userinfo_sex_bg"
-                        android:textSize="18sp"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/fragment_home_guide_title_active_time"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/fragment_home_title_active_time"
-                        android:textColor="@android:color/white"
-                        android:textSize="18sp"/>
-
-                    <TextView
-                        android:id="@+id/fragment_home_title_active_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0"
-                        android:textColor="@color/userinfo_sex_bg"
-                        android:textSize="18sp"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/fragment_home_guide_title_miles"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/fragment_home_title_miles"
-                        android:textColor="@android:color/white"
-                        android:textSize="20sp"/>
-
-                    <TextView
-                        android:id="@+id/fragment_home_title_miles"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0"
-                        android:textColor="@color/userinfo_sex_bg"
-                        android:textSize="18sp"/>
-                </LinearLayout>
-            </LinearLayout>
-
-            <RelativeLayout
-                android:id="@+id/home_content_bar"
-                android:layout_width="250dp"
-                android:layout_height="250dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="20dp"
-                android:background="@android:color/transparent"
-                >
-
-                <com.liulishuo.magicprogresswidget.MagicProgressCircle
-                    android:id="@+id/home_fragment_progress_bar"
+                    android:id="@+id/fragment_home_title_guide_dec"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/transparent"
-                    />
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        style="@style/home_content_title_linnerlayout_style">
+
+                        <TextView
+                            style="@style/home_content_activity_title_text_style"
+                            android:text="@string/fragment_home_title_calories"
+                            />
+
+                        <TextView
+                            android:id="@+id/fragment_home_title_calories"
+                            style="@style/home_content_activity_title_dec_text"
+                            android:text="0"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/home_content_title_linnerlayout_style">
+
+                        <TextView
+                            style="@style/home_content_activity_title_text_style"
+                            android:text="@string/fragment_home_title_active_time"
+                            />
+
+                        <TextView
+                            android:id="@+id/fragment_home_title_active_time"
+                            style="@style/home_content_activity_title_dec_text"
+                            android:text="0"
+                            />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/home_content_title_linnerlayout_style"
+                        >
+
+                        <TextView
+                            style="@style/home_content_activity_title_text_style"
+                            android:text="@string/fragment_home_title_miles"
+                            />
+
+                        <TextView
+                            android:id="@+id/fragment_home_title_miles"
+                            style="@style/home_content_activity_title_dec_text"
+                            android:text="0"
+                            />
+                    </LinearLayout>
+
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/home_fragment_progress_middle_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
+                    android:id="@+id/home_fragement_guide_dec_actvies"
+                    style="@style/home_content_activity_guide_text_style"
+                    android:text="@string/fragment_home_guide_see_data_dec"
+                    android:visibility="gone"
+                    />
+
+                <RelativeLayout
+                    android:id="@+id/home_content_bar"
+                    android:layout_width="250dp"
+                    android:layout_height="250dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="20dp"
                     android:background="@android:color/transparent"
-                    android:text="0"
-                    android:textColor="#ffffff"
-                    android:textSize="36sp"/>
-            </RelativeLayout>
+                    >
 
+                    <com.liulishuo.magicprogresswidget.MagicProgressCircle
+                        android:id="@+id/home_fragment_progress_bar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/home_fragment_progress_middle_dec"
+                            style="@style/home_content_activity_progress_middle_text_style"
+                            android:text="@string/home_content_activity_progress_middle_dec"
+                            android:textColor="@color/home_content_text_color"
+                            />
+
+                        <TextView
+                            android:id="@+id/home_fragment_progress_middle_tv"
+                            style="@style/home_content_activity_progress_middle_text_style"
+                            android:text="0"
+                            android:textColor="@color/userinfo_sex_bg"
+                            />
+
+                        <TextView
+                            android:id="@+id/home_fragment_progress_middle_"
+                            style="@style/home_content_activity_progress_middle_text_style"
+                            android:text="GOCAL:10000"
+                            android:textColor="@color/home_content_text_color"
+                            android:textSize="16sp"/>
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/home_fragement_guide_dec_bar"
+                    style="@style/home_content_activity_guide_text_style"
+                    android:text="@string/fragment_home_guide_meter_dec"
+                    android:visibility="gone"
+                    />
+                <TextView
+                    android:id="@+id/home_fragement_guide_dec_chart"
+                    style="@style/home_content_activity_guide_text_style"
+                    android:text="@string/fragment_home_guide_histogram_dec"
+                    android:gravity="center_horizontal"
+                    android:layout_gravity="right"
+                    android:visibility="gone"
+                    />
+            </LinearLayout>
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/fragment_home_content_bar"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="2"
+                >
+            </com.github.mikephil.charting.charts.BarChart>
         </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/home_content_histogram_ll"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2">
-        </LinearLayout>
-        <com.github.mikephil.charting.charts.BarChart
-            android:id="@+id/fragment_home_content_bar"
-            android:layout_weight="2"
-            android:layout_width="fill_parent"
-            android:layout_height="0dp">
-        </com.github.mikephil.charting.charts.BarChart>
-    </LinearLayout>
-
+        <TextView
+            android:id="@+id/home_fragement_guide_title_dec"
+            style="@style/home_content_activity_guide_text_style"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/fragment_title"
+            android:text="@string/fragment_home_guide_see_horisty_dec"
+            android:layout_gravity="right"
+            android:visibility="gone"
+            />
+    </RelativeLayout>
     <RelativeLayout
         android:id="@+id/fragment_home_guide_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/color_guide_bg"
-        android:visibility="gone"
-        >
-        <TextView
-            android:id="@+id/home_fragement_guide_title_dec"
-            android:gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="48dp"
-            android:text="@string/fragment_home_guide_see_horisty_dec"
-            android:visibility="gone"
-            />
-        <TextView
-        android:id="@+id/home_fragement_guide_dec_actvies"
-        android:gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="68dp"
-        android:text="@string/fragment_home_guide_see_data_dec"
-        android:visibility="gone"
-        />
-        <TextView
-            android:id="@+id/home_fragement_guide_dec_bar"
-            android:gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="338dp"
-            android:text="@string/app_name"
-            android:visibility="gone"
-            />
-        <TextView
-            android:id="@+id/home_fragement_guide_dec_chart"
-            android:gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="180dp"
-            android:text="@string/fragment_home_guide_histogram_dec"
-            android:visibility="gone"
-            />
+        android:background="@color/home_content_activity_guide_bg"
+        android:visibility="gone">
     </RelativeLayout>
 </FrameLayout>

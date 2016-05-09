@@ -281,7 +281,7 @@ public class CalendarView extends View implements View.OnTouchListener {
 		int year = calendar.get(Calendar.YEAR);
 		int month = calendar.get(Calendar.MONTH)+1;
 		int day = calendar.get(Calendar.DAY_OF_MONTH);
-		return day+"";
+		return month+"";
 	}
 
 	public String clickLeftMonth(){

@@ -34,12 +34,13 @@
     <string name="home_guide_profile">PROFILE</string>
     <string name="home_title_back_text">Back</string>
     <string name="fragment_home_title_calories">CALORIES</string>
-    <string name="fragment_home_title_active_time">ACTIVE\t\tTIME</string>
+    <string name="fragment_home_title_active_time">ACTIVE TIME</string>
     <string name="fragment_home_title_miles">MILES</string>
     <string name="fragment_home_guide_see_horisty_dec">See your previous activies</string>
     <string name="fragment_home_guide_see_data_dec">Here is your data from Drone</string>
     <string name="fragment_home_guide_meter_dec">Click the dashboard to see floors</string>
     <string name="fragment_home_guide_histogram_dec">The bar graph will presenting your activities durations</string>
+    <string name="home_content_activity_progress_middle_dec">SLEEP</string>
 
     <string-array name="user_select_dec_arr">
         <item>bcbs</item>

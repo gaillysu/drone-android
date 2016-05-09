@@ -20,7 +20,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 
-
     <application
         android:name=".application.ApplicationModel"
         android:allowBackup="true"
@@ -67,9 +66,9 @@
                   android:launchMode="singleTop"/>
         <activity android:name=".activity.HomeActivity"
                   android:launchMode="singleTop"/>
-        <activity android:name=".activity.ManagerHomeFragmentActivity"
-                  android:launchMode="singleTop"
-            />
+        <activity android:name=".activity.ManagerHomeFragmentActivity"/>
+        <activity android:name=".activity.HomeContentActivity"
+                  android:launchMode="singleTop"/>
 
         <!-- register all services used in the application -->
         <service

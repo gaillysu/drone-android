@@ -18,7 +18,6 @@ import android.widget.TextView;
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.fragment.GalleryFragment;
-import com.dayton.drone.fragment.HomeContentActivity;
 import com.dayton.drone.fragment.SleepFragment;
 import com.dayton.drone.fragment.WatchSettingFragment;
 import com.dayton.drone.fragment.WorldClockFragment;
@@ -49,7 +48,6 @@ public class ManagerHomeFragmentActivity extends BaseActivity {
 
     private ImageButton mIvNextDay;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,9 +64,9 @@ public class ManagerHomeFragmentActivity extends BaseActivity {
         int type = intent.getIntExtra("type", -1);
         switch (type) {
             case 1:
-//                HomeContentActivity homeFragment = new HomeContentActivity();
-//                loadFragment(homeFragment);
+                titleView.setVisibility(View.GONE);
                 startActivity(HomeContentActivity.class);
+                finish();
                 break;
             case 2:
                 SleepFragment po = new SleepFragment();
@@ -91,9 +89,7 @@ public class ManagerHomeFragmentActivity extends BaseActivity {
 
     private void initView() {
 
-//        mIvNextDay = (ImageButton) findViewById(home_fragmet_title_next_day);
-//        mIvBackDay = (ImageButton) findViewById(home_fragmet_title_next_day);
-//        mIvBack = (Button) findViewById(R.id.home_fragment_title_back);
+        mIvBack = (Button) findViewById(R.id.home_fragment_title_back);
         titleView = (RelativeLayout) findViewById(R.id.fragment_title);
         mTitleCalendarTextView = (TextView) findViewById(R.id.home_fragment_title_date_tv);
         frameLayout = (FrameLayout) findViewById(R.id.manager_fragment_framelayout);
@@ -103,6 +99,8 @@ public class ManagerHomeFragmentActivity extends BaseActivity {
         calendarView = View.inflate(getModel(), R.layout.date_layout_popupwindow, null);
         calendar = (CalendarView) calendarView.findViewById(R.id.calendar_popupwindow_layout);
         calendar.setSelectMore(false);
+        mIvBackDay.setVisibility(View.GONE);
+        mIvNextDay.setVisibility(View.GONE);
     }
 
     private void initData() {
@@ -149,6 +147,8 @@ public class ManagerHomeFragmentActivity extends BaseActivity {
         showCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mIvBackDay.setVisibility(View.VISIBLE);
+                mIvNextDay.setVisibility(View.VISIBLE);
                 WindowManager manager = getWindowManager();
                 Display display = manager.getDefaultDisplay();
                 popupWindow = new PopupWindow(calendarView,display.getWidth(),display.getHeight());
@@ -167,6 +167,8 @@ public class ManagerHomeFragmentActivity extends BaseActivity {
                 mTitleCalendarTextView.setText(UIUtils.getString
                         (R.string.main_table_date) + " " + dateArray[2]);
                 popupWindow.dismiss();
+                mIvBackDay.setVisibility(View.GONE);
+                mIvNextDay.setVisibility(View.GONE);
             }
         });
     }
@@ -176,6 +178,8 @@ public class ManagerHomeFragmentActivity extends BaseActivity {
         if(keyCode == KeyEvent.KEYCODE_BACK){
             if(popupWindow != null) {
                 popupWindow.dismiss();
+                mIvBackDay.setVisibility(View.GONE);
+                mIvNextDay.setVisibility(View.GONE);
             }
         }
         return super.onKeyDown(keyCode, event);
