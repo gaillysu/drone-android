@@ -66,9 +66,9 @@ public class LoginActivtiy extends BaseActivity {
              public void onRequestSuccess(LoginUserModel loginUserModel) {
                  progressDialog.dismiss();
                  if(loginUserModel.getStatus()==1) {
-                     getModel().getUser().setDroneUserID(loginUserModel.getUser().getId()+"");
-                     getModel().getUser().setDroneUserEmail(loginUserModel.getUser().getEmail());
-                     getModel().getUser().setIsLogin(true);
+                     getModel().getUser().setUserID(loginUserModel.getUser().getId()+"");
+                     getModel().getUser().setUserEmail(loginUserModel.getUser().getEmail());
+                     getModel().getUser().setUserIsLogin(true);
                      getModel().getSyncActivityManager().launchSyncAll();
                      onLoginSuccess();
                  }

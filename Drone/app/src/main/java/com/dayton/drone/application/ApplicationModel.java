@@ -58,8 +58,8 @@ public class ApplicationModel extends Application {
         otaController  = new OtaControllerImpl(this);
         retrofitManager = new RetrofitManager(this);
         syncActivityManager = new SyncActivityManager(this);
-        user = new User(0);
-        user.setDroneUserID("0");//"0" means anyone user
+        user = new User();
+        user.setUserID("0");//"0" means anyone user
         //TODO read from user table to get the lastest logged in user
         EventBus.getDefault().register(this);
         syncController.startConnect(false);
@@ -112,7 +112,7 @@ public class ApplicationModel extends Application {
     @Subscribe
     public void onEvent(LittleSyncEvent event) {
         Steps steps = new Steps();
-        steps.setUid(Integer.parseInt(getUser().getDroneUserID()));
+        steps.setUid(Integer.parseInt(getUser().getUserID()));
         steps.setDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         steps.setSteps(event.getSteps());
         getSyncActivityManager().launchSyncDailySteps(steps);
