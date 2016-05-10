@@ -22,9 +22,8 @@ import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.event.LittleSyncEvent;
 import com.dayton.drone.modle.Steps;
-import com.dayton.drone.utils.Constance;
+import com.dayton.drone.utils.CacheConstants;
 import com.dayton.drone.utils.SpUtils;
-import com.dayton.drone.utils.UIUtils;
 import com.dayton.drone.view.CalendarView;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -117,7 +116,7 @@ public class HomeContentActivity extends BaseActivity implements OnChartValueSel
         calendarView = View.inflate(getModel(), R.layout.date_layout_popupwindow, null);
 
         mContext = getModel();
-        mIsFirst = SpUtils.getBoolean(mContext, Constance.IS_FIRST, true);
+        mIsFirst = SpUtils.getBoolean(mContext, CacheConstants.IS_FIRST, true);
 
         mProgressBar.setStartColor(R.color.progress_start_color);
         mProgressBar.setEndColor(R.color.progress_end_color);
@@ -167,7 +166,7 @@ public class HomeContentActivity extends BaseActivity implements OnChartValueSel
                         case 5:
                             chartGuideDec.setVisibility(View.GONE);
                             guideView.setVisibility(View.GONE);
-                            SpUtils.putBoolean(getModel(),Constance.IS_FIRST, false);
+                            SpUtils.putBoolean(getModel(), CacheConstants.IS_FIRST, false);
                             break;
                     }
 
@@ -267,7 +266,7 @@ public class HomeContentActivity extends BaseActivity implements OnChartValueSel
             @Override
             public void onClick(View v) {
                 String leftMouth = calendar.clickLeftMonth();
-                mTitleCalendarTextView.setText(UIUtils.getString(R.string.main_table_date)
+                mTitleCalendarTextView.setText(getResources().getString(R.string.main_table_date)
                         + " " + leftMouth);
                 mIvNextMouth.setVisibility(View.GONE);
                 mIvBackMouth.setVisibility(View.GONE);
@@ -278,7 +277,7 @@ public class HomeContentActivity extends BaseActivity implements OnChartValueSel
             @Override
             public void onClick(View v) {
                 String rightMouth = calendar.clickRightMonth();
-                mTitleCalendarTextView.setText(UIUtils.getString(R.string.main_table_date)
+                mTitleCalendarTextView.setText(getResources().getString(R.string.main_table_date)
                         + " " + rightMouth);
                 mIvNextMouth.setVisibility(View.GONE);
                 mIvBackMouth.setVisibility(View.GONE);

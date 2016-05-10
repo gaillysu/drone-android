@@ -1,9 +1,6 @@
 package com.dayton.drone.activity.base.tutorial;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.EditText;
@@ -26,13 +23,6 @@ public class RegisteActivity extends BaseActivity {
     @Bind(R.id.password_ed)
     EditText ed_password;
 
-    private BroadcastReceiver broadcast = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            finish();
-        }
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,9 +32,7 @@ public class RegisteActivity extends BaseActivity {
 
     @OnClick(R.id.registe_back_iv)
     public void goBackActivity() {
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("CLOSE_ACTIVITY");
-        registerReceiver(broadcast,filter);
+        startActivity(TutorialActivtiy.class);
         finish();
     }
 
@@ -60,12 +48,7 @@ public class RegisteActivity extends BaseActivity {
             intent.putExtra("account", email);
             intent.putExtra("password", password);
             startActivity(intent);
-
-            IntentFilter filter = new IntentFilter();
-            filter.addAction("CLOSE_ACTIVITY");
-            registerReceiver(broadcast,filter);
-
-
+            finish();
         }
     }
 }

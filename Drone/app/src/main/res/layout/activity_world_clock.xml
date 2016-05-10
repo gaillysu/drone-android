@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <include
+        android:id="@+id/world_clock_title"
+        layout="@layout/content_title_layout"></include>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:background="#5500ff00">
+
+        <ImageButton
+            android:id="@+id/world_clock_date_edit_bt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="30dp"
+            android:background="@android:color/transparent"
+            android:src="@mipmap/world_clock_edit_icon"/>
+
+        <ImageButton
+            android:id="@+id/world_clock_add_city_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="30dp"
+            android:background="@android:color/transparent"
+            android:src="@mipmap/world_clock_add_icon"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:background="@color/world_clock_bg_color"
+        >
+
+        <TextView
+            android:id="@+id/world_clock_date_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="afsd"
+            android:textColor="@android:color/white"
+            android:textSize="28sp"
+            android:textStyle="bold"/>
+
+        <ListView
+            android:id="@+id/world_clock_select_city_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/world_clock_date_tv">
+        </ListView>
+
+    </RelativeLayout>
+</LinearLayout>

@@ -66,9 +66,12 @@
                   android:launchMode="singleTop"/>
         <activity android:name=".activity.HomeActivity"
                   android:launchMode="singleTop"/>
-        <activity android:name=".activity.ManagerHomeFragmentActivity"/>
         <activity android:name=".activity.HomeContentActivity"
                   android:launchMode="singleTop"/>
+        <activity android:name=".activity.WorldClockActivity"/>
+        <activity android:name=".activity.SettingWatchActivity"/>
+        <activity android:name=".activity.GalleryActivity"/>
+        <activity android:name=".activity.SleepActivity"/>
 
         <!-- register all services used in the application -->
         <service

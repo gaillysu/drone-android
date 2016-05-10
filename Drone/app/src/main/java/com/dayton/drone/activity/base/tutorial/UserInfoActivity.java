@@ -43,12 +43,6 @@ public class UserInfoActivity extends BaseActivity {
     private int viewType = 1;
     private String mUserSex;
 
-    private BroadcastReceiver broadcast = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            finish();
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +126,7 @@ public class UserInfoActivity extends BaseActivity {
 
     @OnClick(R.id.registe_back_iv)
     public void back() {
+        startActivity(RegisteActivity.class);
         finish();
     }
 
@@ -160,14 +155,8 @@ public class UserInfoActivity extends BaseActivity {
                 us.setGender(1);
             }
             database.add(us);
-
-            IntentFilter filter = new IntentFilter();
-            filter.addAction("CLOSE_ACTIVITY");
-            registerReceiver(broadcast,filter);
-            startActivity(RegisteActivity.class);
-
             startActivity(SelectDeviceActivity.class);
-
+             finish();
         } else
 
         {

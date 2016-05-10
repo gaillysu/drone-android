@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:gravity="center_horizontal"
+              android:layout_gravity="center_horizontal"
               android:layout_height="match_parent">
     <ImageView
         android:id="@+id/show_watch_iv"
@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="160dp"
-        android:src="@mipmap/icon_04"/>
+        android:src="@mipmap/drone2"/>
       <TextView
           android:id="@+id/device_connecting_status"
           android:layout_width="wrap_content"

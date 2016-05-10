@@ -159,6 +159,7 @@ public class UserInfoActivity extends BaseActivity{
             Intent nextIntent = new Intent(getModel(),SelectDeviceActivity.class);
             nextIntent.putExtra("type",type);
             startActivity(SelectDeviceActivity.class);
+            finish();
 
         } else {
             Toast.makeText(UserInfoActivity.this,

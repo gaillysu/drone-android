@@ -24,10 +24,8 @@ public class SelectDeviceActivity extends BaseActivity {
 
     private String[] watchNameArray;
     private int[] watchIconArray = {
-            R.mipmap.icon_04, R.mipmap.icon_04,
-            R.mipmap.icon_04, R.mipmap.icon_04,
-            R.mipmap.icon_04, R.mipmap.icon_04,
-            R.mipmap.icon_04, R.mipmap.icon_04,
+            R.mipmap.drone1, R.mipmap.drone2,
+            R.mipmap.drone2, R.mipmap.drone3,
     };
 
     @Override
@@ -48,7 +46,7 @@ public class SelectDeviceActivity extends BaseActivity {
             mIvBack.setVisibility(View.GONE);
         }
         watchNameArray = this.getResources().getStringArray(R.array.user_select_dec_arr);
-        mGridViewAdapter = new SelectDeviceGridViewAdapter(watchIconArray,watchNameArray);
+        mGridViewAdapter = new SelectDeviceGridViewAdapter(watchIconArray,watchNameArray,this);
         mShowWatchGridView.setAdapter(mGridViewAdapter);
         mShowWatchGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

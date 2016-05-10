@@ -1,5 +1,6 @@
 package com.dayton.drone.adapter;
 
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -7,7 +8,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dayton.drone.R;
-import com.dayton.drone.utils.UIUtils;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by boy on 2016/4/27.
@@ -20,10 +23,13 @@ public class SelectDeviceGridViewAdapter extends BaseAdapter {
 
     private int[] watchIconArr;
     private String[] watchNameArr;
+    private Context context;
 
-    public SelectDeviceGridViewAdapter(int[] watchIconArr, String[] watchNameArr) {
+    public SelectDeviceGridViewAdapter(int[] watchIconArr, String[] watchNameArr, Context context) {
         this.watchIconArr = watchIconArr;
         this.watchNameArr = watchNameArr;
+        this.context = context;
+
     }
 
     @Override
@@ -45,10 +51,8 @@ public class SelectDeviceGridViewAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         HolderView holder = null;
         if (convertView == null) {
-            convertView = View.inflate(UIUtils.getContext(), R.layout.item_select_watch, null);
-            holder = new HolderView();
-            holder.watchIcon = (ImageView) convertView.findViewById(R.id.select_watch_icon);
-            holder.watchName = (TextView) convertView.findViewById(R.id.drone_name);
+            convertView = View.inflate(context, R.layout.item_select_watch, null);
+            holder = new HolderView(convertView);
             convertView.setTag(holder);
         } else {
             holder = (HolderView) convertView.getTag();
@@ -61,8 +65,13 @@ public class SelectDeviceGridViewAdapter extends BaseAdapter {
     }
 
     static class HolderView {
+        @Bind(R.id.select_watch_icon)
         ImageView watchIcon;
+        @Bind(R.id.drone_name)
         TextView watchName;
+        public HolderView(View view){
+            ButterKnife.bind(this,view);
+        }
     }
 }
 

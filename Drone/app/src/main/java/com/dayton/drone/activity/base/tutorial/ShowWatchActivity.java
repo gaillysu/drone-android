@@ -46,10 +46,6 @@ public class ShowWatchActivity extends BaseActivity  {
         boolean flage =  connectionDervice();
 
         if(flage){
-
-            Intent broadcastIntent = new Intent();
-            broadcastIntent.setAction("CLOSE_ACTIVITY");
-            sendBroadcast(broadcastIntent);
             startActivity(HomeActivity.class);
             finish();
         }
