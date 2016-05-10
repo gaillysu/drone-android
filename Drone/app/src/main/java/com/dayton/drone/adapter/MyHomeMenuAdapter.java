@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.dayton.drone.R;
 import com.dayton.drone.bean.MenuBean;
-import com.dayton.drone.utils.UIUtils;
 
 import java.util.List;
 
@@ -19,9 +18,9 @@ public class MyHomeMenuAdapter extends BaseAdapter {
     private List<MenuBean> mData;
     private Context mContext;
 
-    public MyHomeMenuAdapter(List<MenuBean> data) {
+    public MyHomeMenuAdapter(List<MenuBean> data, Context context) {
         this.mData = data;
-        mContext = UIUtils.getContext();
+        mContext = context;
     }
 
 

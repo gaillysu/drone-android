@@ -24,7 +24,6 @@ import com.dayton.drone.event.LittleSyncEvent;
 import com.dayton.drone.modle.Steps;
 import com.dayton.drone.utils.Constance;
 import com.dayton.drone.utils.SpUtils;
-import com.dayton.drone.utils.UIUtils;
 import com.dayton.drone.view.CalendarView;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -62,11 +61,11 @@ public class HomeContentActivity extends BaseActivity implements OnChartValueSel
     TextView homeMiddleTv;
 
     @Bind(R.id.fragment_home_title_calories)
-    TextView calories;
+    TextView caloriesTextView;
     @Bind(R.id.fragment_home_title_miles)
-    TextView miles;
+    TextView milesTextView;
     @Bind(R.id.fragment_home_title_active_time)
-    TextView activeTime;
+    TextView activeTimeTextView;
 
     @Bind(R.id.home_content_bar)
     RelativeLayout guideBar;
@@ -267,7 +266,7 @@ public class HomeContentActivity extends BaseActivity implements OnChartValueSel
             @Override
             public void onClick(View v) {
                 String leftMouth = calendar.clickLeftMonth();
-                mTitleCalendarTextView.setText(UIUtils.getString(R.string.main_table_date)
+                mTitleCalendarTextView.setText(getString(R.string.main_table_date)
                         + " " + leftMouth);
                 mIvNextMouth.setVisibility(View.GONE);
                 mIvBackMouth.setVisibility(View.GONE);
@@ -278,7 +277,7 @@ public class HomeContentActivity extends BaseActivity implements OnChartValueSel
             @Override
             public void onClick(View v) {
                 String rightMouth = calendar.clickRightMonth();
-                mTitleCalendarTextView.setText(UIUtils.getString(R.string.main_table_date)
+                mTitleCalendarTextView.setText(getString(R.string.main_table_date)
                         + " " + rightMouth);
                 mIvNextMouth.setVisibility(View.GONE);
                 mIvBackMouth.setVisibility(View.GONE);

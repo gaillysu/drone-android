@@ -21,7 +21,6 @@ import com.dayton.drone.fragment.GalleryFragment;
 import com.dayton.drone.fragment.SleepFragment;
 import com.dayton.drone.fragment.WatchSettingFragment;
 import com.dayton.drone.fragment.WorldClockFragment;
-import com.dayton.drone.utils.UIUtils;
 import com.dayton.drone.view.CalendarView;
 
 import java.text.ParseException;
@@ -31,7 +30,7 @@ import java.util.Date;
 /**
  * Created by boy on 2016/4/28.
  */
-public class ManagerHomeFragmentActivity extends BaseActivity {
+public class ManagerHomeFragmentActivity extends BaseActivity{
     private SimpleDateFormat format;
 
     private FrameLayout frameLayout;
@@ -42,6 +41,7 @@ public class ManagerHomeFragmentActivity extends BaseActivity {
     private PopupWindow popupWindow;
 
     private TextView mTitleCalendarTextView;
+
     private Button mIvBack;
 
     private ImageButton mIvBackDay;
@@ -130,7 +130,7 @@ public class ManagerHomeFragmentActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 String leftday = calendar.clickLeftDay();
-                mTitleCalendarTextView.setText(UIUtils.getString(R.string.main_table_date)
+                mTitleCalendarTextView.setText(getString(R.string.main_table_date)
                         + " " + leftday);
             }
         });
@@ -139,7 +139,7 @@ public class ManagerHomeFragmentActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 String rightday = calendar.clickRightDay();
-                mTitleCalendarTextView.setText(UIUtils.getString(R.string.main_table_date)
+                mTitleCalendarTextView.setText(getString(R.string.main_table_date)
                         + " " + rightday);
             }
         });
@@ -164,7 +164,7 @@ public class ManagerHomeFragmentActivity extends BaseActivity {
             @Override
             public void OnItemClick(Date selectedStartDate, Date selectedEndDate, Date downDate) {
                 String[] dateArray = format.format(downDate).split("-");
-                mTitleCalendarTextView.setText(UIUtils.getString
+                mTitleCalendarTextView.setText(getString
                         (R.string.main_table_date) + " " + dateArray[2]);
                 popupWindow.dismiss();
                 mIvBackDay.setVisibility(View.GONE);
@@ -186,7 +186,7 @@ public class ManagerHomeFragmentActivity extends BaseActivity {
     }
 
     private void loadFragment(Fragment al) {
-        getFragmentManager().beginTransaction()
+        getFragmentManager( ).beginTransaction()
                 .replace(R.id.manager_fragment_framelayout, al).commit();
 
     }

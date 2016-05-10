@@ -10,7 +10,6 @@ import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.adapter.MyHomeMenuAdapter;
 import com.dayton.drone.bean.MenuBean;
-import com.dayton.drone.utils.UIUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +43,7 @@ public class HomeActivity extends BaseActivity {
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
         initData();
-        homeMenuListView.setAdapter(new MyHomeMenuAdapter(listData));
+        homeMenuListView.setAdapter(new MyHomeMenuAdapter(listData,this));
         homeMenuListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -77,7 +76,7 @@ public class HomeActivity extends BaseActivity {
 
     private void initData() {
         listData = new ArrayList<>(homeMenuIconArray.length);
-        homeMenuTextArray = UIUtils.getStringArray(R.array.home_menu_text_data);
+        homeMenuTextArray = getResources().getStringArray(R.array.home_menu_text_data);
         for(int i=0;i< homeMenuIconArray.length;i++){
             MenuBean bean = new MenuBean();
             bean.setIconId(homeMenuIconArray[i]);

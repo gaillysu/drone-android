@@ -39,7 +39,6 @@ import com.dayton.drone.event.BigSyncEvent;
 import com.dayton.drone.event.GoalCompletedEvent;
 import com.dayton.drone.event.LittleSyncEvent;
 import com.dayton.drone.event.LowMemoryEvent;
-import com.dayton.drone.event.TimerEvent;
 
 import net.medcorp.library.ble.controller.ConnectionController;
 import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
@@ -138,12 +137,10 @@ public class SyncControllerImpl implements  SyncController{
 
     }
 
-
     /**
      * send request  package to watch by using a queue
      * @param request
      */
-
     private void sendRequest(final BLERequestData request) {
         if(connectionController.inOTAMode()) {
             return;

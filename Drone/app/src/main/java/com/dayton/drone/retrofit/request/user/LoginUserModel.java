@@ -1,12 +1,11 @@
 package com.dayton.drone.retrofit.request.user;
 
 import com.dayton.drone.retrofit.model.UserLocationModel;
-import com.dayton.drone.retrofit.model.UserModel;
 
 /**
  * Created by med on 16/5/3.
  */
-public class LoginUserModel {
+public class LoginUserModel  {
     private UserLocationModel user;
     private float version;
     private String message;

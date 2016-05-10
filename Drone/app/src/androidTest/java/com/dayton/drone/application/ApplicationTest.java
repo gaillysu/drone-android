@@ -1,10 +1,7 @@
 package com.dayton.drone.application;
 
-import android.app.Application;
 import android.test.ApplicationTestCase;
 import android.test.suitebuilder.TestSuiteBuilder;
-
-import com.dayton.drone.ble.controller.SyncController;
 
 import junit.framework.Test;
 
@@ -18,4 +15,6 @@ public class ApplicationTest extends ApplicationTestCase<ApplicationModel> {
     public static Test suite(){
         return new TestSuiteBuilder(ApplicationTest.class).includeAllPackagesUnderHere().build();
     }
+
+
 }

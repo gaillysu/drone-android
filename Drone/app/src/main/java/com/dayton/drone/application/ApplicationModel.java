@@ -27,7 +27,6 @@ import java.util.Date;
  */
 public class ApplicationModel extends Application {
 
-    private static Context mContext;
     private static Thread	mMainThread;
     private static long		mMainThreadId;
     private static Looper	mMainThreadLooper;

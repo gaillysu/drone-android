@@ -40,4 +40,5 @@ public class StepsDetailModel {
     public void setDate(StepsDateModel date) {
         this.date = date;
     }
+
 }
