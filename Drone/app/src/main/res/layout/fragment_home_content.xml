@@ -22,7 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="4"
-                android:background="@android:color/holo_blue_bright"
+                android:background="@mipmap/background_steps"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -113,7 +113,7 @@
                         <TextView
                             android:id="@+id/home_fragment_progress_middle_dec"
                             style="@style/home_content_activity_progress_middle_text_style"
-                            android:text="@string/home_content_activity_progress_middle_dec"
+                            android:text="STEPS"
                             android:textColor="@color/home_content_text_color"
                             />
 
@@ -127,7 +127,7 @@
                         <TextView
                             android:id="@+id/home_fragment_progress_middle_"
                             style="@style/home_content_activity_progress_middle_text_style"
-                            android:text="GOCAL:10000"
+                            android:text="GOAL:10000"
                             android:textColor="@color/home_content_text_color"
                             android:textSize="16sp"/>
                     </LinearLayout>
