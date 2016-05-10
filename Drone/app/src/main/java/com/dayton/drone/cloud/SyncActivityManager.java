@@ -4,22 +4,17 @@ import android.content.Context;
 import android.util.Log;
 
 import com.dayton.drone.application.ApplicationModel;
-import com.dayton.drone.retrofit.Constants;
-import com.dayton.drone.retrofit.model.Steps;
-import com.dayton.drone.retrofit.model.StepsModel;
-import com.dayton.drone.retrofit.model.StepsWithID;
-import com.dayton.drone.retrofit.request.steps.CreateStepsModel;
-import com.dayton.drone.retrofit.request.steps.CreateStepsRequest;
-import com.dayton.drone.retrofit.request.steps.GetStepsModel;
-import com.dayton.drone.retrofit.request.steps.GetStepsRequest;
-import com.dayton.drone.retrofit.request.steps.UpdateStepsModel;
-import com.dayton.drone.retrofit.request.steps.UpdateStepsRequest;
+import com.dayton.drone.network.Constants;
+import com.dayton.drone.network.request.model.CreateSteps;
+import com.dayton.drone.network.request.model.StepsWithID;
+import com.dayton.drone.network.response.model.CreateStepsModel;
+import com.dayton.drone.network.request.CreateStepsRequest;
+import com.dayton.drone.network.response.model.GetStepsModel;
+import com.dayton.drone.network.request.GetStepsRequest;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by med on 16/4/29.
@@ -42,7 +37,7 @@ public class SyncActivityManager {
     /**
      * when today's steps got change, invoke it
      */
-    public void launchSyncDailySteps(final Steps steps)
+    public void launchSyncDailySteps(final CreateSteps steps)
     {
         getModel().getRetrofitManager().execute(new CreateStepsRequest(steps, getModel().getRetrofitManager().getAccessToken()), new RequestListener<CreateStepsModel>() {
             @Override
