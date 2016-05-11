@@ -20,6 +20,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.SweepGradient;
@@ -359,6 +360,15 @@ public class MagicProgressCircle extends View implements ISmoothTarget {
         paint.setShader(sweepGradient);
         canvas.drawCircle(cx, cy, radius, paint);
         canvas.restore();
+
+        /**
+         * draw inside circle
+         */
+        Paint insidePaint = new Paint();
+        insidePaint.setColor(Color.WHITE);
+        insidePaint.setStyle(Paint.Style.FILL);
+        insidePaint.setAntiAlias(true);
+        canvas.drawCircle(cx, cy, radius-strokeWidth/2, insidePaint);
 
         if (drawPercent > 0) {
 
