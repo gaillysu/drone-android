@@ -19,7 +19,7 @@ public class SleepDatabaseHelper implements iEntryDatabaseHelper<Sleep> {
 
     private DatabaseHelper databaseHelper;
 
-    private SleepDatabaseHelper(Context context) {
+    public SleepDatabaseHelper(Context context) {
         if (databaseHelper == null) {
             databaseHelper = DatabaseHelper.getHelperInstance(context);
         }

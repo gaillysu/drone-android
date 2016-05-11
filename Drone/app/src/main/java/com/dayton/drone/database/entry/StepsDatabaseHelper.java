@@ -20,7 +20,7 @@ public class StepsDatabaseHelper implements iEntryDatabaseHelper<Steps> {
 
     private DatabaseHelper databaseHelper;
 
-    private StepsDatabaseHelper(Context context) {
+    public StepsDatabaseHelper(Context context) {
         if (databaseHelper == null) {
             databaseHelper = DatabaseHelper.getHelperInstance(context);
         }

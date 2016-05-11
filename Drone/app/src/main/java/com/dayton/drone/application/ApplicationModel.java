@@ -9,6 +9,11 @@ import com.dayton.drone.ble.controller.OtaControllerImpl;
 import com.dayton.drone.ble.controller.SyncController;
 import com.dayton.drone.ble.controller.SyncControllerImpl;
 import com.dayton.drone.cloud.SyncActivityManager;
+import com.dayton.drone.database.entry.NotificationDatabaseHelper;
+import com.dayton.drone.database.entry.SleepDatabaseHelper;
+import com.dayton.drone.database.entry.StepsDatabaseHelper;
+import com.dayton.drone.database.entry.UserDatabaseHelper;
+import com.dayton.drone.database.entry.WorldClockDatabaseHelper;
 import com.dayton.drone.event.LittleSyncEvent;
 import com.dayton.drone.modle.User;
 import com.dayton.drone.network.RetrofitManager;
@@ -31,6 +36,11 @@ public class ApplicationModel extends Application {
     private RetrofitManager retrofitManager;
     private SyncActivityManager syncActivityManager;
     private User   user;
+    private UserDatabaseHelper userDatabaseHelper;
+    private WorldClockDatabaseHelper worldClockDatabaseHelper;
+    private StepsDatabaseHelper stepsDatabaseHelper;
+    private SleepDatabaseHelper sleepDatabaseHelper;
+    private NotificationDatabaseHelper notificationDatabaseHelper;
 
     @Override
     public void onCreate()
@@ -45,6 +55,11 @@ public class ApplicationModel extends Application {
         //TODO read from user table to get the lastest logged in user
         EventBus.getDefault().register(this);
         syncController.startConnect(false);
+        userDatabaseHelper = new UserDatabaseHelper(this);
+        worldClockDatabaseHelper = new WorldClockDatabaseHelper(this);
+        stepsDatabaseHelper = new StepsDatabaseHelper(this);
+        sleepDatabaseHelper = new SleepDatabaseHelper(this);
+        notificationDatabaseHelper = new NotificationDatabaseHelper(this);
     }
 
     public SyncController getSyncController() {

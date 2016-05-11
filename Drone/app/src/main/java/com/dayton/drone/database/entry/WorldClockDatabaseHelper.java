@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Created by med on 16/5/9.
@@ -28,7 +29,25 @@ public class WorldClockDatabaseHelper {
 
 
     public void initDatabase() {
-    // TODO add table records if not exist
+        //total 581 timezone is retrieved, set 4 default timezone
+        if(getAll().isEmpty()) {
+            String[] iDs = TimeZone.getAvailableIDs();
+            for(String id:iDs) {
+                WorldClock worldClock = new WorldClock();
+                if(id.contains("Shanghai")
+                        ||id.contains("London")
+                        ||id.contains("Paris")
+                        ||id.contains("New_York"))
+                {
+                    worldClock.setSelected(1);
+                }
+                worldClock.setTimeZoneName(id);
+                add(worldClock);
+            }
+
+            List<WorldClock> defaults = getSelected();
+            int len = defaults.size();
+        }
     }
 
     public Optional<WorldClock> add(WorldClock object) {
