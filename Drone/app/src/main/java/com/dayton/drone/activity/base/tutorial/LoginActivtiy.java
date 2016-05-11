@@ -69,6 +69,7 @@ public class LoginActivtiy extends BaseActivity {
                      getModel().getUser().setUserID(loginUserModel.getUser().getId()+"");
                      getModel().getUser().setUserEmail(loginUserModel.getUser().getEmail());
                      getModel().getUser().setUserIsLogin(true);
+                     getModel().getUserDatabaseHelper().update(getModel().getUser());
                      getModel().getSyncActivityManager().launchSyncAll();
                      onLoginSuccess();
                  }

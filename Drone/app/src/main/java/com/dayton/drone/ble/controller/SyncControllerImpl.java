@@ -39,6 +39,7 @@ import com.dayton.drone.event.BigSyncEvent;
 import com.dayton.drone.event.GoalCompletedEvent;
 import com.dayton.drone.event.LittleSyncEvent;
 import com.dayton.drone.event.LowMemoryEvent;
+import com.dayton.drone.modle.Steps;
 
 import net.medcorp.library.ble.controller.ConnectionController;
 import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
@@ -46,6 +47,7 @@ import net.medcorp.library.ble.event.BLEResponseDataEvent;
 import net.medcorp.library.ble.model.request.BLERequestData;
 import net.medcorp.library.ble.model.response.BLEResponseData;
 import net.medcorp.library.ble.model.response.MEDRawData;
+import net.medcorp.library.ble.util.Optional;
 import net.medcorp.library.ble.util.QueuedMainThreadHandler;
 
 import org.greenrobot.eventbus.EventBus;
@@ -223,8 +225,12 @@ public class SyncControllerImpl implements  SyncController{
                 {
                     ActivityPacket activityPacket = packet.newActivityPacket();
                     Log.i(TAG,activityPacket.getDate().toString() + " steps: " + activityPacket.getSteps());
-                    //TODO, save it to "steps" table
-
+                    Steps steps = new Steps();
+                    steps.setTimeFrame(activityPacket.getDate().getTime());
+                    steps.setDate(activityPacket.getDate().getTime());
+                    steps.setSteps(activityPacket.getSteps());
+                    steps.setUserID(application.getUser().getUserID());
+                    application.getStepsDatabaseHelper().update(steps);
                     if(activityPacket.getMore()==Constants.ActivityDataStatus.MoreData.rawValue())
                     {
                         sendRequest(new GetActivityRequest(application));

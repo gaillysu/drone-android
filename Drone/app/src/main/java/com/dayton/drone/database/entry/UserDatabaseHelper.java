@@ -118,6 +118,22 @@ public class UserDatabaseHelper implements iEntryDatabaseHelper<User> {
         return list;
     }
 
+    public Optional<User> getLoginUser()
+    {
+        Optional<User> optionalUser = new Optional<>();
+        try {
+            List<UserBean> userList = databaseHelper.getUserBean()
+                    .queryBuilder().where().eq(UserBean.fUserIsLogin, true).query();
+            for (UserBean userBean : userList) {
+                optionalUser.set(convertToNormal(userBean));
+                return optionalUser;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return optionalUser;
+    }
+
     private User convertToNormal(UserBean userDAO) {
         User user = new User();
         user.setAge(userDAO.getAge());

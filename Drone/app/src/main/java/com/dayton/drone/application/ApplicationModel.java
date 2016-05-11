@@ -20,6 +20,7 @@ import com.dayton.drone.network.RetrofitManager;
 import com.dayton.drone.network.request.model.CreateSteps;
 
 import net.medcorp.library.ble.controller.OtaController;
+import net.medcorp.library.ble.util.Optional;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -50,16 +51,22 @@ public class ApplicationModel extends Application {
         otaController  = new OtaControllerImpl(this);
         retrofitManager = new RetrofitManager(this);
         syncActivityManager = new SyncActivityManager(this);
-        user = new User();
-        user.setUserID("0");//"0" means anyone user
-        //TODO read from user table to get the lastest logged in user
-        EventBus.getDefault().register(this);
-        syncController.startConnect(false);
         userDatabaseHelper = new UserDatabaseHelper(this);
         worldClockDatabaseHelper = new WorldClockDatabaseHelper(this);
         stepsDatabaseHelper = new StepsDatabaseHelper(this);
         sleepDatabaseHelper = new SleepDatabaseHelper(this);
         notificationDatabaseHelper = new NotificationDatabaseHelper(this);
+        Optional<User> loginUser = userDatabaseHelper.getLoginUser();
+        if(loginUser.notEmpty()) {
+            user = loginUser.get();
+        }
+        else {
+            user = new User();
+            user.setUserID("0");//"0" means anyone user
+        }
+        //put the two lines at end.
+        EventBus.getDefault().register(this);
+        syncController.startConnect(false);
     }
 
     public SyncController getSyncController() {
@@ -79,6 +86,13 @@ public class ApplicationModel extends Application {
     }
 
     public User getUser(){return user;}
+
+    public StepsDatabaseHelper getStepsDatabaseHelper() {
+        return stepsDatabaseHelper;
+    }
+    public UserDatabaseHelper getUserDatabaseHelper() {
+        return userDatabaseHelper;
+    }
 
     @Subscribe
     public void onEvent(LittleSyncEvent event) {
