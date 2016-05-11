@@ -26,34 +26,16 @@ import java.util.Date;
  * Created by karl-john on 18/3/16.
  */
 public class ApplicationModel extends Application {
-
-    private static Thread	mMainThread;
-    private static long		mMainThreadId;
-    private static Looper	mMainThreadLooper;
-    private static Handler mHandler;
-    private static Context mContext;
     private SyncController syncController;
     private OtaController otaController;
     private RetrofitManager retrofitManager;
     private SyncActivityManager syncActivityManager;
     private User   user;
 
-
     @Override
     public void onCreate()
     {
         super.onCreate();
-
-        mContext = this;
-
-        mHandler = new Handler();
-
-        mMainThread = Thread.currentThread();
-
-        mMainThreadId = android.os.Process.myTid();
-
-        mMainThreadLooper = getMainLooper();
-
         syncController = new SyncControllerImpl(this);
         otaController  = new OtaControllerImpl(this);
         retrofitManager = new RetrofitManager(this);
@@ -64,32 +46,6 @@ public class ApplicationModel extends Application {
         EventBus.getDefault().register(this);
         syncController.startConnect(false);
     }
-
-    public static Context getContext()
-    {
-        return mContext;
-    }
-
-    public static Handler getHandler()
-    {
-        return mHandler;
-    }
-
-    public static Thread getMainThread()
-    {
-        return mMainThread;
-    }
-
-    public static long getMainThreadId()
-    {
-        return mMainThreadId;
-    }
-
-    public static Looper getMainThreadLooper()
-    {
-        return mMainThreadLooper;
-    }
-
 
     public SyncController getSyncController() {
         return syncController;
