@@ -26,6 +26,8 @@ public class SelectDeviceActivity extends BaseActivity {
     private int[] watchIconArray = {
             R.mipmap.drone1, R.mipmap.drone2,
             R.mipmap.drone2, R.mipmap.drone3,
+            R.mipmap.drone_mens_black_strap, R.mipmap.drone_mens_tone_split_dial, R.mipmap.drone_white_strap_rosetone,R.mipmap.drone_mens_split_dial,
+            R.mipmap.drone_ladies_crystal_bezel, R.mipmap.drone_ladies_stainless_steel,
     };
 
     @Override

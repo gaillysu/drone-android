@@ -92,7 +92,7 @@
             android:name="com.octo.android.robospice.JacksonSpringAndroidSpiceService"
             android:exported="false" />
         <service
-            android:name=".retrofit.RetrofitService"
+            android:name=".network.RetrofitService"
             android:exported="false" />
     </application>
 </manifest>

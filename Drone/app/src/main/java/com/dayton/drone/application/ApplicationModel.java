@@ -11,8 +11,8 @@ import com.dayton.drone.ble.controller.SyncControllerImpl;
 import com.dayton.drone.cloud.SyncActivityManager;
 import com.dayton.drone.event.LittleSyncEvent;
 import com.dayton.drone.modle.User;
-import com.dayton.drone.retrofit.RetrofitManager;
-import com.dayton.drone.retrofit.model.Steps;
+import com.dayton.drone.network.RetrofitManager;
+import com.dayton.drone.network.request.model.CreateSteps;
 
 import net.medcorp.library.ble.controller.OtaController;
 
@@ -27,7 +27,6 @@ import java.util.Date;
  */
 public class ApplicationModel extends Application {
 
-    private static Context mContext;
     private static Thread	mMainThread;
     private static long		mMainThreadId;
     private static Looper	mMainThreadLooper;
@@ -111,7 +110,7 @@ public class ApplicationModel extends Application {
 
     @Subscribe
     public void onEvent(LittleSyncEvent event) {
-        Steps steps = new Steps();
+        CreateSteps steps = new CreateSteps();
         steps.setUid(Integer.parseInt(getUser().getUserID()));
         steps.setDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         steps.setSteps(event.getSteps());

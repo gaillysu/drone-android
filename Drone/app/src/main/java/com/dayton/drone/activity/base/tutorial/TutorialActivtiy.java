@@ -31,7 +31,7 @@ public class TutorialActivtiy extends BaseActivity {
     @Bind(R.id.registe_bt)
     Button mRegiste;
 
-    private int[] vp_data = new int[]{R.mipmap.drone1, R.mipmap.drone2, R.mipmap.drone3};
+    private int[] vp_data = new int[]{R.mipmap.drone_mens_black_strap, R.mipmap.drone_mens_tone_split_dial, R.mipmap.drone_white_strap_rosetone,R.mipmap.drone_mens_split_dial};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

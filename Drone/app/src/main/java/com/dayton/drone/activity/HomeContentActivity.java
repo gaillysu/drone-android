@@ -61,11 +61,11 @@ public class HomeContentActivity extends BaseActivity implements OnChartValueSel
     TextView homeMiddleTv;
 
     @Bind(R.id.fragment_home_title_calories)
-    TextView calories;
+    TextView caloriesTextView;
     @Bind(R.id.fragment_home_title_miles)
-    TextView miles;
+    TextView milesTextView;
     @Bind(R.id.fragment_home_title_active_time)
-    TextView activeTime;
+    TextView activeTimeTextView;
 
     @Bind(R.id.home_content_bar)
     RelativeLayout guideBar;
@@ -267,6 +267,7 @@ public class HomeContentActivity extends BaseActivity implements OnChartValueSel
             public void onClick(View v) {
                 String leftMouth = calendar.clickLeftMonth();
                 mTitleCalendarTextView.setText(getResources().getString(R.string.main_table_date)
+                mTitleCalendarTextView.setText(getString(R.string.main_table_date)
                         + " " + leftMouth);
                 mIvNextMouth.setVisibility(View.GONE);
                 mIvBackMouth.setVisibility(View.GONE);
@@ -278,6 +279,7 @@ public class HomeContentActivity extends BaseActivity implements OnChartValueSel
             public void onClick(View v) {
                 String rightMouth = calendar.clickRightMonth();
                 mTitleCalendarTextView.setText(getResources().getString(R.string.main_table_date)
+                mTitleCalendarTextView.setText(getString(R.string.main_table_date)
                         + " " + rightMouth);
                 mIvNextMouth.setVisibility(View.GONE);
                 mIvBackMouth.setVisibility(View.GONE);

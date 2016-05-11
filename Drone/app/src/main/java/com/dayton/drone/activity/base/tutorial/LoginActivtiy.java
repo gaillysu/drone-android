@@ -8,9 +8,9 @@ import android.widget.Toast;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
-import com.dayton.drone.retrofit.model.UserLogin;
-import com.dayton.drone.retrofit.request.user.LoginUserModel;
-import com.dayton.drone.retrofit.request.user.LoginUserRequest;
+import com.dayton.drone.network.request.model.LoginUser;
+import com.dayton.drone.network.response.model.LoginUserModel;
+import com.dayton.drone.network.request.LoginUserRequest;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -51,7 +51,7 @@ public class LoginActivtiy extends BaseActivity {
         progressDialog.setMessage("logging in...");
         progressDialog.show();
 
-         UserLogin userLogin = new UserLogin();
+        LoginUser userLogin = new LoginUser();
          userLogin.setEmail(ed_account.getText().toString());
          userLogin.setPassword(ed_password.getText().toString());
          getModel().getRetrofitManager().execute(new LoginUserRequest(userLogin,getModel().getRetrofitManager().getAccessToken()),new RequestListener<LoginUserModel>(){

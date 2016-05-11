@@ -19,6 +19,7 @@ public class MyHomeMenuAdapter extends BaseAdapter {
     private Context mContext;
 
     public MyHomeMenuAdapter(List<MenuBean> data,Context context) {
+    public MyHomeMenuAdapter(List<MenuBean> data, Context context) {
         this.mData = data;
         mContext = context;
     }

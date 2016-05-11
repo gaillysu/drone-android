@@ -15,6 +15,12 @@ import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.database.entry.UserDatabaseHelper;
 import com.dayton.drone.modle.User;
+import com.dayton.drone.network.Constants;
+import com.dayton.drone.network.request.CreateUserRequest;
+import com.dayton.drone.network.request.model.CreateUser;
+import com.dayton.drone.network.response.model.CreateUserModel;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -142,8 +148,6 @@ public class UserInfoActivity extends BaseActivity {
             Intent intent = getIntent();
             String account = intent.getStringExtra("account");
             String password = intent.getStringExtra("password");
-            UserDatabaseHelper database = new UserDatabaseHelper(UserInfoActivity.this);
-            User us = new User();
             int h = new Integer(height.substring(0, 3));
             double w = Double.parseDouble(weight.substring(0, weight.length() - 2));
             us.setUserEmail(account);
@@ -155,6 +159,37 @@ public class UserInfoActivity extends BaseActivity {
                 us.setGender(1);
             }
             database.add(us);
+
+            CreateUser createUser = new CreateUser();
+            createUser.setEmail(account);
+            createUser.setPassword(password);
+            createUser.setFirst_name(account);
+            createUser.setLast_name(account);
+            createUser.setLength(h);
+            //createUser.setAge();
+
+            getModel().getRetrofitManager().execute(new CreateUserRequest(createUser, getModel().getRetrofitManager().getAccessToken()), new RequestListener<CreateUserModel>() {
+                @Override
+                public void onRequestFailure(SpiceException spiceException) {
+                    spiceException.printStackTrace();
+                }
+
+                @Override
+                public void onRequestSuccess(CreateUserModel createUserModel) {
+                    if(createUserModel.getStatus() == Constants.STATUS_CODE.STATUS_SUCCESS)
+                    {
+                        getModel().getUser().setUserEmail(createUserModel.getUser().getEmail());
+                        getModel().getUser().setUserID(createUserModel.getUser().getId()+"");
+                        getModel().getUser().setUserIsLogin(true);
+                        //TODO save to database
+                    }
+                }
+            });
+
+            IntentFilter filter = new IntentFilter();
+            filter.addAction("CLOSE_ACTIVITY");
+            registerReceiver(broadcast,filter);
+
             startActivity(SelectDeviceActivity.class);
              finish();
         } else
