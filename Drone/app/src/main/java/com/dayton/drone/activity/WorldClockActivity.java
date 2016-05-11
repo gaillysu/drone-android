@@ -25,7 +25,7 @@ import butterknife.OnClick;
 /**
  * Created by boy on 2016/4/24.
  */
-public class WorldClockActivity extends BaseActivity{
+public class WorldClockActivity extends BaseActivity {
     @Bind(R.id.world_clock_date_edit_bt)
     ImageButton editButton;
     @Bind(R.id.world_clock_add_city_iv)
@@ -66,41 +66,46 @@ public class WorldClockActivity extends BaseActivity{
         bean.setCity("London");
         bean.setModernDate("Today");
         bean.setTimeDifference("7 hours Behind");
-        bean.setCityCurrentTime(currentHours+7+" PM");
+        bean.setCityCurrentTime(currentHours + 7 + " PM");
         listData.add(bean);
 
         WorldClockListBean bean1 = new WorldClockListBean();
         bean1.setCity("Paris");
         bean1.setModernDate("Today");
         bean1.setTimeDifference("6 hours Behind");
-        bean1.setCityCurrentTime(currentHours+6+" PM");
+        bean1.setCityCurrentTime(currentHours + 6 + " PM");
         listData.add(bean1);
 
         WorldClockListBean bean2 = new WorldClockListBean();
         bean2.setCity("New York");
         bean2.setModernDate("Today");
         bean2.setTimeDifference("12 hours Behind");
-        bean2.setCityCurrentTime(currentHours+12+" PM");
+        bean2.setCityCurrentTime(currentHours + 12 + " PM");
         listData.add(bean2);
 
         WorldClockListBean bean3 = new WorldClockListBean();
         bean3.setCity("Shanghai");
         bean3.setModernDate("Today");
         bean3.setTimeDifference("7 hours Behind");
-        bean3.setCityCurrentTime(currentHours+7+" PM");
+        bean3.setCityCurrentTime(currentHours + 7 + " PM");
         listData.add(bean3);
 
-        worldClockListView.setAdapter(new WorldClockAdapter(listData ,this));
+        worldClockListView.setAdapter(new WorldClockAdapter(listData, this));
 
     }
 
+    @OnClick(R.id.content_title_back_bt)
+    public void backClick() {
+        finish();
+    }
+
     @OnClick(R.id.world_clock_date_edit_bt)
-    public void editButtonClick(){
+    public void editButtonClick() {
         //TODO
     }
 
     @OnClick(R.id.world_clock_add_city_iv)
-    public void addCityClick(){
+    public void addCityClick() {
         //TODO
     }
 

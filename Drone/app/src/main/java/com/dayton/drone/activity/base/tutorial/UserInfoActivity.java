@@ -150,15 +150,15 @@ public class UserInfoActivity extends BaseActivity {
             String password = intent.getStringExtra("password");
             int h = new Integer(height.substring(0, 3));
             double w = Double.parseDouble(weight.substring(0, weight.length() - 2));
-            us.setUserEmail(account);
-            us.setHeight(h);
-            us.setWeight(w);
-            if (mUserSex.equals("famale")) {
-                us.setGender(0);
-            } else {
-                us.setGender(1);
-            }
-            database.add(us);
+//            us.setUserEmail(account);
+//            us.setHeight(h);
+//            us.setWeight(w);
+//            if (mUserSex.equals("famale")) {
+//                us.setGender(0);
+//            } else {
+//                us.setGender(1);
+//            }
+//            database.add(us);
 
             CreateUser createUser = new CreateUser();
             createUser.setEmail(account);
@@ -185,10 +185,6 @@ public class UserInfoActivity extends BaseActivity {
                     }
                 }
             });
-
-            IntentFilter filter = new IntentFilter();
-            filter.addAction("CLOSE_ACTIVITY");
-            registerReceiver(broadcast,filter);
 
             startActivity(SelectDeviceActivity.class);
              finish();

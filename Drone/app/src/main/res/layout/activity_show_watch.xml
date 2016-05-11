@@ -3,14 +3,14 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_gravity="center_horizontal"
+              android:gravity="center_horizontal"
               android:layout_height="match_parent">
     <ImageView
         android:id="@+id/show_watch_iv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:layout_marginTop="160dp"
-        android:src="@mipmap/drone2"/>
+        android:src="@mipmap/drone_def_icon"/>
       <TextView
           android:id="@+id/device_connecting_status"
           android:layout_width="wrap_content"

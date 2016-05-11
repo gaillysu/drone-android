@@ -31,12 +31,13 @@ public class ApplicationModel extends Application {
     private static long		mMainThreadId;
     private static Looper	mMainThreadLooper;
     private static Handler mHandler;
-
+    private static Context mContext;
     private SyncController syncController;
     private OtaController otaController;
     private RetrofitManager retrofitManager;
     private SyncActivityManager syncActivityManager;
     private User   user;
+
 
     @Override
     public void onCreate()

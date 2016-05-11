@@ -109,7 +109,7 @@ public class HomeContentActivity extends BaseActivity implements OnChartValueSel
         titleView = findViewById(R.id.fragment_title);
         mIvNextMouth = (ImageButton) findViewById(R.id.home_fragmet_title_next_day);
         mIvBackMouth = (ImageButton) findViewById(R.id.home_fragment_calendar_back_day);
-        mBtBack = (Button)findViewById(R.id.home_fragment_title_back);
+        mBtBack = (Button) findViewById(R.id.home_fragment_title_back);
         showCalendar = (LinearLayout) findViewById(R.id.home_fragment_title_date);
         dateTv = (LinearLayout) findViewById(R.id.home_fragment_title_date);
         mTitleCalendarTextView = (TextView) findViewById(R.id.home_fragment_title_date_tv);
@@ -172,12 +172,10 @@ public class HomeContentActivity extends BaseActivity implements OnChartValueSel
 
                 }
             });
-        }else{
+        } else {
             guideView.setVisibility(View.GONE);
         }
     }
-
-
 
 
     public void initData() {
@@ -223,18 +221,16 @@ public class HomeContentActivity extends BaseActivity implements OnChartValueSel
         List<String> xVals = new ArrayList<String>();
         List<BarEntry> yValue = new ArrayList<BarEntry>();
 
-        List<Steps>stepsList = new ArrayList<Steps>();
+        List<Steps> stepsList = new ArrayList<Steps>();
         //sample data
-        for(int i=0;i<7;i++)
-        {
+        for (int i = 0; i < 7; i++) {
             Steps sampleSteps = new Steps();
-            sampleSteps.setDate(sampleSteps.getTimeFrame()-i*24*60*60*1000);
+            sampleSteps.setDate(sampleSteps.getTimeFrame() - i * 24 * 60 * 60 * 1000);
             sampleSteps.setSteps(new Random().nextInt(10000));
             stepsList.add(sampleSteps);
         }
         int i = 0;
-        for(Steps steps:stepsList)
-        {
+        for (Steps steps : stepsList) {
             yValue.add(new BarEntry(new float[]{steps.getSteps()}, i));
             xVals.add(sdf.format(new Date(steps.getDate())));
             i++;
@@ -249,7 +245,7 @@ public class HomeContentActivity extends BaseActivity implements OnChartValueSel
         dataSets.add(dataSet);
         BarData data = new BarData(xVals, dataSets);
         barChart.setData(data);
-        barChart.highlightValue(stepsList.size()-1, 0);
+        barChart.highlightValue(stepsList.size() - 1, 0);
 
     }
 
@@ -267,7 +263,6 @@ public class HomeContentActivity extends BaseActivity implements OnChartValueSel
             public void onClick(View v) {
                 String leftMouth = calendar.clickLeftMonth();
                 mTitleCalendarTextView.setText(getResources().getString(R.string.main_table_date)
-                mTitleCalendarTextView.setText(getString(R.string.main_table_date)
                         + " " + leftMouth);
                 mIvNextMouth.setVisibility(View.GONE);
                 mIvBackMouth.setVisibility(View.GONE);
@@ -278,7 +273,6 @@ public class HomeContentActivity extends BaseActivity implements OnChartValueSel
             @Override
             public void onClick(View v) {
                 String rightMouth = calendar.clickRightMonth();
-                mTitleCalendarTextView.setText(getResources().getString(R.string.main_table_date)
                 mTitleCalendarTextView.setText(getString(R.string.main_table_date)
                         + " " + rightMouth);
                 mIvNextMouth.setVisibility(View.GONE);
