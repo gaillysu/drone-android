@@ -10,7 +10,7 @@
     <string name="tips_user_account_password">Account of password is not null</string>
     <string name="user_account_error">Account of password is error</string>
     <string name="user_info_clue">Tell us little bit about your self.</string>
-    <string name="user_info_share">We promissed we will share this info</string>
+    <string name="user_info_share">We promissed we will never share this info</string>
     <string name="user_sex_female">Female</string>
     <string name="user_sex_male">Male</string>
     <string name="user_info_brithday">Birth</string>

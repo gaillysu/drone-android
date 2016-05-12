@@ -1,26 +1,24 @@
 package com.dayton.drone.activity.base.tutorial;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bruce.pickerview.popwindow.DatePickerPopWin;
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
-import com.dayton.drone.database.entry.UserDatabaseHelper;
-import com.dayton.drone.modle.User;
 import com.dayton.drone.network.Constants;
 import com.dayton.drone.network.request.CreateUserRequest;
 import com.dayton.drone.network.request.model.CreateUser;
 import com.dayton.drone.network.response.model.CreateUserModel;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -31,8 +29,8 @@ import butterknife.OnClick;
  */
 public class UserInfoActivity extends BaseActivity {
 
-    @Bind(R.id.user_info_sex_famale_tv)
-    TextView tv_sexFamale;
+    @Bind(R.id.user_info_sex_female_tv)
+    TextView tv_sexFemale;
     @Bind(R.id.user_info_sex_male_tv)
     TextView tv_sexMale;
     @Bind(R.id.user_barthday)
@@ -41,36 +39,29 @@ public class UserInfoActivity extends BaseActivity {
     TextView tv_userHeight;
     @Bind(R.id.user_weight)
     TextView tv_userWeight;
-    @Bind(R.id.registe_back_iv)
-    ImageButton ivBack;
-    @Bind(R.id.registe_next_iv)
-    ImageButton ivNext;
-    private String userSex;
-    private int viewType = 1;
-    private String mUserSex;
 
+    private int gender = 1; //0:female, 1: male
+    private int viewType = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
         ButterKnife.bind(this);
-        tv_sexFamale.setBackgroundColor(R.color.userinfo_sex_bg);
-        mUserSex = tv_sexFamale.getText().toString();
     }
 
-    @OnClick(R.id.user_info_sex_famale_tv)
+    @OnClick(R.id.user_info_sex_female_tv)
     public void selectUserSexFemale() {
-        mUserSex = tv_sexFamale.getText().toString();
-        tv_sexFamale.setBackgroundColor(R.color.userinfo_sex_bg);
-        tv_sexMale.setBackgroundColor(android.R.color.transparent);
+        gender = 0;
+        tv_sexFemale.setBackgroundColor(getResources().getColor(R.color.userinfo_sex_bg));
+        tv_sexMale.setBackgroundColor(getResources().getColor(android.R.color.transparent));
     }
 
     @OnClick(R.id.user_info_sex_male_tv)
     public void selectUserSexMale() {
-        mUserSex = tv_sexMale.getText().toString();
-        tv_sexFamale.setBackgroundColor(android.R.color.transparent);
-        tv_sexMale.setBackgroundColor(R.color.userinfo_sex_bg);
+        gender = 1;
+        tv_sexFemale.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+        tv_sexMale.setBackgroundColor(getResources().getColor(R.color.userinfo_sex_bg));
     }
 
     @OnClick(R.id.user_barthday)
@@ -82,7 +73,6 @@ public class UserInfoActivity extends BaseActivity {
                     @Override
                     public void onDatePickCompleted(int year, int month,
                                                     int day, String dateDesc) {
-                        Toast.makeText(UserInfoActivity.this, dateDesc, 0).show();
                         tv_userBirth.setText(dateDesc);
                     }
                 }).viewStyle(viewType)
@@ -141,24 +131,19 @@ public class UserInfoActivity extends BaseActivity {
         String birthday = tv_userBirth.getText().toString();
         String height = tv_userHeight.getText().toString();
         String weight = tv_userWeight.getText().toString();
-        if (!(TextUtils.isEmpty(birthday) && TextUtils.isEmpty(height) && TextUtils.isEmpty(weight)))
-
+        if (!(TextUtils.isEmpty(birthday) || TextUtils.isEmpty(height) || TextUtils.isEmpty(weight)))
         {
-
             Intent intent = getIntent();
             String account = intent.getStringExtra("account");
             String password = intent.getStringExtra("password");
-            int h = new Integer(height.substring(0, 3));
-            double w = Double.parseDouble(weight.substring(0, weight.length() - 2));
-//            us.setUserEmail(account);
-//            us.setHeight(h);
-//            us.setWeight(w);
-//            if (mUserSex.equals("famale")) {
-//                us.setGender(0);
-//            } else {
-//                us.setGender(1);
-//            }
-//            database.add(us);
+            final int h = new Integer(height.substring(0, 3));
+            final double w = Double.parseDouble(weight.substring(0, weight.length() - 2));
+            int age = 25;
+            try {
+                age = new Date().getYear() -  new SimpleDateFormat("yyyy-MM-dd").parse(birthday).getYear();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
             CreateUser createUser = new CreateUser();
             createUser.setEmail(account);
@@ -166,8 +151,9 @@ public class UserInfoActivity extends BaseActivity {
             createUser.setFirst_name(account);
             createUser.setLast_name(account);
             createUser.setLength(h);
-            //createUser.setAge();
+            createUser.setAge(age);
 
+            final int finalAge = age;
             getModel().getRetrofitManager().execute(new CreateUserRequest(createUser, getModel().getRetrofitManager().getAccessToken()), new RequestListener<CreateUserModel>() {
                 @Override
                 public void onRequestFailure(SpiceException spiceException) {
@@ -178,18 +164,24 @@ public class UserInfoActivity extends BaseActivity {
                 public void onRequestSuccess(CreateUserModel createUserModel) {
                     if(createUserModel.getStatus() == Constants.STATUS_CODE.STATUS_SUCCESS)
                     {
+                        getModel().getUser().setFirstName(createUserModel.getUser().getFirst_name());
+                        getModel().getUser().setLastName(createUserModel.getUser().getLast_name());
+                        getModel().getUser().setAge(finalAge);
+                        getModel().getUser().setHeight(h);
+                        getModel().getUser().setWeight(w);
+                        getModel().getUser().setGender(gender);
                         getModel().getUser().setUserEmail(createUserModel.getUser().getEmail());
                         getModel().getUser().setUserID(createUserModel.getUser().getId()+"");
                         getModel().getUser().setUserIsLogin(true);
-                        //TODO save to database
+                        getModel().getUserDatabaseHelper().update(getModel().getUser());
                     }
                 }
             });
 
             startActivity(SelectDeviceActivity.class);
-             finish();
-        } else
-
+            finish();
+        }
+        else
         {
             Toast.makeText(UserInfoActivity.this,
                     R.string.user_info_about, Toast.LENGTH_SHORT).show();
