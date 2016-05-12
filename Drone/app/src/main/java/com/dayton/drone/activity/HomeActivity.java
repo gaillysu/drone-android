@@ -78,4 +78,12 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(!getModel().getSyncController().isConnected())
+        {
+            getModel().getSyncController().startConnect(false);
+        }
+    }
 }
