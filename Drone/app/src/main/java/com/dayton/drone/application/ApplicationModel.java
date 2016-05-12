@@ -64,9 +64,7 @@ public class ApplicationModel extends Application {
             user = new User();
             user.setUserID("0");//"0" means anyone user
         }
-        //put the two lines at end.
         EventBus.getDefault().register(this);
-        syncController.startConnect(false);
     }
 
     public SyncController getSyncController() {
