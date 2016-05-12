@@ -2,6 +2,7 @@ package com.dayton.drone.activity.base.tutorial;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -109,15 +110,14 @@ public class ShowWatchActivity extends BaseActivity  {
                     watchName.setVisibility(View.VISIBLE);
                     watchVersion.setVisibility(View.VISIBLE);
                     buletoothID.setVisibility(View.VISIBLE);
-
-                    //TODO how to go homeActivity? here assume auto go it after 2s
-                    try {
-                        Thread.sleep(2000);
-                        startActivity(HomeActivity.class);
-                        finish();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    //TODO how to go homeActivity? here assume auto go it after some seconds
+                    new Handler(getMainLooper()).postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            startActivity(HomeActivity.class);
+                            finish();
+                        }
+                    },10000);
                 }
             });
         }
