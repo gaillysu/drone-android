@@ -30,7 +30,7 @@
         tools:replace="android:theme">
 
         <activity
-            android:name=".activity.base.tutorial.SplashActivtiy"
+            android:name=".activity.base.tutorial.SplashActivity"
             android:configChanges="screenLayout|orientation"
             android:label="@string/app_name">
             <intent-filter>

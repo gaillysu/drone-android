@@ -2,7 +2,6 @@ package com.dayton.drone.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -11,14 +10,12 @@ import android.widget.Toast;
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.adapter.WorldClockAdapter;
-import com.dayton.drone.bean.WorldClockListBean;
+import com.dayton.drone.database.entry.WorldClockDatabaseHelper;
+import com.dayton.drone.modle.WorldClock;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -39,18 +36,20 @@ public class WorldClockActivity extends BaseActivity {
     @Bind(R.id.content_title_dec_tv)
     TextView titleTextView;
 
-    private List<WorldClockListBean> listData;
+    private List<WorldClock> listData;
     private WorldClockAdapter worldClockAdapter;
     private boolean isShowEditIcon = true;
     private int requestCode = 3>>2;
+    private WorldClockDatabaseHelper worldClockDatabase;
 
     @Override
     protected void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_world_clock);
         ButterKnife.bind(this);
-        listData = new ArrayList<>(3);
+//        listData = new ArrayList<>(3);
         titleTextView.setText(getString(R.string.world_clock_title_text));
+        worldClockDatabase = getModel().getWorldClockDatabaseHelper();
         initData();
     }
 
@@ -63,38 +62,38 @@ public class WorldClockActivity extends BaseActivity {
         dateTv.setText(getModel().getString(R.string.main_table_date) + " "
                 + currentTimeArray[1] + ", " + currentTimeArray[0]);
 
-        Calendar calendar = Calendar.getInstance();
-        int currentHours = calendar.get(Calendar.HOUR_OF_DAY);
-        TimeZone timeZone = calendar.getTimeZone();
-
-        WorldClockListBean bean = new WorldClockListBean();
-        bean.setCity("London");
-        bean.setModernDate("Today");
-        bean.setTimeDifference("7 hours Behind");
-        bean.setCityCurrentTime(currentHours + 7 + " PM");
-        listData.add(bean);
-
-        WorldClockListBean bean1 = new WorldClockListBean();
-        bean1.setCity("Paris");
-        bean1.setModernDate("Today");
-        bean1.setTimeDifference("6 hours Behind");
-        bean1.setCityCurrentTime(currentHours + 6 + " PM");
-        listData.add(bean1);
-
-        WorldClockListBean bean2 = new WorldClockListBean();
-        bean2.setCity("New York");
-        bean2.setModernDate("Today");
-        bean2.setTimeDifference("12 hours Behind");
-        bean2.setCityCurrentTime(currentHours + 12 + " PM");
-        listData.add(bean2);
-
-        WorldClockListBean bean3 = new WorldClockListBean();
-        bean3.setCity("Shanghai");
-        bean3.setModernDate("Today");
-        bean3.setTimeDifference("7 hours Behind");
-        bean3.setCityCurrentTime(currentHours + 7 + " PM");
-        listData.add(bean3);
-
+//        Calendar calendar = Calendar.getInstance();
+//        int currentHours = calendar.get(Calendar.HOUR_OF_DAY);
+//        TimeZone timeZone = calendar.getTimeZone();
+//
+//        WorldClockListBean bean = new WorldClockListBean();
+//        bean.setCity("London");
+//        bean.setModernDate("Today");
+//        bean.setTimeDifference("7 hours Behind");
+//        bean.setCityCurrentTime(currentHours + 7 + " PM");
+//        listData.add(bean);
+//
+//        WorldClockListBean bean1 = new WorldClockListBean();
+//        bean1.setCity("Paris");
+//        bean1.setModernDate("Today");
+//        bean1.setTimeDifference("6 hours Behind");
+//        bean1.setCityCurrentTime(currentHours + 6 + " PM");
+//        listData.add(bean1);
+//
+//        WorldClockListBean bean2 = new WorldClockListBean();
+//        bean2.setCity("New York");
+//        bean2.setModernDate("Today");
+//        bean2.setTimeDifference("12 hours Behind");
+//        bean2.setCityCurrentTime(currentHours + 12 + " PM");
+//        listData.add(bean2);
+//
+//        WorldClockListBean bean3 = new WorldClockListBean();
+//        bean3.setCity("Shanghai");
+//        bean3.setModernDate("Today");
+//        bean3.setTimeDifference("7 hours Behind");
+//        bean3.setCityCurrentTime(currentHours + 7 + " PM");
+//        listData.add(bean3);
+        listData = worldClockDatabase.getSelected();
         setListAdapter(isShowEditIcon);
         worldClockAdapter.onDeleteItemListener(new WorldClockAdapter.DeleteItemInterface() {
             @Override

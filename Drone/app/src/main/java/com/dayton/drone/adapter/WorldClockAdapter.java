@@ -8,7 +8,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.dayton.drone.R;
-import com.dayton.drone.bean.WorldClockListBean;
+import com.dayton.drone.modle.WorldClock;
 
 import java.util.List;
 
@@ -19,12 +19,12 @@ import butterknife.ButterKnife;
  * Created by Administrator on 2016/5/10.
  */
 public class WorldClockAdapter extends BaseAdapter {
-    private List<WorldClockListBean> list;
+    private List<WorldClock> list;
     private Context context;
     private boolean isShowEditIcon ;
     private static DeleteItemInterface deleteItemInterface;
 
-    public WorldClockAdapter(List<WorldClockListBean> listData ,Context context , boolean flag ) {
+    public WorldClockAdapter(List<WorldClock> listData , Context context , boolean flag ) {
         this.list = listData;
         this.context =  context;
         this.isShowEditIcon = flag;
@@ -55,7 +55,7 @@ public class WorldClockAdapter extends BaseAdapter {
         }else {
             holder = (ViewHolder) convertView.getTag();
         }
-        WorldClockListBean bean = list.get(position);
+        WorldClock bean = list.get(position);
         if(bean != null){
             holder.cityName.setText(bean.getCity());
             holder.cityCurrentTime.setText(bean.getCityCurrentTime());

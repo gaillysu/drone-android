@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
@@ -12,19 +13,17 @@ import com.dayton.drone.activity.base.BaseActivity;
 /**
  * Created by boy on 2016/4/13.
  */
-public class SplashActivtiy extends BaseActivity {
+public class SplashActivity extends BaseActivity {
     private long time;
     private int currentVersion;
     private String newVersionDescription = null;
     private AlertDialog dialog;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activtiy_splash);
-
-        localVersion();
-        isNotUpdate();
+        //        localVersion();
+        //        isNotUpdate();
     }
 
     private void isNotUpdate() {
@@ -33,7 +32,18 @@ public class SplashActivtiy extends BaseActivity {
         } else {
             next();
         }
+    }
 
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                startActivity(TutorialActivtiy.class);
+                finish();
+            }
+        },2000);
     }
 
     public void next() {
