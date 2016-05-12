@@ -5,7 +5,6 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import com.dayton.drone.R;
@@ -26,11 +25,6 @@ public class TutorialActivtiy extends BaseActivity {
     @Bind(R.id.activity_login_vp)
     ViewPager vp_loginPage;
     private List<ImageView> mVpList;
-    @Bind(R.id.login_bt)
-    Button mLogin;
-    @Bind(R.id.registe_bt)
-    Button mRegiste;
-
     private int[] vp_data = new int[]{R.mipmap.drone_mens_black_strap, R.mipmap.drone_mens_tone_split_dial, R.mipmap.drone_white_strap_rosetone,R.mipmap.drone_mens_split_dial};
 
     @Override

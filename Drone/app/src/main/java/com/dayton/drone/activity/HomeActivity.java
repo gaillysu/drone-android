@@ -47,7 +47,7 @@ public class HomeActivity extends BaseActivity {
                 String content = homeMenuTextArray[position];
                 switch (content) {
                     case activities:
-                        startActivity(HomeContentActivity.class);
+                        startActivity(ActivitiesActivity.class);
                         break;
                     case sleep:
 

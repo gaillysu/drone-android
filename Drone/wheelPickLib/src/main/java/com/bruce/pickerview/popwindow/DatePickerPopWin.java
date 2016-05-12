@@ -429,12 +429,12 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
                     break;
                 case 2:
                     int height = middlePos;
-                    mListener.onDatePickCompleted(0, height, 0, height + 120 + "cm");
+                    mListener.onDatePickCompleted(0, height, 0, height + 120 +"");
                     break;
                 case 3:
                     int weight = leftPos;
                     int porint = middlePos;
-                    mListener.onDatePickCompleted(weight, porint, 0, (weight + 25) + "." + porint + "kg");
+                    mListener.onDatePickCompleted(weight, porint, 0, (weight + 25) + "." + porint + "");
                     break;
                 default:
                     dismissPopWin();

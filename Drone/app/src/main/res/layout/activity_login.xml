@@ -5,19 +5,11 @@
               android:background="@android:color/white"
               android:orientation="vertical">
 
+    <include layout="@layout/registe_control_button"/>
     <include
         layout="@layout/registe_table_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="50dp"
         android:layout_weight="1"/>
-
-    <Button
-        android:id="@+id/login_user"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:text="@string/login"/>
 </LinearLayout>

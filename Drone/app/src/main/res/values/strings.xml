@@ -14,8 +14,8 @@
     <string name="user_sex_female">Female</string>
     <string name="user_sex_male">Male</string>
     <string name="user_info_brithday">Birth</string>
-    <string name="user_info_height">Height(cm)</string>
-    <string name="user_info_weight">Weight(kg)</string>
+    <string name="user_info_height">Height</string>
+    <string name="user_info_weight">Weight</string>
     <string name="user_device_select">Setting up your device.</string>
     <string name="user_info_about">About your info is not null</string>
     <string name="user_select_dec">Don\'t have a device here</string>

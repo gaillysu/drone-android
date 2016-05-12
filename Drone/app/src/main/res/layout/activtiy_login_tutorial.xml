@@ -9,6 +9,7 @@
         android:id="@+id/tutorial_drone_logo"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:layout_marginTop="40dp"
         android:src="@mipmap/dronelogo"/>
 
     <android.support.v4.view.ViewPager
@@ -23,8 +24,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_margin="40dp"
+        android:layout_marginBottom="30dp"
         android:gravity="bottom"
         android:orientation="vertical"
         >
@@ -33,12 +34,17 @@
             android:id="@+id/login_bt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/registe_edit_bg"
+            android:textColor="@color/app_text_color_criterion"
             android:text="@string/login"/>
 
         <Button
             android:id="@+id/registe_bt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/registe_edit_bg"
+             android:textColor="@color/app_text_color_criterion"
             android:text="@string/login_registe"/>
     </LinearLayout>
 </LinearLayout>

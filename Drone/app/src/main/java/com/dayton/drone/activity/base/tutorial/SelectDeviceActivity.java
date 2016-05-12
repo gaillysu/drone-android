@@ -11,14 +11,19 @@ import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.adapter.SelectDeviceGridViewAdapter;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by boy on 2016/4/19.
  */
 public class SelectDeviceActivity extends BaseActivity {
-
-    private ImageButton mIvBack;
-    private ImageButton mIvNext;
-    private GridView mShowWatchGridView;
+    @Bind(R.id.registe_back_iv)
+   ImageButton titleBack;
+    @Bind(R.id.registe_next_iv)
+    ImageButton titleNext;
+    @Bind(R.id.select_user_device)
+    GridView mShowWatchGridView;
     private SelectDeviceGridViewAdapter mGridViewAdapter;
     private int type;
 
@@ -33,19 +38,14 @@ public class SelectDeviceActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activtiy_user_select_watch);
+        ButterKnife.bind(this);
+        Intent intent = getIntent();
+        type = intent.getIntExtra("type",-1);
         initView();
     }
 
     private void initView() {
-        Intent intent = getIntent();
-        type = intent.getIntExtra("type",-1);
-        mIvBack = (ImageButton) findViewById(R.id.registe_back_iv);
-        mIvNext = (ImageButton) findViewById(R.id.registe_next_iv);
-        mShowWatchGridView = (GridView) findViewById(R.id.select_user_device);
-        mIvNext.setVisibility(View.GONE);
-        if(type == 2>>4){
-            mIvBack.setVisibility(View.GONE);
-        }
+        titleNext.setVisibility(View.GONE);
         watchNameArray = this.getResources().getStringArray(R.array.user_select_dec_arr);
         mGridViewAdapter = new SelectDeviceGridViewAdapter(watchIconArray,watchNameArray,this);
         mShowWatchGridView.setAdapter(mGridViewAdapter);
@@ -62,9 +62,14 @@ public class SelectDeviceActivity extends BaseActivity {
             }
         });
 
-        mIvBack.setOnClickListener(new View.OnClickListener() {
+        titleBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(type == 2>>4){
+                    startActivity(LoginActivtiy.class);
+                }else{
+                    startActivity(UserInfoActivity.class);
+                }
                 finish();
             }
         });

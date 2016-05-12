@@ -52,7 +52,7 @@ import butterknife.ButterKnife;
 /**
  * Created by boy on 2016/4/22.
  */
-public class HomeContentActivity extends BaseActivity implements OnChartValueSelectedListener {
+public class ActivitiesActivity extends BaseActivity implements OnChartValueSelectedListener {
     private boolean mIsFirst = true;
     private Context mContext;
     @Bind(R.id.home_fragment_progress_bar)

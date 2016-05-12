@@ -66,7 +66,6 @@ public class UserInfoActivity extends BaseActivity {
 
     @OnClick(R.id.user_barthday)
     public void putUserBarthday() {
-
         viewType = 1;
         DatePickerPopWin pickerPopWin = new DatePickerPopWin.Builder(UserInfoActivity.this,
                 new DatePickerPopWin.OnDatePickedListener() {
@@ -95,8 +94,8 @@ public class UserInfoActivity extends BaseActivity {
                         tv_userHeight.setText(dateDesc);
                     }
                 }).viewStyle(viewType)
-                .viewTextSize(25) // pick view text size
-                .dateChose("0-173-0") // date chose when init popwindow
+                .viewTextSize(25)
+                .dateChose("0-173-0")
                 .build();
         pickerPopWin2.showPopWin(UserInfoActivity.this);
     }
@@ -113,8 +112,8 @@ public class UserInfoActivity extends BaseActivity {
                         tv_userWeight.setText(dateDesc);
                     }
                 }).viewStyle(viewType)
-                .viewTextSize(25) // pick view text size
-                .dateChose("52-0-0") // date chose when init popwindow
+                .viewTextSize(25)
+                .dateChose("52-0-0")
                 .build();
         pickerPopWin3.showPopWin(UserInfoActivity.this);
     }

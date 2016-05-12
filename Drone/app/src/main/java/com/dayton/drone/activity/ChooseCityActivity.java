@@ -9,6 +9,9 @@ import android.widget.ListView;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
+import com.dayton.drone.modle.WorldClock;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -28,7 +31,7 @@ public class ChooseCityActivity extends BaseActivity {
     @Bind(R.id.choose_activity_cancel_bt)
     Button cancelButton;
     private boolean isChooseCity = false;
-
+    private List<WorldClock>list;
 
 
     @Override
@@ -36,6 +39,8 @@ public class ChooseCityActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_add_city_layout);
         ButterKnife.bind(this);
+
+
     }
 
     @OnClick(R.id.choose_activity_cancel_bt)

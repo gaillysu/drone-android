@@ -39,7 +39,13 @@ public class LoginActivtiy extends BaseActivity {
         ed_password.setText("123456");
     }
 
-    @OnClick(R.id.login_user)
+    @OnClick(R.id.registe_back_iv)
+    public void back(){
+        startActivity(TutorialActivtiy.class);
+        finish();
+    }
+
+    @OnClick(R.id.registe_next_iv)
     public void loginClick(){
          if(!validate()){
              onLoginFailed();
