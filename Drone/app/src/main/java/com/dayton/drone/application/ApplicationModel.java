@@ -93,6 +93,9 @@ public class ApplicationModel extends Application {
     public UserDatabaseHelper getUserDatabaseHelper() {
         return userDatabaseHelper;
     }
+    public WorldClockDatabaseHelper getWorldClockDatabaseHelper() {
+        return worldClockDatabaseHelper;
+    }
 
     @Subscribe
     public void onEvent(LittleSyncEvent event) {
