@@ -1,7 +1,6 @@
 package com.dayton.drone.activity;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -38,9 +37,11 @@ public class WorldClockActivity extends BaseActivity {
     TextView titleTextView;
 
     private List<WorldClockListBean> listData;
+    private WorldClockAdapter worldClockAdapter;
+    private boolean isShowEditIcon = true;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_world_clock);
         ButterKnife.bind(this);
@@ -90,7 +91,14 @@ public class WorldClockActivity extends BaseActivity {
         bean3.setCityCurrentTime(currentHours + 7 + " PM");
         listData.add(bean3);
 
-        worldClockListView.setAdapter(new WorldClockAdapter(listData, this));
+        setListAdapter(isShowEditIcon);
+        worldClockAdapter.onDeleteItemListener(new WorldClockAdapter.DeleteItemInterface() {
+            @Override
+            public void deleteItem(int position) {
+                listData.remove(position);
+                worldClockAdapter.notifyDataSetChanged();
+            }
+        });
 
     }
 
@@ -101,12 +109,19 @@ public class WorldClockActivity extends BaseActivity {
 
     @OnClick(R.id.world_clock_date_edit_bt)
     public void editButtonClick() {
-        //TODO
+        isShowEditIcon = !isShowEditIcon;
+        setListAdapter(isShowEditIcon);
+        worldClockAdapter.notifyDataSetChanged();
     }
 
     @OnClick(R.id.world_clock_add_city_iv)
     public void addCityClick() {
         //TODO
+    }
+
+    public void setListAdapter(boolean  isShow){
+        worldClockAdapter = new WorldClockAdapter(listData,this ,isShow);
+        worldClockListView.setAdapter(worldClockAdapter);
     }
 
 }
