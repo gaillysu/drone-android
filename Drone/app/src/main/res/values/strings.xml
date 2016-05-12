@@ -42,6 +42,8 @@
     <string name="fragment_home_guide_histogram_dec">The bar graph will presenting your activities durations</string>
     <string name="home_content_activity_progress_middle_dec">SLEEP</string>
     <string name="world_clock_title_text">WORLD CLOCK</string>
+    <string name="choose_activity_title_choose_city_tv">Choose a City</string>
+    <string name="choose_activity_title_cancel">Cancel</string>
 
     <string-array name="user_select_dec_arr">
         <item>bcbs</item>

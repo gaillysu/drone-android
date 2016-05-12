@@ -22,6 +22,7 @@ public class SplashActivtiy extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activtiy_splash);
+
         localVersion();
         isNotUpdate();
     }

@@ -1,0 +1,14 @@
+diff a/Drone/app/src/main/java/com/dayton/drone/activity/WorldClockActivity.java b/Drone/app/src/main/java/com/dayton/drone/activity/WorldClockActivity.java	(rejected hunks)
+@@ -37,9 +37,11 @@
+     TextView titleTextView;
+ 
+     private List<WorldClockListBean> listData;
++    private WorldClockAdapter worldClockAdapter;
++    private boolean isShowEditIcon = true;
+ 
+     @Override
+-    protected void onCreate(@Nullable Bundle savedInstanceState) {
++    protected void onCreate( Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_world_clock);
+         ButterKnife.bind(this);

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="95dp"
+        android:orientation="vertical"
+        android:background="@color/userinfo_sex_bg"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/choose_activity_title_choose_city_tv"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="6dp"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:background="@color/world_clock_bg_color"
+                >
+                <ImageButton
+                    android:id="@+id/choose_activity_search_ib"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/search_icon"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:background="@android:color/transparent"/>
+                <EditText
+                    android:id="@+id/choose_activity_search_edit"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+
+                    android:background="@android:color/transparent"
+                    />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/choose_activity_cancel_bt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:textColor="@android:color/white"
+                android:text="@string/choose_activity_title_cancel"/>
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+    <ListView
+        android:id="@+id/choose_activity_city_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/world_clock_bg_color">
+    </ListView>
+</LinearLayout>

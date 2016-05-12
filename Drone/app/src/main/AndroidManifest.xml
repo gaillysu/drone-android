@@ -72,7 +72,7 @@
         <activity android:name=".activity.SettingWatchActivity"/>
         <activity android:name=".activity.GalleryActivity"/>
         <activity android:name=".activity.SleepActivity"/>
-
+        <activity android:name=".activity.ChooseCityActivity"/>
         <!-- register all services used in the application -->
         <service
             android:name="net.medcorp.library.ble.ble.MEDBTService"

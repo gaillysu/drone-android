@@ -1,9 +1,12 @@
 package com.dayton.drone.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
@@ -39,6 +42,7 @@ public class WorldClockActivity extends BaseActivity {
     private List<WorldClockListBean> listData;
     private WorldClockAdapter worldClockAdapter;
     private boolean isShowEditIcon = true;
+    private int requestCode = 3>>2;
 
     @Override
     protected void onCreate( Bundle savedInstanceState) {
@@ -116,7 +120,9 @@ public class WorldClockActivity extends BaseActivity {
 
     @OnClick(R.id.world_clock_add_city_iv)
     public void addCityClick() {
-        //TODO
+        Intent intent = new Intent(this,ChooseCityActivity.class);
+        startActivityForResult(intent ,requestCode);
+
     }
 
     public void setListAdapter(boolean  isShow){
@@ -124,4 +130,15 @@ public class WorldClockActivity extends BaseActivity {
         worldClockListView.setAdapter(worldClockAdapter);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == this.requestCode){
+           boolean flag= data.getBooleanExtra("isChooseFlag",true);
+            if(flag == true) {
+                //ToDO
+            }
+            Toast.makeText(this ,"没有选择的返回" ,Toast.LENGTH_SHORT).show();
+        }
+    }
 }

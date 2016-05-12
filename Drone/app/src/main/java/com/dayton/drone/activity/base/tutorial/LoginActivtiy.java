@@ -83,11 +83,6 @@ public class LoginActivtiy extends BaseActivity {
         int type = 2>>4;
         loginIntent.putExtra("type",type);
         startActivity(loginIntent);
-
-        Intent broadcastIntent = new Intent();
-        broadcastIntent.setAction("CLOSE_ACTIVITY");
-        sendBroadcast(broadcastIntent);
-
         finish();
     }
 

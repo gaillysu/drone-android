@@ -54,6 +54,7 @@ public class TutorialActivtiy extends BaseActivity {
     @OnClick(R.id.login_bt)
     public void openLoginActivity() {
         startActivity(LoginActivtiy.class);
+        finish();
     }
 
     @OnClick(R.id.registe_bt)
@@ -61,8 +62,6 @@ public class TutorialActivtiy extends BaseActivity {
         startActivity(RegisteActivity.class);
         finish();
     }
-
-
 
     public class MyViewPagerAdapter extends PagerAdapter {
 
