@@ -33,7 +33,7 @@ public class ChooseCityActivity extends BaseActivity {
     ListView cityListView;
 
     private boolean isChooseCity = false;
-    private List<WorldClock> worldClcokDatalist;
+    private List<WorldClock> worldClockDataList;
     private WorldClockDatabaseHelper worldClockDatabase;
     private ChooseCityAdapter cityAdapter;
 
@@ -44,13 +44,19 @@ public class ChooseCityActivity extends BaseActivity {
         setContentView(R.layout.activity_search_add_city_layout);
         ButterKnife.bind(this);
         worldClockDatabase = getModel().getWorldClockDatabaseHelper();
-        worldClcokDatalist = worldClockDatabase.getAll();
-        cityAdapter = new ChooseCityAdapter(this ,worldClcokDatalist);
+        worldClockDataList = worldClockDatabase.getAll();
+        cityAdapter = new ChooseCityAdapter(this , worldClockDataList);
         cityListView.setAdapter(cityAdapter);
         cityListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position , long Id) {
-                //TODO
+                isChooseCity = true;
+                WorldClock worldClock =  worldClockDataList.get(position);
+                Intent intent = getIntent();
+                intent.putExtra("isChooseFlag", isChooseCity);
+                intent.putExtra("worldClock",worldClock);
+                setResult(0, intent);
+                finish();
             }
         });
     }

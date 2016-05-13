@@ -57,7 +57,12 @@ public class WorldClockAdapter extends BaseAdapter {
         }
         WorldClock bean = list.get(position);
         if(bean != null){
-            holder.cityName.setText(bean.getCity());
+            String name = bean.getTimeZoneName();
+            if(name != null){
+                String[] cityDec = name.split("/");
+                holder.cityName.setText(cityDec[1]);
+            }
+
             holder.cityCurrentTime.setText(bean.getCityCurrentTime());
             holder.cityDay.setText(bean.getModernDate()+".");
             holder.timeDifference.setText(bean.getTimeDifference());

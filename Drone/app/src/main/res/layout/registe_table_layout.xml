@@ -43,6 +43,7 @@
             android:layout_height="40dp"
             android:background="@null"
             android:hint="Email"
+            android:textStyle="bold"
             android:inputType="textEmailSubject"
             android:paddingLeft="5dp"
             android:textSize="20sp"/>
@@ -58,6 +59,7 @@
             android:layout_height="40dp"
             android:background="@null"
             android:hint="Password"
+            android:textStyle="bold"
             android:inputType="textPassword"
             android:paddingLeft="5dp"
             android:textSize="20sp"/>
@@ -70,6 +72,7 @@
         android:layout_below="@id/registe_ll"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
+        android:textStyle="bold"
         android:text="@string/third_party_login"
         android:textColor="#88000000"
         android:textSize="14sp"/>

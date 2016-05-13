@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
@@ -39,15 +38,14 @@ public class WorldClockActivity extends BaseActivity {
     private List<WorldClock> listData;
     private WorldClockAdapter worldClockAdapter;
     private boolean isShowEditIcon = true;
-    private int requestCode = 3>>2;
+    private int requestCode = 3 >> 2;
     private WorldClockDatabaseHelper worldClockDatabase;
 
     @Override
-    protected void onCreate( Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_world_clock);
         ButterKnife.bind(this);
-//        listData = new ArrayList<>(3);
         titleTextView.setText(getString(R.string.world_clock_title_text));
         worldClockDatabase = getModel().getWorldClockDatabaseHelper();
         initData();
@@ -62,37 +60,6 @@ public class WorldClockActivity extends BaseActivity {
         dateTv.setText(getModel().getString(R.string.main_table_date) + " "
                 + currentTimeArray[1] + ", " + currentTimeArray[0]);
 
-//        Calendar calendar = Calendar.getInstance();
-//        int currentHours = calendar.get(Calendar.HOUR_OF_DAY);
-//        TimeZone timeZone = calendar.getTimeZone();
-//
-//        WorldClockListBean bean = new WorldClockListBean();
-//        bean.setCity("London");
-//        bean.setModernDate("Today");
-//        bean.setTimeDifference("7 hours Behind");
-//        bean.setCityCurrentTime(currentHours + 7 + " PM");
-//        listData.add(bean);
-//
-//        WorldClockListBean bean1 = new WorldClockListBean();
-//        bean1.setCity("Paris");
-//        bean1.setModernDate("Today");
-//        bean1.setTimeDifference("6 hours Behind");
-//        bean1.setCityCurrentTime(currentHours + 6 + " PM");
-//        listData.add(bean1);
-//
-//        WorldClockListBean bean2 = new WorldClockListBean();
-//        bean2.setCity("New York");
-//        bean2.setModernDate("Today");
-//        bean2.setTimeDifference("12 hours Behind");
-//        bean2.setCityCurrentTime(currentHours + 12 + " PM");
-//        listData.add(bean2);
-//
-//        WorldClockListBean bean3 = new WorldClockListBean();
-//        bean3.setCity("Shanghai");
-//        bean3.setModernDate("Today");
-//        bean3.setTimeDifference("7 hours Behind");
-//        bean3.setCityCurrentTime(currentHours + 7 + " PM");
-//        listData.add(bean3);
         listData = worldClockDatabase.getSelected();
         setListAdapter(isShowEditIcon);
         worldClockAdapter.onDeleteItemListener(new WorldClockAdapter.DeleteItemInterface() {
@@ -119,25 +86,26 @@ public class WorldClockActivity extends BaseActivity {
 
     @OnClick(R.id.world_clock_add_city_iv)
     public void addCityClick() {
-        Intent intent = new Intent(this,ChooseCityActivity.class);
-        startActivityForResult(intent ,requestCode);
+        Intent intent = new Intent(this, ChooseCityActivity.class);
+        startActivityForResult(intent, requestCode);
 
     }
 
-    public void setListAdapter(boolean  isShow){
-        worldClockAdapter = new WorldClockAdapter(listData,this ,isShow);
+    public void setListAdapter(boolean isShow) {
+        worldClockAdapter = new WorldClockAdapter(listData, this, isShow);
         worldClockListView.setAdapter(worldClockAdapter);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == this.requestCode){
-           boolean flag= data.getBooleanExtra("isChooseFlag",true);
-            if(flag == true) {
-                //ToDO
+        if (requestCode == this.requestCode) {
+            boolean flag = data.getBooleanExtra("isChooseFlag", true);
+            if (flag == true) {
+               WorldClock worldClockAdd = (WorldClock) data.getSerializableExtra("worldClock");
+                listData.add(worldClockAdd);
+                worldClockListView.setAdapter(worldClockAdapter);
             }
-            Toast.makeText(this ,"没有选择的返回" ,Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -3,7 +3,9 @@ package com.dayton.drone.activity.base.tutorial;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dayton.drone.R;
@@ -27,6 +29,8 @@ public class LoginActivtiy extends BaseActivity {
     EditText ed_account;
     @Bind(R.id.password_ed)
     EditText ed_password;
+    @Bind(R.id.registe_tx)
+    TextView registeTv;
 
 
     @Override
@@ -37,6 +41,7 @@ public class LoginActivtiy extends BaseActivity {
         //TODO this is test hardcode
         ed_account.setText("test@med-corp.net");
         ed_password.setText("123456");
+        registeTv.setVisibility(View.GONE);
     }
 
     @OnClick(R.id.registe_back_iv)

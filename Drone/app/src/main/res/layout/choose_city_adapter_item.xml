@@ -5,9 +5,10 @@
               android:layout_height="match_parent">
     <TextView
         android:id="@+id/choose_adapter_item_tv"
+        android:layout_marginLeft="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@android:color/white"
-        android:textSize="15sp"/>
+        android:textSize="20sp"/>
 
 </LinearLayout>

@@ -56,9 +56,9 @@ public class ChooseCityAdapter extends BaseAdapter{
 
         WorldClock  bean = chooseCityList.get(position);
         if(bean != null){
-            String cityName = bean.getCity();
-            String cityLocation = bean.getCityLocation();
-            holder.adapterItemTv.setText(cityName+","+cityLocation);
+            String cityName = bean.getTimeZoneName();
+            String[] citydec = cityName.split("/");
+            holder.adapterItemTv.setText(citydec[1]+", "+citydec[0]);
         }
         return convertView;
     }

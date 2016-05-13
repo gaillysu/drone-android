@@ -2,10 +2,12 @@ package com.dayton.drone.modle;
 
 import com.dayton.drone.database.bean.WorldClockBean;
 
+import java.io.Serializable;
+
 /**
  * Created by med on 16/5/9.
  */
-public class WorldClock extends WorldClockBean {
+public class WorldClock extends WorldClockBean implements Serializable{
     private String city;
     private String cityLocation;
     private String modernDate;
