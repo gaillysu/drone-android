@@ -18,8 +18,8 @@
     <string name="user_info_weight">Weight</string>
     <string name="user_device_select">Setting up your device.</string>
     <string name="user_info_about">About your info is not null</string>
-    <string name="user_select_dec">Don\'t have a device here</string>
-    <string name="user_device_drone">Buy you drone here</string>
+    <string name="user_select_dec">Don\'t have a device here?</string>
+    <string name="user_device_drone">Buy you drone here.</string>
     <string name="bluetooth_connecting">Connecting</string>
     <string name="retry_connecting">Retry</string>
     <string name="watch_name">Drone Watch</string>
@@ -46,14 +46,12 @@
     <string name="choose_activity_title_cancel">Cancel</string>
 
     <string-array name="user_select_dec_arr">
-        <item>bcbs</item>
-        <item>akbdkjb</item>
-        <item>bsdhjbh</item>
-        <item>abjhb</item>
-        <item>jhbdjhbsah</item>
-        <item>kjbajkbd</item>
-        <item>bjahhb</item>
-        <item>kbjsbdka</item>
+        <item>Black Strap</item>
+        <item>Tone Split</item>
+        <item>Split Dial</item>
+        <item>Stainless Steel</item>
+        <item>Rose Tone</item>
+        <item>Crystal Bezel</item>
     </string-array>
     <string-array name="home_menu_text_data">
         <item>ACTIVITIES</item>
