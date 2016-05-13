@@ -12,74 +12,22 @@
         <include
             android:id="@+id/fragment_title"
             layout="@layout/main_table"/>
-
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/fragment_title">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/fragment_title"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="4"
+                android:layout_height="wrap_content"
                 android:background="@mipmap/background_steps"
                 android:orientation="vertical">
 
-                <LinearLayout
-                    android:id="@+id/fragment_home_title_guide_dec"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        style="@style/home_content_title_linnerlayout_style">
-
-                        <TextView
-                            style="@style/home_content_activity_title_text_style"
-                            android:text="@string/fragment_home_title_calories"
-                            />
-
-                        <TextView
-                            android:id="@+id/fragment_home_title_calories"
-                            style="@style/home_content_activity_title_dec_text"
-                            android:text="0"/>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        style="@style/home_content_title_linnerlayout_style">
-
-                        <TextView
-                            style="@style/home_content_activity_title_text_style"
-                            android:text="@string/fragment_home_title_active_time"
-                            />
-
-                        <TextView
-                            android:id="@+id/fragment_home_title_active_time"
-                            style="@style/home_content_activity_title_dec_text"
-                            android:text="0"
-                            />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        style="@style/home_content_title_linnerlayout_style"
-                        >
-
-                        <TextView
-                            style="@style/home_content_activity_title_text_style"
-                            android:text="@string/fragment_home_title_miles"
-                            />
-
-                        <TextView
-                            android:id="@+id/fragment_home_title_miles"
-                            style="@style/home_content_activity_title_dec_text"
-                            android:text="0"
-                            />
-                    </LinearLayout>
-
-                </LinearLayout>
+                <include layout="@layout/hourly_header_layout"/>
 
                 <TextView
                     android:id="@+id/home_fragement_guide_dec_actvies"
@@ -95,6 +43,7 @@
                     android:layout_height="250dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
                     android:background="@android:color/transparent"
                     >
 
@@ -153,16 +102,78 @@
             </LinearLayout>
 
             <com.github.mikephil.charting.charts.BarChart
-                android:id="@+id/fragment_home_content_bar"
+                android:id="@+id/activity_activities_hourly_bar"
                 android:layout_width="fill_parent"
-                android:layout_height="0dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_weight="2"
+                android:layout_height="210dp"
+                android:layout_marginTop ="10dp"
                 >
             </com.github.mikephil.charting.charts.BarChart>
-        </LinearLayout>
 
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@android:color/black"
+                android:layout_marginTop ="20dp"
+                android:textSize="20sp"
+                android:text="THIS WEEK"/>
+
+            <include layout="@layout/weekly_header_layout"/>
+
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/activity_activities_weekly_line"
+                android:layout_width="fill_parent"
+                android:layout_height="210dp"
+                android:layout_marginTop ="10dp"
+                android:background="@android:color/white"
+                >
+            </com.github.mikephil.charting.charts.LineChart>
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@android:color/black"
+                android:layout_marginTop ="20dp"
+                android:textSize="20sp"
+                android:text="LAST WEEK"/>
+
+            <include layout="@layout/weekly_header_layout"/>
+
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/activity_activities_last_weekly_line"
+                android:layout_width="fill_parent"
+                android:layout_height="210dp"
+                android:layout_marginTop ="10dp"
+                android:background="@android:color/white"
+                >
+            </com.github.mikephil.charting.charts.LineChart>
+
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@android:color/black"
+                android:layout_marginTop ="20dp"
+                android:textSize="20sp"
+                android:text="LAST 30 DAYS"/>
+
+            <include layout="@layout/monthly_header_layout"/>
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/activity_activities_monthly_line"
+                android:layout_width="fill_parent"
+                android:layout_height="210dp"
+                android:layout_marginTop ="10dp"
+                android:background="@android:color/white"
+                >
+            </com.github.mikephil.charting.charts.LineChart>
+
+        </LinearLayout>
+        </ScrollView>
         <TextView
             android:id="@+id/home_fragement_guide_title_dec"
             style="@style/home_content_activity_guide_text_style"

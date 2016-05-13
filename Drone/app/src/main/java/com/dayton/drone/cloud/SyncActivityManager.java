@@ -55,7 +55,7 @@ public class SyncActivityManager {
                         stepsWithID.setDate(steps.getDate());
                         stepsWithID.setSteps(steps.getSteps());
                         if(createStepsModel.getSteps().getSteps()==stepsWithID.getSteps()) {
-                            Log.i(TAG,"update steps to"+createStepsModel.getSteps().getSteps());
+                            Log.i(TAG,"update steps to "+createStepsModel.getSteps().getSteps());
                             return;
                         }
                     }
