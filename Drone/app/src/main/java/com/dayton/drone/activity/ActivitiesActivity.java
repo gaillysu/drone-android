@@ -270,12 +270,15 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         thisweekLineChart.setDrawBorders(false);
         thisweekLineChart.setTouchEnabled(false);
         thisweekLineChart.setDragEnabled(false);
+        thisweekLineChart.setGridBackgroundColor(Color.WHITE);
 
         LimitLine ll1 = new LimitLine(7000f, "Goal");
-        ll1.setLineWidth(4f);
-        ll1.enableDashedLine(10f, 10f, 0f);
+        ll1.setLineWidth(0.5f);
+        ll1.setLineColor(Color.BLACK);
+        //ll1.enableDashedLine(10f, 10f, 0f);
         ll1.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);
-        ll1.setTextSize(10f);
+        ll1.setTextSize(16f);
+        ll1.setTextColor(Color.BLACK);
 
         YAxis leftAxis = thisweekLineChart.getAxisLeft();
         leftAxis.addLimitLine(ll1);
@@ -319,6 +322,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         set1.setDrawValues(false);
         set1.setDrawCircleHole(false);
         set1.setDrawFilled(true);
+        set1.setFillColor(getResources().getColor(R.color.colorPrimaryDark));
 
         List<LineDataSet> dataSets = new ArrayList<LineDataSet>();
         dataSets.add(set1);
