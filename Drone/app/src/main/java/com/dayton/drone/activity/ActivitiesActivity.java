@@ -26,20 +26,26 @@ import com.dayton.drone.utils.CacheConstants;
 import com.dayton.drone.utils.SpUtils;
 import com.dayton.drone.view.CalendarView;
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.YAxisValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.liulishuo.magicprogresswidget.MagicProgressCircle;
 
+import net.medcorp.library.ble.util.Optional;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -69,11 +75,20 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
 
     @Bind(R.id.home_content_bar)
     RelativeLayout guideBar;
-    @Bind(R.id.fragment_home_title_guide_dec)
+    @Bind(R.id.hourly_header_layout_guide_layout)
     LinearLayout titleDec;
 
-    @Bind(R.id.fragment_home_content_bar)
-    BarChart barChart;
+    @Bind(R.id.activity_activities_hourly_bar)
+    BarChart hourlyBarChart;
+
+    @Bind(R.id.activity_activities_weekly_line)
+    LineChart thisweekLineChart;
+
+    @Bind(R.id.activity_activities_last_weekly_line)
+    LineChart lastweekLineChart;
+
+    @Bind(R.id.activity_activities_monthly_line)
+    LineChart lastmonthLineChart;
 
     @Bind(R.id.fragment_home_guide_view)
     RelativeLayout guideView;
@@ -103,7 +118,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_home_content);
+        setContentView(R.layout.activity_activities);
         ButterKnife.bind(this);
 
         titleView = findViewById(R.id.fragment_title);
@@ -127,7 +142,10 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
 
         mIvNextMouth.setVisibility(View.GONE);
         mIvBackMouth.setVisibility(View.GONE);
-        initData();
+        initHourlyData();
+        initweeklyData();
+        initlastweeklyData();
+        initmonthlyData();
         startView();
         addListener();
     }
@@ -159,7 +177,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
                         case 4:
 
                             barGuide.setVisibility(View.GONE);
-                            barChart.setBackgroundResource(R.drawable.user_guide_bg);
+                            hourlyBarChart.setBackgroundResource(R.drawable.user_guide_bg);
                             guideBar.setBackgroundDrawable(new BitmapDrawable());
                             chartGuideDec.setVisibility(View.VISIBLE);
                             break;
@@ -178,40 +196,97 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     }
 
 
-    public void initData() {
-        format = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = null;
-        try {
-            date = format.parse("2015-01-01");
-        } catch (ParseException e) {
-            e.printStackTrace();
+    public void initHourlyData() {
+        calendar.setCalendarData(new Date());
+        mTitleCalendarTextView.setText(new SimpleDateFormat("MMM").format(new Date()));
+        hourlyBarChart.setDescription("");
+        hourlyBarChart.getLegend().setEnabled(false);
+        hourlyBarChart.setOnChartValueSelectedListener(this);
+        hourlyBarChart.setPinchZoom(false);
+        hourlyBarChart.setDrawGridBackground(false);
+        hourlyBarChart.setScaleEnabled(false);
+        hourlyBarChart.setDrawValueAboveBar(false);
+        hourlyBarChart.setDoubleTapToZoomEnabled(false);
+        hourlyBarChart.setDragEnabled(true);
+
+        YAxis leftAxis = hourlyBarChart.getAxisLeft();
+        leftAxis.setDrawGridLines(true);
+        leftAxis.setEnabled(true);
+        leftAxis.setLabelCount(3, true);
+        leftAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
+        leftAxis.setValueFormatter(new YAxisValueFormatter(){
+            @Override
+            public String getFormattedValue(float value, YAxis yAxis) {
+                int resValue = (int) value;
+                return resValue+"";
+            }
+        });
+        YAxis rightAxis = hourlyBarChart.getAxisRight();
+        rightAxis.setEnabled(false);
+
+        XAxis xAxis = hourlyBarChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        xAxis.setTextSize(10f);
+        xAxis.setTextColor(Color.BLACK);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("HH: mm");
+        List<String> xVals = new ArrayList<String>();
+        List<BarEntry> yValue = new ArrayList<BarEntry>();
+
+        List<Optional<Steps>> stepsList = getModel().getStepsDatabaseHelper().getAll(getModel().getUser().getUserID());
+
+        int i = 0;
+        for (Optional<Steps> steps : stepsList) {
+            //TODO here use sample data
+            if(steps.get().getSteps()==0) {steps.get().setSteps(new Random().nextInt(10000));}
+            if(steps.get().getSteps()>0)
+            {
+                yValue.add(new BarEntry(new float[]{steps.get().getSteps()}, i));
+                xVals.add(sdf.format(new Date(steps.get().getTimeFrame())));
+                i++;
+            }
         }
-        calendar.setCalendarData(date);
-        String mouth = calendar.getYearAndmonth();
-        mTitleCalendarTextView.setText(getResources().
-                getString(R.string.main_table_date) + " " + mouth);
 
+        if (stepsList.size() < 24) {
+            hourlyBarChart.setScaleMinima((.14f), 1f);
+        }else{
+            hourlyBarChart.setScaleMinima((stepsList.size()/24f),1f);
+        }
 
-        barChart.setDescription("");
-        barChart.setNoDataTextDescription("");
-        barChart.getLegend().setEnabled(false);
-        barChart.setOnChartValueSelectedListener(this);
-        barChart.setPinchZoom(false);
-        barChart.setDrawGridBackground(false);
-        barChart.setScaleEnabled(false);
-        barChart.setDrawValueAboveBar(false);
-        barChart.setDoubleTapToZoomEnabled(false);
-        barChart.setViewPortOffsets(0.0f, 0.0f, 0.0f, 80.0f);
-        barChart.setDragEnabled(true);
+        BarDataSet dataSet = new BarDataSet(yValue, "");
+        dataSet.setDrawValues(false);
+        dataSet.setColors(new int[]{getResources().getColor(R.color.colorPrimaryDark)});
+        List<BarDataSet> dataSets = new ArrayList<BarDataSet>();
+        dataSets.add(dataSet);
+        BarData data = new BarData(xVals, dataSets);
+        hourlyBarChart.setData(data);
+    }
 
-        YAxis yAxis = barChart.getAxisLeft();
-        yAxis.setDrawGridLines(false);
-        yAxis.setEnabled(false);
-        yAxis = barChart.getAxisRight();
-        yAxis.setDrawGridLines(false);
-        yAxis.setEnabled(false);
+    void initweeklyData()
+    {
+        thisweekLineChart.setDescription("");
+        thisweekLineChart.getLegend().setEnabled(false);
+        thisweekLineChart.setDrawBorders(false);
+        thisweekLineChart.setTouchEnabled(false);
+        thisweekLineChart.setDragEnabled(false);
 
-        XAxis xAxis = barChart.getXAxis();
+        LimitLine ll1 = new LimitLine(7000f, "Goal");
+        ll1.setLineWidth(4f);
+        ll1.enableDashedLine(10f, 10f, 0f);
+        ll1.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);
+        ll1.setTextSize(10f);
+
+        YAxis leftAxis = thisweekLineChart.getAxisLeft();
+        leftAxis.addLimitLine(ll1);
+        leftAxis.enableGridDashedLine(10f, 10f, 0f);
+        leftAxis.setDrawLimitLinesBehindData(true);
+        leftAxis.setDrawGridLines(false);
+
+        YAxis rightAxis = thisweekLineChart.getAxisRight();
+        rightAxis.setEnabled(false);
+
+        XAxis xAxis = thisweekLineChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
         xAxis.setTextSize(10f);
@@ -219,36 +294,46 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
 
         SimpleDateFormat sdf = new SimpleDateFormat("d'/'M");
         List<String> xVals = new ArrayList<String>();
-        List<BarEntry> yValue = new ArrayList<BarEntry>();
+        List<Entry> yValue = new ArrayList<Entry>();
 
-        List<Steps> stepsList = new ArrayList<Steps>();
-        //sample data
-        for (int i = 0; i < 7; i++) {
-            Steps sampleSteps = new Steps();
-            sampleSteps.setDate(sampleSteps.getTimeFrame() - i * 24 * 60 * 60 * 1000);
-            sampleSteps.setSteps(new Random().nextInt(10000));
-            stepsList.add(sampleSteps);
-        }
+        List<Optional<Steps>> stepsList = getModel().getStepsDatabaseHelper().getAll(getModel().getUser().getUserID());
+
         int i = 0;
-        for (Steps steps : stepsList) {
-            yValue.add(new BarEntry(new float[]{steps.getSteps()}, i));
-            xVals.add(sdf.format(new Date(steps.getDate())));
-            i++;
+        for (Optional<Steps> steps : stepsList) {
+            //TODO here use sample data
+            if(i>6)break;
+            if(steps.get().getSteps()==0) {steps.get().setSteps(new Random().nextInt(10000));}
+            if(steps.get().getSteps()>0)
+            {
+                yValue.add(new Entry(steps.get().getSteps(),i));
+                xVals.add(sdf.format(new Date(steps.get().getTimeFrame())));
+                i++;
+            }
         }
+        LineDataSet set1 = new LineDataSet(yValue, "");
+        set1.enableDashedLine(10f, 5f, 0f);
+        set1.enableDashedHighlightLine(10f, 5f, 0f);
+        set1.setColor(Color.BLACK);
+        set1.setCircleColor(Color.BLACK);
+        set1.setLineWidth(1f);
+        set1.setDrawValues(false);
+        set1.setDrawCircleHole(false);
+        set1.setDrawFilled(true);
 
-        BarDataSet dataSet = new BarDataSet(yValue, "");
-        dataSet.setDrawValues(false);
-        dataSet.setColors(new int[]{getResources().getColor(R.color.line_color)});
-        dataSet.setHighlightEnabled(true);
-        dataSet.setHighLightColor(getResources().getColor(R.color.colorPrimaryDark));
-        List<BarDataSet> dataSets = new ArrayList<BarDataSet>();
-        dataSets.add(dataSet);
-        BarData data = new BarData(xVals, dataSets);
-        barChart.setData(data);
-        barChart.highlightValue(stepsList.size() - 1, 0);
+        List<LineDataSet> dataSets = new ArrayList<LineDataSet>();
+        dataSets.add(set1);
+
+        LineData data = new LineData(xVals, dataSets);
+        thisweekLineChart.setData(data);
+    }
+    void initlastweeklyData()
+    {
 
     }
+    void initmonthlyData()
+    {
 
+    }
 
     public void addListener() {
 
@@ -346,7 +431,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
 
     @Override
     public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
-        barChart.highlightValue(e.getXIndex(), dataSetIndex);
+        hourlyBarChart.highlightValue(e.getXIndex(), dataSetIndex);
     }
 
     @Override

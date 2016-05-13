@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.dayton.drone.R;
+import com.dayton.drone.activity.HomeActivity;
 import com.dayton.drone.activity.base.BaseActivity;
 
 import java.util.ArrayList;
@@ -30,6 +31,13 @@ public class TutorialActivtiy extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //if one user has got logged in, directly entry main menu screen
+        if(getModel().getUser().isUserIsLogin())
+        {
+            startActivity(HomeActivity.class);
+            finish();
+            return;
+        }
         setContentView(R.layout.activtiy_login_tutorial);
         ButterKnife.bind(this);
         initDate();
