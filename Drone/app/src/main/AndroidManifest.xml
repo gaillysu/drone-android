@@ -45,7 +45,7 @@
             android:launchMode="singleTop"
             />
         <activity
-            android:name=".activity.base.tutorial.LoginActivtiy"
+            android:name=".activity.base.tutorial.LoginActivity"
             />
         <activity
             android:name=".activity.base.tutorial.RegisteActivity"

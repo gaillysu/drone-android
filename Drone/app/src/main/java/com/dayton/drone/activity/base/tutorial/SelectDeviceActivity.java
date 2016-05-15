@@ -66,7 +66,7 @@ public class SelectDeviceActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 if(type == 2>>4){
-                    startActivity(LoginActivtiy.class);
+                    startActivity(LoginActivity.class);
                 }else{
                     startActivity(UserInfoActivity.class);
                 }

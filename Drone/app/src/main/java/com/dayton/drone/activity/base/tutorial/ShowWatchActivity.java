@@ -59,6 +59,7 @@ public class ShowWatchActivity extends BaseActivity  {
             finish();
         }
 //        startActivity(HomeActivity.class);
+//        finish();
     }
 
     @Override

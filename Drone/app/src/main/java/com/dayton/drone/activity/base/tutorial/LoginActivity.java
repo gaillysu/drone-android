@@ -23,7 +23,7 @@ import butterknife.OnClick;
 /**
  * Created by boy on 2016/4/14.
  */
-public class LoginActivtiy extends BaseActivity {
+public class LoginActivity extends BaseActivity {
 
     @Bind(R.id.email_ed)
     EditText ed_account;
@@ -56,7 +56,7 @@ public class LoginActivtiy extends BaseActivity {
              onLoginFailed();
              return;
          }
-        final ProgressDialog progressDialog = new ProgressDialog(LoginActivtiy.this);
+        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
         progressDialog.setIndeterminate(true);
         progressDialog.setCancelable(false);
         progressDialog.setMessage("logging in...");
