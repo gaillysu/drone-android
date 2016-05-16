@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.dayton.drone.database.DatabaseHelper;
 import com.dayton.drone.database.bean.SleepBean;
-import com.dayton.drone.modle.Sleep;
+import com.dayton.drone.model.Sleep;
 import net.medcorp.library.ble.util.Optional;
 
 import java.sql.SQLException;

@@ -4,13 +4,12 @@ package com.dayton.drone.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.dayton.drone.application.ApplicationModel;
 import com.dayton.drone.database.bean.NotificationBean;
 import com.dayton.drone.database.bean.SleepBean;
 import com.dayton.drone.database.bean.StepsBean;
 import com.dayton.drone.database.bean.UserBean;
 import com.dayton.drone.database.bean.WorldClockBean;
-import com.dayton.drone.modle.WorldClock;
+import com.dayton.drone.model.WorldClock;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
@@ -24,7 +23,12 @@ import java.sql.SQLException;
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     private static final String DATABASE_NAME = "droneWatch";
-    private static final int DATABASE_VERSION = 1;
+    /**
+     * change history
+     * v1: create
+     * v2: add "password" field in User table
+     */
+    private static final int DATABASE_VERSION = 2;
 
     private Dao<UserBean, Integer> userBean = null;
     private Dao<StepsBean,Integer> stepsBean = null;

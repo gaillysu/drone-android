@@ -10,7 +10,7 @@ import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.adapter.WorldClockAdapter;
 import com.dayton.drone.database.entry.WorldClockDatabaseHelper;
-import com.dayton.drone.modle.WorldClock;
+import com.dayton.drone.model.WorldClock;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

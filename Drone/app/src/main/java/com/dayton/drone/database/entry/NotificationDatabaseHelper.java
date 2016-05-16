@@ -4,13 +4,12 @@ import android.content.Context;
 
 import com.dayton.drone.database.DatabaseHelper;
 import com.dayton.drone.database.bean.NotificationBean;
-import com.dayton.drone.modle.Notification;
+import com.dayton.drone.model.Notification;
 
 import net.medcorp.library.ble.util.Optional;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**

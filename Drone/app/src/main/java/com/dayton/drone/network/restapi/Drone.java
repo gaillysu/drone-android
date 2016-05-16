@@ -4,11 +4,13 @@ import com.dayton.drone.network.request.model.LoginUserObject;
 import com.dayton.drone.network.request.model.CreateUserObject;
 import com.dayton.drone.network.request.model.CreateStepsObject;
 import com.dayton.drone.network.request.model.UpdateStepsObject;
+import com.dayton.drone.network.request.model.UpdateUserObject;
 import com.dayton.drone.network.response.model.CreateStepsModel;
 import com.dayton.drone.network.response.model.GetStepsModel;
 import com.dayton.drone.network.response.model.UpdateStepsModel;
 import com.dayton.drone.network.response.model.CreateUserModel;
 import com.dayton.drone.network.response.model.LoginUserModel;
+import com.dayton.drone.network.response.model.UpdateUserModel;
 
 
 import retrofit.http.Body;
@@ -28,6 +30,9 @@ public interface Drone {
 
     @POST("/user/login")
     LoginUserModel userLogin(@Body LoginUserObject object,@Header("Authorization") String auth,@Header("Content-Type") String type);
+
+    @PUT("/user/update")
+    UpdateUserModel userUpdate(@Body UpdateUserObject object,@Header("Content-Type") String type);
 
     @POST("/steps/create")
     CreateStepsModel stepsCreate(@Body CreateStepsObject object,@Header("Authorization") String auth,@Header("Content-Type") String type);

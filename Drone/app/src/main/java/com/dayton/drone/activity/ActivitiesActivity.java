@@ -21,7 +21,7 @@ import android.widget.TextView;
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.event.LittleSyncEvent;
-import com.dayton.drone.modle.Steps;
+import com.dayton.drone.model.Steps;
 import com.dayton.drone.utils.CacheConstants;
 import com.dayton.drone.utils.SpUtils;
 import com.dayton.drone.view.CalendarView;

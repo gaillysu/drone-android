@@ -78,6 +78,10 @@ public class UserBean {
     @DatabaseField
     private String userEmail;
 
+    public static final String fUserPassword = "userPassword";
+    @DatabaseField
+    private String userPassword;
+
     public static final String fUserIsLogin = "userIsLogin";
     @DatabaseField
     private boolean userIsLogin;
@@ -161,6 +165,14 @@ public class UserBean {
 
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
+    }
+
+    public String getUserPassword() {
+        return userPassword;
+    }
+
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
     }
 
     public boolean isUserIsLogin() {

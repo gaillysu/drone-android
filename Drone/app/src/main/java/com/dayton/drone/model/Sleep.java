@@ -1,4 +1,4 @@
-package com.dayton.drone.modle;
+package com.dayton.drone.model;
 
 import com.dayton.drone.database.bean.SleepBean;
 

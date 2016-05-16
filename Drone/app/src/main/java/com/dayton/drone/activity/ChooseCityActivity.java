@@ -13,7 +13,7 @@ import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.adapter.ChooseCityAdapter;
 import com.dayton.drone.database.entry.WorldClockDatabaseHelper;
-import com.dayton.drone.modle.WorldClock;
+import com.dayton.drone.model.WorldClock;
 
 import java.util.List;
 
