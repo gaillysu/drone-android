@@ -12,3 +12,6 @@ Drone/Drone.iml
 Drone/build/
 Drone/progressbarlibrary/progressbarlibrary.iml
 Drone/wheelPickLib/wheelpicklib.iml
+ContactList/
+IndexableListView-master/
+Drone/build.gradle
