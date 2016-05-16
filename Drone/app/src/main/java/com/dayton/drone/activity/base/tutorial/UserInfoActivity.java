@@ -133,8 +133,8 @@ public class UserInfoActivity extends BaseActivity {
         if (!(TextUtils.isEmpty(birthday) || TextUtils.isEmpty(height) || TextUtils.isEmpty(weight)))
         {
             Intent intent = getIntent();
-            String account = intent.getStringExtra("account");
-            String password = intent.getStringExtra("password");
+            final String account = intent.getStringExtra("account");
+            final String password = intent.getStringExtra("password");
             final int h = new Integer(height.substring(0, 3));
             final double w = Double.parseDouble(weight.substring(0, weight.length() - 2));
             int age = 25;
@@ -170,6 +170,7 @@ public class UserInfoActivity extends BaseActivity {
                         getModel().getUser().setWeight(w);
                         getModel().getUser().setGender(gender);
                         getModel().getUser().setUserEmail(createUserModel.getUser().getEmail());
+                        getModel().getUser().setUserPassword(password);
                         getModel().getUser().setUserID(createUserModel.getUser().getId()+"");
                         getModel().getUser().setUserIsLogin(true);
                         getModel().getUserDatabaseHelper().update(getModel().getUser());

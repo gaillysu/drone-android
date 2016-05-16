@@ -144,6 +144,7 @@ public class UserDatabaseHelper implements iEntryDatabaseHelper<User> {
         user.setGender(userDAO.getGender());
         user.setStrideLength(userDAO.getStrideLength());
         user.setUserEmail(userDAO.getUserEmail());
+        user.setUserPassword(userDAO.getUserPassword());
         user.setUserID(userDAO.getUserID());
         user.setUserIsLogin(userDAO.isUserIsLogin());
         return user;
@@ -159,6 +160,7 @@ public class UserDatabaseHelper implements iEntryDatabaseHelper<User> {
         userDAO.setGender(user.getGender());
         userDAO.setStrideLength(user.getStrideLength());
         userDAO.setUserEmail(user.getUserEmail());
+        userDAO.setUserPassword(user.getUserPassword());
         userDAO.setUserID(user.getUserID());
         userDAO.setUserIsLogin(user.isUserIsLogin());
         return userDAO;
