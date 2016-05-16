@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.dayton.drone.database.DatabaseHelper;
 import com.dayton.drone.database.bean.StepsBean;
-import com.dayton.drone.modle.Steps;
+import com.dayton.drone.model.Steps;
 
 import net.medcorp.library.ble.util.Optional;
 

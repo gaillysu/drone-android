@@ -4,13 +4,12 @@ import android.content.Context;
 
 import com.dayton.drone.database.DatabaseHelper;
 import com.dayton.drone.database.bean.WorldClockBean;
-import com.dayton.drone.modle.WorldClock;
+import com.dayton.drone.model.WorldClock;
 
 import net.medcorp.library.ble.util.Optional;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 

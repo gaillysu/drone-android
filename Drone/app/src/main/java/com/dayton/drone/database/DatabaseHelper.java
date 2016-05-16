@@ -4,13 +4,12 @@ package com.dayton.drone.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.dayton.drone.application.ApplicationModel;
 import com.dayton.drone.database.bean.NotificationBean;
 import com.dayton.drone.database.bean.SleepBean;
 import com.dayton.drone.database.bean.StepsBean;
 import com.dayton.drone.database.bean.UserBean;
 import com.dayton.drone.database.bean.WorldClockBean;
-import com.dayton.drone.modle.WorldClock;
+import com.dayton.drone.model.WorldClock;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;

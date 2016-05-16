@@ -1,9 +1,6 @@
 package com.dayton.drone.application;
 
 import android.app.Application;
-import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
 
 import com.dayton.drone.ble.controller.OtaControllerImpl;
 import com.dayton.drone.ble.controller.SyncController;
@@ -15,7 +12,7 @@ import com.dayton.drone.database.entry.StepsDatabaseHelper;
 import com.dayton.drone.database.entry.UserDatabaseHelper;
 import com.dayton.drone.database.entry.WorldClockDatabaseHelper;
 import com.dayton.drone.event.LittleSyncEvent;
-import com.dayton.drone.modle.User;
+import com.dayton.drone.model.User;
 import com.dayton.drone.network.RetrofitManager;
 import com.dayton.drone.network.request.model.CreateSteps;
 

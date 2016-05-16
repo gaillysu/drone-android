@@ -8,7 +8,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.dayton.drone.R;
-import com.dayton.drone.modle.WorldClock;
+import com.dayton.drone.model.WorldClock;
 
 import java.util.List;
 

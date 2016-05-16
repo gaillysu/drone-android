@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.dayton.drone.database.DatabaseHelper;
 import com.dayton.drone.database.bean.UserBean;
-import com.dayton.drone.modle.User;
+import com.dayton.drone.model.User;
 
 import net.medcorp.library.ble.util.Optional;
 
