@@ -1,19 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
 
     <ImageView
         android:id="@+id/home_adapter_menu_icon"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    <TextView
-        android:id="@+id/home_adapter_menu_tv"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="2dp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
-        android:layout_marginLeft="100dp"
-        android:textSize="35sp"
-        android:textColor="#000000"
-        android:text="addds"/>
+        android:background="@drawable/home_activity_ll_select"
+        >
+        <TextView
+            android:id="@+id/home_adapter_menu_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="100dp"
+            android:text="addds"
+            android:textColor="#55000000"
+            android:textSize="35sp"/>
+    </RelativeLayout>
+
 </FrameLayout>

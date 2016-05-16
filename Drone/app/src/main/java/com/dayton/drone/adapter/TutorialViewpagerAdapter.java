@@ -5,6 +5,7 @@ import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import java.util.List;
 
@@ -39,6 +40,9 @@ public class TutorialViewpagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         ImageView iv = list.get(position);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams
+                (ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        iv.setLayoutParams(lp);
         iv.setScaleType(ImageView.ScaleType.FIT_XY);
         container.addView(iv);
         return iv;

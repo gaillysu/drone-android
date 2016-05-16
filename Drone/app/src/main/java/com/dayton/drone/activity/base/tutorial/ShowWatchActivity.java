@@ -51,15 +51,15 @@ public class ShowWatchActivity extends BaseActivity  {
         Intent intent = getIntent();
         int watchIconId = intent.getIntExtra("watchIconId", -1);
         icon.setImageResource(watchIconId);
-        if(!getModel().getSyncController().isConnected()) {
-            getModel().getSyncController().startConnect(true);
-        }
-        else{
-            startActivity(HomeActivity.class);
-            finish();
-        }
-//        startActivity(HomeActivity.class);
-//        finish();
+//        if(!getModel().getSyncController().isConnected()) {
+//            getModel().getSyncController().startConnect(true);
+//        }
+//        else{
+//            startActivity(HomeActivity.class);
+//            finish();
+//        }
+        startActivity(HomeActivity.class);
+        finish();
     }
 
     @Override

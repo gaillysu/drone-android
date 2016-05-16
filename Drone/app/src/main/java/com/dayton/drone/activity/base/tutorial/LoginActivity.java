@@ -5,14 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
+import com.dayton.drone.network.request.LoginUserRequest;
 import com.dayton.drone.network.request.model.LoginUser;
 import com.dayton.drone.network.response.model.LoginUserModel;
-import com.dayton.drone.network.request.LoginUserRequest;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -29,8 +29,8 @@ public class LoginActivity extends BaseActivity {
     EditText ed_account;
     @Bind(R.id.password_ed)
     EditText ed_password;
-    @Bind(R.id.registe_tx)
-    TextView registeTv;
+    @Bind(R.id.registe_next_iv)
+    ImageButton nextImageButton;
 
 
     @Override
@@ -41,7 +41,7 @@ public class LoginActivity extends BaseActivity {
         //TODO this is test hardcode
         ed_account.setText("test@med-corp.net");
         ed_password.setText("123456");
-        registeTv.setVisibility(View.GONE);
+        nextImageButton.setVisibility(View.GONE);
     }
 
     @OnClick(R.id.registe_back_iv)
@@ -50,7 +50,7 @@ public class LoginActivity extends BaseActivity {
         finish();
     }
 
-    @OnClick(R.id.registe_next_iv)
+    @OnClick(R.id.login_activity_login_bt)
     public void loginClick(){
          if(!validate()){
              onLoginFailed();

@@ -24,15 +24,15 @@ public class HomeActivity extends BaseActivity {
     ListView homeMenuListView;
 
     private List<MenuBean> listData;
-    private int[] homeMenuIconArray ={R.mipmap.mainmenu_activity_icon,
-            R.mipmap.mainmenu_sleep_icon,R.mipmap.mainmenu_gallery_icon,
-            R.mipmap.mainmenu_setting_icon,R.mipmap.mainmenu_worldclock_icon};
+
+
+    private int[] homeMenuIconArray ={R.mipmap.mainmenu_activity_icon
+            ,R.mipmap.mainmenu_worldclock_icon};
+
     private String[] homeMenuTextArray;
     private final String activities = "ACTIVITIES";
-    private final String sleep = "SLEEP";
     private final String clock = "WORLD\nCLOCK";
-    private final String setting = "SETTINGS";
-    private final String gallery = "GALLERY";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,18 +49,8 @@ public class HomeActivity extends BaseActivity {
                     case activities:
                         startActivity(ActivitiesActivity.class);
                         break;
-                    case sleep:
-
-                        startActivity(SleepActivity.class);
-                        break;
                     case clock:
                         startActivity(WorldClockActivity.class);
-                        break;
-                    case setting:
-                        startActivity(SettingWatchActivity.class);
-                        break;
-                    case gallery:
-                        startActivity(GalleryActivity.class);
                         break;
                 }
             }
@@ -78,6 +68,7 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -86,4 +77,6 @@ public class HomeActivity extends BaseActivity {
             getModel().getSyncController().startConnect(false);
         }
     }
+
+
 }

@@ -12,11 +12,16 @@ import com.dayton.drone.bean.MenuBean;
 
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 
 public class MyHomeMenuAdapter extends BaseAdapter {
 
     private List<MenuBean> mData;
     private Context mContext;
+    private boolean isShow = false;
+
     public MyHomeMenuAdapter(List<MenuBean> data, Context context) {
         this.mData = data;
         mContext = context;
@@ -50,14 +55,14 @@ public class MyHomeMenuAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
         if (holder == null) {
-            holder = new ViewHolder();
+
             convertView = View.inflate(mContext, R.layout.home_menu_item, null);
             convertView.setTag(holder);
-            holder.mMenuIv = (ImageView) convertView.findViewById(R.id.home_adapter_menu_icon);
-            holder.mMenuTv = (TextView) convertView.findViewById(R.id.home_adapter_menu_tv);
+            holder = new ViewHolder(convertView);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
+
         if (mData.get(position) != null) {
             MenuBean bean = mData.get(position);
             holder.mMenuIv.setBackgroundResource(bean.getIconId());
@@ -66,9 +71,15 @@ public class MyHomeMenuAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private static class ViewHolder {
+    public static class ViewHolder {
+        @Bind(R.id.home_adapter_menu_icon)
         ImageView mMenuIv;
+        @Bind(R.id.home_adapter_menu_tv)
         TextView mMenuTv;
+
+        public ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
     }
 }
 

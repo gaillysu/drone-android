@@ -1,28 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:background="@android:color/white"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:background="@android:color/white"
+              android:orientation="vertical">
 
-    <include layout="@layout/registe_control_button"
+    <include
+        layout="@layout/registe_control_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
         android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"/>
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"/>
+
     <LinearLayout
-        android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
         android:gravity="center_horizontal"
         android:orientation="vertical">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/user_device_select"
             android:textSize="22sp"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -30,24 +34,28 @@
             android:text="@string/user_select_dec"
             android:textSize="18sp"
             />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:textSize="16sp"
-            android:textColor="@android:color/darker_gray"
             android:text="@string/user_device_drone"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="16sp"
             />
     </LinearLayout>
+
     <GridView
         android:id="@+id/select_user_device"
-        android:layout_width="match_parent"
+        android:layout_width="220dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:numColumns="2"
-        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp">
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:numColumns="2"
+        android:scrollbars="none">
     </GridView>
 </LinearLayout>

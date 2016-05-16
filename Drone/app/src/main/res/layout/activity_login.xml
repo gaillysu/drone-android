@@ -6,10 +6,100 @@
               android:orientation="vertical">
 
     <include layout="@layout/registe_control_button"/>
-    <include
-        layout="@layout/registe_table_layout"
+    <ImageView
+        android:id="@+id/registe_drone_logo"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="50dp"
-        android:layout_weight="1"/>
+        android:layout_height="60dp"
+        android:layout_marginTop="60dp"
+        android:src="@mipmap/dronelogo"/>
+    <LinearLayout
+        android:id="@+id/registe_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="80dp"
+        android:background="@drawable/registe_edit_bg"
+        android:orientation="vertical"
+        >
+
+        <EditText
+            android:id="@+id/email_ed"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@null"
+            android:hint="Email"
+            android:textStyle="bold"
+            android:inputType="textEmailSubject"
+            android:paddingLeft="5dp"
+            android:textSize="20sp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="#33000000"/>
+
+        <EditText
+            android:id="@+id/password_ed"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@null"
+            android:hint="Password"
+            android:textStyle="bold"
+            android:inputType="textPassword"
+            android:paddingLeft="5dp"
+            android:textSize="20sp"/>
+    </LinearLayout>
+    <Button
+        android:id="@+id/login_activity_login_bt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="@android:color/transparent"
+        android:layout_marginTop="40dp"
+        android:text="@string/login"
+        android:textColor="@color/userinfo_sex_bg"/>
+    <TextView
+        android:id="@+id/registe_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/registe_ll"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:textStyle="bold"
+        android:text="@string/third_party_login"
+        android:textColor="#88000000"
+        android:textSize="14sp"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/registe_tv"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center_horizontal"
+        >
+
+        <ImageView
+            android:id="@+id/google_account_login"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@mipmap/login_google_icon"/>
+
+        <ImageView
+            android:id="@+id/face_book_account_login"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="30dp"
+            android:src="@mipmap/login_facebook_icon"/>
+
+        <ImageView
+            android:id="@+id/Twitter_account_login"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="30dp"
+            android:src="@mipmap/login_twitter_icon"/>
+    </LinearLayout>
 </LinearLayout>

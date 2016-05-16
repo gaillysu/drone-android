@@ -32,11 +32,11 @@ public class ChooseCityActivity extends BaseActivity {
     EditText searchTextEditText;
     @Bind(R.id.choose_activity_city_list)
     ListView cityListView;
-
     private boolean isChooseCity = false;
     private List<WorldClock> worldClockDataList;
     private WorldClockDatabaseHelper worldClockDatabase;
     private ChooseCityAdapter cityAdapter;
+
 
 
     @Override
@@ -60,6 +60,7 @@ public class ChooseCityActivity extends BaseActivity {
                 finish();
             }
         });
+
     }
 
     @OnClick(R.id.choose_activity_cancel_bt)

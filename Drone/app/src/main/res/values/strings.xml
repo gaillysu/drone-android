@@ -56,9 +56,9 @@
     </string-array>
     <string-array name="home_menu_text_data">
         <item>ACTIVITIES</item>
-        <item> SLEEP </item>
-        <item>GALLERY</item>
-        <item>SETTINGS</item>
         <item>WORLD\nCLOCK</item>
+        <!--<item> SLEEP </item>-->
+        <!--<item>GALLERY</item>-->
+        <!--<item>SETTINGS</item>-->
     </string-array>
 </resources>
