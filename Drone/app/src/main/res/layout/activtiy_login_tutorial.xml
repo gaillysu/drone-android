@@ -28,26 +28,15 @@
             android:layout_weight="1">
         </android.support.v4.view.ViewPager>
 
-        <RelativeLayout
+
+        <LinearLayout
+            android:id="@+id/view_pager_point_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true">
-
-            <LinearLayout
-                android:id="@+id/view_pager_point_group"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-            </LinearLayout>
-
-            <ImageView
-                android:id="@+id/tutorial_activity_select_point"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/select_poine"
-                />
-        </RelativeLayout>
+            android:orientation="horizontal">
+        </LinearLayout>
 
     </RelativeLayout>
 
@@ -56,9 +45,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
         android:layout_marginLeft="80dp"
         android:layout_marginRight="80dp"
-        android:layout_marginBottom="20dp"
         android:layout_marginTop="5dp"
         android:orientation="vertical"
         >
