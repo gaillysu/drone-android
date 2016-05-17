@@ -15,6 +15,8 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 /**
  * Created by boy on 2016/4/21.
  */
@@ -78,5 +80,10 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
+    @OnClick(R.id.manager_fragment_title_right_add)
+    public void addWatch()
+    {
+        startActivity(AddWatchActivity.class);
+    }
 
 }
