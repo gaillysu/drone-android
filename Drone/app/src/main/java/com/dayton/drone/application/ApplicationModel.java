@@ -1,7 +1,6 @@
 package com.dayton.drone.application;
 
 import android.app.Application;
-import android.os.Handler;
 
 import com.dayton.drone.ble.controller.OtaControllerImpl;
 import com.dayton.drone.ble.controller.SyncController;
@@ -40,12 +39,11 @@ public class ApplicationModel extends Application {
     private StepsDatabaseHelper stepsDatabaseHelper;
     private SleepDatabaseHelper sleepDatabaseHelper;
     private NotificationDatabaseHelper notificationDatabaseHelper;
-    private Handler handler;
+
     @Override
     public void onCreate()
     {
         super.onCreate();
-        handler = new Handler();
         syncController = new SyncControllerImpl(this);
         otaController  = new OtaControllerImpl(this);
         retrofitManager = new RetrofitManager(this);
@@ -92,10 +90,6 @@ public class ApplicationModel extends Application {
     }
     public WorldClockDatabaseHelper getWorldClockDatabaseHelper() {
         return worldClockDatabaseHelper;
-    }
-
-    public Handler getHandler(){
-        return handler;
     }
 
     @Subscribe

@@ -24,7 +24,7 @@ public class TutorialViewpagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return Integer.MAX_VALUE;
+        return list.size();
     }
 
     @Override
@@ -39,7 +39,6 @@ public class TutorialViewpagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        position = position %list.size();
         ImageView iv = list.get(position);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams
                 (ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
