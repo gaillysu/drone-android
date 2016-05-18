@@ -1,10 +1,11 @@
-package com.dayton.drone.activity.base;
+package com.dayton.drone.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.TextView;
 
 import com.dayton.drone.R;
+import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.model.User;
 
 import butterknife.Bind;

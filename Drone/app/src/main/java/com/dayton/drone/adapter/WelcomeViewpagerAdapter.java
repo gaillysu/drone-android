@@ -1,6 +1,5 @@
 package com.dayton.drone.adapter;
 
-import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +11,10 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/5/13.
  */
-public class TutorialViewpagerAdapter extends PagerAdapter {
+public class WelcomeViewpagerAdapter extends PagerAdapter {
 
     private List<ImageView> imageIdArray;
-    public TutorialViewpagerAdapter(Context context , List<ImageView> imageIdArray){
+    public WelcomeViewpagerAdapter(List<ImageView> imageIdArray){
         this.imageIdArray = imageIdArray;
     }
 
