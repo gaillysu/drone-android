@@ -32,7 +32,7 @@ public class RegisteActivity extends BaseActivity {
 
     @OnClick(R.id.registe_back_iv)
     public void goBackActivity() {
-        startActivity(TutorialActivtiy.class);
+        startActivity(WelcomeActivity.class);
         finish();
     }
 

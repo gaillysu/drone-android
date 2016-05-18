@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:layout_gravity="center_horizontal"
-        android:text="@string/reiste_email"
+        android:text="@string/register_email"
         android:textColor="@color/app_text_color_criterion"
         android:textSize="16sp"/>
 

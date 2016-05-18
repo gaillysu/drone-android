@@ -46,7 +46,7 @@ public class LoginActivity extends BaseActivity {
 
     @OnClick(R.id.registe_back_iv)
     public void back(){
-        startActivity(TutorialActivtiy.class);
+        startActivity(WelcomeActivity.class);
         finish();
     }
 

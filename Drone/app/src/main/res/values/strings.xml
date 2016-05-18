@@ -4,9 +4,9 @@
     <string name="update">Update</string>
     <string name="cancel_update">Cancel</string>
     <string name="login">Login</string>
-    <string name="login_registe">Registe</string>
-    <string name="reiste_email"> Registe with your email</string>
-    <string name="third_party_login">Or registe with your social media</string>
+    <string name="login_register">Register</string>
+    <string name="register_email"> Register with your email</string>
+    <string name="third_party_login">Or register with your social media</string>
     <string name="tips_user_account_password">Account of password is not null</string>
     <string name="user_account_error">Account of password is error</string>
     <string name="user_info_clue">Tell us little bit about your self.</string>

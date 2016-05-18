@@ -16,22 +16,21 @@ import butterknife.ButterKnife;
  */
 public class GalleryListAdapter extends BaseAdapter {
     private Context context;
-    private int[] imageData;
+    private int[] imagesIdArray;
 
-    public GalleryListAdapter(Context context, int[] imageData) {
+    public GalleryListAdapter(Context context, int[] imagesArray) {
         this.context = context;
-        this.imageData = imageData;
-
+        this.imagesIdArray = imagesArray;
     }
 
     @Override
     public int getCount() {
-        return imageData.length != 0 ? imageData.length : 0;
+        return imagesIdArray.length != 0 ? imagesIdArray.length : 0;
     }
 
     @Override
     public Object getItem(int i) {
-        return imageData[i] != -1 ? imageData[i] : -1;
+        return imagesIdArray[i];
     }
 
     @Override
@@ -48,7 +47,7 @@ public class GalleryListAdapter extends BaseAdapter {
             view.setTag(holder);
         }else
             holder = (ViewHolder) view.getTag();
-            holder.deviceImageView.setBackgroundResource(imageData[i]);
+            holder.deviceImageView.setBackgroundResource(imagesIdArray[i]);
         return view;
     }
 
