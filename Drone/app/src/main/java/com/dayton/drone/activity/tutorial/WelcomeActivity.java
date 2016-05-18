@@ -58,7 +58,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             imageView.setImageResource(iv);
             droneImageViewList.add(imageView);
         }
-        viewPager.setAdapter(new WelcomeViewpagerAdapter(this, droneImageViewList));
+        viewPager.setAdapter(new WelcomeViewpagerAdapter(droneImageViewList));
 
         for (int x = 0; x < droneImageViewIdList.length; x++) {
             ImageView pointImageView = new ImageView(this);

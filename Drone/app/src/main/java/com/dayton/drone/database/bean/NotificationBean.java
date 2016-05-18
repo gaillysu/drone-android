@@ -26,7 +26,7 @@ public class NotificationBean {
 
 
     /**
-     * contacts list, split by ";"
+     * JSONArray string,eg:{"contacts":[{"name":"Tom","number":"10086"},{"name":"John","number":"10000;10001"},{},...]}
      */
     public static final String fContactsList = "contactsList";
     @DatabaseField
