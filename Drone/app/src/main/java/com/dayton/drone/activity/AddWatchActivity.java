@@ -40,7 +40,7 @@ public class AddWatchActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(position==0) {
-                    //TODO  retrive phonebook to get all contacts
+                    startActivity(SetNotificationActivity.class);
                 }
                 else if(position==1) {
                     getModel().getSyncController().forgetDevice();
