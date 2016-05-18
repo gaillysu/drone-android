@@ -43,7 +43,7 @@ public class ProfileActivity extends BaseActivity {
         userHeight.setText(mUser.getHeight()+"cm");
         userWeight.setText(mUser.getWeight()+"kg");
     }
-    
+
     @OnClick(R.id.profile_activity_edit_user_name_ib)
     public void editUserName(){
 

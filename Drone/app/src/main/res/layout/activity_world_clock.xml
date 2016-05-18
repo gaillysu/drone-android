@@ -56,6 +56,8 @@
             android:id="@+id/world_clock_select_city_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:divider="@android:color/white"
             android:layout_below="@id/world_clock_date_tv">
         </ListView>
 

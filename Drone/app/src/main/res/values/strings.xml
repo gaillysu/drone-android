@@ -45,7 +45,10 @@
     <string name="choose_activity_title_choose_city_tv">Choose a City</string>
     <string name="choose_activity_title_cancel">Cancel</string>
     <string name="gallery_activity_title">GALLERY</string>
-
+    <string name="world_clock_Yesterday_tv">yesterday</string>
+    <string name="world_clock_today_tv">today</string>
+    <string name="world_clock_Tomorrow_tv">Tomorrow</string>
+    <string name="world_clock_city_time_difference">hopurs behind</string>
     <string-array name="user_select_dec_arr">
         <item>Black Strap</item>
         <item>Tone Split</item>

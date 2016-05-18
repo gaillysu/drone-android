@@ -2,7 +2,6 @@ package com.dayton.drone.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -24,10 +23,6 @@ import butterknife.OnClick;
  * Created by boy on 2016/4/24.
  */
 public class WorldClockActivity extends BaseActivity {
-    @Bind(R.id.world_clock_date_edit_bt)
-    ImageButton editButton;
-    @Bind(R.id.world_clock_add_city_iv)
-    ImageButton addCityButton;
     @Bind(R.id.world_clock_date_tv)
     TextView dateTv;
     @Bind(R.id.world_clock_select_city_list)
@@ -57,9 +52,7 @@ public class WorldClockActivity extends BaseActivity {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String currentTime = format.format(date);
         String[] currentTimeArray = currentTime.split("-");
-        dateTv.setText(getModel().getString(R.string.main_table_date) + " "
-                + currentTimeArray[1] + ", " + currentTimeArray[0]);
-
+        dateTv.setText(getModel().getString(R.string.main_table_date) + " "+ currentTimeArray[1] + ", " + currentTimeArray[0]);
         listData = worldClockDatabase.getSelected();
         setListAdapter(isShowEditIcon);
         worldClockAdapter.onDeleteItemListener(new WorldClockAdapter.DeleteItemInterface() {

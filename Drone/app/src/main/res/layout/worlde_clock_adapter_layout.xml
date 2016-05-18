@@ -43,7 +43,7 @@
                 style="@style/world_clock_adapter_textview_style"
                 android:textSize="20sp"/>
             <TextView
-                android:id="@+id/world_clock_item_time_diffecer"
+                android:id="@+id/world_clock_item_time_diffenecer"
                 style="@style/world_clock_adapter_textview_style"
                 android:layout_marginLeft="3dp"
                 android:textSize="20sp"/>
