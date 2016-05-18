@@ -1,12 +1,13 @@
 package com.dayton.drone.activity.base.tutorial;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.view.ViewPager;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.HomeActivity;
@@ -23,20 +24,19 @@ import butterknife.OnClick;
 /**
  * Created by boy on 2016/4/13.
  */
-public class TutorialActivtiy extends BaseActivity {
+public class TutorialActivtiy extends BaseActivity implements ViewPager.OnPageChangeListener {
 
     @Bind(R.id.activity_login_vp)
     ViewPager vp_loginPage;
     @Bind(R.id.view_pager_point_group)
     LinearLayout pointGroup;
-    @Bind(R.id.tutorial_activity_select_point)
-    ImageView currentPageFlag;
 
     private List<ImageView> mVpList;
+    private SwitchPicTask switchPicTask;
+    private Handler handler;
     private int[] vp_data = new int[]{R.mipmap.drone_mens_black_strap,
             R.mipmap.drone_mens_tone_split_dial, R.mipmap.drone_white_strap_rosetone,
             R.mipmap.drone_mens_split_dial};
-    private int mPointSpace;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,14 +49,9 @@ public class TutorialActivtiy extends BaseActivity {
         }
         setContentView(R.layout.activtiy_login_tutorial);
         ButterKnife.bind(this);
+        handler = new Handler();
         initDate();
-        currentPageFlag.getViewTreeObserver().addOnGlobalLayoutListener
-                (new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                mPointSpace=  pointGroup.getChildAt(1).getLeft() - pointGroup.getChildAt(0).getLeft();
-            }
-        });
+
     }
 
     private void initDate() {
@@ -66,40 +61,46 @@ public class TutorialActivtiy extends BaseActivity {
             imageView.setBackgroundResource(iv);
             mVpList.add(imageView);
         }
-
         vp_loginPage.setAdapter(new TutorialViewpagerAdapter(this, mVpList));
 
         for (int x = 0; x < vp_data.length; x++) {
             ImageView pointImageView = new ImageView(this);
-                pointImageView.setBackgroundResource(R.drawable.uncheck_point_shape);
+            pointImageView.setBackgroundResource(R.drawable.uncheck_point_shape);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams
                     (ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-            if (x != 0) {
+            if (x == 0) {
+                pointImageView.setBackgroundResource(R.drawable.select_point);
+            }else{
                 lp.leftMargin = 15;
             }
-            pointImageView.setLayoutParams(lp);
-            pointGroup.addView(pointImageView);
+            pointGroup.addView(pointImageView,lp);
         }
 
-        vp_loginPage.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        vp_loginPage.addOnPageChangeListener(this);
+        int middle = Integer.MAX_VALUE/2;
+        int surplus = middle%vp_data.length;
+        int selectPoint=middle -surplus;
+        vp_loginPage.setCurrentItem(selectPoint);
+
+        if(switchPicTask == null){
+            switchPicTask = new SwitchPicTask();
+        }
+        switchPicTask.start();
+        vp_loginPage.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                int marginLeft = (int) (mPointSpace*positionOffset+position*mPointSpace+0.5f);
-                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) currentPageFlag.getLayoutParams();
-                layoutParams.leftMargin = marginLeft;
-                currentPageFlag.setLayoutParams(layoutParams);
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        switchPicTask.stop();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        switchPicTask.start();
+                        break;
+                    default:
+                        break;
+                }
+                return false;
             }
         });
     }
@@ -115,5 +116,46 @@ public class TutorialActivtiy extends BaseActivity {
         startActivity(RegisteActivity.class);
         finish();
     }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        position = position%vp_data.length;
+        int pointChild = pointGroup.getChildCount();
+        for(int x = 0; x< pointChild; x++) {
+            ImageView point = (ImageView) pointGroup.getChildAt(x);
+            point.setBackgroundResource(position == x ? R.drawable.select_point
+                    : R.drawable.uncheck_point_shape);
+        }
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+
+    private class SwitchPicTask implements Runnable{
+
+        @Override
+        public void run() {
+            int currentItem = vp_loginPage.getCurrentItem();
+            vp_loginPage.setCurrentItem(++currentItem);
+            handler.postDelayed(this ,2000);
+        }
+
+        public void start(){
+            stop();
+            handler.postDelayed(this ,2000);
+        }
+
+        public void stop(){
+            handler.removeCallbacks(this);
+        }
+    }
 }
+
 

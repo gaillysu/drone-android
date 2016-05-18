@@ -7,6 +7,7 @@ import android.widget.ListView;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
+import com.dayton.drone.activity.base.ProfileActivity;
 import com.dayton.drone.adapter.MyHomeMenuAdapter;
 import com.dayton.drone.bean.MenuBean;
 
@@ -86,4 +87,8 @@ public class HomeActivity extends BaseActivity {
         startActivity(AddWatchActivity.class);
     }
 
+    @OnClick(R.id.title_head_icon)
+    public void startProfile(){
+        startActivity(ProfileActivity.class);
+    }
 }

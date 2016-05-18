@@ -74,6 +74,7 @@
         <activity android:name=".activity.SleepActivity"/>
         <activity android:name=".activity.ChooseCityActivity"/>
         <activity android:name=".activity.AddWatchActivity"/>
+        <activity android:name=".activity.base.ProfileActivity"/>
         <!-- register all services used in the application -->
         <service
             android:name="net.medcorp.library.ble.ble.MEDBTService"
