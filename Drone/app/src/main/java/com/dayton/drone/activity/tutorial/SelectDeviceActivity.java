@@ -1,4 +1,4 @@
-package com.dayton.drone.activity.base.tutorial;
+package com.dayton.drone.activity.tutorial;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,11 +28,7 @@ public class SelectDeviceActivity extends BaseActivity {
     private int type;
 
     private String[] watchNameArray;
-    private int[] watchIconArray = {
-            R.mipmap.drone_mens_black_strap, R.mipmap.drone_mens_tone_split_dial,
-            R.mipmap.drone_mens_split_dial,R.mipmap.drone_ladies_stainless_steel,
-            R.mipmap.drone_white_strap_rosetone,R.mipmap.drone_ladies_crystal_bezel,
-    };
+    private int[] droneImagesIdArray = new int[]{R.drawable.welcome_drone_1,R.drawable.welcome_drone_2,R.drawable.welcome_drone_3,R.drawable.welcome_drone_4,R.drawable.welcome_drone_5,R.drawable.welcome_drone_6};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,18 +38,20 @@ public class SelectDeviceActivity extends BaseActivity {
         Intent intent = getIntent();
         type = intent.getIntExtra("type",-1);
         initView();
+
     }
 
     private void initView() {
+
         titleNext.setVisibility(View.GONE);
         watchNameArray = this.getResources().getStringArray(R.array.user_select_dec_arr);
-        mGridViewAdapter = new SelectDeviceGridViewAdapter(watchIconArray,watchNameArray,this);
+        mGridViewAdapter = new SelectDeviceGridViewAdapter(droneImagesIdArray,watchNameArray,this);
         mShowWatchGridView.setAdapter(mGridViewAdapter);
         mShowWatchGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                int iconId = watchIconArray[position];
-                String watchName =watchNameArray[position];
+                int iconId = droneImagesIdArray[position];
+                String watchName = watchNameArray[position];
                 Intent intent =new Intent(SelectDeviceActivity.this,ShowWatchActivity.class);
                 intent.putExtra("watchIconId",iconId);
                 intent.putExtra("selectWatchName",watchName);

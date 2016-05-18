@@ -21,9 +21,8 @@ public class GalleryActivity extends BaseActivity {
     TextView titleTextView;
     @Bind(R.id.activity_gallery_list)
     ListView listView;
-    private int[] vp_data = new int[]{R.mipmap.drone_mens_black_strap,
-            R.mipmap.drone_mens_tone_split_dial, R.mipmap.drone_white_strap_rosetone,
-            R.mipmap.drone_mens_split_dial};
+    private int[] droneImagesIdArray = new int[]{R.drawable.welcome_drone_1,R.drawable.welcome_drone_2,R.drawable.welcome_drone_3,R.drawable.welcome_drone_4,R.drawable.welcome_drone_5,R.drawable.welcome_drone_6};
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +30,7 @@ public class GalleryActivity extends BaseActivity {
         setContentView(R.layout.activity_gallery_layout);
         ButterKnife.bind(this);
         titleTextView.setText(getString(R.string.gallery_activity_title));
-        listView.setAdapter(new GalleryListAdapter(this ,vp_data));
+        listView.setAdapter(new GalleryListAdapter(this ,droneImagesIdArray));
     }
 
     @OnClick(R.id.content_title_back_bt)

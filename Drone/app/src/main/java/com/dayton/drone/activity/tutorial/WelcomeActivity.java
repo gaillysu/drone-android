@@ -1,4 +1,4 @@
-package com.dayton.drone.activity.base.tutorial;
+package com.dayton.drone.activity.tutorial;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import com.dayton.drone.R;
 import com.dayton.drone.activity.HomeActivity;
 import com.dayton.drone.activity.base.BaseActivity;
-import com.dayton.drone.adapter.TutorialViewpagerAdapter;
+import com.dayton.drone.adapter.WelcomeViewpagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,20 +24,17 @@ import butterknife.OnClick;
 /**
  * Created by boy on 2016/4/13.
  */
-public class TutorialActivtiy extends BaseActivity implements ViewPager.OnPageChangeListener {
+public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
+
+    private int[] droneImageViewIdList = new int[]{R.drawable.welcome_drone_1,R.drawable.welcome_drone_2,R.drawable.welcome_drone_3,R.drawable.welcome_drone_4,R.drawable.welcome_drone_5,R.drawable.welcome_drone_6};
 
     @Bind(R.id.activity_login_vp)
-    ViewPager vp_loginPage;
+    ViewPager viewPager;
     @Bind(R.id.view_pager_point_group)
     LinearLayout pointGroup;
 
-    private List<ImageView> mVpList;
     private SwitchPicTask switchPicTask;
     private Handler handler;
-    private int[] vp_data = new int[]{R.mipmap.drone_mens_black_strap,
-            R.mipmap.drone_mens_tone_split_dial, R.mipmap.drone_white_strap_rosetone,
-            R.mipmap.drone_mens_split_dial};
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +44,7 @@ public class TutorialActivtiy extends BaseActivity implements ViewPager.OnPageCh
             finish();
             return;
         }
-        setContentView(R.layout.activtiy_login_tutorial);
+        setContentView(R.layout.activtiy_welcome);
         ButterKnife.bind(this);
         handler = new Handler();
         initDate();
@@ -55,17 +52,17 @@ public class TutorialActivtiy extends BaseActivity implements ViewPager.OnPageCh
     }
 
     private void initDate() {
-        mVpList = new ArrayList<>(vp_data.length);
-        for (int iv : vp_data) {
+        List<ImageView> droneImageViewList = new ArrayList<>(droneImageViewIdList.length);
+        for (int iv : droneImageViewIdList) {
             ImageView imageView = new ImageView(this);
-            imageView.setBackgroundResource(iv);
-            mVpList.add(imageView);
+            imageView.setImageResource(iv);
+            droneImageViewList.add(imageView);
         }
-        vp_loginPage.setAdapter(new TutorialViewpagerAdapter(this, mVpList));
+        viewPager.setAdapter(new WelcomeViewpagerAdapter(droneImageViewList));
 
-        for (int x = 0; x < vp_data.length; x++) {
+        for (int x = 0; x < droneImageViewIdList.length; x++) {
             ImageView pointImageView = new ImageView(this);
-            pointImageView.setBackgroundResource(R.drawable.uncheck_point_shape);
+            pointImageView.setImageResource(R.drawable.uncheck_point_shape);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams
                     (ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             if (x == 0) {
@@ -76,17 +73,17 @@ public class TutorialActivtiy extends BaseActivity implements ViewPager.OnPageCh
             pointGroup.addView(pointImageView,lp);
         }
 
-        vp_loginPage.addOnPageChangeListener(this);
+        viewPager.addOnPageChangeListener(this);
         int middle = Integer.MAX_VALUE/2;
-        int surplus = middle%vp_data.length;
+        int surplus = middle% droneImageViewIdList.length;
         int selectPoint=middle -surplus;
-        vp_loginPage.setCurrentItem(selectPoint);
+        viewPager.setCurrentItem(selectPoint);
 
         if(switchPicTask == null){
             switchPicTask = new SwitchPicTask();
         }
         switchPicTask.start();
-        vp_loginPage.setOnTouchListener(new View.OnTouchListener() {
+        viewPager.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()){
@@ -111,7 +108,7 @@ public class TutorialActivtiy extends BaseActivity implements ViewPager.OnPageCh
         finish();
     }
 
-    @OnClick(R.id.registe_bt)
+    @OnClick(R.id.register_bt)
     public void openRegisteActivity() {
         startActivity(RegisteActivity.class);
         finish();
@@ -124,7 +121,7 @@ public class TutorialActivtiy extends BaseActivity implements ViewPager.OnPageCh
 
     @Override
     public void onPageSelected(int position) {
-        position = position%vp_data.length;
+        position = position% droneImageViewIdList.length;
         int pointChild = pointGroup.getChildCount();
         for(int x = 0; x< pointChild; x++) {
             ImageView point = (ImageView) pointGroup.getChildAt(x);
@@ -142,8 +139,8 @@ public class TutorialActivtiy extends BaseActivity implements ViewPager.OnPageCh
 
         @Override
         public void run() {
-            int currentItem = vp_loginPage.getCurrentItem();
-            vp_loginPage.setCurrentItem(++currentItem);
+            int currentItem = viewPager.getCurrentItem();
+            viewPager.setCurrentItem(++currentItem);
             handler.postDelayed(this ,2000);
         }
 
@@ -157,5 +154,4 @@ public class TutorialActivtiy extends BaseActivity implements ViewPager.OnPageCh
         }
     }
 }
-
 

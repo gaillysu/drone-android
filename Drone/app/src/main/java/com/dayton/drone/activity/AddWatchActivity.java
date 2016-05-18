@@ -3,14 +3,12 @@ package com.dayton.drone.activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
-import com.dayton.drone.activity.base.tutorial.SelectDeviceActivity;
+import com.dayton.drone.activity.tutorial.SelectDeviceActivity;
 import com.dayton.drone.adapter.AddWatchMenuAdapter;
-import com.dayton.drone.bean.MenuBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +38,7 @@ public class AddWatchActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(position==0) {
-                    //TODO  retrive phonebook to get all contacts
+                    startActivity(SetNotificationActivity.class);
                 }
                 else if(position==1) {
                     getModel().getSyncController().forgetDevice();

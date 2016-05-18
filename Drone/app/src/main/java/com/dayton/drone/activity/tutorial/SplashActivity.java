@@ -1,4 +1,4 @@
-package com.dayton.drone.activity.base.tutorial;
+package com.dayton.drone.activity.tutorial;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -40,7 +40,7 @@ public class SplashActivity extends BaseActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(TutorialActivtiy.class);
+                startActivity(WelcomeActivity.class);
                 finish();
             }
         },2000);
@@ -49,16 +49,16 @@ public class SplashActivity extends BaseActivity {
     public void next() {
         long newTime = System.currentTimeMillis();
         if ((newTime - time) >= 3000) {
-            startActivity(TutorialActivtiy.class);
+            startActivity(WelcomeActivity.class);
             finish();
         } else {
             try {
                 Thread.sleep(3000 - (newTime - time));
-                startActivity(TutorialActivtiy.class);
+                startActivity(WelcomeActivity.class);
                 finish();
             } catch (InterruptedException e) {
                 e.printStackTrace();
-                startActivity(TutorialActivtiy.class);
+                startActivity(WelcomeActivity.class);
                 finish();
             }
         }
@@ -74,7 +74,7 @@ public class SplashActivity extends BaseActivity {
         builder.setNegativeButton(R.string.cancel_update, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                startActivity(TutorialActivtiy.class);
+                startActivity(WelcomeActivity.class);
                 dialog.dismiss();
                 finish();
             }
@@ -98,7 +98,7 @@ public class SplashActivity extends BaseActivity {
      */
     private void downLoadUpdateVersion() {
         //TODO
-        startActivity(TutorialActivtiy.class);
+        startActivity(WelcomeActivity.class);
         finish();
     }
 

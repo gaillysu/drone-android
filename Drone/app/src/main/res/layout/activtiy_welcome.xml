@@ -7,11 +7,11 @@
 
     <ImageView
         android:id="@+id/tutorial_drone_logo"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-
-        android:layout_marginTop="40dp"
-        android:src="@mipmap/dronelogo"/>
+        android:layout_width="220dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="80dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/drone_logo_grey_2"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -24,8 +24,10 @@
             android:id="@+id/activity_login_vp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:layout_weight="1">
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:layout_marginBottom="4dp">
+
         </android.support.v4.view.ViewPager>
             <LinearLayout
                 android:id="@+id/view_pager_point_group"
@@ -33,7 +35,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentBottom="true"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
             </LinearLayout>
 
     </RelativeLayout>
@@ -43,9 +46,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginLeft="80dp"
-        android:layout_marginRight="80dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="75dp"
+        android:layout_marginRight="75dp"
+        android:layout_marginBottom="50dp"
         android:layout_marginTop="5dp"
         android:orientation="vertical"
         >
@@ -53,20 +56,21 @@
         <Button
             android:id="@+id/login_bt"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
+            android:layout_height="43dp"
             android:background="@drawable/registe_edit_bg"
             android:text="@string/login"
             android:textColor="@color/app_text_color_criterion"
-            android:textStyle="bold"/>
+            android:textSize="20sp"/>
 
         <Button
-            android:id="@+id/registe_bt"
+            android:textSize="20sp"
+            android:id="@+id/register_bt"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_marginTop="5dp"
+            android:layout_height="43dp"
+            android:layout_marginTop="4dp"
             android:background="@drawable/registe_edit_bg"
-            android:text="@string/login_registe"
+            android:text="@string/login_register"
             android:textColor="@color/app_text_color_criterion"
-            android:textStyle="bold"/>
+            />
     </LinearLayout>
 </RelativeLayout>

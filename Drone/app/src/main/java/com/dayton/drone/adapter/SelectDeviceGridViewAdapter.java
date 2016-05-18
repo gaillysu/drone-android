@@ -21,12 +21,12 @@ import butterknife.ButterKnife;
  */
 public class SelectDeviceGridViewAdapter extends BaseAdapter {
 
-    private int[] watchIconArr;
+    private int[] watchesArray;
     private String[] watchNameArr;
     private Context context;
 
-    public SelectDeviceGridViewAdapter(int[] watchIconArr, String[] watchNameArr, Context context) {
-        this.watchIconArr = watchIconArr;
+    public SelectDeviceGridViewAdapter(int[] watchesArray, String[] watchNameArr, Context context) {
+        this.watchesArray = watchesArray;
         this.watchNameArr = watchNameArr;
         this.context = context;
 
@@ -34,12 +34,12 @@ public class SelectDeviceGridViewAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return watchIconArr.length;
+        return watchesArray.length;
     }
 
     @Override
     public Object getItem(int position) {
-        return watchIconArr[position];
+        return watchesArray[position];
     }
 
     @Override
@@ -59,8 +59,8 @@ public class SelectDeviceGridViewAdapter extends BaseAdapter {
         } else {
             holder = (HolderView) convertView.getTag();
         }
-        if (watchNameArr.length > 0 && watchIconArr.length > 0) {
-            holder.watchIcon.setImageResource(watchIconArr[position]);
+        if (watchNameArr.length > 0 && watchesArray.length > 0) {
+            holder.watchIcon.setImageResource(watchesArray[position]);
             holder.watchName.setText(watchNameArr[position]);
         }
         return convertView;
