@@ -1,4 +1,4 @@
-package com.dayton.drone.activity.base.tutorial;
+package com.dayton.drone.activity.tutorial;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
