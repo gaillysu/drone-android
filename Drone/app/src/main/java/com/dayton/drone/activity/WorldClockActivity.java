@@ -52,7 +52,9 @@ public class WorldClockActivity extends BaseActivity {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String currentTime = format.format(date);
         String[] currentTimeArray = currentTime.split("-");
-        dateTv.setText(getModel().getString(R.string.main_table_date) + " "+ currentTimeArray[1] + ", " + currentTimeArray[0]);
+
+        dateTv.setText(new SimpleDateFormat("MMM").format(date)+ currentTimeArray[2] + ", " + currentTimeArray[0]);
+
         listData = worldClockDatabase.getSelected();
         setListAdapter(isShowEditIcon);
         worldClockAdapter.onDeleteItemListener(new WorldClockAdapter.DeleteItemInterface() {
@@ -95,8 +97,10 @@ public class WorldClockActivity extends BaseActivity {
         if (requestCode == this.requestCode) {
             boolean flag = data.getBooleanExtra("isChooseFlag", true);
             if (flag == true) {
-               WorldClock worldClockAdd = (WorldClock) data.getSerializableExtra("worldClock");
-                listData.add(worldClockAdd);
+               String timeZoneName =data.getStringExtra("worldClock");
+                WorldClock worldClock=  new WorldClock();
+                worldClock.setTimeZoneName(timeZoneName);
+                listData.add(worldClock);
                 worldClockListView.setAdapter(worldClockAdapter);
             }
         }

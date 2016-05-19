@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.dayton.drone.R;
@@ -26,10 +24,6 @@ import butterknife.OnClick;
  */
 public class ChooseCityActivity extends BaseActivity {
 
-    @Bind(R.id.choose_activity_search_ib)
-    ImageButton searchButton;
-    @Bind(R.id.choose_activity_search_edit)
-    EditText searchTextEditText;
     @Bind(R.id.choose_activity_city_list)
     ListView cityListView;
     private boolean isChooseCity = false;
@@ -48,6 +42,7 @@ public class ChooseCityActivity extends BaseActivity {
         worldClockDataList = worldClockDatabase.getAll();
         cityAdapter = new ChooseCityAdapter(this , worldClockDataList);
         cityListView.setAdapter(cityAdapter);
+
         cityListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position , long Id) {
@@ -55,7 +50,7 @@ public class ChooseCityActivity extends BaseActivity {
                 WorldClock worldClock =  worldClockDataList.get(position);
                 Intent intent = getIntent();
                 intent.putExtra("isChooseFlag", isChooseCity);
-                intent.putExtra("worldClock",worldClock);
+                intent.putExtra("worldClock",worldClock.getTimeZoneName());
                 setResult(0, intent);
                 finish();
             }

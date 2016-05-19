@@ -12,6 +12,9 @@
     <color name="world_clock_bg_color">#e6c68e</color>
     <color name="app_text_color_criterion">#66000000</color>
     <color name="regitse_text_color">#88000000</color>
-    <color name="home_adapter_item_select_color">#00000000</color>
+    <color name="home_adapter_item_select_color">#FF543C6E</color>
     <color name="profile_user_bg">#22000000</color>
+    <color name="choose_adapter_text_color">#FFFDFDFE</color>
+    <color name="choose_adapter_list_item_view_color">#EBD7BA</color>
+    <color name="home_list_adapter_item_tv_color">#FF5C5D5D</color>
 </resources>

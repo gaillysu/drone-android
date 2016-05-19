@@ -53,4 +53,15 @@ public class WorldClock extends WorldClockBean implements Serializable{
     public void setCityCurrentTime(String cityCurrentTime) {
         this.cityCurrentTime = cityCurrentTime;
     }
+
+    @Override
+    public String toString() {
+        return "WorldClock{" +
+                "city='" + city + '\'' +
+                ", cityLocation='" + cityLocation + '\'' +
+                ", modernDate='" + modernDate + '\'' +
+                ", timeDifference='" + timeDifference + '\'' +
+                ", cityCurrentTime='" + cityCurrentTime + '\'' +
+                '}';
+    }
 }

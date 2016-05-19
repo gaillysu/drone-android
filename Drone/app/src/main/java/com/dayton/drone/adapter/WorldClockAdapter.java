@@ -79,9 +79,11 @@ public class WorldClockAdapter extends BaseAdapter {
             int minutes = LATime.get(Calendar.MINUTE);
 
 
-            if (name != null) {
+            if (name != null&& name.contains("/")) {
                 String[] cityDec = name.split("/");
                 holder.cityName.setText(cityDec[1]);
+            }else{
+                holder.cityName.setText(name);
             }
 
             if (zoneId.equals(name)) {
@@ -89,7 +91,7 @@ public class WorldClockAdapter extends BaseAdapter {
             }
 
             if(minutes <10){
-                minutesTime = "o"+minutes;
+                minutesTime = "0"+minutes;
             }else{
                 minutesTime = minutes+"";
             }
@@ -98,13 +100,17 @@ public class WorldClockAdapter extends BaseAdapter {
                 hourDay ="0"+hour;
 
             }else{
-                hourDay = ""+hour;
+                hourDay =""+hour;
             }
 
             if (hour > 12) {
                 holder.cityCurrentTime.setText(hourDay+ ":" +minutesTime+ " PM");
             } else {
                 holder.cityCurrentTime.setText(hourDay + ":" +minutesTime+ " AM");
+            }
+
+            if(hour == 0){
+                hour = 24;
             }
 
             Date currentDate = new Date();
@@ -114,23 +120,31 @@ public class WorldClockAdapter extends BaseAdapter {
 
             if (currentDay > date) {
                 holder.cityDay.setText(R.string.world_clock_Yesterday_tv);
+                int cityTimeDifference = 24-hour+currentTime;
+                holder.timeDifference.setText("," +cityTimeDifference+
+                        context.getResources().getString(R.string.world_clock_city_time_difference));
 
-                holder.timeDifference.setText("," + (24 - hour+ currentTime + R.string.world_clock_city_time_difference));
             } else if (currentDay == date) {
 
                 holder.cityDay.setText(R.string.world_clock_today_tv);
 
                 if (hour > currentTime) {
-                    holder.timeDifference.setText("," + (hour- currentTime) + R.string.world_clock_city_time_difference);
+                    int cityTimeDifference =hour-currentTime;
+                    holder.timeDifference.setText("," + cityTimeDifference+
+                            context.getResources().getString(R.string.world_clock_city_time_difference));
                 } else if(hour<currentTime){
-                    holder.timeDifference.setText("," + (currentTime - hour) + R.string.world_clock_city_time_difference);
+                    int cityTimeDifference =currentTime -hour;
+                    holder.timeDifference.setText("," +cityTimeDifference+
+                            context.getResources().getString(R.string.world_clock_city_time_difference));
                 }else{
                     holder.timeDifference.setVisibility(View.GONE);
                 }
             } else {
 
-                holder.cityDay.setText(R.string.world_clock_Tomorrow_tv);
-                holder.timeDifference.setText("," + (24 - currentTime) + R.string.world_clock_city_time_difference);
+                holder.cityDay.setText(context.getResources().getString(R.string.world_clock_Tomorrow_tv));
+
+                holder.timeDifference.setText("," + (24 - currentTime) +
+                        context.getResources().getString(R.string.world_clock_city_time_difference));
             }
         }
 
@@ -160,7 +174,7 @@ public class WorldClockAdapter extends BaseAdapter {
         TextView cityCurrentTime;
         @Bind(R.id.world_clock_item_current_day)
         TextView cityDay;
-        @Bind(R.id.world_clock_item_time_diffenecer)
+        @Bind(R.id.world_clock_item_time_difference)
         TextView timeDifference;
         @Bind(R.id.world_clock_delete_icon)
         ImageButton deleteIcon;

@@ -14,6 +14,7 @@ import java.util.List;
 public class WelcomeViewpagerAdapter extends PagerAdapter {
 
     private List<ImageView> imageIdArray;
+
     public WelcomeViewpagerAdapter(List<ImageView> imageIdArray){
         this.imageIdArray = imageIdArray;
     }

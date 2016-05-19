@@ -28,13 +28,13 @@ public class HomeActivity extends BaseActivity {
     private List<MenuBean> listData;
 
 
-    private int[] homeMenuIconArray ={R.mipmap.mainmenu_activity_icon
-            ,R.mipmap.mainmenu_worldclock_icon};
+    private int[] homeMenuIconArray = {R.mipmap.mainmenu_activity_icon
+            , R.mipmap.mainmenu_worldclock_icon};
 
     private String[] homeMenuTextArray;
     private final String activities = "ACTIVITIES";
     private final String clock = "WORLD\nCLOCK";
-
+    private MyHomeMenuAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +42,8 @@ public class HomeActivity extends BaseActivity {
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
         initData();
-        homeMenuListView.setAdapter(new MyHomeMenuAdapter(listData,this));
+        adapter = new MyHomeMenuAdapter(listData, this);
+        homeMenuListView.setAdapter(adapter);
         homeMenuListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -56,13 +57,14 @@ public class HomeActivity extends BaseActivity {
                         break;
                 }
             }
+
         });
     }
 
     private void initData() {
         listData = new ArrayList<>(homeMenuIconArray.length);
         homeMenuTextArray = getResources().getStringArray(R.array.home_menu_text_data);
-        for(int i=0;i< homeMenuIconArray.length;i++){
+        for (int i = 0; i < homeMenuIconArray.length; i++) {
             MenuBean bean = new MenuBean();
             bean.setIconId(homeMenuIconArray[i]);
             bean.setDec(homeMenuTextArray[i]);
@@ -74,20 +76,20 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(!getModel().getSyncController().isConnected())
-        {
+        if (!getModel().getSyncController().isConnected()) {
             getModel().getSyncController().startConnect(false);
         }
     }
 
     @OnClick(R.id.manager_fragment_title_right_add)
-    public void addWatch()
-    {
+    public void addWatch() {
         startActivity(AddWatchActivity.class);
     }
 
     @OnClick(R.id.title_head_icon)
-    public void startProfile(){
+    public void startProfile() {
         startActivity(ProfileActivity.class);
     }
+
+
 }

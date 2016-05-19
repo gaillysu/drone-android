@@ -7,7 +7,8 @@
 
     <include
         android:id="@+id/world_clock_title"
-        layout="@layout/content_title_layout"></include>
+        layout="@layout/content_title_layout"
+        ></include>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -48,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:text="afsd"
-            android:textColor="@android:color/white"
+            android:textColor="@color/choose_adapter_text_color"
             android:textSize="28sp"
             android:textStyle="bold"/>
 

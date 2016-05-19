@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="horizontal"
               android:layout_marginLeft="10dp"
+              android:paddingTop="5dp"
               android:layout_width="match_parent"
               android:layout_height="wrap_content">
     <ImageButton
@@ -10,6 +11,7 @@
         android:layout_height="35dp"
         android:layout_gravity="center"
         android:layout_marginLeft="20dp"
+        android:scaleType="fitXY"
         android:background="@android:color/transparent"
         android:src="@mipmap/world_clock_delete_icon"
         android:visibility="gone"
@@ -43,9 +45,9 @@
                 style="@style/world_clock_adapter_textview_style"
                 android:textSize="20sp"/>
             <TextView
-                android:id="@+id/world_clock_item_time_diffenecer"
+                android:id="@+id/world_clock_item_time_difference"
                 style="@style/world_clock_adapter_textview_style"
-                android:layout_marginLeft="3dp"
+                android:singleLine="true"
                 android:textSize="20sp"/>
         </LinearLayout>
 

@@ -34,6 +34,9 @@
                     style="@style/home_content_activity_guide_text_style"
                     android:text="@string/fragment_home_guide_see_data_dec"
                     android:layout_gravity="right"
+                    android:background="@drawable/tip_up_icon"
+                    android:gravity="center"
+                    android:padding="5dp"
                     android:visibility="gone"
                     />
 
@@ -89,6 +92,9 @@
                     style="@style/home_content_activity_guide_text_style"
                     android:text="@string/fragment_home_guide_meter_dec"
                     android:layout_gravity="right"
+                    android:background="@drawable/tip_up_icon"
+                    android:gravity="center"
+                    android:padding="5dp"
                     android:visibility="gone"
                     />
 
@@ -98,6 +104,9 @@
                     android:layout_gravity="right"
                     android:text="@string/fragment_home_guide_histogram_dec"
                     android:visibility="gone"
+                    android:gravity="center"
+                    android:background="@drawable/tip_down_icon"
+                    android:padding="5dp"
                     />
             </LinearLayout>
 
@@ -180,6 +189,9 @@
             android:layout_alignParentRight="true"
             android:layout_below="@id/fragment_title"
             android:text="@string/fragment_home_guide_see_horisty_dec"
+            android:gravity="center"
+            android:background="@drawable/tip_up_icon"
+            android:padding="5dp"
             android:visibility="gone"
             />
     </RelativeLayout>

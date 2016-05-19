@@ -26,7 +26,8 @@ import butterknife.OnClick;
  */
 public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
 
-    private int[] droneImageViewIdList = new int[]{R.drawable.welcome_drone_1,R.drawable.welcome_drone_2,R.drawable.welcome_drone_3,R.drawable.welcome_drone_4,R.drawable.welcome_drone_5,R.drawable.welcome_drone_6};
+    private int[] droneImageViewIdList = new int[]{R.drawable.welcome_drone_1, R.drawable.welcome_drone_2,
+            R.drawable.welcome_drone_3, R.drawable.welcome_drone_4, R.drawable.welcome_drone_5, R.drawable.welcome_drone_6};
 
     @Bind(R.id.activity_login_vp)
     ViewPager viewPager;
@@ -35,6 +36,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     private SwitchPicTask switchPicTask;
     private Handler handler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,28 +67,28 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             pointImageView.setImageResource(R.drawable.uncheck_point_shape);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams
                     (ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            if (x == 0) {
+            if (x != 0) {
+                lp.leftMargin = dip2px(8f);
+            } else {
                 pointImageView.setBackgroundResource(R.drawable.select_point);
-            }else{
-                lp.leftMargin = 15;
             }
-            pointGroup.addView(pointImageView,lp);
+            pointGroup.addView(pointImageView, lp);
         }
 
         viewPager.addOnPageChangeListener(this);
-        int middle = Integer.MAX_VALUE/2;
-        int surplus = middle% droneImageViewIdList.length;
-        int selectPoint=middle -surplus;
+        int middle = Integer.MAX_VALUE / 2;
+        int surplus = middle % droneImageViewIdList.length;
+        int selectPoint = middle - surplus;
         viewPager.setCurrentItem(selectPoint);
 
-        if(switchPicTask == null){
+        if (switchPicTask == null) {
             switchPicTask = new SwitchPicTask();
         }
         switchPicTask.start();
         viewPager.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()){
+                switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         switchPicTask.stop();
                         break;
@@ -101,6 +103,12 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             }
         });
     }
+
+    public int dip2px(float dpValue) {
+        final float scale = getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
+    }
+
 
     @OnClick(R.id.login_bt)
     public void openLoginActivity() {
@@ -121,11 +129,11 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @Override
     public void onPageSelected(int position) {
-        position = position% droneImageViewIdList.length;
+        position = position%droneImageViewIdList.length;
         int pointChild = pointGroup.getChildCount();
-        for(int x = 0; x< pointChild; x++) {
+        for (int x = 0; x < pointChild; x++) {
             ImageView point = (ImageView) pointGroup.getChildAt(x);
-            point.setBackgroundResource(position == x ? R.drawable.select_point
+            point.setBackgroundResource(position % pointChild == x ? R.drawable.select_point
                     : R.drawable.uncheck_point_shape);
         }
     }
@@ -135,21 +143,21 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     }
 
-    private class SwitchPicTask implements Runnable{
+    private class SwitchPicTask implements Runnable {
 
         @Override
         public void run() {
             int currentItem = viewPager.getCurrentItem();
             viewPager.setCurrentItem(++currentItem);
-            handler.postDelayed(this ,2000);
+            handler.postDelayed(this, 2000);
         }
 
-        public void start(){
+        public void start() {
             stop();
-            handler.postDelayed(this ,2000);
+            handler.postDelayed(this, 2000);
         }
 
-        public void stop(){
+        public void stop() {
             handler.removeCallbacks(this);
         }
     }

@@ -351,8 +351,8 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
             @Override
             public void onClick(View v) {
                 String leftMouth = calendar.clickLeftMonth();
-                mTitleCalendarTextView.setText(getResources().getString(R.string.main_table_date)
-                        + " " + leftMouth);
+                mTitleCalendarTextView.setText(leftMouth);
+
                 mIvNextMouth.setVisibility(View.GONE);
                 mIvBackMouth.setVisibility(View.GONE);
             }
@@ -362,8 +362,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
             @Override
             public void onClick(View v) {
                 String rightMouth = calendar.clickRightMonth();
-                mTitleCalendarTextView.setText(getString(R.string.main_table_date)
-                        + " " + rightMouth);
+                mTitleCalendarTextView.setText(rightMouth);
                 mIvNextMouth.setVisibility(View.GONE);
                 mIvBackMouth.setVisibility(View.GONE);
             }
