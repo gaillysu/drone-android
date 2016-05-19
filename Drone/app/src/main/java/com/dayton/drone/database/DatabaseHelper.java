@@ -8,6 +8,7 @@ import com.dayton.drone.database.bean.NotificationBean;
 import com.dayton.drone.database.bean.SleepBean;
 import com.dayton.drone.database.bean.StepsBean;
 import com.dayton.drone.database.bean.UserBean;
+import com.dayton.drone.database.bean.WatchesBean;
 import com.dayton.drone.database.bean.WorldClockBean;
 import com.dayton.drone.model.WorldClock;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
@@ -27,14 +28,16 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
      * change history
      * v1: create
      * v2: add "password" field in User table
+     * v3: add "watches" table
      */
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     private Dao<UserBean, Integer> userBean = null;
     private Dao<StepsBean,Integer> stepsBean = null;
     private Dao<SleepBean,Integer> sleepBean = null;
     private Dao<NotificationBean,Integer> notificationBean = null;
     private Dao<WorldClockBean,Integer> worldClockBean = null;
+    private Dao<WatchesBean,Integer> watchesBean = null;
     public static DatabaseHelper instance;
 
     public static synchronized DatabaseHelper getHelperInstance(Context context) {
@@ -59,6 +62,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource,SleepBean.class);
             TableUtils.createTable(connectionSource,NotificationBean.class);
             TableUtils.createTable(connectionSource,WorldClockBean.class);
+            TableUtils.createTable(connectionSource,WatchesBean.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -73,6 +77,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.dropTable(connectionSource, SleepBean.class, true);
             TableUtils.dropTable(connectionSource, NotificationBean.class, true);
             TableUtils.dropTable(connectionSource, WorldClock.class, true);
+            TableUtils.dropTable(connectionSource, WatchesBean.class, true);
             onCreate(sqLiteDatabase, connectionSource);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -112,5 +117,12 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             worldClockBean = getDao(WorldClockBean.class);
         }
         return worldClockBean;
+    }
+
+    public Dao<WatchesBean,Integer> getWatchesBean() throws SQLException {
+        if(watchesBean == null){
+            watchesBean = getDao(WatchesBean.class);
+        }
+        return watchesBean;
     }
 }

@@ -10,6 +10,7 @@ import com.dayton.drone.database.entry.NotificationDatabaseHelper;
 import com.dayton.drone.database.entry.SleepDatabaseHelper;
 import com.dayton.drone.database.entry.StepsDatabaseHelper;
 import com.dayton.drone.database.entry.UserDatabaseHelper;
+import com.dayton.drone.database.entry.WatchesDatabaseHelper;
 import com.dayton.drone.database.entry.WorldClockDatabaseHelper;
 import com.dayton.drone.event.LittleSyncEvent;
 import com.dayton.drone.model.User;
@@ -39,6 +40,7 @@ public class ApplicationModel extends Application {
     private StepsDatabaseHelper stepsDatabaseHelper;
     private SleepDatabaseHelper sleepDatabaseHelper;
     private NotificationDatabaseHelper notificationDatabaseHelper;
+    private WatchesDatabaseHelper watchesDatabaseHelper;
 
     @Override
     public void onCreate()
@@ -53,6 +55,7 @@ public class ApplicationModel extends Application {
         stepsDatabaseHelper = new StepsDatabaseHelper(this);
         sleepDatabaseHelper = new SleepDatabaseHelper(this);
         notificationDatabaseHelper = new NotificationDatabaseHelper(this);
+        watchesDatabaseHelper = new WatchesDatabaseHelper(this);
         Optional<User> loginUser = userDatabaseHelper.getLoginUser();
         if(loginUser.notEmpty()) {
             user = loginUser.get();
@@ -93,6 +96,9 @@ public class ApplicationModel extends Application {
     }
     public NotificationDatabaseHelper getNotificationDatabaseHelper(){
         return notificationDatabaseHelper;
+    }
+    public WatchesDatabaseHelper getWatchesDatabaseHelper(){
+        return watchesDatabaseHelper;
     }
 
     @Subscribe
