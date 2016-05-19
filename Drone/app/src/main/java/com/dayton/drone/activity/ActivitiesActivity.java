@@ -112,7 +112,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     private TextView mTitleCalendarTextView;
     private CalendarView calendar;
     private View calendarView;
-
+    private Date selectedDate = new Date(); //the selected date comes from calendar.
     private int guidePage = 1;
 
     @Override
@@ -198,7 +198,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
 
     public void initHourlyData() {
         calendar.setCalendarData(new Date());
-        mTitleCalendarTextView.setText(new SimpleDateFormat("MMM").format(new Date()));
+        mTitleCalendarTextView.setText(new SimpleDateFormat("MMM").format(selectedDate));
         hourlyBarChart.setDescription("");
         hourlyBarChart.getLegend().setEnabled(false);
         hourlyBarChart.setOnChartValueSelectedListener(this);
@@ -299,7 +299,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         List<String> xVals = new ArrayList<String>();
         List<Entry> yValue = new ArrayList<Entry>();
 
-        List<Optional<Steps>> stepsList = getModel().getStepsDatabaseHelper().getAll(getModel().getUser().getUserID());
+        List<Optional<Steps>> stepsList = getModel().getStepsDatabaseHelper().getThisWeekSteps(getModel().getUser().getUserID(), selectedDate);
 
         int i = 0;
         for (Optional<Steps> steps : stepsList) {
@@ -332,13 +332,138 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     }
     void initlastweeklyData()
     {
+        lastweekLineChart.setDescription("");
+        lastweekLineChart.getLegend().setEnabled(false);
+        lastweekLineChart.setDrawBorders(false);
+        lastweekLineChart.setTouchEnabled(false);
+        lastweekLineChart.setDragEnabled(false);
+        lastweekLineChart.setGridBackgroundColor(Color.WHITE);
 
+        LimitLine ll1 = new LimitLine(7000f, "Goal");
+        ll1.setLineWidth(0.5f);
+        ll1.setLineColor(Color.BLACK);
+        //ll1.enableDashedLine(10f, 10f, 0f);
+        ll1.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);
+        ll1.setTextSize(16f);
+        ll1.setTextColor(Color.BLACK);
+
+        YAxis leftAxis = lastweekLineChart.getAxisLeft();
+        leftAxis.addLimitLine(ll1);
+        leftAxis.enableGridDashedLine(10f, 10f, 0f);
+        leftAxis.setDrawLimitLinesBehindData(true);
+        leftAxis.setDrawGridLines(false);
+
+        YAxis rightAxis = lastweekLineChart.getAxisRight();
+        rightAxis.setEnabled(false);
+
+        XAxis xAxis = lastweekLineChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        xAxis.setTextSize(10f);
+        xAxis.setTextColor(Color.BLACK);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("d'/'M");
+        List<String> xVals = new ArrayList<String>();
+        List<Entry> yValue = new ArrayList<Entry>();
+
+        List<Optional<Steps>> stepsList = getModel().getStepsDatabaseHelper().getLastWeekSteps(getModel().getUser().getUserID(), selectedDate);
+
+        int i = 0;
+        for (Optional<Steps> steps : stepsList) {
+            //TODO here use sample data
+            if(i>6)break;
+            if(steps.get().getSteps()==0) {steps.get().setSteps(new Random().nextInt(10000));}
+            if(steps.get().getSteps()>0)
+            {
+                yValue.add(new Entry(steps.get().getSteps(),i));
+                xVals.add(sdf.format(new Date(steps.get().getTimeFrame())));
+                i++;
+            }
+        }
+        LineDataSet set1 = new LineDataSet(yValue, "");
+        set1.enableDashedLine(10f, 5f, 0f);
+        set1.enableDashedHighlightLine(10f, 5f, 0f);
+        set1.setColor(Color.BLACK);
+        set1.setCircleColor(Color.BLACK);
+        set1.setLineWidth(1f);
+        set1.setDrawValues(false);
+        set1.setDrawCircleHole(false);
+        set1.setDrawFilled(true);
+        set1.setFillColor(getResources().getColor(R.color.colorPrimaryDark));
+
+        List<LineDataSet> dataSets = new ArrayList<LineDataSet>();
+        dataSets.add(set1);
+
+        LineData data = new LineData(xVals, dataSets);
+        lastweekLineChart.setData(data);
     }
     void initmonthlyData()
     {
+        lastmonthLineChart.setDescription("");
+        lastmonthLineChart.getLegend().setEnabled(false);
+        lastmonthLineChart.setDrawBorders(false);
+        lastmonthLineChart.setTouchEnabled(false);
+        lastmonthLineChart.setDragEnabled(false);
+        lastmonthLineChart.setGridBackgroundColor(Color.WHITE);
 
+        LimitLine ll1 = new LimitLine(7000f, "Goal");
+        ll1.setLineWidth(0.5f);
+        ll1.setLineColor(Color.BLACK);
+        //ll1.enableDashedLine(10f, 10f, 0f);
+        ll1.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);
+        ll1.setTextSize(16f);
+        ll1.setTextColor(Color.BLACK);
+
+        YAxis leftAxis = lastmonthLineChart.getAxisLeft();
+        leftAxis.addLimitLine(ll1);
+        leftAxis.enableGridDashedLine(10f, 10f, 0f);
+        leftAxis.setDrawLimitLinesBehindData(true);
+        leftAxis.setDrawGridLines(false);
+
+        YAxis rightAxis = lastmonthLineChart.getAxisRight();
+        rightAxis.setEnabled(false);
+
+        XAxis xAxis = lastmonthLineChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        xAxis.setTextSize(10f);
+        xAxis.setTextColor(Color.BLACK);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("d'/'M");
+        List<String> xVals = new ArrayList<String>();
+        List<Entry> yValue = new ArrayList<Entry>();
+
+        List<Optional<Steps>> stepsList = getModel().getStepsDatabaseHelper().getLastMonthSteps(getModel().getUser().getUserID(), selectedDate);
+
+        int i = 0;
+        for (Optional<Steps> steps : stepsList) {
+            //TODO here use sample data
+            if(i>29)break;
+            if(steps.get().getSteps()==0) {steps.get().setSteps(new Random().nextInt(10000));}
+            if(steps.get().getSteps()>0)
+            {
+                yValue.add(new Entry(steps.get().getSteps(),i));
+                xVals.add(sdf.format(new Date(steps.get().getTimeFrame())));
+                i++;
+            }
+        }
+        LineDataSet set1 = new LineDataSet(yValue, "");
+        set1.enableDashedLine(10f, 5f, 0f);
+        set1.enableDashedHighlightLine(10f, 5f, 0f);
+        set1.setColor(Color.BLACK);
+        set1.setCircleColor(Color.BLACK);
+        set1.setLineWidth(1f);
+        set1.setDrawValues(false);
+        set1.setDrawCircleHole(false);
+        set1.setDrawFilled(true);
+        set1.setFillColor(getResources().getColor(R.color.colorPrimaryDark));
+
+        List<LineDataSet> dataSets = new ArrayList<LineDataSet>();
+        dataSets.add(set1);
+
+        LineData data = new LineData(xVals, dataSets);
+        lastmonthLineChart.setData(data);
     }
-
     public void addListener() {
 
         mBtBack.setOnClickListener(new View.OnClickListener() {

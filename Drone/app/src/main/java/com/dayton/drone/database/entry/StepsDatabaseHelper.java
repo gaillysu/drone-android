@@ -146,4 +146,41 @@ public class StepsDatabaseHelper implements iEntryDatabaseHelper<Steps> {
         }
         return stepsList;
     }
+
+    /**
+     *
+     * @param userId
+     * @param date
+     * @return
+     */
+    public List<Optional<Steps> > getThisWeekSteps(String userId,Date date)
+    {
+        List<Optional<Steps> > stepsList = getAll(userId);
+
+        return stepsList;
+    }
+
+    /**
+     *
+     * @param userId
+     * @param date
+     * @return
+     */
+    public List<Optional<Steps> > getLastWeekSteps(String userId,Date date)
+    {
+        List<Optional<Steps> > stepsList = getAll(userId);
+        return stepsList;
+    }
+
+    /**
+     *
+     * @param userId
+     * @param date
+     * @return return date up to date-30 steps ??? or according to the calendar Month???
+     */
+    public List<Optional<Steps> > getLastMonthSteps(String userId,Date date)
+    {
+        List<Optional<Steps> > stepsList = getAll(userId);
+        return stepsList;
+    }
 }
