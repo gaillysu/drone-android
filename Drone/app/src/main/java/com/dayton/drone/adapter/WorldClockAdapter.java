@@ -85,11 +85,6 @@ public class WorldClockAdapter extends BaseAdapter {
             }else{
                 holder.cityName.setText(name);
             }
-
-            if (zoneId.equals(name)) {
-                holder.timeDifference.setVisibility(View.GONE);
-            }
-
             if(minutes <10){
                 minutesTime = "0"+minutes;
             }else{
@@ -120,8 +115,8 @@ public class WorldClockAdapter extends BaseAdapter {
 
             if (currentDay > date) {
                 holder.cityDay.setText(R.string.world_clock_Yesterday_tv);
-                int cityTimeDifference = 24-hour+currentTime;
-                holder.timeDifference.setText("," +cityTimeDifference+
+                int cityTimeDifference = 24-hour +currentTime;
+                holder.timeDifference.setText(","+cityTimeDifference+
                         context.getResources().getString(R.string.world_clock_city_time_difference));
 
             } else if (currentDay == date) {
@@ -137,7 +132,7 @@ public class WorldClockAdapter extends BaseAdapter {
                     holder.timeDifference.setText("," +cityTimeDifference+
                             context.getResources().getString(R.string.world_clock_city_time_difference));
                 }else{
-                    holder.timeDifference.setVisibility(View.GONE);
+                    holder.timeDifference.setText("");
                 }
             } else {
 

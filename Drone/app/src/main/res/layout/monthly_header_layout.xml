@@ -9,7 +9,7 @@ android:layout_marginRight="10dp"
 android:orientation="horizontal">
 
 <LinearLayout
-    style="@style/home_content_title_linnerlayout_style">
+    style="@style/home_content_title_ll_style">
 
     <TextView
         style="@style/home_content_activity_last_title_text_style"
@@ -23,7 +23,7 @@ android:orientation="horizontal">
 </LinearLayout>
 
 <LinearLayout
-    style="@style/home_content_title_linnerlayout_style">
+    style="@style/home_content_title_ll_style">
 
     <TextView
         style="@style/home_content_activity_last_title_text_style"
@@ -38,7 +38,7 @@ android:orientation="horizontal">
 </LinearLayout>
 
 <LinearLayout
-    style="@style/home_content_title_linnerlayout_style"
+    style="@style/home_content_title_ll_style"
     >
 
     <TextView

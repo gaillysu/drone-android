@@ -70,7 +70,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             if (x != 0) {
                 lp.leftMargin = dip2px(8f);
             } else {
-                pointImageView.setBackgroundResource(R.drawable.select_point);
+                pointImageView.setImageResource(R.drawable.select_point);
             }
             pointGroup.addView(pointImageView, lp);
         }
@@ -133,7 +133,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         int pointChild = pointGroup.getChildCount();
         for (int x = 0; x < pointChild; x++) {
             ImageView point = (ImageView) pointGroup.getChildAt(x);
-            point.setBackgroundResource(position % pointChild == x ? R.drawable.select_point
+            point.setImageResource(position == x ? R.drawable.select_point
                     : R.drawable.uncheck_point_shape);
         }
     }

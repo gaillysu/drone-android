@@ -60,7 +60,7 @@
         android:background="@android:color/transparent"
         android:layout_marginTop="40dp"
         android:text="@string/login"
-        android:textColor="@color/userinfo_sex_bg"/>
+        android:textColor="@color/user_info_sex_bg"/>
     <TextView
         android:id="@+id/registe_tv"
         android:layout_width="wrap_content"

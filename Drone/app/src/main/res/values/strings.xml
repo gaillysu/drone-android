@@ -48,6 +48,8 @@
     <string name="world_clock_today_tv">today</string>
     <string name="world_clock_Tomorrow_tv">Tomorrow</string>
     <string name="world_clock_city_time_difference">hours behind</string>
+    <string name="profile_activity_user_goal">GOAL</string>
+    <string name="profile_bottom_tv">GOAl NOTIFICATION </string>
     <string-array name="user_select_dec_arr">
         <item>Black Strap</item>
         <item>Tone Split</item>

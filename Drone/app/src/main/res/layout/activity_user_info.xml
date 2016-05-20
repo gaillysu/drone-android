@@ -45,7 +45,7 @@
                 android:id="@+id/user_info_sex_male_tv"
                 android:layout_width="80dp"
                 android:layout_height="40dp"
-                android:background="@color/userinfo_sex_bg"
+                android:background="@color/user_info_sex_bg"
                 android:gravity="center"
                 android:text="@string/user_sex_male"/>
         </LinearLayout>

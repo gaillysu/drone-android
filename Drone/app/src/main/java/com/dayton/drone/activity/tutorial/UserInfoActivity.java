@@ -53,7 +53,7 @@ public class UserInfoActivity extends BaseActivity {
     @OnClick(R.id.user_info_sex_female_tv)
     public void selectUserSexFemale() {
         gender = 0;
-        tv_sexFemale.setBackgroundColor(getResources().getColor(R.color.userinfo_sex_bg));
+        tv_sexFemale.setBackgroundColor(getResources().getColor(R.color.user_info_sex_bg));
         tv_sexMale.setBackgroundColor(getResources().getColor(android.R.color.transparent));
     }
 
@@ -61,7 +61,7 @@ public class UserInfoActivity extends BaseActivity {
     public void selectUserSexMale() {
         gender = 1;
         tv_sexFemale.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-        tv_sexMale.setBackgroundColor(getResources().getColor(R.color.userinfo_sex_bg));
+        tv_sexMale.setBackgroundColor(getResources().getColor(R.color.user_info_sex_bg));
     }
 
     @OnClick(R.id.user_barthday)

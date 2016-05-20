@@ -25,7 +25,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/userinfo_sex_bg</item>
+        <item name="android:textColor">@color/user_info_sex_bg</item>
     </style>
 
     <style name="home_content_activity_last_title_text_style">
@@ -43,7 +43,7 @@
         <item name="android:textColor">#3da7d1</item>
     </style>
 
-    <style name="home_content_title_linnerlayout_style">
+    <style name="home_content_title_ll_style">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
@@ -64,10 +64,29 @@
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
-    <style name="world_clock_adapter_textview_style">
+    <style name="world_clock_adapter_tv_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/choose_adapter_text_color</item>
         <item name="android:textStyle">bold</item>
+    </style>
+    <style name="profile_activity_text_style">
+
+        <item name="android:layout_marginLeft">25dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:textColor">@color/profile_text_color</item>
+        <item name="android:textSize">28sp</item>
+    </style>
+    <style name="profile_activity_image_button_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginRight">30dp</item>
+        <item name="android:src">@mipmap/pencil</item>
+        <item name="android:scaleType">fitXY</item>
+        <item name="android:background">@android:color/transparent</item>
     </style>
 </resources>

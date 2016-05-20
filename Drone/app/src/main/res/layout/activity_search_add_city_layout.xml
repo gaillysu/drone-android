@@ -7,7 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@color/userinfo_sex_bg"
+        android:background="@color/user_info_sex_bg"
         android:gravity="center_vertical"
         >
 
