@@ -3,14 +3,17 @@ package com.dayton.drone.ble.model.request.init;
 import android.content.Context;
 
 import com.dayton.drone.ble.model.request.base.RequestBase;
+import com.dayton.drone.ble.util.Constants;
 
 /**
  * Created by med on 16/4/13.
  */
 public class SetAppConfigRequest extends RequestBase{
     public final static byte HEADER = (byte)0x04;
-    public SetAppConfigRequest(Context context) {
+    final Constants.ApplicationID id;
+    public SetAppConfigRequest(Context context, Constants.ApplicationID id) {
         super(context);
+        this.id = id;
     }
     @Override
     public byte getHeader() {
@@ -18,9 +21,18 @@ public class SetAppConfigRequest extends RequestBase{
     }
     @Override
     public byte[][] getRawDataEx() {
-        return new byte[][] {
-                {(byte) 0x80,HEADER,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-                {(byte) 0x80,HEADER,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
-        };
+        if(id == Constants.ApplicationID.WorldClock)
+        {
+            return new byte[][] {
+                    {(byte) 0x80,HEADER, (byte) id.rawValue(),1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+            };
+        }
+        if(id == Constants.ApplicationID.ActivityTracking)
+        {
+            return new byte[][] {
+                    {(byte) 0x80,HEADER, (byte) id.rawValue(),1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+            };
+        }
+        return null;
     }
 }

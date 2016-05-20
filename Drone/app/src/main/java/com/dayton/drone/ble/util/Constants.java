@@ -5,6 +5,8 @@ package com.dayton.drone.ble.util;
  */
 public class Constants {
 
+    public final static int MTU = 20;
+
     public enum SystemStatus {
         LowMemory(0),
         InvalidTime(3),
@@ -36,6 +38,28 @@ public class Constants {
             this.status = status;
         }
         public  int rawValue() {return status;}
+    }
+
+    public enum SystemConfigID{
+        DNDConfig(1),
+        AirplaneMode(2),
+        Enabled(4),
+        ClockFormat(8),
+        SleepConfig(9);
+        private SystemConfigID(int id) {
+            this.id = id;
+        }
+        final private int id;
+        public  int rawValue() {return id;}
+    }
+
+    public enum ApplicationID {
+        WorldClock(1),ActivityTracking(2);
+        final int id;
+        private ApplicationID(int id) {
+            this.id = id;
+        }
+        public  int rawValue() {return id;}
     }
 
 }

@@ -24,6 +24,7 @@ import com.dayton.drone.ble.model.packet.SystemEventPacket;
 import com.dayton.drone.ble.model.packet.SystemStatusPacket;
 import com.dayton.drone.ble.model.packet.base.DronePacket;
 import com.dayton.drone.ble.model.request.battery.GetBatteryRequest;
+import com.dayton.drone.ble.model.request.clean.ForgetWatchRequest;
 import com.dayton.drone.ble.model.request.init.GetSystemStatus;
 import com.dayton.drone.ble.model.request.init.SetAppConfigRequest;
 import com.dayton.drone.ble.model.request.init.SetRTCRequest;
@@ -121,6 +122,8 @@ public class SyncControllerImpl implements  SyncController{
 
     @Override
     public void forgetDevice() {
+        //steps0:clean pair infomation on watch and drop connection
+        sendRequest(new ForgetWatchRequest(application));
         //step1:disconnect
         if(connectionController.isConnected())
         {
@@ -191,9 +194,12 @@ public class SyncControllerImpl implements  SyncController{
                     Log.i(TAG,"GetSystemStatus return status value: " + systemStatusPacket.getStatus());
                     if(systemStatusPacket.getStatus()== Constants.SystemStatus.SystemReset.rawValue())
                     {
-                        sendRequest(new SetSystemConfig(application,1,0, 0, 0));
+                        sendRequest(new SetSystemConfig(application,1,0, 0, 0, Constants.SystemConfigID.ClockFormat));
+                        sendRequest(new SetSystemConfig(application,1,0, 0, 0, Constants.SystemConfigID.Enabled));
+                        sendRequest(new SetSystemConfig(application,1,0, 0, 0, Constants.SystemConfigID.SleepConfig));
                         sendRequest(new SetRTCRequest(application));
-                        sendRequest(new SetAppConfigRequest(application));
+                        sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.WorldClock));
+                        sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.ActivityTracking));
                         sendRequest(new SetUserProfileRequest(application));
                     }
 
@@ -214,10 +220,8 @@ public class SyncControllerImpl implements  SyncController{
                 }
                 else if((byte) SetRTCRequest.HEADER == packet.getHeader())
                 {
-                    sendRequest(new SetAppConfigRequest(application));
-                }
-                else if((byte) SetAppConfigRequest.HEADER == packet.getHeader())
-                {
+                    sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.WorldClock));
+                    sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.ActivityTracking));
                     sendRequest(new SetUserProfileRequest(application));
                 }
                 else if((byte) GetActivityRequest.HEADER == packet.getHeader())

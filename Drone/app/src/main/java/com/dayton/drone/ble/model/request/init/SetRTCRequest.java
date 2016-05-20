@@ -21,8 +21,8 @@ public class SetRTCRequest extends RequestBase {
     @Override
     public byte[][] getRawDataEx() {
         Date theDay = new Date();
-        int  timezone = TimeZone.getDefault().getRawOffset()/1000/3600 * 15;
-        long timestamp = theDay.getTime()/1000 + 2*3600;
+        int  timezone = TimeZone.getDefault().getRawOffset()/1000/900;
+        long timestamp = theDay.getTime()/1000;
         return new byte[][]{
                 {
                         (byte)0x80,HEADER,
