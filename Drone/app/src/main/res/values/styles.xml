@@ -76,10 +76,10 @@
         <item name="android:layout_weight">1</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:background">@android:color/transparent</item>
-        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginRight">10dp</item>
         <item name="android:textColor">@color/profile_text_color</item>
-        <item name="android:textSize">28sp</item>
+        <item name="android:textSize">20sp</item>
     </style>
     <style name="profile_activity_image_button_style">
         <item name="android:layout_width">wrap_content</item>

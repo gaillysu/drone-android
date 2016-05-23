@@ -32,6 +32,8 @@
     <string name="home_guide_setting">WATCH\n\tSETTING</string>
     <string name="home_guide_profile">PROFILE</string>
     <string name="home_title_back_text">Back</string>
+    <string name="home_title_save_text">Save</string>
+
     <string name="fragment_home_title_calories">CALORIES</string>
     <string name="fragment_home_title_active_time">ACTIVE TIME</string>
     <string name="fragment_home_title_miles">MILES</string>
@@ -50,6 +52,15 @@
     <string name="world_clock_city_time_difference">hours behind</string>
     <string name="profile_activity_user_goal">GOAL</string>
     <string name="profile_bottom_tv">GOAl NOTIFICATION </string>
+    <string name="profile_edit_prompt">edit</string>
+    <string name="profile_user_weight_unit">Kg</string>
+    <string name="profile_user_height_unit">cm</string>
+    <string name="world_add_city_prompt">Add up to five cities</string>
+    <string name="profile_prompt_user_edit">Enter the space, the success of the editorial department</string>
+    <string name="profile_email_format_error_prompt">Mailbox format is not correct</string>
+    <string name="profile_user_height_error">illegal input</string>
+    <string name="title_save_text">Save</string>
+
     <string-array name="user_select_dec_arr">
         <item>Black Strap</item>
         <item>Tone Split</item>

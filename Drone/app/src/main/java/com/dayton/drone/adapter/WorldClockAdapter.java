@@ -114,14 +114,14 @@ public class WorldClockAdapter extends BaseAdapter {
             int currentDay = new Integer(format.format(currentDate).split(" ")[0].split("-")[2]);
 
             if (currentDay > date) {
-                holder.cityDay.setText(R.string.world_clock_Yesterday_tv);
+                holder.cityDay.setText(context.getResources().getString(R.string.world_clock_Yesterday_tv));
                 int cityTimeDifference = 24-hour +currentTime;
                 holder.timeDifference.setText(","+cityTimeDifference+
                         context.getResources().getString(R.string.world_clock_city_time_difference));
 
             } else if (currentDay == date) {
 
-                holder.cityDay.setText(R.string.world_clock_today_tv);
+                holder.cityDay.setText(context.getResources().getString(R.string.world_clock_today_tv));
 
                 if (hour > currentTime) {
                     int cityTimeDifference =hour-currentTime;

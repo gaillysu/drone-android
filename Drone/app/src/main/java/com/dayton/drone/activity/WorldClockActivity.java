@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
@@ -100,8 +101,12 @@ public class WorldClockActivity extends BaseActivity {
                String timeZoneName =data.getStringExtra("worldClock");
                 WorldClock worldClock=  new WorldClock();
                 worldClock.setTimeZoneName(timeZoneName);
-                listData.add(worldClock);
-                worldClockListView.setAdapter(worldClockAdapter);
+                if(listData.size()<5) {
+                    listData.add(worldClock);
+                    worldClockListView.setAdapter(worldClockAdapter);
+                }else{
+                    Toast.makeText(this,R.string.world_add_city_prompt,Toast.LENGTH_SHORT).show();
+                }
             }
         }
     }
