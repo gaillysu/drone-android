@@ -11,72 +11,16 @@
         android:gravity="center_vertical"
         >
 
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center_horizontal"-->
-            <!--android:layout_marginTop="20dp"-->
-            <!--android:text="@string/choose_activity_title_choose_city_tv"-->
-            <!--android:textColor="@android:color/white"-->
-            <!--android:textSize="20sp"-->
-            <!--android:textStyle="bold"/>-->
-
-        <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="0dp"-->
-            <!--android:layout_marginBottom="6dp"-->
-            <!--android:layout_marginTop="8dp"-->
-            <!--android:layout_weight="1"-->
-            <!--android:orientation="horizontal">-->
-
-            <!--<LinearLayout-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_marginLeft="10dp"-->
-                <!--android:layout_marginRight="5dp"-->
-                <!--android:layout_weight="1"-->
-                <!--android:background="@color/world_clock_bg_color"-->
-                <!--android:focusable="true"-->
-                <!--android:focusableInTouchMode="true"-->
-                <!--&gt;-->
-
-                <!--<ImageButton-->
-                    <!--android:id="@+id/choose_activity_search_ib"-->
-                    <!--android:layout_width="30dp"-->
-                    <!--android:layout_height="30dp"-->
-                    <!--android:layout_gravity="center_vertical"-->
-                    <!--android:layout_marginLeft="5dp"-->
-                    <!--android:background="@android:color/transparent"-->
-                    <!--android:src="@mipmap/search_icon"/>-->
-
-                <!--<EditText-->
-                    <!--android:id="@+id/choose_activity_search_edit"-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="30dp"-->
-                    <!--android:layout_gravity="center"-->
-                    <!--android:layout_weight="1"-->
-
-                    <!--android:background="@android:color/transparent"-->
-                    <!--/>-->
-            <!--</LinearLayout>-->
-
-            <!--<Button-->
-                <!--android:id="@+id/choose_activity_cancel_bt"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:background="@null"-->
-                <!--android:text="@string/choose_activity_title_cancel"-->
-                <!--android:textColor="@android:color/white"/>-->
-        <!--</LinearLayout>-->
         <ImageButton
-           android:id="@+id/choose_activity_cancel_bt"
+            android:id="@+id/choose_activity_cancel_bt"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:scaleType="fitXY"
-           android:layout_marginLeft="10dp"
             android:layout_centerVertical="true"
-            android:src="@mipmap/choose_city_back_icon"
-            android:background="@android:color/transparent"/>
+            android:layout_marginLeft="10dp"
+            android:background="@android:color/transparent"
+            android:scaleType="fitXY"
+            android:src="@mipmap/choose_city_back_icon"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -87,13 +31,24 @@
             android:textStyle="bold"/>
     </RelativeLayout>
 
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
 
-    <ListView
-        android:id="@+id/choose_activity_city_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@android:color/white"
-        android:background="@color/world_clock_bg_color"
-        android:scrollbars="none">
-    </ListView>
+        <ListView
+            android:id="@+id/choose_activity_city_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@color/world_clock_bg_color"
+            android:divider="@android:color/white"
+            android:scrollbars="none"
+            />
+
+        <com.dayton.drone.view.SideBar
+            android:id="@+id/choose_activity_list_index_sidebar"
+            android:layout_width="30.0dip"
+            android:layout_height="fill_parent"
+            android:layout_gravity="right|center"/>
+    </FrameLayout>
 </LinearLayout>

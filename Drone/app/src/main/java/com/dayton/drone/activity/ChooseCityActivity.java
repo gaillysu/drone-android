@@ -9,10 +9,16 @@ import android.widget.ListView;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
-import com.dayton.drone.adapter.ChooseCityAdapter;
+import com.dayton.drone.adapter.SortAdapter;
 import com.dayton.drone.database.entry.WorldClockDatabaseHelper;
+import com.dayton.drone.model.SortModel;
 import com.dayton.drone.model.WorldClock;
+import com.dayton.drone.view.CharacterParser;
+import com.dayton.drone.view.PinyinComparator;
+import com.dayton.drone.view.SideBar;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.Bind;
@@ -26,23 +32,26 @@ public class ChooseCityActivity extends BaseActivity {
 
     @Bind(R.id.choose_activity_city_list)
     ListView cityListView;
+    @Bind(R.id.choose_activity_list_index_sidebar)
+    SideBar sideBar;
     private boolean isChooseCity = false;
     private List<WorldClock> worldClockDataList;
     private WorldClockDatabaseHelper worldClockDatabase;
-    private ChooseCityAdapter cityAdapter;
-
-
-
+//    private ChooseCityAdapter cityAdapter;
+    private SortAdapter adapter;
+    private CharacterParser characterParser;
+    private List<SortModel> SourceDateList;
+    private PinyinComparator pinyinComparator;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_add_city_layout);
         ButterKnife.bind(this);
+
         worldClockDatabase = getModel().getWorldClockDatabaseHelper();
         worldClockDataList = worldClockDatabase.getAll();
-        cityAdapter = new ChooseCityAdapter(this , worldClockDataList);
-        cityListView.setAdapter(cityAdapter);
-
+        pinyinComparator = new PinyinComparator();
+        characterParser = CharacterParser.getInstance();
         cityListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position , long Id) {
@@ -56,6 +65,22 @@ public class ChooseCityActivity extends BaseActivity {
             }
         });
 
+        sideBar.setOnTouchingLetterChangedListener(new SideBar.OnTouchingLetterChangedListener() {
+
+            @Override
+            public void onTouchingLetterChanged(String s) {
+                int position = adapter.getPositionForSection(s.charAt(0));
+                if(position != -1){
+                    cityListView.setSelection(position);
+                }
+
+            }
+        });
+
+        SourceDateList = filledData(worldClockDataList);
+        Collections.sort(SourceDateList, pinyinComparator);
+        adapter = new SortAdapter(this, SourceDateList);
+        cityListView.setAdapter(adapter);
     }
 
     @OnClick(R.id.choose_activity_cancel_bt)
@@ -79,4 +104,26 @@ public class ChooseCityActivity extends BaseActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
+    private List<SortModel> filledData(List<WorldClock> date){
+        List<SortModel> mSortList = new ArrayList<SortModel>();
+
+        for(int i=0; i<date.size(); i++){
+            SortModel sortModel = new SortModel();
+            sortModel.setName(date.get(i).getTimeZoneName());
+            String pinyin = characterParser.getSelling(date.get(i).getTimeZoneName());
+            String sortString = pinyin.substring(0, 1).toUpperCase();
+
+            if(sortString.matches("[A-Z]")){
+                sortModel.setSortLetters(sortString.toUpperCase());
+            }else{
+                sortModel.setSortLetters("#");
+            }
+
+            mSortList.add(sortModel);
+        }
+        return mSortList;
+
+    }
+
 }
