@@ -29,6 +29,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
      * v1: create
      * v2: add "password" field in User table
      * v3: add "watches" table
+     * v4: modify world clock table struct
      */
     private static final int DATABASE_VERSION = 3;
 

@@ -18,6 +18,7 @@ import android.util.Log;
 
 import com.dayton.drone.application.ApplicationModel;
 import com.dayton.drone.ble.datasource.GattAttributesDataSourceImpl;
+import com.dayton.drone.ble.model.TimeZoneModel;
 import com.dayton.drone.ble.model.packet.ActivityPacket;
 import com.dayton.drone.ble.model.packet.GetStepsGoalPacket;
 import com.dayton.drone.ble.model.packet.SystemEventPacket;
@@ -33,6 +34,7 @@ import com.dayton.drone.ble.model.request.setting.SetGoalRequest;
 import com.dayton.drone.ble.model.request.setting.SetUserProfileRequest;
 import com.dayton.drone.ble.model.request.sync.GetActivityRequest;
 import com.dayton.drone.ble.model.request.sync.GetStepsGoalRequest;
+import com.dayton.drone.ble.model.request.worldclock.SetWorldClockRequest;
 import com.dayton.drone.ble.util.Constants;
 import com.dayton.drone.event.BLEPairStatusChangedEvent;
 import com.dayton.drone.event.BatteryStatusChangedEvent;
@@ -40,7 +42,9 @@ import com.dayton.drone.event.BigSyncEvent;
 import com.dayton.drone.event.GoalCompletedEvent;
 import com.dayton.drone.event.LittleSyncEvent;
 import com.dayton.drone.event.LowMemoryEvent;
+import com.dayton.drone.event.WorldClockChangedEvent;
 import com.dayton.drone.model.Steps;
+import com.dayton.drone.model.WorldClock;
 
 import net.medcorp.library.ble.controller.ConnectionController;
 import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
@@ -55,6 +59,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -316,6 +321,18 @@ public class SyncControllerImpl implements  SyncController{
                 }
             },2000);
         }
+    }
+
+    @Subscribe
+    public void onEvent(WorldClockChangedEvent worldClockChangedEvent) {
+        List<TimeZoneModel> timeZoneModelList = new ArrayList<>();
+        for(WorldClock worldClock:worldClockChangedEvent.getWorldClockList())
+        {
+            float utc_offset = worldClock.getTimeZoneOffset();
+            String utc_name = worldClock.getTimeZoneName();
+            timeZoneModelList.add(new TimeZoneModel(utc_offset,utc_name));
+        }
+        sendRequest(new SetWorldClockRequest(application,timeZoneModelList));
     }
 
     //local service

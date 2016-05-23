@@ -7,9 +7,9 @@ import java.util.List;
 /**
  * Created by med on 16/5/20.
  */
-public class SplitPackageConverter {
+public class SplitPacketConverter {
 
-    public static byte[][] rawData2Packages(byte[] rawData,int MTU)
+    public static byte[][] rawData2Packets(byte[] rawData, int MTU)
     {
         if(rawData.length>=MTU)
         {

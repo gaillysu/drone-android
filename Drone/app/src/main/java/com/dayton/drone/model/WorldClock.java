@@ -8,6 +8,7 @@ import java.io.Serializable;
  * Created by med on 16/5/9.
  */
 public class WorldClock extends WorldClockBean implements Serializable{
+    /**
     private String city;
     private String cityLocation;
     private String modernDate;
@@ -64,4 +65,5 @@ public class WorldClock extends WorldClockBean implements Serializable{
                 ", cityCurrentTime='" + cityCurrentTime + '\'' +
                 '}';
     }
+    */
 }
