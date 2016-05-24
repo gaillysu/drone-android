@@ -328,8 +328,9 @@ public class SyncControllerImpl implements  SyncController{
         List<TimeZoneModel> timeZoneModelList = new ArrayList<>();
         for(WorldClock worldClock:worldClockChangedEvent.getWorldClockList())
         {
-            float utc_offset = worldClock.getTimeZoneOffset();
-            String utc_name = worldClock.getTimeZoneName();
+            float utc_offset = TimeZone.getTimeZone(worldClock.getTimeZoneName()).getRawOffset()/1000f/3600f;
+            String utc_name = worldClock.getTimeZoneTitle().split(",")[0];
+            Log.i("gailly",utc_name + "," + utc_offset);
             timeZoneModelList.add(new TimeZoneModel(utc_offset,utc_name));
         }
         sendRequest(new SetWorldClockRequest(application,timeZoneModelList));

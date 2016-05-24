@@ -31,7 +31,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
      * v3: add "watches" table
      * v4: modify world clock table struct
      */
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     private Dao<UserBean, Integer> userBean = null;
     private Dao<StepsBean,Integer> stepsBean = null;
@@ -77,7 +77,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.dropTable(connectionSource, StepsBean.class, true);
             TableUtils.dropTable(connectionSource, SleepBean.class, true);
             TableUtils.dropTable(connectionSource, NotificationBean.class, true);
-            TableUtils.dropTable(connectionSource, WorldClock.class, true);
+            TableUtils.dropTable(connectionSource, WorldClockBean.class, true);
             TableUtils.dropTable(connectionSource, WatchesBean.class, true);
             onCreate(sqLiteDatabase, connectionSource);
         } catch (SQLException e) {

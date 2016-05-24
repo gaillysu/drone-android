@@ -13,6 +13,9 @@ public class WorldClockBean {
     @DatabaseField(generatedId = true)
     private int id = 1;
 
+    /**
+     * this is the unique ID defined by UTC website,@refer to Java function 'TimeZone.getAvailableIDs()'
+     */
     public  static final String fTimeZoneName = "timeZoneName";
     @DatabaseField
     private String timeZoneName;
@@ -25,11 +28,12 @@ public class WorldClockBean {
     private String timeZoneCategory;
 
     /**
-     * from -12.0 to +12.0
+     * this is used for showing city/zone name, split with ",", current watch only supports english string
      */
-    public  static final String fTimeZoneOffset = "timeZoneOffset";
+    public  static final String fTimeZoneTitle = "timeZoneTitle";
     @DatabaseField
-    private float timeZoneOffset;
+    private String timeZoneTitle;
+
 
     /**
      * if "1", show it in the world clock list
@@ -62,12 +66,12 @@ public class WorldClockBean {
         this.timeZoneCategory = timeZoneCategory;
     }
 
-    public float getTimeZoneOffset() {
-        return timeZoneOffset;
+    public String getTimeZoneTitle() {
+        return timeZoneTitle;
     }
 
-    public void setTimeZoneOffset(float timeZoneOffset) {
-        this.timeZoneOffset = timeZoneOffset;
+    public void setTimeZoneTitle(String timeZoneTitle) {
+        this.timeZoneTitle = timeZoneTitle;
     }
 
     public int getSelected() {
