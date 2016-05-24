@@ -51,22 +51,23 @@ public class WorldClockDatabaseHelper {
                         JsonReader reader = new JsonReader(new InputStreamReader(is));
                         try {
                             String groupName;
-                            String timeZoneCityName;
-                            String timeZoneOffset;
+                            String timeZoneName;
+                            String timeZoneTitle;
                             reader.beginObject();
                             while(reader.hasNext()) {
                                 groupName = reader.nextName();
                                 reader.beginObject();
                                 while(reader.hasNext())
                                 {
-                                    timeZoneCityName = reader.nextName();
-                                    timeZoneOffset = reader.nextString();
+                                    timeZoneTitle = reader.nextName();
+                                    timeZoneName = reader.nextString();
                                     WorldClock worldClock = new WorldClock();
                                     worldClock.setTimeZoneCategory(groupName);
-                                    worldClock.setTimeZoneName(timeZoneCityName);
-                                    worldClock.setTimeZoneOffset(Float.parseFloat(timeZoneOffset));
+                                    worldClock.setTimeZoneName(timeZoneName);
+                                    worldClock.setTimeZoneTitle(timeZoneTitle);
+                                    worldClock.setSelected(0);
                                     add(worldClock);
-                                    Log.i("Gailly", groupName +": " + timeZoneCityName + ": " + timeZoneOffset);
+                                    Log.i("Gailly", groupName +": " + timeZoneName + ": " + timeZoneTitle);
                                 }
                                 reader.endObject();
                             }
@@ -171,7 +172,7 @@ public class WorldClockDatabaseHelper {
         worldClock.setTimeZoneName(worldClockBean.getTimeZoneName());
         worldClock.setSelected(worldClockBean.getSelected());
         worldClock.setTimeZoneCategory(worldClockBean.getTimeZoneCategory());
-        worldClock.setTimeZoneOffset(worldClockBean.getTimeZoneOffset());
+        worldClock.setTimeZoneTitle(worldClockBean.getTimeZoneTitle());
         return worldClock;
     }
 
@@ -180,7 +181,7 @@ public class WorldClockDatabaseHelper {
         worldClockBean.setTimeZoneName(worldClock.getTimeZoneName());
         worldClockBean.setSelected(worldClock.getSelected());
         worldClockBean.setTimeZoneCategory(worldClock.getTimeZoneCategory());
-        worldClockBean.setTimeZoneOffset(worldClock.getTimeZoneOffset());
+        worldClockBean.setTimeZoneTitle(worldClock.getTimeZoneTitle());
         return worldClockBean;
     }
 

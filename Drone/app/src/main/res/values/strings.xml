@@ -49,8 +49,9 @@
     <string name="world_clock_Yesterday_tv">yesterday</string>
     <string name="world_clock_today_tv">today</string>
     <string name="world_clock_Tomorrow_tv">Tomorrow</string>
-    <string name="world_clock_city_time_difference">hours behind</string>
-    <string name="profile_activity_user_goal">Goal</string>
+    <string name="world_clock_city_time_difference_behind">hours behind</string>
+    <string name="world_clock_city_time_difference_ahead">hours ahead</string>
+    <string name="profile_activity_user_goal">GOAL</string>
     <string name="profile_bottom_tv">GOAl NOTIFICATION </string>
     <string name="profile_edit_prompt">edit</string>
     <string name="profile_user_weight_unit">Kg</string>

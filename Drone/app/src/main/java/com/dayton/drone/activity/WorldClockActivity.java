@@ -3,6 +3,8 @@ package com.dayton.drone.activity;
 import android.content.Intent;
 import android.hardware.camera2.TotalCaptureResult;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -11,10 +13,12 @@ import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.adapter.WorldClockAdapter;
 import com.dayton.drone.database.entry.WorldClockDatabaseHelper;
+import com.dayton.drone.event.TimerEvent;
 import com.dayton.drone.event.WorldClockChangedEvent;
 import com.dayton.drone.model.WorldClock;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -51,6 +55,27 @@ public class WorldClockActivity extends BaseActivity {
         initData();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+    @Subscribe
+    public void onEvent(final TimerEvent event) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                worldClockAdapter.notifyDataSetChanged();
+            }
+        });
+    }
 
     public void initData() {
         Date date = new Date();

@@ -105,13 +105,13 @@ public class ChooseCityActivity extends BaseActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-    private List<SortModel> filledData(List<WorldClock> date){
+    private List<SortModel> filledData(List<WorldClock> worldClockList){
         List<SortModel> mSortList = new ArrayList<SortModel>();
 
-        for(int i=0; i<date.size(); i++){
+        for(int i=0; i<worldClockList.size(); i++){
             SortModel sortModel = new SortModel();
-            sortModel.setName(date.get(i).getTimeZoneName());
-            String pinyin = characterParser.getSelling(date.get(i).getTimeZoneName());
+            sortModel.setName(worldClockList.get(i).getTimeZoneTitle().split(",")[0]);
+            String pinyin = worldClockList.get(i).getTimeZoneCategory();
             String sortString = pinyin.substring(0, 1).toUpperCase();
 
             if(sortString.matches("[A-Z]")){

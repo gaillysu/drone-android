@@ -68,16 +68,14 @@ public class WorldClockAdapter extends BaseAdapter {
         if (bean != null) {
             String name = bean.getTimeZoneName();
 
-            TimeZone timeZone = TimeZone.getDefault();
-            String zoneId = timeZone.getID();
-
+            TimeZone timeZone = TimeZone.getTimeZone(name);
             Calendar calendar = Calendar.getInstance();
-            Calendar LATime = new GregorianCalendar(TimeZone.getTimeZone(name));
+            Calendar LATime = new GregorianCalendar(timeZone);
             LATime.setTimeInMillis(calendar.getTimeInMillis());
+
             int date = LATime.get(Calendar.DATE);
             int hour= LATime.get(Calendar.HOUR_OF_DAY);
             int minutes = LATime.get(Calendar.MINUTE);
-
 
             if (name != null&& name.contains("/")) {
                 String[] cityDec = name.split("/");
@@ -117,7 +115,7 @@ public class WorldClockAdapter extends BaseAdapter {
                 holder.cityDay.setText(context.getResources().getString(R.string.world_clock_Yesterday_tv));
                 int cityTimeDifference = 24-hour +currentTime;
                 holder.timeDifference.setText(","+cityTimeDifference+
-                        context.getResources().getString(R.string.world_clock_city_time_difference));
+                        context.getResources().getString(R.string.world_clock_city_time_difference_behind));
 
             } else if (currentDay == date) {
 
@@ -126,11 +124,11 @@ public class WorldClockAdapter extends BaseAdapter {
                 if (hour > currentTime) {
                     int cityTimeDifference =hour-currentTime;
                     holder.timeDifference.setText("," + cityTimeDifference+
-                            context.getResources().getString(R.string.world_clock_city_time_difference));
+                            context.getResources().getString(R.string.world_clock_city_time_difference_ahead));
                 } else if(hour<currentTime){
                     int cityTimeDifference =currentTime -hour;
                     holder.timeDifference.setText("," +cityTimeDifference+
-                            context.getResources().getString(R.string.world_clock_city_time_difference));
+                            context.getResources().getString(R.string.world_clock_city_time_difference_behind));
                 }else{
                     holder.timeDifference.setText("");
                 }
@@ -139,7 +137,7 @@ public class WorldClockAdapter extends BaseAdapter {
                 holder.cityDay.setText(context.getResources().getString(R.string.world_clock_Tomorrow_tv));
 
                 holder.timeDifference.setText("," + (24 - currentTime) +
-                        context.getResources().getString(R.string.world_clock_city_time_difference));
+                        context.getResources().getString(R.string.world_clock_city_time_difference_ahead));
             }
         }
 

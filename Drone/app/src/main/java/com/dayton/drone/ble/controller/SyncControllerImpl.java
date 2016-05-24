@@ -42,6 +42,7 @@ import com.dayton.drone.event.BigSyncEvent;
 import com.dayton.drone.event.GoalCompletedEvent;
 import com.dayton.drone.event.LittleSyncEvent;
 import com.dayton.drone.event.LowMemoryEvent;
+import com.dayton.drone.event.TimerEvent;
 import com.dayton.drone.event.WorldClockChangedEvent;
 import com.dayton.drone.model.Steps;
 import com.dayton.drone.model.WorldClock;
@@ -58,10 +59,13 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Date;
 
 /**
  * Created by med on 16/4/12.
@@ -83,7 +87,7 @@ public class SyncControllerImpl implements  SyncController{
             public void run() {
                 //TODO : connected with watch is idle status, enable this little sync request.
                 sendRequest(new GetStepsGoalRequest(application));
-                //EventBus.getDefault().post(new TimerEvent());
+                EventBus.getDefault().post(new TimerEvent());
                 startAutoSyncTimer();
             }
         },10000);
@@ -177,7 +181,7 @@ public class SyncControllerImpl implements  SyncController{
             if(droneData.getRawData().length==1 && (byte)0xFF == droneData.getRawData()[0])
             {
                 //discard dummy packet "FF"
-                Log.e("Nevo Error","dummy Packets Received!");
+                Log.e("Drone Error","dummy Packets Received!");
                 return;
             }
             packetsBuffer.add(droneData);
@@ -328,8 +332,12 @@ public class SyncControllerImpl implements  SyncController{
         List<TimeZoneModel> timeZoneModelList = new ArrayList<>();
         for(WorldClock worldClock:worldClockChangedEvent.getWorldClockList())
         {
-            float utc_offset = worldClock.getTimeZoneOffset();
-            String utc_name = worldClock.getTimeZoneName();
+            TimeZone timeZone = TimeZone.getTimeZone(worldClock.getTimeZoneName());
+            Calendar LATime = new GregorianCalendar(timeZone);
+            LATime.setTimeInMillis(new Date().getTime());
+            float utc_offset = timeZone.getOffset(LATime.getTimeInMillis())/1000f/3600f;
+            String utc_name = worldClock.getTimeZoneTitle().split(",")[0];
+            Log.i("gailly",utc_name + ", " + utc_offset+ ", DaylightTime: " + timeZone.useDaylightTime());
             timeZoneModelList.add(new TimeZoneModel(utc_offset,utc_name));
         }
         sendRequest(new SetWorldClockRequest(application,timeZoneModelList));
