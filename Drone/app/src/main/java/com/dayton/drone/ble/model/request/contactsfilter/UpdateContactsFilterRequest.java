@@ -4,10 +4,7 @@ import android.content.Context;
 
 import com.dayton.drone.ble.model.request.base.RequestBase;
 import com.dayton.drone.ble.util.Constants;
-import com.dayton.drone.ble.util.SplitPackageConverter;
-
-import java.util.Arrays;
-import java.util.List;
+import com.dayton.drone.ble.util.SplitPacketConverter;
 
 /**
  * Created by med on 16/4/13.
@@ -40,7 +37,7 @@ public class UpdateContactsFilterRequest extends RequestBase{
         if(operationMode==3){
             System.arraycopy(contactID.getBytes(),0,rawData,3+contact.length(),contactID.length());
         }
-        return SplitPackageConverter.rawData2Packages(rawData,Constants.MTU);
+        return SplitPacketConverter.rawData2Packets(rawData,Constants.MTU);
     }
 
     @Override

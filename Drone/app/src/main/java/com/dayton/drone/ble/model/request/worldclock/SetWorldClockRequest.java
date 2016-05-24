@@ -5,11 +5,9 @@ import android.content.Context;
 import com.dayton.drone.ble.model.TimeZoneModel;
 import com.dayton.drone.ble.model.request.base.RequestBase;
 import com.dayton.drone.ble.util.Constants;
-import com.dayton.drone.ble.util.SplitPackageConverter;
-import com.dayton.drone.model.Contact;
+import com.dayton.drone.ble.util.SplitPacketConverter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -33,7 +31,7 @@ public class SetWorldClockRequest extends RequestBase{
         data.add((byte) timeZoneCount);
         for(int i=0;i<timeZoneCount;i++)
         {
-            data.add((byte)(timeZoneList.get(i).getTimeZone()*15));
+            data.add((byte)(timeZoneList.get(i).getTimeZone()*4));
             data.add((byte) timeZoneList.get(i).getTimeZoneName().length());
             for(byte b:timeZoneList.get(i).getTimeZoneName().getBytes())
             {
@@ -44,7 +42,7 @@ public class SetWorldClockRequest extends RequestBase{
         for(int i=0;i<data.size();i++){
             rawData[i] = data.get(i).byteValue();
         }
-        return SplitPackageConverter.rawData2Packages(rawData,Constants.MTU);
+        return SplitPacketConverter.rawData2Packets(rawData,Constants.MTU);
     }
 
     @Override

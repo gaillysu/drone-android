@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.dayton.drone.ble.model.request.base.RequestBase;
 import com.dayton.drone.ble.util.Constants;
-import com.dayton.drone.ble.util.SplitPackageConverter;
+import com.dayton.drone.ble.util.SplitPacketConverter;
 
 /**
  * Created by med on 16/4/22.
@@ -26,7 +26,7 @@ public class UpdateNotificationFilterRequest extends RequestBase {
         rawData[1] = operationMode;
         rawData[2] = (byte)appPackage.length();
         System.arraycopy(appPackage.getBytes(),0,rawData,3,appPackage.length());
-        return SplitPackageConverter.rawData2Packages(rawData, Constants.MTU);
+        return SplitPacketConverter.rawData2Packets(rawData, Constants.MTU);
     }
 
     @Override

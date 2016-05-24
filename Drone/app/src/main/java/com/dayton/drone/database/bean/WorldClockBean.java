@@ -18,6 +18,20 @@ public class WorldClockBean {
     private String timeZoneName;
 
     /**
+     * from "A"  to "Z"
+     */
+    public  static final String fTimeZoneCategory = "timeZoneCategory";
+    @DatabaseField
+    private String timeZoneCategory;
+
+    /**
+     * from -12.0 to +12.0
+     */
+    public  static final String fTimeZoneOffset = "timeZoneOffset";
+    @DatabaseField
+    private float timeZoneOffset;
+
+    /**
      * if "1", show it in the world clock list
      */
     public  static final String fSelected = "selected";
@@ -38,6 +52,22 @@ public class WorldClockBean {
 
     public void setTimeZoneName(String timeZoneName) {
         this.timeZoneName = timeZoneName;
+    }
+
+    public String getTimeZoneCategory() {
+        return timeZoneCategory;
+    }
+
+    public void setTimeZoneCategory(String timeZoneCategory) {
+        this.timeZoneCategory = timeZoneCategory;
+    }
+
+    public float getTimeZoneOffset() {
+        return timeZoneOffset;
+    }
+
+    public void setTimeZoneOffset(float timeZoneOffset) {
+        this.timeZoneOffset = timeZoneOffset;
     }
 
     public int getSelected() {

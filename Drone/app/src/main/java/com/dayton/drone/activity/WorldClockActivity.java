@@ -1,6 +1,7 @@
 package com.dayton.drone.activity;
 
 import android.content.Intent;
+import android.hardware.camera2.TotalCaptureResult;
 import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -10,7 +11,10 @@ import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.adapter.WorldClockAdapter;
 import com.dayton.drone.database.entry.WorldClockDatabaseHelper;
+import com.dayton.drone.event.WorldClockChangedEvent;
 import com.dayton.drone.model.WorldClock;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -61,8 +65,12 @@ public class WorldClockActivity extends BaseActivity {
         worldClockAdapter.onDeleteItemListener(new WorldClockAdapter.DeleteItemInterface() {
             @Override
             public void deleteItem(int position) {
-                listData.remove(position);
-                worldClockAdapter.notifyDataSetChanged();
+                if(worldClockDatabase.update(listData.get(position),false))
+                {
+                    listData.remove(position);
+                    worldClockAdapter.notifyDataSetChanged();
+                    EventBus.getDefault().post(new WorldClockChangedEvent(worldClockDatabase.getSelected()));
+                }
             }
         });
 
@@ -99,13 +107,23 @@ public class WorldClockActivity extends BaseActivity {
             boolean flag = data.getBooleanExtra("isChooseFlag", true);
             if (flag == true) {
                String timeZoneName =data.getStringExtra("worldClock");
+                if(worldClockDatabase.getSelected().size()==5)
+                {
+                    Toast.makeText(WorldClockActivity.this,"Max 5 clock limited", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 WorldClock worldClock=  new WorldClock();
                 worldClock.setTimeZoneName(timeZoneName);
-                if(listData.size()<5) {
+
+                if(worldClockDatabase.update(worldClock,true))
+                {
                     listData.add(worldClock);
-                    worldClockListView.setAdapter(worldClockAdapter);
-                }else{
-                    Toast.makeText(this,R.string.world_add_city_prompt,Toast.LENGTH_SHORT).show();
+                    worldClockAdapter.notifyDataSetChanged();
+                    EventBus.getDefault().post(new WorldClockChangedEvent(worldClockDatabase.getSelected()));
+                }
+                else
+                {
+                    Toast.makeText(WorldClockActivity.this,"Failed,Clock existed", Toast.LENGTH_LONG).show();
                 }
             }
         }
