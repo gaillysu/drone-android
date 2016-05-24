@@ -73,19 +73,19 @@
         <item name="android:textStyle">bold</item>
     </style>
     <style name="profile_activity_text_style">
-
         <item name="android:layout_marginLeft">25dp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:background">@android:color/transparent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginRight">10dp</item>
-        <item name="android:textColor">@color/profile_text_color</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/home_list_adapter_item_tv_color</item>
+        <item name="android:textSize">24sp</item>
     </style>
     <style name="profile_activity_image_button_style">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">24dp</item>
         <item name="android:layout_marginRight">30dp</item>
         <item name="android:src">@mipmap/pencil</item>
         <item name="android:scaleType">fitXY</item>

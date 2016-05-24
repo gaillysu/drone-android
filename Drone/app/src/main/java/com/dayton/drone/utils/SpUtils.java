@@ -21,4 +21,16 @@ public class SpUtils {
                 (CacheConstants.SP_Name,Context.MODE_PRIVATE);
         return sharedPreferences.getBoolean(name,defaultValue);
     }
+
+    public static void putIntMethod(Context context,String goal,int values){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CacheConstants.SP_Name,Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor =  sharedPreferences.edit();
+        editor.putInt(goal,values);
+        editor.commit();
+    }
+
+    public static int getIntMethod(Context context,String name, int defaultValues){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CacheConstants.SP_Name,Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(name,defaultValues);
+    }
 }

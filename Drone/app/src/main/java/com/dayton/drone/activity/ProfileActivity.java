@@ -1,5 +1,7 @@
 package com.dayton.drone.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -12,6 +14,8 @@ import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.database.entry.UserDatabaseHelper;
 import com.dayton.drone.model.User;
+import com.dayton.drone.utils.CacheConstants;
+import com.dayton.drone.utils.SpUtils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -42,9 +46,10 @@ public class ProfileActivity extends BaseActivity {
     @Bind(R.id.home_title_right_save_bt)
     Button saveButton;
     @Bind(R.id.content_title_back_bt)
-    Button canael;
-
-    private User user;
+    Button cancel;
+    @Bind(R.id.profile_activity_log_out_bt)
+    Button logOut;
+    private int userStepGoal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,52 +57,55 @@ public class ProfileActivity extends BaseActivity {
         setContentView(R.layout.activity_profile_layout);
         ButterKnife.bind(this);
         saveButton.setVisibility(View.VISIBLE);
-        canael.setText(getString(R.string.home_title_back_text));
-        user = getModel().getUser();
+        userStepGoal = SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000);
+        cancel.setText(getString(R.string.home_title_back_text));
+        stepGoal.setText(userStepGoal + "");
         titleText.setText(getString(R.string.home_guide_profile));
-        mUser =  getModel().getUser();
-        accountName.setText(mUser.getLastName() != null? mUser.getLastName():getResources().getString(R.string.profile_edit_prompt));
-        userFirstName.setText(mUser.getFirstName()!=null?mUser.getFirstName():getResources().getString(R.string.profile_edit_prompt));
-        emailAccount.setText(mUser.getUserEmail() !=null?mUser.getUserEmail():getResources().getString(R.string.profile_edit_prompt));
+        mUser = getModel().getUser();
+        accountName.setText(mUser.getLastName() != null ? mUser.getLastName() : getResources().getString(R.string.profile_edit_prompt));
+        userFirstName.setText(mUser.getFirstName() != null ? mUser.getFirstName() : getResources().getString(R.string.profile_edit_prompt));
+        emailAccount.setText(mUser.getUserEmail() != null ? mUser.getUserEmail() : getResources().getString(R.string.profile_edit_prompt));
+
         int userHeightValue = mUser.getHeight();
-        if(userHeightValue>50){
-            userHeight.setText(userHeightValue+getResources().getString(R.string.profile_user_height_unit));
-        }else{
+        if (userHeightValue > 50&&userHeightValue<300) {
+            userHeight.setText(userHeightValue + getResources().getString(R.string.profile_user_height_unit));
+        } else {
             userHeight.setText(getResources().getString(R.string.profile_edit_prompt));
         }
         double userWeightValue = mUser.getWeight();
-        if(userHeightValue>15){
-            userWeight.setText(userWeightValue+getResources().getString(R.string.profile_user_weight_unit));
-        }else{
+        if (userWeightValue > 15 &&userWeightValue <500) {
+            userWeight.setText(userWeightValue + getResources().getString(R.string.profile_user_weight_unit));
+        } else {
             userWeight.setText(getResources().getString(R.string.profile_edit_prompt));
         }
     }
 
-    @OnClick(R.id.profile_activity_edit_user_name_ib)
-    public void editUserName(){
-
-    }
-
     @OnClick(R.id.content_title_back_bt)
-    public void back(){
+    public void back() {
         finish();
     }
 
     @OnClick(R.id.profile_activity_edit_user_name_ib)
-    public void editUserLastNameOnClick(){
+    public void editUserLastNameOnClick() {
         accountName.requestFocus();
         accountName.setText("");
         accountName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                if(!b){
+                if (!b) {
                     String lastName = accountName.getText().toString();
-                    if(!TextUtils.isEmpty(lastName)){
-                        user.setLastName(lastName);
+                    if (!TextUtils.isEmpty(lastName)) {
+
+                        mUser.setLastName(lastName);
                         accountName.setText(lastName);
-                    }else{
-                        accountName.setText(getResources().getString(R.string.profile_edit_prompt));
-                        Toast.makeText(ProfileActivity.this,R.string.profile_prompt_user_edit,Toast.LENGTH_SHORT).show();
+                    } else {
+                        if (mUser.getLastName() == null) {
+                            accountName.setText(getResources().getString(R.string.profile_edit_prompt));
+                            Toast.makeText(ProfileActivity.this, R.string.profile_prompt_user_edit, Toast.LENGTH_SHORT).show();
+                        } else {
+                            accountName.setText(mUser.getLastName());
+                        }
+
                     }
                 }
             }
@@ -105,21 +113,24 @@ public class ProfileActivity extends BaseActivity {
     }
 
     @OnClick(R.id.profile_activity_edit_fist_name_ib)
-    public void editUserFirstName(){
+    public void editUserFirstName() {
         userFirstName.requestFocus();
         userFirstName.setText("");
-        userFirstName.isFocusable();
         userFirstName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onFocusChange(View view, boolean b) {
-                if(!b){
-                    String firstName =userFirstName.getText().toString();
-                    if(!TextUtils.isEmpty(firstName)){
-                        user.setFirstName(firstName);
+            public void onFocusChange(View view, boolean isFocus) {
+                if (!isFocus) {
+                    String firstName = userFirstName.getText().toString();
+                    if (!TextUtils.isEmpty(firstName)) {
+                        mUser.setFirstName(firstName);
                         userFirstName.setText(firstName);
-                    }else{
-                        userFirstName.setText(R.string.profile_edit_prompt);
-                        Toast.makeText(ProfileActivity.this,R.string.profile_prompt_user_edit,Toast.LENGTH_SHORT).show();
+                    } else {
+                        if (mUser.getFirstName() == null) {
+                            userFirstName.setText(R.string.profile_edit_prompt);
+                            Toast.makeText(ProfileActivity.this, R.string.profile_prompt_user_edit, Toast.LENGTH_SHORT).show();
+                        } else {
+                            userFirstName.setText(mUser.getFirstName());
+                        }
                     }
                 }
             }
@@ -127,27 +138,30 @@ public class ProfileActivity extends BaseActivity {
     }
 
     @OnClick(R.id.profile_activity_edit_email_ib)
-    public void editUserEmailClick(){
+    public void editUserEmailClick() {
         emailAccount.requestFocus();
         emailAccount.setText("");
         emailAccount.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                if(!b){
+                if (!b) {
                     String email = emailAccount.getText().toString();
-                    if(TextUtils.isEmpty(email)){
-                      boolean flag = checkEmail(email);
-                        if(flag){
-                            user.setUserEmail(email);
+                    if (!TextUtils.isEmpty(email)) {
+                        boolean flag = checkEmail(email);
+                        if (!flag) {
+                            mUser.setUserEmail(email);
                             emailAccount.setText(email);
-                        }else{
-                            emailAccount.setText(user.getUserEmail());
-                            Toast.makeText(ProfileActivity.this,
-                                    getString(R.string.profile_email_format_error_prompt),Toast.LENGTH_SHORT).show();
-
+                        } else {
+                            if (mUser.getUserEmail() == null) {
+                                emailAccount.setText(mUser.getUserEmail());
+                                Toast.makeText(ProfileActivity.this,
+                                        getString(R.string.profile_email_format_error_prompt), Toast.LENGTH_SHORT).show();
+                            } else {
+                                emailAccount.setText(mUser.getUserEmail());
+                            }
                         }
-                    }else{
-                        emailAccount.setText(user.getUserEmail());
+                    } else {
+                        emailAccount.setText(mUser.getUserEmail());
                     }
                 }
             }
@@ -155,25 +169,31 @@ public class ProfileActivity extends BaseActivity {
     }
 
     @OnClick(R.id.profile_activity_edit_user_height)
-    public void editUserHright(){
+    public void editUserHeight() {
         userHeight.requestFocus();
         userHeight.setText("");
         userHeight.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                if(!b){
+                if (!b) {
                     String height = userHeight.getText().toString();
-                    if(!TextUtils.isEmpty(height)){
-                        int userH = new Integer(height).intValue();
-                        if(userH<300&&userH>50){
-                            user.setHeight(userH);
-                            userHeight.setText(userH+getResources().getString(R.string.profile_user_height_unit));
+                    if (!TextUtils.isEmpty(height)) {
+                        int userH = 0;
+                        if(height.contains(getString(R.string.profile_user_height_unit))){
+                         userH = new Integer(height.substring(0,height.length()-2)).intValue();
                         }else{
-                            userHeight.setText(user.getHeight()+getResources().getString(R.string.profile_user_height_unit));
-                            Toast.makeText(ProfileActivity.this,getString(R.string.profile_user_height_error),Toast.LENGTH_SHORT).show();
+                            userH = new Integer(height).intValue();
                         }
-                    }else{
-                        userHeight.setText(user.getHeight()+getResources().getString(R.string.profile_user_height_unit));
+                        if (userH < 300 && userH > 50) {
+                            mUser.setHeight(userH);
+                            userHeight.setText(userH + getResources().getString(R.string.profile_user_height_unit));
+                        } else {
+                            userHeight.setText(mUser.getHeight() + getResources().getString(R.string.profile_user_height_unit));
+                            Toast.makeText(ProfileActivity.this, getString(R.string.profile_user_height_error), Toast.LENGTH_SHORT).show();
+
+                        }
+                    } else {
+                        userHeight.setText(mUser.getHeight() + getResources().getString(R.string.profile_user_height_unit));
                     }
                 }
             }
@@ -181,25 +201,31 @@ public class ProfileActivity extends BaseActivity {
     }
 
     @OnClick(R.id.profile_activity_edit_user_weight)
-    public void editUserWeight(){
+    public void editUserWeight() {
         userWeight.requestFocus();
         userWeight.setText("");
         userWeight.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                if(!b){
+                if (!b) {
                     String weightInput = userWeight.getText().toString();
-                    if(!TextUtils.isEmpty(weightInput)){
-                        double weight = Double.parseDouble(weightInput);
-                        if((weight>0.0)&&(weight<300.0)){
-                            user.setWeight(weight);
-                            userWeight.setText(weight+getResources().getString(R.string.profile_user_weight_unit));
+                    if (!TextUtils.isEmpty(weightInput)) {
+                        double weight = 0;
+                        if(weightInput.contains(getString(R.string.profile_user_weight_unit))){
+                            weight =Double.parseDouble(weightInput.substring(0,weightInput.length()-2));
                         }else{
-                            userHeight.setText(user.getWeight()+getResources().getString(R.string.profile_user_weight_unit));
-                            Toast.makeText(ProfileActivity.this,getString(R.string.profile_user_height_error),Toast.LENGTH_SHORT).show();
+                            weight = Double.parseDouble(weightInput);
                         }
-                    }else{
-                        userHeight.setText(user.getWeight()+getResources().getString(R.string.profile_user_weight_unit));
+                        if ((weight > 0.0) && (weight < 300.0)) {
+                            mUser.setWeight(weight);
+                            userWeight.setText(weight + getResources().getString(R.string.profile_user_weight_unit));
+                        } else {
+                            userWeight.setText(mUser.getWeight() + getResources().getString(R.string.profile_user_weight_unit));
+                            Toast.makeText(ProfileActivity.this, getString(R.string.profile_user_height_error), Toast.LENGTH_SHORT).show();
+                        }
+
+                    } else {
+                        userWeight.setText(mUser.getWeight() + getResources().getString(R.string.profile_user_weight_unit));
                     }
                 }
             }
@@ -207,46 +233,112 @@ public class ProfileActivity extends BaseActivity {
     }
 
     @OnClick(R.id.profile_activity_edit_goal_ib)
-    public void editGoalClick(){
+    public void editGoalClick() {
         stepGoal.requestFocus();
         stepGoal.setText("");
         stepGoal.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                if(!b){
+                if (!b) {
                     String goal = stepGoal.getText().toString();
-                    if(!TextUtils.isEmpty(goal)){
+                    if (!TextUtils.isEmpty(goal)) {
                         int goalStep = new Integer(goal).intValue();
-                        if(goalStep>0&&goalStep<1000000){
-                            //TODO
-                        }else{
-                            stepGoal.setText("10000");
-                            Toast.makeText(ProfileActivity.this,getString
-                                    (R.string.profile_user_height_error),Toast.LENGTH_SHORT).show();
+                        if (goalStep > 0 && goalStep < 1000000) {
+                            stepGoal.setText(goalStep + "");
+                        } else {
+                            stepGoal.setText(goalStep);
+                            Toast.makeText(ProfileActivity.this, getString
+                                    (R.string.profile_user_height_error), Toast.LENGTH_SHORT).show();
                         }
-                    }else{
-                        //TODO
+                    } else {
+                        stepGoal.setText(SpUtils.getIntMethod(ProfileActivity.this, CacheConstants.GOAL_STEP, 10000) + "");
                     }
                 }
             }
         });
     }
 
-    @OnClick(R.id.home_title_right_save_bt)
-    public void editOver(){
-        UserDatabaseHelper helper = getModel().getUserDatabaseHelper();
-        helper.update(user);
+    @OnClick(R.id.profile_activity_log_out_bt)
+    public void logOutClick() {
+        showDiaLogMethod(logOut.getId());
     }
 
-    public boolean checkEmail(String email){
+    @OnClick(R.id.home_title_right_save_bt)
+    public void saveEdit() {
+        showDiaLogMethod(saveButton.getId());
+    }
+
+    private void showDiaLogMethod(int id) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        if (id == logOut.getId()) {
+            builder.setTitle(R.string.profile_dialog_log_out_prompt).
+                    setMessage(R.string.profile_dialog_log_out_message);
+            builder.setPositiveButton(R.string.profile_dialog_positive_button_text, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    mUser = new User();
+                   getModel().getUserDatabaseHelper().update(mUser);
+                }
+            });
+            builder.setNegativeButton(R.string.profile_dialog_negative_button_text, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+            builder.show();
+
+        } else if (id == saveButton.getId()) {
+            builder.setTitle(R.string.profile_dialog_save_title_text).setMessage(R.string.profile_dialog_save_message_text);
+            builder.setPositiveButton(R.string.profile_dialog_save_positive_button_text, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    int currentGoalStep = new Integer(stepGoal.getText().toString()).intValue();
+                    SpUtils.putIntMethod(ProfileActivity.this, CacheConstants.GOAL_STEP, currentGoalStep);
+                    User user = getModel().getUser();
+                    user.setLastName(accountName.getText().toString());
+                    user.setFirstName(userFirstName.getText().toString());
+                    user.setUserEmail(emailAccount.getText().toString());
+                    String height = userHeight.getText().toString();
+                    if(height.contains(getString(R.string.profile_user_height_unit))){
+                       int currentHeight = new Integer(height.substring(0,height.length()-2)).intValue();
+                        user.setHeight(currentHeight);
+                    }else{
+                        user.setHeight(new Integer(height).intValue());
+                    }
+
+                    String weight = userWeight.getText().toString();
+                    if(weight.contains(getString(R.string.profile_user_weight_unit))){
+                        double currentWeight = Double.parseDouble(weight.substring(0,weight.length()-2));
+                        user.setWeight(currentWeight);
+                    }else{
+                        user.setWeight(Double.parseDouble(weight));
+                    }
+                    UserDatabaseHelper helper = getModel().getUserDatabaseHelper();
+                    helper.update(user);
+                }
+            });
+
+            builder.setNegativeButton(R.string.profile_dialog_save_negative_button_text, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+            builder.show();
+        }
+
+    }
+
+    public boolean checkEmail(String email) {
         boolean flag = false;
-        try{
-            String check = "/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\\.[a-zA-Z0-9_-]{2,3}){1,2})$/";
+        try {
+            String check = "^([a-z0-9A-Z]+[-|\\\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\\\.)+[a-zA-Z]{2,}$";
 
             Pattern regex = Pattern.compile(check);
             Matcher matcher = regex.matcher(email);
             flag = matcher.matches();
-        }catch(Exception e){
+        } catch (Exception e) {
             flag = false;
         }
         return flag;
