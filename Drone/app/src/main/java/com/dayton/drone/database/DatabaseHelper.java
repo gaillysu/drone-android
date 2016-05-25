@@ -10,7 +10,6 @@ import com.dayton.drone.database.bean.StepsBean;
 import com.dayton.drone.database.bean.UserBean;
 import com.dayton.drone.database.bean.WatchesBean;
 import com.dayton.drone.database.bean.WorldClockBean;
-import com.dayton.drone.model.WorldClock;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
@@ -85,6 +84,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
     }
 
+
+
     public Dao<UserBean, Integer> getUserBean() throws SQLException {
         if(userBean == null){
             userBean = getDao(UserBean.class);
@@ -125,5 +126,16 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             watchesBean = getDao(WatchesBean.class);
         }
         return watchesBean;
+    }
+
+    @Override
+    public void close() {
+        super.close();
+        userBean = null;
+        stepsBean = null;
+        sleepBean = null;
+        notificationBean = null;
+        worldClockBean = null;
+        watchesBean = null;
     }
 }

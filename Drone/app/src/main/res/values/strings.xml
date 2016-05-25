@@ -30,7 +30,7 @@
     <string name="home_guide_clock">WORLD\n\tCLOCK</string>
     <string name="home_guide_analysis">ANALYISIS</string>
     <string name="home_guide_setting">WATCH\n\tSETTING</string>
-    <string name="home_guide_profile">PROFILE</string>
+    <string name="home_guide_profile">Profile</string>
     <string name="home_title_back_text">Back</string>
     <string name="home_title_save_text">Save</string>
 
@@ -61,7 +61,7 @@
     <string name="profile_email_format_error_prompt">Mailbox format is not correct</string>
     <string name="profile_user_height_error">illegal input</string>
     <string name="profile_activity_log_out_text">Log Out</string>
-    <string name="profile_dialog_log_out_prompt">Prompt</string>
+    <string name="profile_dialog_log_out_prompt">Message</string>
     <string name="profile_dialog_log_out_message">Are you sure you want to log out?</string>
     <string name="profile_dialog_positive_button_text">Sure</string>
     <string name="profile_dialog_negative_button_text">Cancel</string>

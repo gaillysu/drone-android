@@ -2,7 +2,6 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             android:background="@android:color/white"
     >
 
     <RelativeLayout
@@ -104,13 +103,13 @@
                         android:id="@+id/home_fragement_guide_dec_chart"
                         style="@style/home_content_activity_guide_text_style"
                         android:layout_gravity="right"
-                        android:background="@drawable/tip_down_icon"
                         android:layout_marginLeft="150dp"
+                        android:background="@drawable/tip_down_icon"
                         android:gravity="center"
-                        android:paddingTop="5dp"
+                        android:paddingBottom="25dp"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
-                        android:paddingBottom="25dp"
+                        android:paddingTop="5dp"
                         android:text="@string/fragment_home_guide_histogram_dec"
                         android:visibility="gone"
                         />
@@ -120,8 +119,8 @@
                     android:id="@+id/activity_activities_hourly_bar"
                     android:layout_width="fill_parent"
                     android:layout_height="210dp"
-                    android:layout_marginRight="10dp"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_marginTop="10dp"
                     >
                 </com.github.mikephil.charting.charts.BarChart>
