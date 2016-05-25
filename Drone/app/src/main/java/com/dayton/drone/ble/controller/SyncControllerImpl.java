@@ -217,6 +217,9 @@ public class SyncControllerImpl implements  SyncController{
                     if(systemStatusPacket.getStatus()==Constants.SystemStatus.InvalidTime.rawValue())
                     {
                         sendRequest(new SetRTCRequest(application));
+                        sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.WorldClock));
+                        sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.ActivityTracking));
+                        sendRequest(new SetUserProfileRequest(application));
                     }
                     else if(systemStatusPacket.getStatus()==Constants.SystemStatus.GoalCompleted.rawValue())
                     {
@@ -228,12 +231,6 @@ public class SyncControllerImpl implements  SyncController{
                         EventBus.getDefault().post(new BigSyncEvent(BigSyncEvent.BIG_SYNC_EVENT.STARTED));
                         sendRequest(new GetActivityRequest(application));
                     }
-                }
-                else if((byte) SetRTCRequest.HEADER == packet.getHeader())
-                {
-                    sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.WorldClock));
-                    sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.ActivityTracking));
-                    sendRequest(new SetUserProfileRequest(application));
                 }
                 else if((byte) GetActivityRequest.HEADER == packet.getHeader())
                 {
