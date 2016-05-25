@@ -26,8 +26,8 @@ import butterknife.OnClick;
  */
 public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
 
-    private int[] droneImageViewIdList = new int[]{R.drawable.welcome_drone_1, R.drawable.welcome_drone_2,
-            R.drawable.welcome_drone_3, R.drawable.welcome_drone_4, R.drawable.welcome_drone_5, R.drawable.welcome_drone_6};
+    private int[] droneImageViewIdList = new int[]{R.mipmap.welcome_drone_1, R.mipmap.welcome_drone_2,
+            R.mipmap.welcome_drone_3, R.mipmap.welcome_drone_4, R.mipmap.welcome_drone_5, R.mipmap.welcome_drone_6};
 
     @Bind(R.id.activity_login_vp)
     ViewPager viewPager;

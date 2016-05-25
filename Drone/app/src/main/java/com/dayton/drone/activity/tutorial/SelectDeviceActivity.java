@@ -28,7 +28,8 @@ public class SelectDeviceActivity extends BaseActivity {
     private int type;
 
     private String[] watchNameArray;
-    private int[] droneImagesIdArray = new int[]{R.drawable.welcome_drone_1,R.drawable.welcome_drone_2,R.drawable.welcome_drone_3,R.drawable.welcome_drone_4,R.drawable.welcome_drone_5,R.drawable.welcome_drone_6};
+    private int[] droneImagesIdArray = new int[]{R.mipmap.welcome_drone_1,R.mipmap.welcome_drone_2,
+            R.mipmap.welcome_drone_3,R.mipmap.welcome_drone_4,R.mipmap.welcome_drone_5,R.mipmap.welcome_drone_6};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +70,7 @@ public class SelectDeviceActivity extends BaseActivity {
                 }else{
                     startActivity(UserInfoActivity.class);
                 }
+
                 finish();
             }
         });

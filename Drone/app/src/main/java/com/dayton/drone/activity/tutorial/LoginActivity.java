@@ -65,7 +65,8 @@ public class LoginActivity extends BaseActivity {
         LoginUser userLogin = new LoginUser();
          userLogin.setEmail(ed_account.getText().toString());
          userLogin.setPassword(ed_password.getText().toString());
-         getModel().getRetrofitManager().execute(new LoginUserRequest(userLogin,getModel().getRetrofitManager().getAccessToken()),new RequestListener<LoginUserModel>(){
+         getModel().getRetrofitManager().execute(new LoginUserRequest(userLogin,
+                 getModel().getRetrofitManager().getAccessToken()),new RequestListener<LoginUserModel>(){
 
              @Override
              public void onRequestFailure(SpiceException spiceException) {

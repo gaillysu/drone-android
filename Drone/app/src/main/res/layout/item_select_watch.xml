@@ -10,7 +10,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:scaleType="fitXY"
-        android:src="@drawable/welcome_drone_1"
+        android:src="@mipmap/welcome_drone_1"
         android:background="@android:color/transparent"
         />
     <TextView

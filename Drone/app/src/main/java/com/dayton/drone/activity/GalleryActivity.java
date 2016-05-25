@@ -21,7 +21,8 @@ public class GalleryActivity extends BaseActivity {
     TextView titleTextView;
     @Bind(R.id.activity_gallery_list)
     ListView listView;
-    private int[] droneImagesIdArray = new int[]{R.drawable.welcome_drone_1,R.drawable.welcome_drone_2,R.drawable.welcome_drone_3,R.drawable.welcome_drone_4,R.drawable.welcome_drone_5,R.drawable.welcome_drone_6};
+    private int[] droneImagesIdArray = new int[]{R.mipmap.welcome_drone_1,R.mipmap.welcome_drone_2,
+            R.mipmap.welcome_drone_3,R.mipmap.welcome_drone_4,R.mipmap.welcome_drone_5,R.mipmap.welcome_drone_6};
 
 
     @Override
