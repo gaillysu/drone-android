@@ -30,8 +30,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
      * v2: add "password" field in User table
      * v3: add "watches" table
      * v4: modify world clock table struct
+     * V5: modify steps/sleep table for adding field "cloudID"
      */
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     private Dao<UserBean, Integer> userBean = null;
     private Dao<StepsBean,Integer> stepsBean = null;

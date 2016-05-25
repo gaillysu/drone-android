@@ -52,6 +52,13 @@ public class StepsBean {
     private int distance;
 
 
+    /**
+     * the cloudID is the unique value that saved on Cloud server, -1 menas that no sync with cloud server
+     */
+    public static final String fCloudID = "cloudID";
+    @DatabaseField
+    private int cloudID = -1;
+
 
     public int getId() {
         return id;
@@ -99,5 +106,13 @@ public class StepsBean {
 
     public void setDistance(int distance) {
         this.distance = distance;
+    }
+
+    public int getCloudID() {
+        return cloudID;
+    }
+
+    public void setCloudID(int cloudID) {
+        this.cloudID = cloudID;
     }
 }

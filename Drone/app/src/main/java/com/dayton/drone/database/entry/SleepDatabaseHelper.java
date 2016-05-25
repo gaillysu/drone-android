@@ -121,6 +121,7 @@ public class SleepDatabaseHelper implements iEntryDatabaseHelper<Sleep> {
         sleepDAO.setWakeupTime(sleep.getWakeupTime());
         sleepDAO.setLightSleepTime(sleep.getLightSleepTime());
         sleepDAO.setDeepSleepTime(sleep.getDeepSleepTime());
+        sleepDAO.setCloudID(sleep.getCloudID());
         return sleepDAO;
     }
 
@@ -131,6 +132,7 @@ public class SleepDatabaseHelper implements iEntryDatabaseHelper<Sleep> {
         sleep.setWakeupTime(sleepDAO.getWakeupTime());
         sleep.setLightSleepTime(sleepDAO.getLightSleepTime());
         sleep.setDeepSleepTime(sleepDAO.getDeepSleepTime());
+        sleep.setCloudID(sleepDAO.getCloudID());
         return sleep;
     }
 

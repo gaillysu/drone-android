@@ -234,12 +234,10 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         List<String> xVals = new ArrayList<String>();
         List<BarEntry> yValue = new ArrayList<BarEntry>();
 
-        List<Optional<Steps>> stepsList = getModel().getStepsDatabaseHelper().getAll(getModel().getUser().getUserID());
+        List<Optional<Steps>> stepsList = getModel().getStepsDatabaseHelper().get(getModel().getUser().getUserID(),selectedDate);
 
         int i = 0;
         for (Optional<Steps> steps : stepsList) {
-            //TODO here use sample data
-            if(steps.get().getSteps()==0) {steps.get().setSteps(new Random().nextInt(10000));}
             if(steps.get().getSteps()>0)
             {
                 yValue.add(new BarEntry(new float[]{steps.get().getSteps()}, i));
@@ -299,17 +297,14 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         List<String> xVals = new ArrayList<String>();
         List<Entry> yValue = new ArrayList<Entry>();
 
-        List<Optional<Steps>> stepsList = getModel().getStepsDatabaseHelper().getThisWeekSteps(getModel().getUser().getUserID(), selectedDate);
+        List<Steps> stepsList = getModel().getStepsDatabaseHelper().getThisWeekSteps(getModel().getUser().getUserID(), selectedDate);
 
         int i = 0;
-        for (Optional<Steps> steps : stepsList) {
-            //TODO here use sample data
-            if(i>6)break;
-            if(steps.get().getSteps()==0) {steps.get().setSteps(new Random().nextInt(10000));}
-            if(steps.get().getSteps()>0)
+        for (Steps steps : stepsList) {
+            if(steps.getSteps()>0)
             {
-                yValue.add(new Entry(steps.get().getSteps(),i));
-                xVals.add(sdf.format(new Date(steps.get().getTimeFrame())));
+                yValue.add(new Entry(steps.getSteps(),i));
+                xVals.add(sdf.format(new Date(steps.getTimeFrame())));
                 i++;
             }
         }
@@ -366,17 +361,14 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         List<String> xVals = new ArrayList<String>();
         List<Entry> yValue = new ArrayList<Entry>();
 
-        List<Optional<Steps>> stepsList = getModel().getStepsDatabaseHelper().getLastWeekSteps(getModel().getUser().getUserID(), selectedDate);
+        List<Steps> stepsList = getModel().getStepsDatabaseHelper().getLastWeekSteps(getModel().getUser().getUserID(), selectedDate);
 
         int i = 0;
-        for (Optional<Steps> steps : stepsList) {
-            //TODO here use sample data
-            if(i>6)break;
-            if(steps.get().getSteps()==0) {steps.get().setSteps(new Random().nextInt(10000));}
-            if(steps.get().getSteps()>0)
+        for (Steps steps : stepsList) {
+            if(steps.getSteps()>0)
             {
-                yValue.add(new Entry(steps.get().getSteps(),i));
-                xVals.add(sdf.format(new Date(steps.get().getTimeFrame())));
+                yValue.add(new Entry(steps.getSteps(),i));
+                xVals.add(sdf.format(new Date(steps.getTimeFrame())));
                 i++;
             }
         }
@@ -433,17 +425,14 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         List<String> xVals = new ArrayList<String>();
         List<Entry> yValue = new ArrayList<Entry>();
 
-        List<Optional<Steps>> stepsList = getModel().getStepsDatabaseHelper().getLastMonthSteps(getModel().getUser().getUserID(), selectedDate);
+        List<Steps> stepsList = getModel().getStepsDatabaseHelper().getLastMonthSteps(getModel().getUser().getUserID(), selectedDate);
 
         int i = 0;
-        for (Optional<Steps> steps : stepsList) {
-            //TODO here use sample data
-            if(i>29)break;
-            if(steps.get().getSteps()==0) {steps.get().setSteps(new Random().nextInt(10000));}
-            if(steps.get().getSteps()>0)
+        for (Steps steps : stepsList) {
+            if(steps.getSteps()>0)
             {
-                yValue.add(new Entry(steps.get().getSteps(),i));
-                xVals.add(sdf.format(new Date(steps.get().getTimeFrame())));
+                yValue.add(new Entry(steps.getSteps(),i));
+                xVals.add(sdf.format(new Date(steps.getTimeFrame())));
                 i++;
             }
         }

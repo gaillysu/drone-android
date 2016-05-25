@@ -4,7 +4,9 @@ import android.content.Context;
 
 import com.dayton.drone.database.DatabaseHelper;
 import com.dayton.drone.database.bean.StepsBean;
+import com.dayton.drone.model.CanlendarWeek;
 import com.dayton.drone.model.Steps;
+import com.dayton.drone.utils.Common;
 
 import net.medcorp.library.ble.util.Optional;
 
@@ -16,7 +18,7 @@ import java.util.List;
 /**
  * Created by karl-john on 17/11/15.
  */
-public class StepsDatabaseHelper implements iEntryDatabaseHelper<Steps> {
+public class StepsDatabaseHelper {
 
     private DatabaseHelper databaseHelper;
 
@@ -26,7 +28,7 @@ public class StepsDatabaseHelper implements iEntryDatabaseHelper<Steps> {
         }
     }
 
-    @Override
+
     public Optional<Steps> add(Steps object) {
         Optional<Steps> stepsOptional = new Optional<>();
         try {
@@ -41,7 +43,7 @@ public class StepsDatabaseHelper implements iEntryDatabaseHelper<Steps> {
         return stepsOptional;
     }
 
-    @Override
+
     public boolean update(Steps object) {
 
         int result = -1;
@@ -59,7 +61,7 @@ public class StepsDatabaseHelper implements iEntryDatabaseHelper<Steps> {
         return result>=0;
     }
 
-    @Override
+
     public boolean remove(String userId,Date date) {
         try {
             List<StepsBean> stepsDAOList = databaseHelper.getStepsBean()
@@ -75,17 +77,12 @@ public class StepsDatabaseHelper implements iEntryDatabaseHelper<Steps> {
         return false;
     }
 
-    @Override
-    public List<Optional<Steps>> get(String userId) {
-        return getAll(userId);
-    }
 
-    @Override
-    public Optional<Steps>  get(String userId,Date date) {
+    public List<Optional<Steps> >  get(String userId,Date date) {
         List<Optional<Steps> > stepsList = new ArrayList<Optional<Steps> >();
         try {
             List<StepsBean> stepsDAOList = databaseHelper.getStepsBean()
-                    .queryBuilder().where().eq(StepsBean.fUserID, userId)
+                    .queryBuilder().orderBy(StepsBean.fTimeframe,true).where().eq(StepsBean.fUserID, userId)
                     .and().eq(StepsBean.fDate, date.getTime()).query();
             for(StepsBean stepsBean : stepsDAOList){
                 Optional<Steps> stepsOptional = new Optional<>();
@@ -95,15 +92,15 @@ public class StepsDatabaseHelper implements iEntryDatabaseHelper<Steps> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return stepsList.isEmpty()? new Optional<Steps>() : stepsList.get(0);
+        return stepsList;
     }
 
-    @Override
+
     public List<Optional<Steps> > getAll(String userId) {
         List<Optional<Steps> > stepsList = new ArrayList<Optional<Steps> >();
         try {
             List<StepsBean> stepsDAOList = databaseHelper.getStepsBean()
-                    .queryBuilder().orderBy(StepsBean.fDate,false).where().
+                    .queryBuilder().orderBy(StepsBean.fDate,true).where().
                             eq(StepsBean.fUserID, userId).query();
             for(StepsBean stepsDAO : stepsDAOList){
                 Optional<Steps> stepsOptional = new Optional<>();
@@ -123,6 +120,7 @@ public class StepsDatabaseHelper implements iEntryDatabaseHelper<Steps> {
         stepsDao.setDate(steps.getDate());
         stepsDao.setSteps(steps.getSteps());
         stepsDao.setDistance(steps.getDistance());
+        stepsDao.setCloudID(steps.getCloudID());
         return stepsDao;
     }
 
@@ -133,14 +131,15 @@ public class StepsDatabaseHelper implements iEntryDatabaseHelper<Steps> {
         steps.setDate(stepsDAO.getDate());
         steps.setSteps(stepsDAO.getSteps());
         steps.setDistance(stepsDAO.getDistance());
+        steps.setCloudID(stepsDAO.getCloudID());
         return steps;
     }
 
-    @Override
+
     public List<Steps> convertToNormalList(List<Optional<Steps>> optionals) {
         List<Steps> stepsList = new ArrayList<>();
         for (Optional<Steps> stepsOptional: optionals) {
-            if (stepsOptional.notEmpty()){
+            if (stepsOptional.notEmpty() && stepsOptional.get().getSteps()>0){
                 stepsList.add(stepsOptional.get());
             }
         }
@@ -153,11 +152,10 @@ public class StepsDatabaseHelper implements iEntryDatabaseHelper<Steps> {
      * @param date
      * @return
      */
-    public List<Optional<Steps> > getThisWeekSteps(String userId,Date date)
+    public List<Steps> getThisWeekSteps(String userId,Date date)
     {
-        List<Optional<Steps> > stepsList = getAll(userId);
-
-        return stepsList;
+       CanlendarWeek canlendarWeek =  Common.getThisweek(date);
+       return getStepsBetweenDate(userId,canlendarWeek.getWeekStart(),canlendarWeek.getWeekEnd());
     }
 
     /**
@@ -166,10 +164,10 @@ public class StepsDatabaseHelper implements iEntryDatabaseHelper<Steps> {
      * @param date
      * @return
      */
-    public List<Optional<Steps> > getLastWeekSteps(String userId,Date date)
+    public List<Steps> getLastWeekSteps(String userId,Date date)
     {
-        List<Optional<Steps> > stepsList = getAll(userId);
-        return stepsList;
+        CanlendarWeek canlendarWeek =  Common.getLastweek(date);
+        return getStepsBetweenDate(userId,canlendarWeek.getWeekStart(),canlendarWeek.getWeekEnd());
     }
 
     /**
@@ -178,9 +176,23 @@ public class StepsDatabaseHelper implements iEntryDatabaseHelper<Steps> {
      * @param date
      * @return return date up to date-30 steps ??? or according to the calendar Month???
      */
-    public List<Optional<Steps> > getLastMonthSteps(String userId,Date date)
+    public List<Steps> getLastMonthSteps(String userId,Date date)
     {
-        List<Optional<Steps> > stepsList = getAll(userId);
+        return getStepsBetweenDate(userId,Common.getLast30Days(date),date);
+    }
+
+    public List<Steps> getStepsBetweenDate(String userId,Date startDate,Date endDate)
+    {
+        List<Steps> stepsList = new ArrayList<>();
+
+        Date start = Common.removeTimeFromDate(startDate);
+        Date end = Common.removeTimeFromDate(endDate);
+
+        for(long timeStamp = start.getTime();timeStamp<=end.getTime();timeStamp+=Common.ONEDAY)
+        {
+            stepsList.addAll(convertToNormalList(get(userId,new Date(timeStamp))));
+        }
         return stepsList;
     }
+
 }
