@@ -276,7 +276,8 @@ public class ProfileActivity extends BaseActivity {
             builder.setPositiveButton(R.string.profile_dialog_positive_button_text, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    //TODO
+                   getModel().getUser().setUserIsLogin(false);
+                   getModel().getUserDatabaseHelper().update(getModel().getUser());
                 }
             });
             builder.setNegativeButton(R.string.profile_dialog_negative_button_text, new DialogInterface.OnClickListener() {

@@ -47,6 +47,13 @@ public class SleepBean {
     @DatabaseField
     private int deepSleepTime;
 
+    /**
+     * the cloudID is the unique value that saved on Cloud server,-1 menas that no sync with cloud server
+     */
+    public static final String fCloudID = "cloudID";
+    @DatabaseField
+    private int cloudID = -1;
+
     public int getId() {
         return id;
     }
@@ -101,5 +108,13 @@ public class SleepBean {
 
     public void setDeepSleepTime(int deepSleepTime) {
         this.deepSleepTime = deepSleepTime;
+    }
+
+    public int getCloudID() {
+        return cloudID;
+    }
+
+    public void setCloudID(int cloudID) {
+        this.cloudID = cloudID;
     }
 }

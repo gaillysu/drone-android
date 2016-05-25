@@ -42,10 +42,12 @@ import com.dayton.drone.event.BigSyncEvent;
 import com.dayton.drone.event.GoalCompletedEvent;
 import com.dayton.drone.event.LittleSyncEvent;
 import com.dayton.drone.event.LowMemoryEvent;
+import com.dayton.drone.event.TimeFramePacketReceivedEvent;
 import com.dayton.drone.event.TimerEvent;
 import com.dayton.drone.event.WorldClockChangedEvent;
 import com.dayton.drone.model.Steps;
 import com.dayton.drone.model.WorldClock;
+import com.dayton.drone.utils.Common;
 
 import net.medcorp.library.ble.controller.ConnectionController;
 import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
@@ -215,6 +217,9 @@ public class SyncControllerImpl implements  SyncController{
                     if(systemStatusPacket.getStatus()==Constants.SystemStatus.InvalidTime.rawValue())
                     {
                         sendRequest(new SetRTCRequest(application));
+                        sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.WorldClock));
+                        sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.ActivityTracking));
+                        sendRequest(new SetUserProfileRequest(application));
                     }
                     else if(systemStatusPacket.getStatus()==Constants.SystemStatus.GoalCompleted.rawValue())
                     {
@@ -227,22 +232,17 @@ public class SyncControllerImpl implements  SyncController{
                         sendRequest(new GetActivityRequest(application));
                     }
                 }
-                else if((byte) SetRTCRequest.HEADER == packet.getHeader())
-                {
-                    sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.WorldClock));
-                    sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.ActivityTracking));
-                    sendRequest(new SetUserProfileRequest(application));
-                }
                 else if((byte) GetActivityRequest.HEADER == packet.getHeader())
                 {
                     ActivityPacket activityPacket = packet.newActivityPacket();
-                    Log.i(TAG,activityPacket.getDate().toString() + " steps: " + activityPacket.getSteps());
+                    Log.i(TAG,activityPacket.getDate().toString() + " time frame steps: " + activityPacket.getSteps());
                     Steps steps = new Steps();
                     steps.setTimeFrame(activityPacket.getDate().getTime());
-                    steps.setDate(activityPacket.getDate().getTime());
+                    steps.setDate((Common.removeTimeFromDate(new Date(activityPacket.getDate().getTime()))).getTime());
                     steps.setSteps(activityPacket.getSteps());
                     steps.setUserID(application.getUser().getUserID());
                     application.getStepsDatabaseHelper().update(steps);
+                    EventBus.getDefault().post(new TimeFramePacketReceivedEvent(steps));
                     if(activityPacket.getMore()==Constants.ActivityDataStatus.MoreData.rawValue())
                     {
                         sendRequest(new GetActivityRequest(application));
@@ -258,8 +258,6 @@ public class SyncControllerImpl implements  SyncController{
                     int steps = getStepsGoalPacket.getSteps();
                     int goal  = getStepsGoalPacket.getGoal();
                     Log.i(TAG,"steps: " + steps + ",goal: " + goal);
-                    //TODO, update "steps" table, and refresh screen
-
                     EventBus.getDefault().post(new LittleSyncEvent(steps, goal));
                 }
                 //system event: 0x02, this is sent by watch proactively,pls refer to Constants.SystemEvent
