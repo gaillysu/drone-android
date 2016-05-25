@@ -47,6 +47,7 @@ public class SelectDeviceActivity extends BaseActivity {
         watchNameArray = this.getResources().getStringArray(R.array.user_select_dec_arr);
         mGridViewAdapter = new SelectDeviceGridViewAdapter(droneImagesIdArray,watchNameArray,this);
         mShowWatchGridView.setAdapter(mGridViewAdapter);
+
         mShowWatchGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

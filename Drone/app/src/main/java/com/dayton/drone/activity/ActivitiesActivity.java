@@ -54,6 +54,7 @@ import java.util.Random;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by boy on 2016/4/22.
@@ -124,7 +125,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         titleView = findViewById(R.id.fragment_title);
         mIvNextMouth = (ImageButton) findViewById(R.id.home_fragmet_title_next_day);
         mIvBackMouth = (ImageButton) findViewById(R.id.home_fragment_calendar_back_day);
-        mBtBack = (Button) findViewById(R.id.home_fragment_title_back);
         showCalendar = (LinearLayout) findViewById(R.id.home_fragment_title_date);
         dateTv = (LinearLayout) findViewById(R.id.home_fragment_title_date);
         mTitleCalendarTextView = (TextView) findViewById(R.id.home_fragment_title_date_tv);
@@ -465,13 +465,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         lastmonthLineChart.setData(data);
     }
     public void addListener() {
-
-        mBtBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(HomeActivity.class);
-            }
-        });
         mIvBackMouth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -516,6 +509,11 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
                 popupWindow.update();
             }
         });
+    }
+
+    @OnClick(R.id.home_fragment_title_back)
+    public void backOnClick(){
+        finish();
     }
 
     @Override

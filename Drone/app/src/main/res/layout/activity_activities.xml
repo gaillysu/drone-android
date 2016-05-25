@@ -105,8 +105,12 @@
                         style="@style/home_content_activity_guide_text_style"
                         android:layout_gravity="right"
                         android:background="@drawable/tip_down_icon"
+                        android:layout_marginLeft="150dp"
                         android:gravity="center"
-                        android:padding="5dp"
+                        android:paddingTop="5dp"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:paddingBottom="25dp"
                         android:text="@string/fragment_home_guide_histogram_dec"
                         android:visibility="gone"
                         />
@@ -116,6 +120,8 @@
                     android:id="@+id/activity_activities_hourly_bar"
                     android:layout_width="fill_parent"
                     android:layout_height="210dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     >
                 </com.github.mikephil.charting.charts.BarChart>
