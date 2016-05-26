@@ -50,7 +50,8 @@ public class StepsDatabaseHelper {
         try {
             List<StepsBean> stepsDAOList = databaseHelper.getStepsBean()
                     .queryBuilder().where().eq(StepsBean.fUserID, object.getUserID())
-                    .and().eq(StepsBean.fDate, object.getDate()).query();
+                    .and().eq(StepsBean.fDate, object.getDate())
+                    .and().eq(StepsBean.fTimeframe, object.getTimeFrame()).query();
             if(stepsDAOList.isEmpty()) return add(object)!=null;
             StepsBean daoobject = convertToDao(object);
             daoobject.setId(stepsDAOList.get(0).getId());

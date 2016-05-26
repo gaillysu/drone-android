@@ -6,7 +6,7 @@ package com.dayton.drone.network.response.model;
 public class StepsDetail {
     private int id;
     private int uid;
-    private int steps;
+    private String steps;
     private StepsWithTimeZone date;
 
     public int getId() {
@@ -25,11 +25,11 @@ public class StepsDetail {
         this.uid = uid;
     }
 
-    public int getSteps() {
+    public String getSteps() {
         return steps;
     }
 
-    public void setSteps(int steps) {
+    public void setSteps(String steps) {
         this.steps = steps;
     }
 

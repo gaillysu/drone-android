@@ -42,7 +42,6 @@ import com.dayton.drone.event.BigSyncEvent;
 import com.dayton.drone.event.GoalCompletedEvent;
 import com.dayton.drone.event.LittleSyncEvent;
 import com.dayton.drone.event.LowMemoryEvent;
-import com.dayton.drone.event.TimeFramePacketReceivedEvent;
 import com.dayton.drone.event.TimerEvent;
 import com.dayton.drone.event.WorldClockChangedEvent;
 import com.dayton.drone.model.Steps;
@@ -55,6 +54,7 @@ import net.medcorp.library.ble.event.BLEResponseDataEvent;
 import net.medcorp.library.ble.model.request.BLERequestData;
 import net.medcorp.library.ble.model.response.BLEResponseData;
 import net.medcorp.library.ble.model.response.MEDRawData;
+import net.medcorp.library.ble.util.Optional;
 import net.medcorp.library.ble.util.QueuedMainThreadHandler;
 
 import org.greenrobot.eventbus.EventBus;
@@ -80,6 +80,7 @@ public class SyncControllerImpl implements  SyncController{
     private List<MEDRawData> packetsBuffer = new ArrayList<MEDRawData>();
 
     private Timer autoSyncTimer = null;
+    private Optional<Date> theBigSyncStartDate = new Optional<>();
 
     private void startAutoSyncTimer() {
         if(autoSyncTimer!=null)autoSyncTimer.cancel();
@@ -228,7 +229,8 @@ public class SyncControllerImpl implements  SyncController{
                     }
                     else if(systemStatusPacket.getStatus()==Constants.SystemStatus.ActivityDataAvailable.rawValue())
                     {
-                        EventBus.getDefault().post(new BigSyncEvent(BigSyncEvent.BIG_SYNC_EVENT.STARTED));
+                        theBigSyncStartDate = new Optional<>(new Date());
+                        EventBus.getDefault().post(new BigSyncEvent(theBigSyncStartDate.get(), BigSyncEvent.BIG_SYNC_EVENT.STARTED));
                         sendRequest(new GetActivityRequest(application));
                     }
                 }
@@ -242,14 +244,18 @@ public class SyncControllerImpl implements  SyncController{
                     steps.setSteps(activityPacket.getSteps());
                     steps.setUserID(application.getUser().getUserID());
                     application.getStepsDatabaseHelper().update(steps);
-                    EventBus.getDefault().post(new TimeFramePacketReceivedEvent(steps));
+                    //save the oldest activity date as colud sync starting date
+                    if(theBigSyncStartDate.isEmpty() || (theBigSyncStartDate.notEmpty() && theBigSyncStartDate.get().getTime()>steps.getDate()))
+                    {
+                        theBigSyncStartDate.set(new Date(steps.getDate()));
+                    }
                     if(activityPacket.getMore()==Constants.ActivityDataStatus.MoreData.rawValue())
                     {
                         sendRequest(new GetActivityRequest(application));
                     }
                     else
                     {
-                        EventBus.getDefault().post(new BigSyncEvent(BigSyncEvent.BIG_SYNC_EVENT.STOPPED));
+                        EventBus.getDefault().post(new BigSyncEvent(theBigSyncStartDate.get(), BigSyncEvent.BIG_SYNC_EVENT.STOPPED));
                     }
                 }
                 else if((byte) GetStepsGoalRequest.HEADER == packet.getHeader())
@@ -278,7 +284,8 @@ public class SyncControllerImpl implements  SyncController{
                         EventBus.getDefault().post(new LowMemoryEvent());
                     }
                     else if(systemEventPacket.getEvent() == Constants.SystemEvent.ActivityDataAvailable.rawValue()) {
-                        EventBus.getDefault().post(new BigSyncEvent(BigSyncEvent.BIG_SYNC_EVENT.STARTED));
+                        theBigSyncStartDate = new Optional<>(new Date());
+                        EventBus.getDefault().post(new BigSyncEvent(theBigSyncStartDate.get(), BigSyncEvent.BIG_SYNC_EVENT.STARTED));
                         sendRequest(new GetActivityRequest(application));
                     }
                 }

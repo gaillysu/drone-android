@@ -45,7 +45,9 @@ public class SleepDatabaseHelper implements iEntryDatabaseHelper<Sleep> {
         try {
             List<SleepBean> sleepDAOList = databaseHelper.getSleepBean()
                     .queryBuilder().where().eq(SleepBean.fUserID, object.getUserID())
-                    .and().eq(SleepBean.fDate, object.getDate()).query();
+                    .and().eq(SleepBean.fDate, object.getDate())
+                    .and().eq(SleepBean.fTimeframe, object.getTimeFrame())
+                    .query();
             if (sleepDAOList.isEmpty())
                 return add(object) != null;
             SleepBean daoobject = convertToDao(object);

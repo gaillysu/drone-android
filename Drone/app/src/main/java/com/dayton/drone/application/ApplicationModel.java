@@ -13,11 +13,9 @@ import com.dayton.drone.database.entry.UserDatabaseHelper;
 import com.dayton.drone.database.entry.WatchesDatabaseHelper;
 import com.dayton.drone.database.entry.WorldClockDatabaseHelper;
 import com.dayton.drone.event.BigSyncEvent;
-import com.dayton.drone.event.LittleSyncEvent;
-import com.dayton.drone.event.TimeFramePacketReceivedEvent;
 import com.dayton.drone.model.User;
 import com.dayton.drone.network.RetrofitManager;
-import com.dayton.drone.network.request.model.CreateSteps;
+import com.dayton.drone.utils.Common;
 
 import net.medcorp.library.ble.controller.OtaController;
 import net.medcorp.library.ble.util.Optional;
@@ -25,7 +23,6 @@ import net.medcorp.library.ble.util.Optional;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -104,18 +101,14 @@ public class ApplicationModel extends Application {
     }
 
     @Subscribe
-    public void onEvent(LittleSyncEvent event) {
-        //CreateSteps steps = new CreateSteps();
-        //steps.setUid(Integer.parseInt(getUser().getUserID()));
-        //steps.setDate(new SimpleDateFormat("yyyy-MM-dd 00:00:00").format(new Date()));
-        //steps.setSteps(event.getSteps());
-        //getSyncActivityManager().launchSyncDailyAccumulateSteps(steps);
-    }
-    @Subscribe
-    public void onEvent(TimeFramePacketReceivedEvent event) {
-        if(event.getSteps()!=null)
+    public void onEvent(BigSyncEvent event) {
+        if(event.getStatus() == BigSyncEvent.BIG_SYNC_EVENT.STOPPED)
         {
-            getSyncActivityManager().launchSyncDailyTimeFrameSteps(event.getSteps());
+            Date today = new Date();
+            for(long start = event.getStartSyncDate().getTime();start<=today.getTime();start+= Common.ONEDAY)
+            {
+                getSyncActivityManager().launchSyncDailyHourlySteps(new Date(start));
+            }
         }
     }
 
