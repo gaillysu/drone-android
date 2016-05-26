@@ -60,8 +60,10 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     private Context mContext;
     @Bind(R.id.home_fragment_progress_bar)
     MagicProgressCircle mProgressBar;
-    @Bind(R.id.home_fragment_progress_middle_tv)
+    @Bind(R.id.activities_progress_middle_tv)
     TextView homeMiddleTv;
+    @Bind(R.id.activities_progress_middle_user_step_goal)
+    TextView userStepGoalTextView;
 
     @Bind(R.id.fragment_home_title_calories)
     TextView caloriesTextView;
@@ -108,7 +110,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     LinearLayout calendarGroup;
     @Bind(R.id.calendar_date_view)
     CalendarView calendar;
-    private View titleView;
     @Bind(R.id.activities_activity_calendar_back_day)
     ImageButton backMonth;
     @Bind(R.id.activities_activity_title_next_day)
@@ -134,8 +135,9 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         mProgressBar.setEndColor(R.color.progress_end_color);
         mProgressBar.setSmoothPercent(0.3f);
         homeMiddleTv.setText(200+ "");
+        userStepGoalTextView.setText(getResources().getString(R.string.user_step_goal)
+                +SpUtils.getIntMethod(this,CacheConstants.GOAL_STEP,10000));
         calendar.setSelectMore(false);
-
         nextMonth.setVisibility(View.GONE);
         backMonth.setVisibility(View.GONE);
         initHourlyData();

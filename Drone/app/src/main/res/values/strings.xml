@@ -22,6 +22,7 @@
     <string name="user_device_drone">Buy you drone here.</string>
     <string name="user_info_activity_edit_first_name_hint">First Name</string>
     <string name="user_info_activity_edit_last_name_hint">Last Name</string>
+    <string name="user_step_goal">GOAL:</string>
 
     <string name="bluetooth_connecting">Connecting</string>
     <string name="retry_connecting">Retry</string>
