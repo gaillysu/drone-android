@@ -7,7 +7,7 @@
                 android:orientation="horizontal">
 
     <Button
-        android:id="@+id/home_fragment_title_back"
+        android:id="@+id/activities_title_back"
         android:background="@android:color/transparent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -49,7 +49,7 @@
                 />
 
             <TextView
-                android:id="@+id/home_fragment_title_date_tv"
+                android:id="@+id/activities_calendar_title_date_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"

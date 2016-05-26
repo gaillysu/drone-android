@@ -118,7 +118,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @OnClick(R.id.register_bt)
     public void openRegisteActivity() {
-        startActivity(RegisteActivity.class);
+        startActivity(RegisterActivity.class);
         finish();
     }
 

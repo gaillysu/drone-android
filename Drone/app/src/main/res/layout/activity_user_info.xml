@@ -11,7 +11,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp"
         android:text="@string/user_info_clue"
-        android:textColor="@color/regitse_text_color"
+        android:textColor="@color/register_text_color"
         android:textSize="19sp"/>
 
     <TextView

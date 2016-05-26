@@ -7,16 +7,13 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.view.Display;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
@@ -90,29 +87,38 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     @Bind(R.id.activity_activities_monthly_line)
     LineChart lastmonthLineChart;
 
-    @Bind(R.id.fragment_home_guide_view)
+    @Bind(R.id.activities_activity_shadow_home_guide_view)
     RelativeLayout guideView;
-    @Bind(R.id.home_fragement_guide_title_dec)
+    @Bind(R.id.activities_guide_title_dec)
     TextView titleGuide;
-    @Bind(R.id.home_fragement_guide_dec_actvies)
-    TextView acvitiesGuide;
-    @Bind(R.id.home_fragement_guide_dec_bar)
+    @Bind(R.id.activities_guide_dec_actvies)
+    TextView activitiesGuide;
+    @Bind(R.id.activities_guide_dec_bar)
     TextView barGuide;
-    @Bind(R.id.home_fragement_guide_dec_chart)
+    @Bind(R.id.activities_guide_dec_chart)
     TextView chartGuideDec;
 
+
+    @Bind(R.id.activities_activity_title_date)
+    LinearLayout showCalendar;
+    @Bind(R.id.activities_calendar_title_date_tv)
+    TextView mTitleCalendarTextView;
+
+    @Bind(R.id.activities_calendar_group)
+    LinearLayout calendarGroup;
+    @Bind(R.id.calendar_date_view)
+    CalendarView calendar;
     private View titleView;
-    private Button mBtBack;
-    private ImageButton backMonth;
-    private ImageButton nextMonth;
-    private LinearLayout showCalendar;
+    @Bind(R.id.activities_activity_calendar_back_day)
+    ImageButton backMonth;
+    @Bind(R.id.activities_activity_title_next_day)
+    ImageButton nextMonth;
+
     private SimpleDateFormat format;
-    private PopupWindow popupWindow;
-    private TextView mTitleCalendarTextView;
-    private CalendarView calendar;
-    private View calendarView;
+
     private Date selectedDate = new Date(); //the selected date comes from calendar.
     private int guidePage = 1;
+    private boolean isShowCalendar = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,21 +126,14 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         setContentView(R.layout.activity_activities);
         ButterKnife.bind(this);
 
-        titleView = findViewById(R.id.fragment_title);
-        nextMonth = (ImageButton) findViewById(R.id.activities_activity_title_next_day);
-        backMonth = (ImageButton) findViewById(R.id.activities_activity_calendar_back_day);
-        showCalendar = (LinearLayout) findViewById(R.id.activities_activity_title_date);
-        mTitleCalendarTextView = (TextView) findViewById(R.id.home_fragment_title_date_tv);
-        calendarView = View.inflate(getModel(), R.layout.date_layout_popupwindow, null);
-
+        calendarGroup.setVisibility(View.GONE);
         mContext = getModel();
         mIsFirst = SpUtils.getBoolean(mContext, CacheConstants.IS_FIRST, true);
 
         mProgressBar.setStartColor(R.color.progress_start_color);
         mProgressBar.setEndColor(R.color.progress_end_color);
         mProgressBar.setSmoothPercent(0.3f);
-        homeMiddleTv.setText(200 + "");
-        calendar = (CalendarView) calendarView.findViewById(R.id.calendar_popupwindow_layout);
+        homeMiddleTv.setText(200+ "");
         calendar.setSelectMore(false);
 
         nextMonth.setVisibility(View.GONE);
@@ -146,6 +145,8 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         startView();
         addListener();
     }
+
+
 
     private void startView() {
         if (mIsFirst) {
@@ -160,7 +161,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
                         case 2:
                             titleDec.setBackgroundResource(R.drawable.user_guide_bg);
                             showCalendar.setBackgroundDrawable(new BitmapDrawable());
-                            acvitiesGuide.setVisibility(View.VISIBLE);
+                            activitiesGuide.setVisibility(View.VISIBLE);
                             titleGuide.setVisibility(View.GONE);
 
                             break;
@@ -168,7 +169,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
 
                             titleDec.setBackgroundDrawable(new BitmapDrawable());
                             guideBar.setBackgroundResource(R.drawable.user_guide_bg);
-                            acvitiesGuide.setVisibility(View.GONE);
+                            activitiesGuide.setVisibility(View.GONE);
                             barGuide.setVisibility(View.VISIBLE);
                             break;
                         case 4:
@@ -458,8 +459,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
                 String leftMouth = calendar.clickLeftMonth();
                 mTitleCalendarTextView.setText(leftMouth);
 
-                nextMonth.setVisibility(View.GONE);
-                backMonth.setVisibility(View.GONE);
             }
         });
 
@@ -468,8 +467,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
             public void onClick(View v) {
                 String rightMouth = calendar.clickRightMonth();
                 mTitleCalendarTextView.setText(rightMouth);
-                nextMonth.setVisibility(View.GONE);
-                backMonth.setVisibility(View.GONE);
+
             }
         });
 
@@ -478,46 +476,49 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
             public void onClick(View v) {
                 nextMonth.setVisibility(View.VISIBLE);
                 backMonth.setVisibility(View.VISIBLE);
-                WindowManager manager = getWindowManager();
-                Display display = manager.getDefaultDisplay();
-                popupWindow = new PopupWindow(calendarView, display.getWidth(), display.getHeight());
-                popupWindow.setFocusable(true);
-                popupWindow.setTouchable(true);
-                popupWindow.setOutsideTouchable(true);
-                popupWindow.setBackgroundDrawable(new BitmapDrawable());
-                popupWindow.showAsDropDown(titleView);
-
+                calendarGroup.setVisibility(View.VISIBLE);
+                isShowCalendar =true;
             }
         });
 
-        calendar.setOnItemClickListener(new CalendarView.OnItemClickListener() {
+        calendar.setOnItemClickListener( new CalendarView.OnItemClickListener() {
             @Override
-            public void OnItemClick(Date selectedStartDate, Date selectedEndDate, Date downDate) {
-                popupWindow.update();
+            public void OnItemClick(Date selectedStartDate, Date selectedEndDate, Date downDate){
+                //TODO
+                format = new SimpleDateFormat("yyyy-MM-dd");
+                String selectDate = format.format(downDate);
+                Toast.makeText(ActivitiesActivity.this,selectDate,Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    @OnClick(R.id.home_fragment_title_back)
+
+
+    @OnClick(R.id.activities_title_back)
     public void backOnClick(){
-        finish();
+        if(isShowCalendar){
+            calendarGroup.setVisibility(View.GONE);
+            nextMonth.setVisibility(View.GONE);
+            backMonth.setVisibility(View.GONE);
+            isShowCalendar = false;
+        }else{
+            finish();
+        }
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        finish();
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (popupWindow != null) {
-                popupWindow.dismiss();
-                backMonth.setVisibility(View.GONE);
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            if(isShowCalendar){
+                calendarGroup.setVisibility(View.GONE);
                 nextMonth.setVisibility(View.GONE);
+                backMonth.setVisibility(View.GONE);
+                isShowCalendar = false;
+                return true;
             }
-            startActivity(HomeActivity.class);
-            return true;
         }
         return super.onKeyDown(keyCode, event);
     }
-
 
     @Override
     public void onStart() {

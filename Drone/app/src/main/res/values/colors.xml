@@ -11,7 +11,7 @@
     <color name="home_content_text_color">#88000000</color>
     <color name="world_clock_bg_color">#e6c68e</color>
     <color name="app_text_color_criterion">#66000000</color>
-    <color name="regitse_text_color">#88000000</color>
+    <color name="register_text_color">#88000000</color>
     <color name="home_adapter_item_select_color">#FF543C6E</color>
     <color name="profile_user_bg">#FFD7D7D7</color>
     <color name="choose_adapter_text_color">#FFFDFDFE</color>
@@ -19,4 +19,5 @@
     <color name="home_list_adapter_item_tv_color">#FF5C5D5D</color>
     <color name="user_info_gender_select_text_color">#ffffffff</color>
     <color name="user_info_gender_default_text_color">#88000000</color>
+    <color name="activities_calendar_show_bg_color">#b0000000</color>
 </resources>

@@ -50,7 +50,7 @@
             android:name=".activity.tutorial.LoginActivity"
             />
         <activity
-            android:name=".activity.tutorial.RegisteActivity"
+            android:name=".activity.tutorial.RegisterActivity"
             android:configChanges="screenLayout|orientation"
             android:launchMode="singleTop"
             />

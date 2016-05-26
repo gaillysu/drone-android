@@ -16,7 +16,7 @@ import butterknife.OnClick;
 /**
  * Created by boy on 2016/4/14.
  */
-public class RegisteActivity extends BaseActivity {
+public class RegisterActivity extends BaseActivity {
 
     @Bind(R.id.email_ed)
     EditText ed_email;
@@ -41,10 +41,10 @@ public class RegisteActivity extends BaseActivity {
         String email = ed_email.getText().toString();
         String password = ed_password.getText().toString();
         if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
-            Toast.makeText(RegisteActivity.this,
+            Toast.makeText(RegisterActivity.this,
                     R.string.tips_user_account_password, Toast.LENGTH_SHORT).show();
         } else {
-            Intent intent = new Intent(RegisteActivity.this, UserInfoActivity.class);
+            Intent intent = new Intent(RegisterActivity.this, UserInfoActivity.class);
             intent.putExtra("account", email);
             intent.putExtra("password", password);
             startActivity(intent);

@@ -132,7 +132,7 @@ public class UserInfoActivity extends BaseActivity {
 
     @OnClick(R.id.registe_back_iv)
     public void back() {
-        startActivity(RegisteActivity.class);
+        startActivity(RegisterActivity.class);
         finish();
     }
 
