@@ -17,4 +17,5 @@
     <color name="choose_adapter_text_color">#FFFDFDFE</color>
     <color name="choose_adapter_list_item_view_color">#EBD7BA</color>
     <color name="home_list_adapter_item_tv_color">#FF5C5D5D</color>
+    <color name="grey">#666666</color>
 </resources>

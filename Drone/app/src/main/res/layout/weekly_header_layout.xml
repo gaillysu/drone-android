@@ -43,11 +43,11 @@ android:orientation="horizontal">
 
     <TextView
         style="@style/home_content_activity_last_title_text_style"
-        android:text="@string/fragment_home_title_miles"
+        android:text="@string/fragment_home_title_kilometer"
         />
 
     <TextView
-        android:id="@+id/weekly_header_layout_miles_textview"
+        android:id="@+id/weekly_header_layout_km_textview"
         style="@style/home_content_activity_last_title_content_style"
         android:text="0"
         />
