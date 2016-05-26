@@ -23,7 +23,7 @@ public class StepsBean {
     private String userID;
 
     /**
-     * unix timestamp of the start of the accumulation, created date ?
+     * unix timestamp of the start of the accumulation, created date and time
      */
     public static final String fTimeframe = "timeFrame";
     @DatabaseField

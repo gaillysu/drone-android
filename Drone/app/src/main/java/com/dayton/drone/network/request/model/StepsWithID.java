@@ -6,7 +6,7 @@ package com.dayton.drone.network.request.model;
 public class StepsWithID {
     private int id;
     private int uid;
-    private int steps;
+    private String steps;
     private String date;
 
     public int getId() {
@@ -25,11 +25,11 @@ public class StepsWithID {
         this.uid = uid;
     }
 
-    public int getSteps() {
+    public String getSteps() {
         return steps;
     }
 
-    public void setSteps(int steps) {
+    public void setSteps(String steps) {
         this.steps = steps;
     }
 
