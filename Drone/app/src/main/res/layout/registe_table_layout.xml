@@ -44,7 +44,7 @@
             android:hint="Email"
             android:textStyle="bold"
             android:inputType="textEmailSubject"
-            android:paddingLeft="5dp"
+            android:paddingLeft="10dp"
             android:textSize="20sp"/>
 
         <View
@@ -60,7 +60,7 @@
             android:hint="Password"
             android:textStyle="bold"
             android:inputType="textPassword"
-            android:paddingLeft="5dp"
+            android:paddingLeft="10dp"
             android:textSize="20sp"/>
     </LinearLayout>
 

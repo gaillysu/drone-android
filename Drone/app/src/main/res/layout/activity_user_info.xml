@@ -5,62 +5,94 @@
               android:orientation="vertical">
 
     <include layout="@layout/registe_control_button"/>
-    <!--<ImageView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="60dp"-->
-        <!--android:src="@mipmap/dronelogo"/>-->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:text="@string/user_info_clue"
-        android:textSize="18sp"/>
+        android:textColor="@color/regitse_text_color"
+        android:textSize="19sp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="40dp"
         android:text="@string/user_info_share"
         android:textColor="#55000000"
-        android:textSize="15sp"/>
-
+        android:textSize="14sp"/>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="50dp"
+    android:layout_marginRight="50dp"
+    android:layout_marginTop="20dp"
+    android:orientation="vertical"
+    android:background="@drawable/registe_edit_bg"
+    >
+    <EditText
+        android:id="@+id/user_info_activity_first_name_ed"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:paddingLeft="15dp"
+        android:inputType="text"
+        android:background="@android:color/transparent"
+        android:hint="@string/user_info_activity_edit_first_name_hint"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/line_color"
+        />
+    <EditText
+        android:id="@+id/user_info_activity_last_name_ed"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:inputType="text"
+        android:hint="@string/user_info_activity_edit_last_name_hint"
+        android:paddingLeft="15dp"
+        android:background="@android:color/transparent"/>
+</LinearLayout>
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginLeft="50dp"
         android:orientation="horizontal"
         >
 
         <LinearLayout
 
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/registe_edit_bg">
 
             <TextView
                 android:id="@+id/user_info_sex_male_tv"
-                android:layout_width="80dp"
-                android:layout_height="40dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:background="@color/user_info_sex_bg"
+                android:textSize="20sp"
                 android:gravity="center"
+                android:textColor="@android:color/white"
                 android:text="@string/user_sex_male"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/registe_edit_bg">
 
             <TextView
                android:id="@+id/user_info_sex_female_tv"
-                android:layout_width="80dp"
-                android:layout_height="40dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:gravity="center"
+               android:textSize="20sp"
                 android:background="@android:color/transparent"
                 android:text="@string/user_sex_female"/>
         </LinearLayout>
@@ -72,7 +104,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="25dp"
         android:background="@drawable/registe_edit_bg"
         android:orientation="vertical"
         >
@@ -82,12 +114,13 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/user_barthday"
+                android:id="@+id/user_birthday"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="55dp"
+                android:textSize="20sp"
                 android:gravity="center_vertical"
                 android:hint="@string/user_info_brithday"
-                android:paddingLeft="5dp"
+                android:paddingLeft="15dp"
                 />
         </LinearLayout>
 
@@ -104,10 +137,11 @@
             <TextView
                 android:id="@+id/user_height"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="55dp"
+                android:textSize="20sp"
                 android:gravity="center_vertical"
                 android:hint="@string/user_info_height"
-                android:paddingLeft="5dp"
+                android:paddingLeft="15dp"
                 />
         </LinearLayout>
 
@@ -123,10 +157,11 @@
             <TextView
                 android:id="@+id/user_weight"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="55dp"
+                android:textSize="20sp"
                 android:gravity="center_vertical"
                 android:hint="@string/user_info_weight"
-                android:paddingLeft="5dp"
+                android:paddingLeft="15dp"
                 />
         </LinearLayout>
 

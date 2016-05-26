@@ -7,9 +7,11 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bruce.pickerview.popwindow.DatePickerPopWin;
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.database.entry.UserDatabaseHelper;
@@ -38,9 +40,9 @@ public class ProfileActivity extends BaseActivity {
     @Bind(R.id.profile_activity_user_email_account)
     EditText emailAccount;
     @Bind(R.id.profile_activity_user_height)
-    EditText userHeight;
+    TextView userHeight;
     @Bind(R.id.profile_activity_user_weight)
-    EditText userWeight;
+    TextView userWeight;
     @Bind(R.id.profile_activity_step_goal_et)
     EditText stepGoal;
     @Bind(R.id.home_title_right_save_bt)
@@ -50,6 +52,7 @@ public class ProfileActivity extends BaseActivity {
     @Bind(R.id.profile_activity_log_out_bt)
     Button logOut;
     private int userStepGoal;
+    private int viewType = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,13 +70,13 @@ public class ProfileActivity extends BaseActivity {
         emailAccount.setText(mUser.getUserEmail() != null ? mUser.getUserEmail() : getResources().getString(R.string.profile_edit_prompt));
 
         int userHeightValue = mUser.getHeight();
-        if (userHeightValue > 50&&userHeightValue<300) {
+        if (userHeightValue > 50 && userHeightValue < 300) {
             userHeight.setText(userHeightValue + getResources().getString(R.string.profile_user_height_unit));
         } else {
             userHeight.setText(getResources().getString(R.string.profile_edit_prompt));
         }
         double userWeightValue = mUser.getWeight();
-        if (userWeightValue > 15 &&userWeightValue <500) {
+        if (userWeightValue > 15 && userWeightValue < 500) {
             userWeight.setText(userWeightValue + getResources().getString(R.string.profile_user_weight_unit));
         } else {
             userWeight.setText(getResources().getString(R.string.profile_edit_prompt));
@@ -170,31 +173,26 @@ public class ProfileActivity extends BaseActivity {
 
     @OnClick(R.id.profile_activity_edit_user_height)
     public void editUserHeight() {
-        userHeight.requestFocus();
         userHeight.setText("");
-        userHeight.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (!b) {
-                    String height = userHeight.getText().toString();
-                    if (!TextUtils.isEmpty(height)) {
-                        int userH = 0;
-                        if(height.contains(getString(R.string.profile_user_height_unit))){
-                         userH = new Integer(height.substring(0,height.length()-2)).intValue();
-                        }else{
-                            userH = new Integer(height).intValue();
-                        }
-                        if (userH < 300 && userH > 50) {
-                            mUser.setHeight(userH);
-                            userHeight.setText(userH + getResources().getString(R.string.profile_user_height_unit));
-                        } else {
-                            userHeight.setText(mUser.getHeight() + getResources().getString(R.string.profile_user_height_unit));
-                            Toast.makeText(ProfileActivity.this, getString(R.string.profile_user_height_error), Toast.LENGTH_SHORT).show();
-
-                        }
-                    } else {
-                        userHeight.setText(mUser.getHeight() + getResources().getString(R.string.profile_user_height_unit));
+        viewType = 2;
+        DatePickerPopWin pickerPopWin2 = new DatePickerPopWin.Builder(ProfileActivity.this,
+                new DatePickerPopWin.OnDatePickedListener() {
+                    @Override
+                    public void onDatePickCompleted(int year, int month,
+                                                    int day, String dateDesc) {
+                        userHeight.setText(dateDesc + getResources().getString(R.string.profile_user_height_unit));
                     }
+                }).viewStyle(viewType)
+                .viewTextSize(25)
+                .dateChose("0-173-0")
+                .build();
+        pickerPopWin2.showPopWin(ProfileActivity.this);
+        pickerPopWin2.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+               String height = userHeight.getText().toString();
+                if(TextUtils.isEmpty(height)){
+                 userHeight.setText(mUser.getHeight()+getResources().getString(R.string.profile_user_height_unit));
                 }
             }
         });
@@ -202,31 +200,26 @@ public class ProfileActivity extends BaseActivity {
 
     @OnClick(R.id.profile_activity_edit_user_weight)
     public void editUserWeight() {
-        userWeight.requestFocus();
         userWeight.setText("");
-        userWeight.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (!b) {
-                    String weightInput = userWeight.getText().toString();
-                    if (!TextUtils.isEmpty(weightInput)) {
-                        double weight = 0;
-                        if(weightInput.contains(getString(R.string.profile_user_weight_unit))){
-                            weight =Double.parseDouble(weightInput.substring(0,weightInput.length()-2));
-                        }else{
-                            weight = Double.parseDouble(weightInput);
-                        }
-                        if ((weight > 0.0) && (weight < 300.0)) {
-                            mUser.setWeight(weight);
-                            userWeight.setText(weight + getResources().getString(R.string.profile_user_weight_unit));
-                        } else {
-                            userWeight.setText(mUser.getWeight() + getResources().getString(R.string.profile_user_weight_unit));
-                            Toast.makeText(ProfileActivity.this, getString(R.string.profile_user_height_error), Toast.LENGTH_SHORT).show();
-                        }
-
-                    } else {
-                        userWeight.setText(mUser.getWeight() + getResources().getString(R.string.profile_user_weight_unit));
+        viewType = 3;
+        DatePickerPopWin pickerPopWin3 = new DatePickerPopWin.Builder(ProfileActivity.this,
+                new DatePickerPopWin.OnDatePickedListener() {
+                    @Override
+                    public void onDatePickCompleted(int year, int month,
+                                                    int day, String dateDesc) {
+                        userWeight.setText(dateDesc + getResources().getString(R.string.profile_user_weight_unit));
                     }
+                }).viewStyle(viewType)
+                .viewTextSize(25)
+                .dateChose("52-0-0")
+                .build();
+        pickerPopWin3.showPopWin(ProfileActivity.this);
+        pickerPopWin3.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                String weight = userWeight.getText().toString();
+                if(TextUtils.isEmpty(weight)){
+                    userWeight.setText(mUser.getWeight()+getResources().getString(R.string.profile_user_weight_unit));
                 }
             }
         });
@@ -276,8 +269,8 @@ public class ProfileActivity extends BaseActivity {
             builder.setPositiveButton(R.string.profile_dialog_positive_button_text, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                   getModel().getUser().setUserIsLogin(false);
-                   getModel().getUserDatabaseHelper().update(getModel().getUser());
+                    getModel().getUser().setUserIsLogin(false);
+                    getModel().getUserDatabaseHelper().update(getModel().getUser());
                 }
             });
             builder.setNegativeButton(R.string.profile_dialog_negative_button_text, new DialogInterface.OnClickListener() {
@@ -300,20 +293,20 @@ public class ProfileActivity extends BaseActivity {
                     user.setFirstName(userFirstName.getText().toString());
                     user.setUserEmail(emailAccount.getText().toString());
                     String height = userHeight.getText().toString();
-                    if(height.contains(getString(R.string.profile_user_height_unit))){
-                       int currentHeight = new Integer(height.substring(0,height.length()-2)).intValue();
-                        user.setHeight(currentHeight);
-                    }else{
-                        user.setHeight(new Integer(height).intValue());
-                    }
+                        if (height.contains(getString(R.string.profile_user_height_unit))) {
+                            int currentHeight = new Integer(height.substring(0, height.length() - 2)).intValue();
+                            user.setHeight(currentHeight);
+                        } else {
+                            user.setHeight(new Integer(height).intValue());
+                        }
 
                     String weight = userWeight.getText().toString();
-                    if(weight.contains(getString(R.string.profile_user_weight_unit))){
-                        double currentWeight = Double.parseDouble(weight.substring(0,weight.length()-2));
-                        user.setWeight(currentWeight);
-                    }else{
-                        user.setWeight(Double.parseDouble(weight));
-                    }
+                        if (weight.contains(getString(R.string.profile_user_weight_unit))) {
+                            double currentWeight = Double.parseDouble(weight.substring(0, weight.length() - 2));
+                            user.setWeight(currentWeight);
+                        } else {
+                            user.setWeight(Double.parseDouble(weight));
+                        }
                     UserDatabaseHelper helper = getModel().getUserDatabaseHelper();
                     helper.update(user);
                 }

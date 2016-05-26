@@ -20,6 +20,9 @@
     <string name="user_info_about">About your info is not null</string>
     <string name="user_select_dec">Don\'t have a device here?</string>
     <string name="user_device_drone">Buy you drone here.</string>
+    <string name="user_info_activity_edit_first_name_hint">First Name</string>
+    <string name="user_info_activity_edit_last_name_hint">Last Name</string>
+
     <string name="bluetooth_connecting">Connecting</string>
     <string name="retry_connecting">Retry</string>
     <string name="watch_name">Drone Watch</string>

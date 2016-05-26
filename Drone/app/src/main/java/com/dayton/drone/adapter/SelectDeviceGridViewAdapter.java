@@ -53,8 +53,6 @@ public class SelectDeviceGridViewAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = View.inflate(context, R.layout.item_select_watch, null);
             holder = new HolderView(convertView);
-            holder.watchIcon = (ImageView) convertView.findViewById(R.id.select_watch_icon);
-            holder.watchName = (TextView) convertView.findViewById(R.id.drone_name);
             convertView.setTag(holder);
         } else {
             holder = (HolderView) convertView.getTag();
