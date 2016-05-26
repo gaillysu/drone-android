@@ -50,7 +50,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -102,11 +101,10 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     @Bind(R.id.home_fragement_guide_dec_chart)
     TextView chartGuideDec;
 
-    private LinearLayout dateTv;
     private View titleView;
     private Button mBtBack;
-    private ImageButton mIvBackMouth;
-    private ImageButton mIvNextMouth;
+    private ImageButton backMonth;
+    private ImageButton nextMonth;
     private LinearLayout showCalendar;
     private SimpleDateFormat format;
     private PopupWindow popupWindow;
@@ -123,10 +121,9 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         ButterKnife.bind(this);
 
         titleView = findViewById(R.id.fragment_title);
-        mIvNextMouth = (ImageButton) findViewById(R.id.home_fragmet_title_next_day);
-        mIvBackMouth = (ImageButton) findViewById(R.id.home_fragment_calendar_back_day);
-        showCalendar = (LinearLayout) findViewById(R.id.home_fragment_title_date);
-        dateTv = (LinearLayout) findViewById(R.id.home_fragment_title_date);
+        nextMonth = (ImageButton) findViewById(R.id.activities_activity_title_next_day);
+        backMonth = (ImageButton) findViewById(R.id.activities_activity_calendar_back_day);
+        showCalendar = (LinearLayout) findViewById(R.id.activities_activity_title_date);
         mTitleCalendarTextView = (TextView) findViewById(R.id.home_fragment_title_date_tv);
         calendarView = View.inflate(getModel(), R.layout.date_layout_popupwindow, null);
 
@@ -140,8 +137,8 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         calendar = (CalendarView) calendarView.findViewById(R.id.calendar_popupwindow_layout);
         calendar.setSelectMore(false);
 
-        mIvNextMouth.setVisibility(View.GONE);
-        mIvBackMouth.setVisibility(View.GONE);
+        nextMonth.setVisibility(View.GONE);
+        backMonth.setVisibility(View.GONE);
         initHourlyData();
         initweeklyData();
         initlastweeklyData();
@@ -152,7 +149,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
 
     private void startView() {
         if (mIsFirst) {
-            dateTv.setBackgroundResource(R.drawable.user_guide_bg);
+            showCalendar.setBackgroundResource(R.drawable.user_guide_bg);
             titleGuide.setVisibility(View.VISIBLE);
             guideView.setVisibility(View.VISIBLE);
             guideView.setOnClickListener(new View.OnClickListener() {
@@ -162,7 +159,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
                     switch (guidePage) {
                         case 2:
                             titleDec.setBackgroundResource(R.drawable.user_guide_bg);
-                            dateTv.setBackgroundDrawable(new BitmapDrawable());
+                            showCalendar.setBackgroundDrawable(new BitmapDrawable());
                             acvitiesGuide.setVisibility(View.VISIBLE);
                             titleGuide.setVisibility(View.GONE);
 
@@ -184,6 +181,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
                         case 5:
                             chartGuideDec.setVisibility(View.GONE);
                             guideView.setVisibility(View.GONE);
+                            hourlyBarChart.setBackgroundDrawable(new BitmapDrawable());
                             SpUtils.putBoolean(getModel(), CacheConstants.IS_FIRST, false);
                             break;
                     }
@@ -454,32 +452,32 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         lastmonthLineChart.setData(data);
     }
     public void addListener() {
-        mIvBackMouth.setOnClickListener(new View.OnClickListener() {
+        backMonth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String leftMouth = calendar.clickLeftMonth();
                 mTitleCalendarTextView.setText(leftMouth);
 
-                mIvNextMouth.setVisibility(View.GONE);
-                mIvBackMouth.setVisibility(View.GONE);
+                nextMonth.setVisibility(View.GONE);
+                backMonth.setVisibility(View.GONE);
             }
         });
 
-        mIvNextMouth.setOnClickListener(new View.OnClickListener() {
+        nextMonth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String rightMouth = calendar.clickRightMonth();
                 mTitleCalendarTextView.setText(rightMouth);
-                mIvNextMouth.setVisibility(View.GONE);
-                mIvBackMouth.setVisibility(View.GONE);
+                nextMonth.setVisibility(View.GONE);
+                backMonth.setVisibility(View.GONE);
             }
         });
 
         showCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mIvNextMouth.setVisibility(View.VISIBLE);
-                mIvBackMouth.setVisibility(View.VISIBLE);
+                nextMonth.setVisibility(View.VISIBLE);
+                backMonth.setVisibility(View.VISIBLE);
                 WindowManager manager = getWindowManager();
                 Display display = manager.getDefaultDisplay();
                 popupWindow = new PopupWindow(calendarView, display.getWidth(), display.getHeight());
@@ -511,8 +509,8 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (popupWindow != null) {
                 popupWindow.dismiss();
-                mIvBackMouth.setVisibility(View.GONE);
-                mIvNextMouth.setVisibility(View.GONE);
+                backMonth.setVisibility(View.GONE);
+                nextMonth.setVisibility(View.GONE);
             }
             startActivity(HomeActivity.class);
             return true;

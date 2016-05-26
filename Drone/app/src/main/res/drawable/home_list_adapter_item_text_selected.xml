@@ -9,5 +9,5 @@
     <!--点击时的颜色-->
     <item android:state_pressed="true" android:color="#FFFFFF" />
     <!-- 默认颜色 -->
-    <item android:color="#995C5D5D"/>
+    <item android:color="#5C5D5D"/>
 </selector>

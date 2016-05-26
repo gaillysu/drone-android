@@ -31,7 +31,7 @@
     <string name="connecting_fail">Fail</string>
     <string name="start_smart_watch">Open</string>
     <string name="home_guide_clock">WORLD\n\tCLOCK</string>
-    <string name="home_guide_analysis">ANALYISIS</string>
+    <string name="home_guide_analysis">保证ANALYISIS</string>
     <string name="home_guide_setting">WATCH\n\tSETTING</string>
     <string name="home_guide_profile">Profile</string>
     <string name="home_title_back_text">Back</string>
@@ -40,7 +40,7 @@
     <string name="fragment_home_title_calories">CALORIES</string>
     <string name="fragment_home_title_active_time">ACTIVE TIME</string>
     <string name="fragment_home_title_miles">MILES</string>
-    <string name="fragment_home_guide_see_horisty_dec">See your previous activies</string>
+    <string name="fragment_home_guide_see_history_dec">See your previous activies</string>
     <string name="fragment_home_guide_see_data_dec">Here is your data from Drone</string>
     <string name="fragment_home_guide_meter_dec">Click the dashboard to see floors</string>
     <string name="fragment_home_guide_histogram_dec">The bar graph will presenting your activities durations</string>

@@ -6,7 +6,7 @@
               android:orientation="vertical">
 
     <include
-        layout="@layout/home_fragment_title"></include>
+        layout="@layout/home_activity_title"></include>
 
     <ListView
         android:id="@+id/activity_home_meun_listview"
