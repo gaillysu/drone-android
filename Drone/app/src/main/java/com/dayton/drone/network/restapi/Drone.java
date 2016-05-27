@@ -32,7 +32,7 @@ public interface Drone {
     LoginUserModel userLogin(@Body LoginUserObject object,@Header("Authorization") String auth,@Header("Content-Type") String type);
 
     @PUT("/user/update")
-    UpdateUserModel userUpdate(@Body UpdateUserObject object,@Header("Content-Type") String type);
+    UpdateUserModel userUpdate(@Body UpdateUserObject object,@Header("Authorization") String auth,@Header("Content-Type") String type);
 
     @POST("/steps/create")
     CreateStepsModel stepsCreate(@Body CreateStepsObject object,@Header("Authorization") String auth,@Header("Content-Type") String type);

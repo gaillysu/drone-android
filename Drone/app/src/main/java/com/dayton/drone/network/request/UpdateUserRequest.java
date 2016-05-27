@@ -26,7 +26,7 @@ public class UpdateUserRequest extends BaseRequest<UpdateUserModel,Drone> implem
 
     @Override
     public UpdateUserModel loadDataFromNetwork() throws Exception {
-        return getService().userUpdate(buildRequestBody(),CONTENT_TYPE);
+        return getService().userUpdate(buildRequestBody(),buildAuthorization(),CONTENT_TYPE);
     }
 
     @Override

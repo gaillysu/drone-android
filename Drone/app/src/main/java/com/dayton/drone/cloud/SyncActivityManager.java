@@ -4,21 +4,28 @@ import android.content.Context;
 import android.util.Log;
 
 import com.dayton.drone.application.ApplicationModel;
+import com.dayton.drone.event.BigSyncEvent;
+import com.dayton.drone.event.ProfileChangedEvent;
 import com.dayton.drone.model.Steps;
 import com.dayton.drone.network.Constants;
 import com.dayton.drone.network.request.UpdateStepsRequest;
+import com.dayton.drone.network.request.UpdateUserRequest;
 import com.dayton.drone.network.request.model.CreateSteps;
 import com.dayton.drone.network.request.model.StepsWithID;
+import com.dayton.drone.network.request.model.UpdateUser;
 import com.dayton.drone.network.response.model.CreateStepsModel;
 import com.dayton.drone.network.request.CreateStepsRequest;
 import com.dayton.drone.network.response.model.GetStepsModel;
 import com.dayton.drone.network.request.GetStepsRequest;
 import com.dayton.drone.network.response.model.StepsDetail;
 import com.dayton.drone.network.response.model.UpdateStepsModel;
+import com.dayton.drone.network.response.model.UpdateUserModel;
 import com.dayton.drone.utils.Common;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -43,6 +50,7 @@ public class SyncActivityManager {
     public SyncActivityManager(Context context)
     {
         this.context = context;
+        EventBus.getDefault().register(this);
     }
     private ApplicationModel getModel() {return (ApplicationModel)context;}
 
@@ -239,5 +247,43 @@ public class SyncActivityManager {
     private void downloadSleep(final Date startDate, final Date endDate)
     {
 
+    }
+
+    @Subscribe
+    public void onEvent(BigSyncEvent event) {
+        if(event.getStatus() == BigSyncEvent.BIG_SYNC_EVENT.STOPPED)
+        {
+            Date today = new Date();
+            for(long start = event.getStartSyncDate().getTime();start<=today.getTime();start+= Common.ONEDAY)
+            {
+                launchSyncDailyHourlySteps(new Date(start));
+            }
+        }
+    }
+
+    @Subscribe
+    public void onEvent(ProfileChangedEvent profileChangedEvent) {
+        UpdateUser updateUser = new UpdateUser();
+        updateUser.setId(Integer.parseInt(profileChangedEvent.getUser().getUserID()));
+        updateUser.setFirst_name(profileChangedEvent.getUser().getFirstName());
+        updateUser.setLast_name(profileChangedEvent.getUser().getLastName());
+        updateUser.setEmail(profileChangedEvent.getUser().getUserEmail());
+        updateUser.setPassword(profileChangedEvent.getUser().getUserPassword());
+        updateUser.setLength(profileChangedEvent.getUser().getHeight());
+        updateUser.setAge(profileChangedEvent.getUser().getAge());
+        getModel().getRetrofitManager().execute(new UpdateUserRequest(updateUser, getModel().getRetrofitManager().getAccessToken()), new RequestListener<UpdateUserModel>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                spiceException.printStackTrace();
+            }
+
+            @Override
+            public void onRequestSuccess(UpdateUserModel updateUserModel) {
+                Log.i(TAG,updateUserModel.getMessage());
+                if(updateUserModel.getStatus()==1) {
+
+                }
+            }
+        });
     }
 }

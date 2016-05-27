@@ -63,7 +63,6 @@ public class ApplicationModel extends Application {
             user = new User();
             user.setUserID("0");//"0" means anyone user
         }
-        EventBus.getDefault().register(this);
     }
 
     public SyncController getSyncController() {
@@ -100,16 +99,5 @@ public class ApplicationModel extends Application {
         return watchesDatabaseHelper;
     }
 
-    @Subscribe
-    public void onEvent(BigSyncEvent event) {
-        if(event.getStatus() == BigSyncEvent.BIG_SYNC_EVENT.STOPPED)
-        {
-            Date today = new Date();
-            for(long start = event.getStartSyncDate().getTime();start<=today.getTime();start+= Common.ONEDAY)
-            {
-                getSyncActivityManager().launchSyncDailyHourlySteps(new Date(start));
-            }
-        }
-    }
 
 }

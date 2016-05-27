@@ -15,9 +15,13 @@ import com.bruce.pickerview.popwindow.DatePickerPopWin;
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.database.entry.UserDatabaseHelper;
+import com.dayton.drone.event.ProfileChangedEvent;
+import com.dayton.drone.event.StepsGoalChangedEvent;
 import com.dayton.drone.model.User;
 import com.dayton.drone.utils.CacheConstants;
 import com.dayton.drone.utils.SpUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -308,7 +312,15 @@ public class ProfileActivity extends BaseActivity {
                             user.setWeight(Double.parseDouble(weight));
                         }
                     UserDatabaseHelper helper = getModel().getUserDatabaseHelper();
-                    helper.update(user);
+                    if(userStepGoal!=currentGoalStep)
+                    {
+                        userStepGoal = currentGoalStep;
+                        EventBus.getDefault().post(new StepsGoalChangedEvent(userStepGoal));
+                    }
+                    if(helper.update(user))
+                    {
+                        EventBus.getDefault().post(new ProfileChangedEvent(user));
+                    }
                 }
             });
 
