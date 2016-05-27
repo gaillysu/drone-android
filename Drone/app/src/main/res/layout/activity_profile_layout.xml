@@ -21,7 +21,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="70dp"
+                android:layout_height="80dp"
                 android:background="@color/profile_user_bg"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
@@ -204,4 +204,30 @@
             android:textColor="@android:color/white"
             android:textSize="24sp"/>
     </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/profile_save_no_watch_connected_show"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:background="@color/activities_calendar_show_bg_color">
+        <LinearLayout
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:background="@drawable/profile"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:textColor="@color/app_text_color_criterion"
+            android:textSize="15sp"
+            android:text="@string/profile_save_text_dec"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@mipmap/save_error_icon"/>
+        </LinearLayout>
+    </RelativeLayout>
 </RelativeLayout>

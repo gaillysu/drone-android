@@ -25,9 +25,9 @@ import butterknife.OnClick;
  */
 public class LoginActivity extends BaseActivity {
 
-    @Bind(R.id.email_ed)
+    @Bind(R.id.register_edit_email_ed)
     EditText ed_account;
-    @Bind(R.id.password_ed)
+    @Bind(R.id.register_edit_password_ed)
     EditText ed_password;
     @Bind(R.id.registe_next_iv)
     ImageButton nextImageButton;
@@ -47,6 +47,7 @@ public class LoginActivity extends BaseActivity {
     @OnClick(R.id.registe_back_iv)
     public void back(){
         startActivity(WelcomeActivity.class);
+        getModel().getUser().setUserIsLogin(false);
         finish();
     }
 

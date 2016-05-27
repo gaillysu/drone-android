@@ -1,5 +1,6 @@
 package com.dayton.drone.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -7,6 +8,7 @@ import android.widget.ListView;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
+import com.dayton.drone.activity.tutorial.WelcomeActivity;
 import com.dayton.drone.adapter.MyHomeMenuAdapter;
 import com.dayton.drone.bean.MenuBean;
 
@@ -88,8 +90,22 @@ public class HomeActivity extends BaseActivity {
 
     @OnClick(R.id.title_head_icon)
     public void startProfile() {
-        startActivity(ProfileActivity.class);
+        Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
+        startActivityForResult(intent, 2);
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 2 >> 5) {
+            boolean flag = data.getBooleanExtra("logOut", false);
+            if (flag) {
+                getModel().getUser().setUserIsLogin(false);
+                startActivity(WelcomeActivity.class);
+                finish();
+            } else {
+                getModel().getUser().setUserIsLogin(true);
+            }
+        }
+    }
 }

@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:background="@android:color/white"
               android:orientation="vertical">
 
     <include layout="@layout/registe_control_button"/>
@@ -20,7 +21,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="40dp"
         android:text="@string/user_info_share"
-        android:textColor="#55000000"
+        android:textColor="#88000000"
         android:textSize="14sp"/>
 <LinearLayout
     android:layout_width="match_parent"
@@ -34,9 +35,10 @@
     <EditText
         android:id="@+id/user_info_activity_first_name_ed"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:paddingLeft="15dp"
+        android:layout_height="50dp"
+        android:paddingLeft="10dp"
         android:inputType="text"
+        android:textSize="20sp"
         android:background="@android:color/transparent"
         android:hint="@string/user_info_activity_edit_first_name_hint"/>
     <View
@@ -47,15 +49,16 @@
     <EditText
         android:id="@+id/user_info_activity_last_name_ed"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="50dp"
         android:inputType="text"
+        android:textSize="20sp"
         android:hint="@string/user_info_activity_edit_last_name_hint"
-        android:paddingLeft="15dp"
+        android:paddingLeft="10dp"
         android:background="@android:color/transparent"/>
 </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="50dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="25dp"
         android:layout_marginRight="50dp"
@@ -116,11 +119,11 @@
             <TextView
                 android:id="@+id/user_birthday"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
+                android:layout_height="50dp"
                 android:textSize="20sp"
                 android:gravity="center_vertical"
                 android:hint="@string/user_info_brithday"
-                android:paddingLeft="15dp"
+                android:paddingLeft="10dp"
                 />
         </LinearLayout>
 
@@ -137,11 +140,11 @@
             <TextView
                 android:id="@+id/user_height"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
+                android:layout_height="50dp"
                 android:textSize="20sp"
                 android:gravity="center_vertical"
                 android:hint="@string/user_info_height"
-                android:paddingLeft="15dp"
+                android:paddingLeft="10dp"
                 />
         </LinearLayout>
 
@@ -157,11 +160,11 @@
             <TextView
                 android:id="@+id/user_weight"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
+                android:layout_height="50dp"
                 android:textSize="20sp"
                 android:gravity="center_vertical"
                 android:hint="@string/user_info_weight"
-                android:paddingLeft="15dp"
+                android:paddingLeft="10dp"
                 />
         </LinearLayout>
 

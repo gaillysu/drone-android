@@ -60,7 +60,7 @@ public class UserDatabaseHelper implements iEntryDatabaseHelper<User> {
     }
 
     @Override
-    public boolean remove(String userId, Date date) {
+    public boolean remove(String userId ,Date date) {
         try {
             List<UserBean> userList = databaseHelper.getUserBean().queryBuilder()
                     .where().eq(UserBean.fUserID, userId).query();
@@ -71,6 +71,20 @@ public class UserDatabaseHelper implements iEntryDatabaseHelper<User> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return false;
+    }
+
+
+    public boolean removeAll(){
+        try {
+            List<UserBean> userBeanList = databaseHelper.getUserBean().queryForAll();
+            return databaseHelper.getUserBean().delete(userBeanList)>=0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
         return false;
     }
 

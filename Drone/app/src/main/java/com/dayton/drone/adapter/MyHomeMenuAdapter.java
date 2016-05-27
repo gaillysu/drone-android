@@ -5,7 +5,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dayton.drone.R;
@@ -69,7 +68,6 @@ public class MyHomeMenuAdapter extends BaseAdapter {
             holder.mMenuIv.setBackgroundResource(bean.getIconId());
             holder.mMenuTv.setText(bean.getDec());
         }
-
         return convertView;
     }
 
@@ -78,11 +76,11 @@ public class MyHomeMenuAdapter extends BaseAdapter {
         ImageView mMenuIv;
         @Bind(R.id.home_adapter_menu_tv)
         TextView mMenuTv;
-        @Bind(R.id.home_activity_list_adapter_item)
-        RelativeLayout homeAdapterRelativeLayout;
+
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
     }
 }
+
 

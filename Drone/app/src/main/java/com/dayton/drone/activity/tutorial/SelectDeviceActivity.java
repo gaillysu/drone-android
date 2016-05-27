@@ -70,7 +70,6 @@ public class SelectDeviceActivity extends BaseActivity {
                 }else{
                     startActivity(UserInfoActivity.class);
                 }
-
                 finish();
             }
         });

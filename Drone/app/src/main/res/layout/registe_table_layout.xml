@@ -4,32 +4,30 @@
               android:layout_height="wrap_content"
               android:background="@android:color/white"
               android:orientation="vertical">
-
     <ImageView
-        android:id="@+id/registe_drone_logo"
+        android:id="@+id/register_drone_logo"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginTop="10dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
         android:src="@mipmap/dronelogo"/>
-
     <TextView
-        android:id="@+id/registe_tx"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/register_email"
-        android:textColor="@color/app_text_color_criterion"
-        android:textSize="16sp"/>
-
+    android:id="@+id/register_tx"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="30dp"
+    android:layout_gravity="center_horizontal"
+    android:text="@string/register_email"
+    android:textColor="@color/app_text_color_criterion"
+    android:textSize="25sp"/>
     <LinearLayout
-        android:id="@+id/registe_ll"
+        android:id="@+id/register_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/registe_tx"
         android:layout_centerHorizontal="true"
-        android:layout_marginLeft="80dp"
-        android:layout_marginRight="80dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="60dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="50dp"
         android:background="@drawable/registe_edit_bg"
@@ -37,9 +35,9 @@
         >
 
         <EditText
-            android:id="@+id/email_ed"
+            android:id="@+id/register_edit_email_ed"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:background="@null"
             android:hint="Email"
             android:textStyle="bold"
@@ -53,9 +51,9 @@
             android:background="#33000000"/>
 
         <EditText
-            android:id="@+id/password_ed"
+            android:id="@+id/register_edit_password_ed"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:background="@null"
             android:hint="Password"
             android:textStyle="bold"
@@ -63,46 +61,45 @@
             android:paddingLeft="10dp"
             android:textSize="20sp"/>
     </LinearLayout>
-
     <TextView
         android:id="@+id/registe_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/registe_ll"
+        android:layout_below="@id/register_ll"
+        android:layout_marginTop="50dp"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="60dp"
         android:textStyle="bold"
         android:text="@string/third_party_login"
         android:textColor="#88000000"
-        android:textSize="14sp"/>
+        android:textSize="16sp"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/registe_tv"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="40dp"
         android:layout_gravity="center_horizontal"
         >
 
         <ImageView
             android:id="@+id/google_account_login"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:src="@mipmap/login_google_icon"/>
 
         <ImageView
             android:id="@+id/face_book_account_login"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginLeft="30dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="55dp"
             android:src="@mipmap/login_facebook_icon"/>
 
         <ImageView
             android:id="@+id/Twitter_account_login"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginLeft="30dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="55dp"
             android:src="@mipmap/login_twitter_icon"/>
     </LinearLayout>
 </LinearLayout>

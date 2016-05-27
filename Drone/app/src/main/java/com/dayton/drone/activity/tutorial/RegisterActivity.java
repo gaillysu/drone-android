@@ -18,9 +18,9 @@ import butterknife.OnClick;
  */
 public class RegisterActivity extends BaseActivity {
 
-    @Bind(R.id.email_ed)
+    @Bind(R.id.register_edit_email_ed)
     EditText ed_email;
-    @Bind(R.id.password_ed)
+    @Bind(R.id.register_edit_password_ed)
     EditText ed_password;
 
     @Override

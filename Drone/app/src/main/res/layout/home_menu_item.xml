@@ -23,6 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="100dp"
+            android:background="@android:color/transparent"
             android:textColor="@drawable/home_list_adapter_item_text_selected"
             android:textSize="35sp"/>
     </RelativeLayout>

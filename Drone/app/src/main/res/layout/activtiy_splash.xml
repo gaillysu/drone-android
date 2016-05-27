@@ -6,6 +6,8 @@
               android:orientation="vertical"
                 >
             <ImageView
+              android:layout_marginRight="40dp"
+              android:layout_marginLeft="40dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"

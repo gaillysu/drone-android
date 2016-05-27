@@ -65,14 +65,11 @@
     <string name="profile_email_format_error_prompt">Mailbox format is not correct</string>
     <string name="profile_user_height_error">illegal input</string>
     <string name="profile_activity_log_out_text">Log Out</string>
-    <string name="profile_dialog_log_out_prompt">Message</string>
+    <string name="profile_dialog_log_out_prompt">Log Out</string>
     <string name="profile_dialog_log_out_message">Are you sure you want to log out?</string>
     <string name="profile_dialog_positive_button_text">Sure</string>
     <string name="profile_dialog_negative_button_text">Cancel</string>
-    <string name="profile_dialog_save_title_text">Save</string>
-    <string name="profile_dialog_save_message_text">Save changes</string>
-    <string name="profile_dialog_save_positive_button_text">Yes</string>
-    <string name="profile_dialog_save_negative_button_text">No</string>
+    <string name="profile_save_text_dec">No Watch\nconnected</string>
 
 
     <string-array name="user_select_dec_arr">
