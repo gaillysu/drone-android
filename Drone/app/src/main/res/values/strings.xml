@@ -40,7 +40,7 @@
 
     <string name="fragment_home_title_calories">CALORIES</string>
     <string name="fragment_home_title_active_time">ACTIVE TIME</string>
-    <string name="fragment_home_title_miles">MILES</string>
+    <string name="fragment_home_title_kilometer">KM</string>
     <string name="fragment_home_guide_see_history_dec">See your previous activies</string>
     <string name="fragment_home_guide_see_data_dec">Here is your data from Drone</string>
     <string name="fragment_home_guide_meter_dec">Click the dashboard to see floors</string>
@@ -86,8 +86,5 @@
     <string-array name="home_menu_text_data">
         <item>ACTIVITIES</item>
         <item>WORLD\nCLOCK</item>
-        <!--<item> SLEEP </item>-->
-        <!--<item>GALLERY</item>-->
-        <!--<item>SETTINGS</item>-->
     </string-array>
 </resources>
