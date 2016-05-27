@@ -93,6 +93,9 @@ public class ProfileActivity extends BaseActivity {
 
     @OnClick(R.id.content_title_back_bt)
     public void back() {
+        Intent intent = getIntent();
+        intent.putExtra("logOut", false);
+        setResult(2 >> 5, intent);
         finish();
     }
 
@@ -198,9 +201,9 @@ public class ProfileActivity extends BaseActivity {
         pickerPopWin2.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
-               String height = userHeight.getText().toString();
-                if(TextUtils.isEmpty(height)){
-                 userHeight.setText(mUser.getHeight()+getResources().getString(R.string.profile_user_height_unit));
+                String height = userHeight.getText().toString();
+                if (TextUtils.isEmpty(height)) {
+                    userHeight.setText(mUser.getHeight() + getResources().getString(R.string.profile_user_height_unit));
                 }
             }
         });
@@ -226,8 +229,8 @@ public class ProfileActivity extends BaseActivity {
             @Override
             public void onDismiss() {
                 String weight = userWeight.getText().toString();
-                if(TextUtils.isEmpty(weight)){
-                    userWeight.setText(mUser.getWeight()+getResources().getString(R.string.profile_user_weight_unit));
+                if (TextUtils.isEmpty(weight)) {
+                    userWeight.setText(mUser.getWeight() + getResources().getString(R.string.profile_user_weight_unit));
                 }
             }
         });
@@ -267,9 +270,9 @@ public class ProfileActivity extends BaseActivity {
     @OnClick(R.id.home_title_right_save_bt)
     public void saveEdit() {
         boolean watchConnected = getModel().getSyncController().isConnected();
-        if(!watchConnected){
+        if (!watchConnected) {
             noWatchShow.setVisibility(View.VISIBLE);
-            AlphaAnimation alpha = new AlphaAnimation(1,0);
+            AlphaAnimation alpha = new AlphaAnimation(1, 0);
             alpha.setDuration(2000);
             alpha.setFillAfter(true);
             noWatchShow.startAnimation(alpha);
@@ -320,75 +323,75 @@ public class ProfileActivity extends BaseActivity {
 
     private void showDiaLogMethod(int id) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(R.string.profile_dialog_log_out_prompt).
-                    setMessage(R.string.profile_dialog_log_out_message);
-            builder.setPositiveButton(R.string.profile_dialog_positive_button_text, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    SpUtils.putBoolean(ProfileActivity.this,CacheConstants.IS_FIRST,true);
-                    getModel().getUser().setUserIsLogin(false);
-                    getModel().getUserDatabaseHelper().remove(mUser.getUserID(),new Date());
-                    Intent intent = getIntent();
-                    intent.putExtra("logOut",true);
-                    setResult(2>>5,intent);
-                    finish();
-                }
-            });
-            builder.setNegativeButton(R.string.profile_dialog_negative_button_text, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.dismiss();
-                }
-            });
-            builder.show();
+        builder.setTitle(R.string.profile_dialog_log_out_prompt).
+                setMessage(R.string.profile_dialog_log_out_message);
+        builder.setPositiveButton(R.string.profile_dialog_positive_button_text, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                SpUtils.putBoolean(ProfileActivity.this, CacheConstants.IS_FIRST, true);
+                getModel().getUser().setUserIsLogin(false);
+                getModel().getUserDatabaseHelper().remove(mUser.getUserID(), new Date());
+                Intent intent = getIntent();
+                intent.putExtra("logOut", true);
+                setResult(2 >> 5, intent);
+                finish();
+            }
+        });
+        builder.setNegativeButton(R.string.profile_dialog_negative_button_text, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        builder.show();
 
-//        } else if (id == saveButton.getId()) {
-//            builder.setTitle(R.string.profile_dialog_save_title_text).setMessage(R.string.profile_dialog_save_message_text);
-//            builder.setPositiveButton(R.string.profile_dialog_save_positive_button_text, new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialogInterface, int i) {
-//                    int currentGoalStep = new Integer(stepGoal.getText().toString()).intValue();
-//                    SpUtils.putIntMethod(ProfileActivity.this, CacheConstants.GOAL_STEP, currentGoalStep);
-//                    User user = getModel().getUser();
-//                    user.setLastName(accountName.getText().toString());
-//                    user.setFirstName(userFirstName.getText().toString());
-//                    user.setUserEmail(emailAccount.getText().toString());
-//                    String height = userHeight.getText().toString();
-//                        if (height.contains(getString(R.string.profile_user_height_unit))) {
-//                            int currentHeight = new Integer(height.substring(0, height.length() - 2)).intValue();
-//                            user.setHeight(currentHeight);
-//                        } else {
-//                            user.setHeight(new Integer(height).intValue());
-//                        }
-//
-//                    String weight = userWeight.getText().toString();
-//                        if (weight.contains(getString(R.string.profile_user_weight_unit))) {
-//                            double currentWeight = Double.parseDouble(weight.substring(0, weight.length() - 2));
-//                            user.setWeight(currentWeight);
-//                        } else {
-//                            user.setWeight(Double.parseDouble(weight));
-//                        }
-//                    UserDatabaseHelper helper = getModel().getUserDatabaseHelper();
-//                    if(userStepGoal!=currentGoalStep)
-//                    {
-//                        userStepGoal = currentGoalStep;
-//                        EventBus.getDefault().post(new StepsGoalChangedEvent(userStepGoal));
-//                    }
-//                    if(helper.update(user))
-//                    {
-//                        EventBus.getDefault().post(new ProfileChangedEvent(user));
-//                    }
-//                }
-//            });
-//
-//            builder.setNegativeButton(R.string.profile_dialog_save_negative_button_text, new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialogInterface, int i) {
-//                    dialogInterface.dismiss();
-//                }
-//            });
-//            builder.show();
-//        }
+        //        } else if (id == saveButton.getId()) {
+        //            builder.setTitle(R.string.profile_dialog_save_title_text).setMessage(R.string.profile_dialog_save_message_text);
+        //            builder.setPositiveButton(R.string.profile_dialog_save_positive_button_text, new DialogInterface.OnClickListener() {
+        //                @Override
+        //                public void onClick(DialogInterface dialogInterface, int i) {
+        //                    int currentGoalStep = new Integer(stepGoal.getText().toString()).intValue();
+        //                    SpUtils.putIntMethod(ProfileActivity.this, CacheConstants.GOAL_STEP, currentGoalStep);
+        //                    User user = getModel().getUser();
+        //                    user.setLastName(accountName.getText().toString());
+        //                    user.setFirstName(userFirstName.getText().toString());
+        //                    user.setUserEmail(emailAccount.getText().toString());
+        //                    String height = userHeight.getText().toString();
+        //                        if (height.contains(getString(R.string.profile_user_height_unit))) {
+        //                            int currentHeight = new Integer(height.substring(0, height.length() - 2)).intValue();
+        //                            user.setHeight(currentHeight);
+        //                        } else {
+        //                            user.setHeight(new Integer(height).intValue());
+        //                        }
+        //
+        //                    String weight = userWeight.getText().toString();
+        //                        if (weight.contains(getString(R.string.profile_user_weight_unit))) {
+        //                            double currentWeight = Double.parseDouble(weight.substring(0, weight.length() - 2));
+        //                            user.setWeight(currentWeight);
+        //                        } else {
+        //                            user.setWeight(Double.parseDouble(weight));
+        //                        }
+        //                    UserDatabaseHelper helper = getModel().getUserDatabaseHelper();
+        //                    if(userStepGoal!=currentGoalStep)
+        //                    {
+        //                        userStepGoal = currentGoalStep;
+        //                        EventBus.getDefault().post(new StepsGoalChangedEvent(userStepGoal));
+        //                    }
+        //                    if(helper.update(user))
+        //                    {
+        //                        EventBus.getDefault().post(new ProfileChangedEvent(user));
+        //                    }
+        //                }
+        //            });
+        //
+        //            builder.setNegativeButton(R.string.profile_dialog_save_negative_button_text, new DialogInterface.OnClickListener() {
+        //                @Override
+        //                public void onClick(DialogInterface dialogInterface, int i) {
+        //                    dialogInterface.dismiss();
+        //                }
+        //            });
+        //            builder.show();
+        //        }
     }
 
     public boolean checkEmail(String email) {
@@ -407,10 +410,10 @@ public class ProfileActivity extends BaseActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK){
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             Intent intent = getIntent();
-            intent.putExtra("logOut",false);
-            setResult(2>>5,intent);
+            intent.putExtra("logOut", false);
+            setResult(2 >> 5, intent);
             finish();
             return true;
         }
