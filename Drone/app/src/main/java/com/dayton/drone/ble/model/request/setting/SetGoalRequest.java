@@ -9,7 +9,7 @@ import com.dayton.drone.ble.model.request.base.RequestBase;
  */
 public class SetGoalRequest extends RequestBase {
     public final static byte HEADER = (byte)0x12;
-    public final static int DEFAULTSTEPSGOAL = 7000;
+    public final static int DEFAULTSTEPSGOAL = 10000;
     private final int stepsGoal;
     private final int timeFrame = 0;//always 0x00
     public SetGoalRequest(Context context, int stepsGoal) {
@@ -24,6 +24,8 @@ public class SetGoalRequest extends RequestBase {
                         (byte) 0x80,HEADER,
                         (byte) (stepsGoal&0xFF),
                         (byte) (stepsGoal>>8&0xFF),
+                        (byte) (stepsGoal>>16&0xFF),
+                        (byte) (stepsGoal>>24&0xFF),
                         (byte) (timeFrame &0xFF)
                 }
         };

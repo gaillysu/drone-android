@@ -20,4 +20,6 @@
     <color name="user_info_gender_select_text_color">#ffffffff</color>
     <color name="user_info_gender_default_text_color">#88000000</color>
     <color name="activities_calendar_show_bg_color">#b0000000</color>
+    <color name="grey">#666666</color>
+
 </resources>

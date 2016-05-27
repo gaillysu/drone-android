@@ -42,6 +42,8 @@ import com.dayton.drone.event.BigSyncEvent;
 import com.dayton.drone.event.GoalCompletedEvent;
 import com.dayton.drone.event.LittleSyncEvent;
 import com.dayton.drone.event.LowMemoryEvent;
+import com.dayton.drone.event.ProfileChangedEvent;
+import com.dayton.drone.event.StepsGoalChangedEvent;
 import com.dayton.drone.event.TimerEvent;
 import com.dayton.drone.event.WorldClockChangedEvent;
 import com.dayton.drone.model.Steps;
@@ -212,7 +214,7 @@ public class SyncControllerImpl implements  SyncController{
                         sendRequest(new SetRTCRequest(application));
                         sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.WorldClock));
                         sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.ActivityTracking));
-                        sendRequest(new SetUserProfileRequest(application));
+                        sendRequest(new SetUserProfileRequest(application,application.getUser()));
                     }
 
                     if(systemStatusPacket.getStatus()==Constants.SystemStatus.InvalidTime.rawValue())
@@ -220,7 +222,7 @@ public class SyncControllerImpl implements  SyncController{
                         sendRequest(new SetRTCRequest(application));
                         sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.WorldClock));
                         sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.ActivityTracking));
-                        sendRequest(new SetUserProfileRequest(application));
+                        sendRequest(new SetUserProfileRequest(application,application.getUser()));
                     }
                     else if(systemStatusPacket.getStatus()==Constants.SystemStatus.GoalCompleted.rawValue())
                     {
@@ -346,6 +348,14 @@ public class SyncControllerImpl implements  SyncController{
             timeZoneModelList.add(new TimeZoneModel(utc_offset,utc_name));
         }
         sendRequest(new SetWorldClockRequest(application,timeZoneModelList));
+    }
+    @Subscribe
+    public void onEvent(StepsGoalChangedEvent stepsGoalChangedEvent) {
+        sendRequest(new SetGoalRequest(application,stepsGoalChangedEvent.getStepsGoal()));
+    }
+    @Subscribe
+    public void onEvent(ProfileChangedEvent profileChangedEvent) {
+        sendRequest(new SetUserProfileRequest(application,profileChangedEvent.getUser()));
     }
 
     //local service

@@ -342,6 +342,53 @@ public class ProfileActivity extends BaseActivity {
             });
             builder.show();
 
+//        } else if (id == saveButton.getId()) {
+//            builder.setTitle(R.string.profile_dialog_save_title_text).setMessage(R.string.profile_dialog_save_message_text);
+//            builder.setPositiveButton(R.string.profile_dialog_save_positive_button_text, new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialogInterface, int i) {
+//                    int currentGoalStep = new Integer(stepGoal.getText().toString()).intValue();
+//                    SpUtils.putIntMethod(ProfileActivity.this, CacheConstants.GOAL_STEP, currentGoalStep);
+//                    User user = getModel().getUser();
+//                    user.setLastName(accountName.getText().toString());
+//                    user.setFirstName(userFirstName.getText().toString());
+//                    user.setUserEmail(emailAccount.getText().toString());
+//                    String height = userHeight.getText().toString();
+//                        if (height.contains(getString(R.string.profile_user_height_unit))) {
+//                            int currentHeight = new Integer(height.substring(0, height.length() - 2)).intValue();
+//                            user.setHeight(currentHeight);
+//                        } else {
+//                            user.setHeight(new Integer(height).intValue());
+//                        }
+//
+//                    String weight = userWeight.getText().toString();
+//                        if (weight.contains(getString(R.string.profile_user_weight_unit))) {
+//                            double currentWeight = Double.parseDouble(weight.substring(0, weight.length() - 2));
+//                            user.setWeight(currentWeight);
+//                        } else {
+//                            user.setWeight(Double.parseDouble(weight));
+//                        }
+//                    UserDatabaseHelper helper = getModel().getUserDatabaseHelper();
+//                    if(userStepGoal!=currentGoalStep)
+//                    {
+//                        userStepGoal = currentGoalStep;
+//                        EventBus.getDefault().post(new StepsGoalChangedEvent(userStepGoal));
+//                    }
+//                    if(helper.update(user))
+//                    {
+//                        EventBus.getDefault().post(new ProfileChangedEvent(user));
+//                    }
+//                }
+//            });
+//
+//            builder.setNegativeButton(R.string.profile_dialog_save_negative_button_text, new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialogInterface, int i) {
+//                    dialogInterface.dismiss();
+//                }
+//            });
+//            builder.show();
+//        }
     }
 
     public boolean checkEmail(String email) {
