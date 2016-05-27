@@ -66,7 +66,6 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
         List<Watches>  watchesList = getModel().getWatchesDatabaseHelper().getAll(getModel().getUser().getUserID());
         if(watchesList.isEmpty())
         {
-            //TODO assume that has a watch, by now, our code doesn't save the connected watch to local database
             watchesList.add(new Watches());
             new Handler().postDelayed(new Runnable() {
                 @Override

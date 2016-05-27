@@ -1,5 +1,6 @@
 package com.dayton.drone.utils;
 
+import com.dayton.drone.model.CanlendarMonth;
 import com.dayton.drone.model.CanlendarWeek;
 
 import java.text.SimpleDateFormat;
@@ -45,6 +46,15 @@ public class Common {
         return new CanlendarWeek(lastWeekend);
     }
 
+    public static CanlendarMonth getThisMonth(Date date){
+        return new CanlendarMonth(date);
+    }
+
+    public static CanlendarMonth getLastMonth(Date date){
+        CanlendarMonth canlendarMonth = new CanlendarMonth(date);
+        Date lastMonthDate = new Date(canlendarMonth.getMonthStart().getTime() - ONEDAY);
+        return new CanlendarMonth(lastMonthDate);
+    }
     /**
      *
      * @param date
