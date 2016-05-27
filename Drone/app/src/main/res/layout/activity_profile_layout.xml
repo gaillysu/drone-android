@@ -221,12 +221,14 @@
             android:layout_width="match_parent"
             android:gravity="center"
             android:layout_height="wrap_content"
-            android:textColor="@color/app_text_color_criterion"
-            android:textSize="15sp"
+            android:textColor="@color/profile_watch_is_connected"
+            android:textSize="20sp"
+            android:textStyle="bold"
             android:text="@string/profile_save_text_dec"/>
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="2dp"
             android:src="@mipmap/save_error_icon"/>
         </LinearLayout>
     </RelativeLayout>

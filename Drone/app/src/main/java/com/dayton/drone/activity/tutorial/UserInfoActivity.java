@@ -78,6 +78,9 @@ public class UserInfoActivity extends BaseActivity {
     @OnClick(R.id.user_birthday)
     public void putUserBarthday() {
         viewType = 1;
+        Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String formatDate = format.format(date);
         DatePickerPopWin pickerPopWin = new DatePickerPopWin.Builder(UserInfoActivity.this,
                 new DatePickerPopWin.OnDatePickedListener() {
                     @Override
@@ -87,9 +90,10 @@ public class UserInfoActivity extends BaseActivity {
                     }
                 }).viewStyle(viewType)
                 .viewTextSize(25) // pick view text size
-                .minYear(1990) //min year in loop
-                .maxYear(2550) // max year in loop
-                .dateChose("2000-11-11") // date chose when init popwindow
+                .minYear(new Integer(formatDate.split("-")[0]).intValue()-100) //min year in loop
+                .maxYear(new Integer(formatDate.split("-")[0]).intValue()) // max year in loop
+                .dateChose((new Integer(formatDate.split("-")[0])-30)
+                        +"-"+formatDate.split("-")[1]+"-"+formatDate.split("-")[2]) // date chose when init popwindow
                 .build();
         pickerPopWin.showPopWin(UserInfoActivity.this);
     }
@@ -106,7 +110,7 @@ public class UserInfoActivity extends BaseActivity {
                     }
                 }).viewStyle(viewType)
                 .viewTextSize(25)
-                .dateChose("0-173-0")
+                .dateChose("0-215-0")
                 .build();
         pickerPopWin2.showPopWin(UserInfoActivity.this);
     }
@@ -144,7 +148,7 @@ public class UserInfoActivity extends BaseActivity {
         String firstName = editFirstName.getText().toString();
         String lastName = editLastName.getText().toString();
         if (!(TextUtils.isEmpty(birthday) || TextUtils.isEmpty(height)
-                || TextUtils.isEmpty(weight) ||TextUtils.isEmpty(firstName)||TextUtils.isEmpty(lastName))) {
+                || TextUtils.isEmpty(weight) || TextUtils.isEmpty(firstName) || TextUtils.isEmpty(lastName))) {
 
             Intent intent = getIntent();
             final String account = intent.getStringExtra("account");
