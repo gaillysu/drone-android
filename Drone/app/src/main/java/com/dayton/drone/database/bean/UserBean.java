@@ -40,7 +40,7 @@ public class UserBean {
     private int height = 175;
 
     /**
-     * Sex = 0, female, sex = 1, male
+     * gender = 0, female, gender = 1, male
      */
     public static  final String fGender = "gender";
     @DatabaseField
