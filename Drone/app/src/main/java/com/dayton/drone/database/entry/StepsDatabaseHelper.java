@@ -84,7 +84,7 @@ public class StepsDatabaseHelper {
         try {
             List<StepsBean> stepsDAOList = databaseHelper.getStepsBean()
                     .queryBuilder().orderBy(StepsBean.fTimeframe,true).where().eq(StepsBean.fUserID, userId)
-                    .and().eq(StepsBean.fDate, date.getTime()).query();
+                    .and().eq(StepsBean.fDate, Common.removeTimeFromDate(date).getTime()).query();
             for(StepsBean stepsBean : stepsDAOList){
                 Optional<Steps> stepsOptional = new Optional<>();
                 stepsOptional.set(convertToNormal(stepsBean));

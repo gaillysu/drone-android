@@ -21,9 +21,11 @@ import android.widget.TextView;
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.event.LittleSyncEvent;
+import com.dayton.drone.model.DailySteps;
 import com.dayton.drone.model.Steps;
 import com.dayton.drone.utils.CacheConstants;
 import com.dayton.drone.utils.SpUtils;
+import com.dayton.drone.utils.StepsHandler;
 import com.dayton.drone.view.CalendarView;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
@@ -147,8 +149,8 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         boolean mIsFirst = SpUtils.getBoolean(this, CacheConstants.IS_FIRST, true);
         mProgressBar.setStartColor(R.color.progress_start_color);
         mProgressBar.setEndColor(R.color.progress_end_color);
-        mProgressBar.setSmoothPercent(0.3f);
-        homeMiddleTv.setText(200 + "");
+        mProgressBar.setSmoothPercent(1.0f*SpUtils.getIntMethod(this, CacheConstants.TODAY_STEP, 0)/SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000));
+        homeMiddleTv.setText(SpUtils.getIntMethod(this, CacheConstants.TODAY_STEP, 0) + "");
         userStepGoalTextView.setText(getResources().getString(R.string.user_step_goal)
                 + SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000));
         calendar.setSelectMore(false);
@@ -161,18 +163,10 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         modifyChart(lastWeekLineChart);
         modifyChart(thisWeekLineChart);
 
-        List<Steps> thisWeeksSteps = getModel().getStepsDatabaseHelper().getThisWeekSteps(getModel().getUser().getUserID(), selectedDate);
-        // TODO add data for this week and test if this works
-
-        List<Steps> lastWeekSteps = getModel().getStepsDatabaseHelper().getLastWeekSteps(getModel().getUser().getUserID(), selectedDate);
-        // TODO add data for last week and test if this works
-
-        List<Steps> lastMonthSteps = getModel().getStepsDatabaseHelper().getLastMonthSteps(getModel().getUser().getUserID(), selectedDate);
-        // TODO add data for this month and test if this works
-
-        setDataInChart(lastWeekLineChart, thisWeeksSteps, 7);
-        setDataInChart(thisWeekLineChart, lastWeekSteps, 7);
-        setDataInChart(lastMonthLineChart, lastMonthSteps, 30);
+        StepsHandler stepsHandler = new StepsHandler(getModel().getStepsDatabaseHelper(),getModel().getUser());
+        setDataInChart(thisWeekLineChart, stepsHandler.getThisWeekSteps(selectedDate));
+        setDataInChart(lastWeekLineChart, stepsHandler.getLastWeekSteps(selectedDate));
+        setDataInChart(lastMonthLineChart, stepsHandler.getLastMonthSteps(selectedDate));
     }
     public void initHourlyData() {
         calendar.setCalendarData(new Date());
@@ -219,27 +213,13 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         List<String> xVals = new ArrayList<String>();
         List<BarEntry> yValue = new ArrayList<BarEntry>();
 
-        List<Optional<Steps>> stepsList = getModel().getStepsDatabaseHelper().get(getModel().getUser().getUserID(),selectedDate);
-        float[] hours = new float[24];
-        for (Optional<Steps> steps: stepsList){
-            // TODO Fill hours array  with the steps per hour based on the steps.
-            /*
-                1. Check steps timestamp, put it into right spot of hours[] Hours represent
-                2. Do for every step.
-                3. Rest is already done.
-             */
+        StepsHandler stepsHandler = new StepsHandler(getModel().getStepsDatabaseHelper(),getModel().getUser());
+        DailySteps dailySteps = stepsHandler.getDailySteps(selectedDate);
+        for (int i = 0; i < dailySteps.getHourlySteps().length; i++) {
+            yValue.add(new BarEntry(dailySteps.getHourlySteps()[i], i));
+            xVals.add(i+":00");
         }
-            for (int i = 0; i < hours.length; i++) {
-                    yValue.add(new BarEntry(hours[i]+ 100, i));
-                    xVals.add(i+":00");
-            }
-
-        if (stepsList.size() < 24) {
-            hourlyBarChart.setScaleMinima((.14f), 1f);
-        }else{
-            hourlyBarChart.setScaleMinima((stepsList.size()/24f),1f);
-        }
-
+        hourlyBarChart.setScaleMinima((.14f), 1f);
         BarDataSet dataSet = new BarDataSet(yValue, "");
         dataSet.setDrawValues(false);
         dataSet.setColors(new int[]{getResources().getColor(R.color.colorPrimaryDark)});
@@ -249,22 +229,15 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         hourlyBarChart.setData(data);
     }
 
-    private void setDataInChart(LineChart lineChart, List<Steps> stepsList, int maxSize){
+    private void setDataInChart(LineChart lineChart, List<DailySteps> stepsList){
         SimpleDateFormat sdf = new SimpleDateFormat("d'/'M");
         List<String> xVals = new ArrayList<String>();
         List<Entry> yValue = new ArrayList<Entry>();
-        long lastDate = 0;
-        for (int i = 0; i < maxSize; i++) {
-            if (i < stepsList.size()) {
-                Steps steps = stepsList.get(i);
-                lastDate = steps.getDate();
-                yValue.add(new Entry(steps.getSteps(), i));
-                xVals.add(sdf.format(new Date(steps.getTimeFrame())));
-            }else{
-                lastDate+=86400000;
-                yValue.add(new Entry(0, i));
-                xVals.add(sdf.format(new Date(lastDate)));
-            }
+
+        for (int i = 0; i < stepsList.size(); i++) {
+            DailySteps dailySteps = stepsList.get(i);
+            yValue.add(new Entry(dailySteps.getDailySteps(), i));
+            xVals.add(sdf.format(new Date(dailySteps.getDate())));
         }
         LineDataSet set = new LineDataSet(yValue, "");
         set.setColor(R.color.grey);
@@ -435,7 +408,11 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
             @Override
             public void run() {
                 homeMiddleTv.setText(event.getSteps() + "");
+                userStepGoalTextView.setText(getResources().getString(R.string.user_step_goal)
+                        + event.getGoal());
                 mProgressBar.setSmoothPercent(1.0f * event.getSteps() / event.getGoal());
+                SpUtils.putIntMethod(getApplicationContext(),CacheConstants.GOAL_STEP,event.getGoal());
+                SpUtils.putIntMethod(getApplicationContext(),CacheConstants.TODAY_STEP,event.getSteps());
             }
         });
     }
