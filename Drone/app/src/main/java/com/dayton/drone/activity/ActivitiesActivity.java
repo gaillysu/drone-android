@@ -57,13 +57,11 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnLongClick;
 
 /**
  * Created by boy on 2016/4/22.
  */
 public class ActivitiesActivity extends BaseActivity implements OnChartValueSelectedListener {
-    private boolean mIsFirst = true;
 
     @Bind(R.id.home_fragment_progress_bar)
     MagicProgressCircle mProgressBar;
@@ -144,7 +142,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
 
         calendarView = View.inflate(getModel(), R.layout.date_layout_popupwindow, null);
 
-        mIsFirst = SpUtils.getBoolean(this, CacheConstants.IS_FIRST, true);
+        boolean mIsFirst = SpUtils.getBoolean(this, CacheConstants.IS_FIRST, true);
 
         mProgressBar.setStartColor(R.color.progress_start_color);
         mProgressBar.setEndColor(R.color.progress_end_color);
@@ -152,22 +150,22 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         homeMiddleTv.setText(200 + "");
         calendar = (CalendarView) calendarView.findViewById(R.id.calendar_popupwindow_layout);
         calendar.setSelectMore(false);
-
+        calendar.setOnItemClickListener(onItemClicklistener);
         mIvNextMouth.setVisibility(View.GONE);
         mIvBackMouth.setVisibility(View.GONE);
         initHourlyData();
-
         modifyChart(lastMonthLineChart);
         modifyChart(lastWeekLineChart);
         modifyChart(thisWeekLineChart);
 
-        //
         List<Steps> thisWeeksSteps = getModel().getStepsDatabaseHelper().getThisWeekSteps(getModel().getUser().getUserID(), selectedDate);
+        // TODO add data for this week and test if this works
 
         List<Steps> lastWeekSteps = getModel().getStepsDatabaseHelper().getLastWeekSteps(getModel().getUser().getUserID(), selectedDate);
+        // TODO add data for last week and test if this works
 
         List<Steps> lastMonthSteps = getModel().getStepsDatabaseHelper().getLastMonthSteps(getModel().getUser().getUserID(), selectedDate);
-
+        // TODO add data for this month and test if this works
 
         setDataInChart(lastWeekLineChart,thisWeeksSteps, 7);
         setDataInChart(thisWeekLineChart,lastWeekSteps, 7);
@@ -194,6 +192,8 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         hourlyBarChart.setDrawValueAboveBar(false);
         hourlyBarChart.setDoubleTapToZoomEnabled(false);
         hourlyBarChart.setDragEnabled(true);
+        hourlyBarChart.setSelected(false);
+
 
         YAxis leftAxis = hourlyBarChart.getAxisLeft();
         leftAxis.setDrawGridLines(true);
@@ -226,17 +226,19 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         List<BarEntry> yValue = new ArrayList<BarEntry>();
 
         List<Optional<Steps>> stepsList = getModel().getStepsDatabaseHelper().get(getModel().getUser().getUserID(),selectedDate);
-        int[] hours = new int[24];
+        float[] hours = new float[24];
         for (Optional<Steps> steps: stepsList){
-
+            // TODO Fill hours array  with the steps per hour based on the steps.
+            /*
+                1. Check steps timestamp, put it into right spot of hours[] Hours represent
+                2. Do for every step.
+                3. Rest is already done.
+             */
         }
-//            for (int i = 0; i < 24; i++) {
-//                if (steps.get().getSteps() > 0) {
-//                    yValue.add(new BarEntry(new float[]{500}, i));
-//                    int hour = i+1;
-//                    xVals.add(hour+":00");
-//                }
-//            }
+            for (int i = 0; i < hours.length; i++) {
+                    yValue.add(new BarEntry(hours[i]+ 100, i));
+                    xVals.add(i+":00");
+            }
 
         if (stepsList.size() < 24) {
             hourlyBarChart.setScaleMinima((.14f), 1f);
@@ -270,21 +272,21 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
                 xVals.add(sdf.format(new Date(lastDate)));
             }
         }
-        LineDataSet set1 = new LineDataSet(yValue, "");
-        set1.setColor(R.color.grey);
-        set1.setCircleColor(R.color.grey);
-        set1.setLineWidth(1.5f);
-        set1.setCircleSize(3.0f);
-        set1.setDrawCircleHole(true);
-        set1.setFillAlpha(128);
-        set1.setDrawFilled(true);
-        set1.setDrawValues(false);
-        set1.setCircleColorHole(Color.BLACK);
-        set1.setFillColor(getResources().getColor(R.color.colorPrimaryDark));
+        LineDataSet set = new LineDataSet(yValue, "");
+        set.setColor(R.color.grey);
+        set.setCircleColor(R.color.grey);
+        set.setLineWidth(1.5f);
+        set.setCircleSize(3.0f);
+        set.setDrawCircleHole(true);
+        set.setFillAlpha(128);
+        set.setDrawFilled(true);
+        set.setDrawValues(false);
+        set.setCircleColorHole(Color.BLACK);
+        set.setFillColor(getResources().getColor(R.color.colorPrimaryDark));
         Drawable drawable = ContextCompat.getDrawable(this, R.drawable.chart_gradient);
-        set1.setFillDrawable(drawable);
+        set.setFillDrawable(drawable);
         List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
-        dataSets.add(set1);
+        dataSets.add(set);
         LineData data = new LineData(xVals, dataSets);
         lineChart.setData(data);
         lineChart.animateY(2, Easing.EasingOption.EaseInCirc);
@@ -300,18 +302,18 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         lineChart.setPinchZoom(false);
         lineChart.getLegend().setEnabled(false);
 
-        LimitLine ll1 = new LimitLine(7000f, "Goal");
-        ll1.setLineWidth(1.5f);
-        ll1.setLineColor(R.color.grey);
-        ll1.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);
-        ll1.setTextSize(18f);
-        ll1.setTextColor(R.color.grey);
+        LimitLine limitLine = new LimitLine(7000f, "Goal");
+        limitLine.setLineWidth(1.5f);
+        limitLine.setLineColor(R.color.grey);
+        limitLine.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);
+        limitLine.setTextSize(18f);
+        limitLine.setTextColor(R.color.grey);
 
         YAxis leftAxis = lineChart.getAxisLeft();
         leftAxis.setAxisLineColor(R.color.grey);
         leftAxis.setDrawGridLines(false);
         leftAxis.setDrawLabels(false);
-        leftAxis.addLimitLine(ll1);
+        leftAxis.addLimitLine(limitLine);
         leftAxis.setAxisMinValue(0.0f);
 
         YAxis rightAxis = lineChart.getAxisRight();
@@ -389,11 +391,12 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         popupWindow.showAsDropDown(titleView);
     }
 
-    @OnLongClick(R.id.home_fragment_title_date)
-    public boolean showCalendarLongClick(){
-        popupWindow.update();
-        return true;
-    }
+    private CalendarView.OnItemClickListener onItemClicklistener = new CalendarView.OnItemClickListener() {
+        @Override
+        public void OnItemClick(Date selectedStartDate, Date selectedEndDate, Date downDate) {
+            popupWindow.update();
+        }
+    };
 
     @OnClick(R.id.home_fragment_title_back)
     public void backOnClick(){

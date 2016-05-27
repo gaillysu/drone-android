@@ -38,7 +38,7 @@ dependencies {
     }
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.jakewharton:butterknife:7.0.1'
-    compile 'com.github.PhilJay:MPAndroidChart:v2.1.6'
+    compile 'com.github.PhilJay:MPAndroidChart:v2.2.4'
     compile project(':wheelpicklib')
     compile project(':progressbarlibrary')
     compile 'com.google.code.gson:gson:2.6.2'
