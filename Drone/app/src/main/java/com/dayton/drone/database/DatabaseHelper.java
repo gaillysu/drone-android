@@ -30,8 +30,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
      * v3: add "watches" table
      * v4: modify world clock table struct
      * V5: modify steps/sleep table for adding field "cloudID"
+     * V6: modify 'steps' table, add field "String HourlySteps" for saving hourly steps a day,see @StepsBean.class
      */
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
 
     private Dao<UserBean, Integer> userBean = null;
     private Dao<StepsBean,Integer> stepsBean = null;

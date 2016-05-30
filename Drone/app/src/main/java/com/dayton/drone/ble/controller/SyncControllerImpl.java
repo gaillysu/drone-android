@@ -44,6 +44,7 @@ import com.dayton.drone.event.LittleSyncEvent;
 import com.dayton.drone.event.LowMemoryEvent;
 import com.dayton.drone.event.ProfileChangedEvent;
 import com.dayton.drone.event.StepsGoalChangedEvent;
+import com.dayton.drone.event.TimeFramePacketReceivedEvent;
 import com.dayton.drone.event.TimerEvent;
 import com.dayton.drone.event.WorldClockChangedEvent;
 import com.dayton.drone.model.Steps;
@@ -240,12 +241,10 @@ public class SyncControllerImpl implements  SyncController{
                 {
                     ActivityPacket activityPacket = packet.newActivityPacket();
                     Log.i(TAG,activityPacket.getDate().toString() + " time frame steps: " + activityPacket.getSteps());
-                    Steps steps = new Steps();
-                    steps.setTimeFrame(activityPacket.getDate().getTime());
+                    Steps steps = new Steps(activityPacket.getSteps(), activityPacket.getDate().getTime());
                     steps.setDate((Common.removeTimeFromDate(new Date(activityPacket.getDate().getTime()))).getTime());
-                    steps.setSteps(activityPacket.getSteps());
                     steps.setUserID(application.getUser().getUserID());
-                    application.getStepsDatabaseHelper().update(steps);
+                    EventBus.getDefault().post(new TimeFramePacketReceivedEvent(steps));
                     //save the oldest activity date as colud sync starting date
                     if(theBigSyncStartDate.isEmpty() || (theBigSyncStartDate.notEmpty() && theBigSyncStartDate.get().getTime()>steps.getDate()))
                     {
@@ -358,6 +357,10 @@ public class SyncControllerImpl implements  SyncController{
         sendRequest(new SetUserProfileRequest(application,profileChangedEvent.getUser()));
     }
 
+    @Subscribe
+    public void onEvent(final TimeFramePacketReceivedEvent timeFramePacketReceivedEvent) {
+        application.getStepsDatabaseHelper().update(timeFramePacketReceivedEvent.getSteps());
+    }
     //local service
     static public class LocalService extends Service
     {

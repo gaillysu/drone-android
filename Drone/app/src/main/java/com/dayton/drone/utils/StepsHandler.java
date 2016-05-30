@@ -9,6 +9,9 @@ import com.dayton.drone.model.User;
 
 import net.medcorp.library.ble.util.Optional;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,9 +34,16 @@ public class StepsHandler {
         Date middleNight = Common.removeTimeFromDate(date);
         List<Optional<Steps>> stepsList = stepsDatabaseHelper.get(user.getUserID(),date);
         int[] hours = new int[24];
-        for (Optional<Steps> steps: stepsList){
-            int hourIndex = new Date(steps.get().getTimeFrame()).getHours();
-            hours[hourIndex] = hours[hourIndex] + steps.get().getSteps();
+        if(stepsList.size()>0) {
+            try {
+                JSONArray jsonArray = new JSONArray(stepsList.get(0).get().getHourlySteps());
+
+                for (int i = 0; i < jsonArray.length() && i < hours.length; i++) {
+                    hours[i] = jsonArray.optInt(i);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
         return new DailySteps(middleNight.getTime(),hours);
     }

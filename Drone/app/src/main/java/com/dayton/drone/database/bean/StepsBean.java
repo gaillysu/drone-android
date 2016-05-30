@@ -22,12 +22,6 @@ public class StepsBean {
     @DatabaseField
     private String userID;
 
-    /**
-     * unix timestamp of the start of the accumulation, created date and time
-     */
-    public static final String fTimeframe = "timeFrame";
-    @DatabaseField
-    private long timeFrame = new Date().getTime();
 
     /**
      *  date, one day which is Year/Month/Day
@@ -38,11 +32,11 @@ public class StepsBean {
 
 
     /**
-     * time frame total steps
+     * this is accumulation steps for every hour a day, like this [100,200,300,....,2400]
      */
-    public static final String fSteps = "steps";
+    public static final String fHourlySteps = "hourlySteps";
     @DatabaseField
-    private int steps;
+    private String hourlySteps = "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]";
 
     /**
      * one day's total distance ,unit is meter.
@@ -53,7 +47,7 @@ public class StepsBean {
 
 
     /**
-     * the cloudID is the unique value that saved on Cloud server, -1 menas that no sync with cloud server
+     * the cloudID is the unique value that saved on Cloud server, "-1" menas that no sync with cloud server
      */
     public static final String fCloudID = "cloudID";
     @DatabaseField
@@ -76,14 +70,6 @@ public class StepsBean {
         this.userID = userID;
     }
 
-    public long getTimeFrame() {
-        return timeFrame;
-    }
-
-    public void setTimeFrame(long timeFrame) {
-        this.timeFrame = timeFrame;
-    }
-
     public long getDate() {
         return date;
     }
@@ -92,12 +78,12 @@ public class StepsBean {
         this.date = date;
     }
 
-    public int getSteps() {
-        return steps;
+    public String getHourlySteps() {
+        return hourlySteps;
     }
 
-    public void setSteps(int steps) {
-        this.steps = steps;
+    public void setHourlySteps(String hourlySteps) {
+        this.hourlySteps = hourlySteps;
     }
 
     public int getDistance() {

@@ -10,6 +10,9 @@ import com.dayton.drone.utils.Common;
 
 import net.medcorp.library.ble.util.Optional;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,7 +35,9 @@ public class StepsDatabaseHelper {
     public Optional<Steps> add(Steps object) {
         Optional<Steps> stepsOptional = new Optional<>();
         try {
-            StepsBean stepsDAO = databaseHelper.getStepsBean().createIfNotExists(convertToDao(object));
+            StepsBean daoobject = convertToDao(object);
+            daoobject.setHourlySteps(convertToDAOHourlySteps(object.getHourlySteps(),object));
+            StepsBean stepsDAO = databaseHelper.getStepsBean().createIfNotExists(daoobject);
             if(stepsDAO != null)
             {
                 stepsOptional.set(convertToNormal(stepsDAO));
@@ -50,11 +55,12 @@ public class StepsDatabaseHelper {
         try {
             List<StepsBean> stepsDAOList = databaseHelper.getStepsBean()
                     .queryBuilder().where().eq(StepsBean.fUserID, object.getUserID())
-                    .and().eq(StepsBean.fDate, object.getDate())
-                    .and().eq(StepsBean.fTimeframe, object.getTimeFrame()).query();
+                    .and().eq(StepsBean.fDate, Common.removeTimeFromDate(new Date(object.getDate())).getTime())
+                    .query();
             if(stepsDAOList.isEmpty()) return add(object)!=null;
             StepsBean daoobject = convertToDao(object);
             daoobject.setId(stepsDAOList.get(0).getId());
+            daoobject.setHourlySteps(convertToDAOHourlySteps(stepsDAOList.get(0).getHourlySteps(), object));
             result = databaseHelper.getStepsBean().update(daoobject);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -67,7 +73,7 @@ public class StepsDatabaseHelper {
         try {
             List<StepsBean> stepsDAOList = databaseHelper.getStepsBean()
                     .queryBuilder().where().eq(StepsBean.fUserID, userId)
-                    .and().eq(StepsBean.fDate,date.getTime()).query();
+                    .and().eq(StepsBean.fDate,Common.removeTimeFromDate(date).getTime()).query();
             if(!stepsDAOList.isEmpty())
             {
                 return databaseHelper.getStepsBean().delete(stepsDAOList)>=0;
@@ -83,8 +89,9 @@ public class StepsDatabaseHelper {
         List<Optional<Steps> > stepsList = new ArrayList<Optional<Steps> >();
         try {
             List<StepsBean> stepsDAOList = databaseHelper.getStepsBean()
-                    .queryBuilder().orderBy(StepsBean.fTimeframe,true).where().eq(StepsBean.fUserID, userId)
-                    .and().eq(StepsBean.fDate, Common.removeTimeFromDate(date).getTime()).query();
+                    .queryBuilder().where().eq(StepsBean.fUserID, userId)
+                    .and().eq(StepsBean.fDate, Common.removeTimeFromDate(date).getTime())
+                    .query();
             for(StepsBean stepsBean : stepsDAOList){
                 Optional<Steps> stepsOptional = new Optional<>();
                 stepsOptional.set(convertToNormal(stepsBean));
@@ -117,30 +124,42 @@ public class StepsDatabaseHelper {
     private StepsBean convertToDao(Steps steps){
         StepsBean stepsDao = new StepsBean();
         stepsDao.setUserID(steps.getUserID());
-        stepsDao.setTimeFrame(steps.getTimeFrame());
         stepsDao.setDate(steps.getDate());
-        stepsDao.setSteps(steps.getSteps());
+        stepsDao.setHourlySteps(steps.getHourlySteps());
         stepsDao.setDistance(steps.getDistance());
         stepsDao.setCloudID(steps.getCloudID());
         return stepsDao;
     }
 
     private Steps convertToNormal(StepsBean stepsDAO){
-        Steps steps = new Steps();
+        Steps steps = new Steps(0,stepsDAO.getDate());
         steps.setUserID(stepsDAO.getUserID());
-        steps.setTimeFrame(stepsDAO.getTimeFrame());
         steps.setDate(stepsDAO.getDate());
-        steps.setSteps(stepsDAO.getSteps());
+        steps.setHourlySteps(stepsDAO.getHourlySteps());
         steps.setDistance(stepsDAO.getDistance());
         steps.setCloudID(stepsDAO.getCloudID());
         return steps;
     }
 
+    private String convertToDAOHourlySteps(String srcDAOHourlySteps,Steps steps)
+    {
+        String dstDAOHourlySteps = srcDAOHourlySteps;
+        Date date = new Date(steps.getTimeFrame());
+        int indexHour = date.getHours();
+        try {
+            JSONArray hourlySteps = new JSONArray(srcDAOHourlySteps);
+            hourlySteps.put(indexHour,hourlySteps.optInt(indexHour)+steps.getTimeFrameSteps());
+            dstDAOHourlySteps = hourlySteps.toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return dstDAOHourlySteps;
+    }
 
     public List<Steps> convertToNormalList(List<Optional<Steps>> optionals) {
         List<Steps> stepsList = new ArrayList<>();
         for (Optional<Steps> stepsOptional: optionals) {
-            if (stepsOptional.notEmpty() && stepsOptional.get().getSteps()>0){
+            if (stepsOptional.notEmpty() && stepsOptional.get().getDailySteps()>0){
                 stepsList.add(stepsOptional.get());
             }
         }
