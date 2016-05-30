@@ -24,7 +24,6 @@ import com.dayton.drone.model.User;
 import com.dayton.drone.utils.CacheConstants;
 import com.dayton.drone.utils.SpUtils;
 
-import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,7 +43,7 @@ public class ProfileActivity extends BaseActivity {
     @Bind(R.id.profile_activity_user_fist_name)
     EditText userFirstName;
     @Bind(R.id.profile_activity_user_email_account)
-    EditText emailAccount;
+    TextView emailAccount;
     @Bind(R.id.profile_activity_user_height)
     TextView userHeight;
     @Bind(R.id.profile_activity_user_weight)
@@ -69,13 +68,16 @@ public class ProfileActivity extends BaseActivity {
         ButterKnife.bind(this);
         saveButton.setVisibility(View.VISIBLE);
         userStepGoal = SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000);
-        cancel.setText(getString(R.string.home_title_back_text));
+        cancel.setText(getString(R.string.profile_title_back_text));
         stepGoal.setText(userStepGoal + "");
         titleText.setText(getString(R.string.home_guide_profile));
         mUser = getModel().getUser();
-        accountName.setText(mUser.getLastName() != null ? mUser.getLastName() : getResources().getString(R.string.profile_edit_prompt));
-        userFirstName.setText(mUser.getFirstName() != null ? mUser.getFirstName() : getResources().getString(R.string.profile_edit_prompt));
-        emailAccount.setText(mUser.getUserEmail() != null ? mUser.getUserEmail() : getResources().getString(R.string.profile_edit_prompt));
+        accountName.setText(mUser.getLastName() != null ? mUser.getLastName() :
+                getResources().getString(R.string.profile_edit_prompt));
+        userFirstName.setText(mUser.getFirstName() != null ? mUser.getFirstName() :
+                getResources().getString(R.string.profile_edit_prompt));
+        emailAccount.setText(mUser.getUserEmail() != null ? mUser.getUserEmail() :
+                getResources().getString(R.string.profile_edit_prompt));
 
         int userHeightValue = mUser.getHeight();
         if (userHeightValue > 50 && userHeightValue < 300) {
@@ -115,7 +117,8 @@ public class ProfileActivity extends BaseActivity {
                     } else {
                         if (mUser.getLastName() == null) {
                             accountName.setText(getResources().getString(R.string.profile_edit_prompt));
-                            Toast.makeText(ProfileActivity.this, R.string.profile_prompt_user_edit, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ProfileActivity.this, getResources().getString(R.string.profile_prompt_user_edit)
+                                    , Toast.LENGTH_SHORT).show();
                         } else {
                             accountName.setText(mUser.getLastName());
                         }
@@ -140,7 +143,7 @@ public class ProfileActivity extends BaseActivity {
                         userFirstName.setText(firstName);
                     } else {
                         if (mUser.getFirstName() == null) {
-                            userFirstName.setText(R.string.profile_edit_prompt);
+                            userFirstName.setText(getResources().getString(R.string.profile_edit_prompt));
                             Toast.makeText(ProfileActivity.this, R.string.profile_prompt_user_edit, Toast.LENGTH_SHORT).show();
                         } else {
                             userFirstName.setText(mUser.getFirstName());
@@ -153,33 +156,34 @@ public class ProfileActivity extends BaseActivity {
 
     @OnClick(R.id.profile_activity_edit_email_ib)
     public void editUserEmailClick() {
-        emailAccount.requestFocus();
-        emailAccount.setText("");
-        emailAccount.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (!b) {
-                    String email = emailAccount.getText().toString();
-                    if (!TextUtils.isEmpty(email)) {
-                        boolean flag = checkEmail(email);
-                        if (!flag) {
-                            mUser.setUserEmail(email);
-                            emailAccount.setText(email);
-                        } else {
-                            if (mUser.getUserEmail() == null) {
-                                emailAccount.setText(mUser.getUserEmail());
-                                Toast.makeText(ProfileActivity.this,
-                                        getString(R.string.profile_email_format_error_prompt), Toast.LENGTH_SHORT).show();
-                            } else {
-                                emailAccount.setText(mUser.getUserEmail());
-                            }
-                        }
-                    } else {
-                        emailAccount.setText(mUser.getUserEmail());
-                    }
-                }
-            }
-        });
+        Toast.makeText(this ,getString(R.string.profile_edit_email_prompt),Toast.LENGTH_SHORT).show();
+//        emailAccount.requestFocus();
+//        emailAccount.setText("");
+//        emailAccount.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View view, boolean b) {
+//                if (!b) {
+//                    String email = emailAccount.getText().toString();
+//                    if (!TextUtils.isEmpty(email)) {
+//                        boolean flag = checkEmail(email);
+//                        if (!flag) {
+//                            mUser.setUserEmail(email);
+//                            emailAccount.setText(email);
+//                        } else {
+//                            if (mUser.getUserEmail() == null) {
+//                                emailAccount.setText(mUser.getUserEmail());
+//                                Toast.makeText(ProfileActivity.this,
+//                                        getString(R.string.profile_email_format_error_prompt), Toast.LENGTH_SHORT).show();
+//                            } else {
+//                                emailAccount.setText(mUser.getUserEmail());
+//                            }
+//                        }
+//                    } else {
+//                        emailAccount.setText(mUser.getUserEmail());
+//                    }
+//                }
+//            }
+//        });
     }
 
     @OnClick(R.id.profile_activity_edit_user_height)
@@ -323,14 +327,15 @@ public class ProfileActivity extends BaseActivity {
 
     private void showDiaLogMethod(int id) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.profile_dialog_log_out_prompt).
-                setMessage(R.string.profile_dialog_log_out_message);
-        builder.setPositiveButton(R.string.profile_dialog_positive_button_text, new DialogInterface.OnClickListener() {
+        builder.setTitle(getString(R.string.profile_dialog_log_out_prompt)).
+                setMessage(getString(R.string.profile_dialog_log_out_message));
+        builder.setPositiveButton(getString(R.string.profile_dialog_positive_button_text),
+                new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                SpUtils.putBoolean(ProfileActivity.this, CacheConstants.IS_FIRST, true);
+                SpUtils.putIntMethod(ProfileActivity.this, CacheConstants.GOAL_STEP,10000);
                 getModel().getUser().setUserIsLogin(false);
-                getModel().getUserDatabaseHelper().remove(mUser.getUserID(), new Date());
+                getModel().getUserDatabaseHelper().removeAll();
                 Intent intent = getIntent();
                 intent.putExtra("logOut", true);
                 setResult(2 >> 5, intent);

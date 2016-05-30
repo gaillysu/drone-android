@@ -8,6 +8,7 @@ import android.widget.GridView;
 import android.widget.ImageButton;
 
 import com.dayton.drone.R;
+import com.dayton.drone.activity.AddWatchActivity;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.adapter.SelectDeviceGridViewAdapter;
 
@@ -67,7 +68,9 @@ public class SelectDeviceActivity extends BaseActivity {
             public void onClick(View view) {
                 if(type == 2>>4){
                     startActivity(LoginActivity.class);
-                }else{
+                }else if(type == 5<<3){
+                    startActivity(AddWatchActivity.class);
+                }else {
                     startActivity(UserInfoActivity.class);
                 }
                 finish();

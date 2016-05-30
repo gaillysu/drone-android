@@ -17,10 +17,10 @@
 
     <ImageView
         android:id="@+id/title_middle_logo"
-        android:layout_width="130dp"
+        android:layout_width="128dp"
         android:layout_height="30dp"
         android:scaleType="fitXY"
-        android:src="@mipmap/drone_vectr_line_art"
+        android:src="@mipmap/drone_home_logo_icon"
         android:layout_centerInParent="true"/>
 
     <LinearLayout

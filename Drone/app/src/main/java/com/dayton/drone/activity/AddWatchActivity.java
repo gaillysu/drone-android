@@ -1,5 +1,6 @@
 package com.dayton.drone.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
@@ -108,7 +109,10 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
     @OnClick(R.id.activity_addwatch_add_imagebutton)
     public void addWatch()
     {
-        startActivity(SelectDeviceActivity.class);
+        Intent intent  = new Intent(this ,SelectDeviceActivity.class);
+        intent.putExtra("type",5<<3);
+        startActivity(intent);
+        finish();
     }
 
     @Override

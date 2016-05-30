@@ -8,13 +8,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.content.ContextCompat;
-import android.view.Display;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -22,7 +19,6 @@ import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.event.LittleSyncEvent;
 import com.dayton.drone.model.DailySteps;
-import com.dayton.drone.model.Steps;
 import com.dayton.drone.utils.CacheConstants;
 import com.dayton.drone.utils.SpUtils;
 import com.dayton.drone.utils.StepsHandler;
@@ -45,8 +41,6 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.liulishuo.magicprogresswidget.MagicProgressCircle;
-
-import net.medcorp.library.ble.util.Optional;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -121,10 +115,10 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     @Bind(R.id.calendar_date_view)
     CalendarView calendar;
 
-    @Bind(R.id.activities_activity_calendar_back_day)
+    @Bind(R.id.activities_activity_calendar_back_month)
     ImageButton backMonth;
 
-    @Bind(R.id.activities_activity_title_next_day)
+    @Bind(R.id.activities_activity_title_next_month)
     ImageButton nextMonth;
 
     @Bind(R.id.activities_guide_dec_chart)
@@ -132,8 +126,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
 
     @Bind(R.id.activities_activity_title_date)
     LinearLayout showCalendar;
-
-    private PopupWindow popupWindow;
 
     private Date selectedDate = new Date(); //the selected date comes from calendar.
     private int guidePage = 1;
@@ -154,7 +146,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         userStepGoalTextView.setText(getResources().getString(R.string.user_step_goal)
                 + SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000));
         calendar.setSelectMore(false);
-        calendar.setOnItemClickListener(onItemClicklistener);
         nextMonth.setVisibility(View.GONE);
         backMonth.setVisibility(View.GONE);
 
@@ -328,41 +319,32 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         }
     }
 
-    @OnClick(R.id.activities_activity_calendar_back_day)
+    @OnClick(R.id.activities_activity_calendar_back_month)
     public void mIvBackMouthClick() {
         String leftMouth = calendar.clickLeftMonth();
         mTitleCalendarTextView.setText(leftMouth);
-        nextMonth.setVisibility(View.GONE);
-        backMonth.setVisibility(View.GONE);
     }
 
-    @OnClick(R.id.activities_activity_title_next_day)
+    @OnClick(R.id.activities_activity_title_next_month)
     public void mIvNextMouthClick() {
         String rightMouth = calendar.clickRightMonth();
         mTitleCalendarTextView.setText(rightMouth);
-        nextMonth.setVisibility(View.GONE);
-        backMonth.setVisibility(View.GONE);
     }
 
-    @OnClick(R.id.activities_calendar_title_date_tv)
+    @OnClick(R.id.activities_activity_title_date)
     public void showCalendarClick() {
         nextMonth.setVisibility(View.VISIBLE);
         backMonth.setVisibility(View.VISIBLE);
-        WindowManager manager = getWindowManager();
-        Display display = manager.getDefaultDisplay();
-        popupWindow = new PopupWindow(calendar, display.getWidth(), display.getHeight());
-        popupWindow.setFocusable(true);
-        popupWindow.setTouchable(true);
-        popupWindow.setOutsideTouchable(true);
-        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        calendarGroup.setVisibility(View.VISIBLE);
+        isShowCalendar = true;
+        calendar.setOnItemClickListener(new CalendarView.OnItemClickListener() {
+            @Override
+            public void OnItemClick(Date selectedStartDate, Date selectedEndDate, Date downDate) {
+                selectedDate = downDate;
+            }
+        });
     }
 
-    private CalendarView.OnItemClickListener onItemClicklistener = new CalendarView.OnItemClickListener() {
-        @Override
-        public void OnItemClick(Date selectedStartDate, Date selectedEndDate, Date downDate) {
-            popupWindow.update();
-        }
-    };
 
     @OnClick(R.id.activities_title_back)
     public void backOnClick(){

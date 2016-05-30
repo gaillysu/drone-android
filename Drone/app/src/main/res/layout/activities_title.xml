@@ -24,7 +24,7 @@
         >
 
         <ImageButton
-            android:id="@+id/activities_activity_calendar_back_day"
+            android:id="@+id/activities_activity_calendar_back_month"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginRight="18dp"
@@ -54,7 +54,7 @@
         </LinearLayout>
 
         <ImageButton
-            android:id="@+id/activities_activity_title_next_day"
+            android:id="@+id/activities_activity_title_next_month"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginLeft="20dp"
