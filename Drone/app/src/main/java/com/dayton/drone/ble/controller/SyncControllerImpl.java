@@ -20,6 +20,7 @@ import com.dayton.drone.application.ApplicationModel;
 import com.dayton.drone.ble.datasource.GattAttributesDataSourceImpl;
 import com.dayton.drone.ble.model.TimeZoneModel;
 import com.dayton.drone.ble.model.packet.ActivityPacket;
+import com.dayton.drone.ble.model.packet.GetBatteryPacket;
 import com.dayton.drone.ble.model.packet.GetStepsGoalPacket;
 import com.dayton.drone.ble.model.packet.SystemEventPacket;
 import com.dayton.drone.ble.model.packet.SystemStatusPacket;
@@ -44,7 +45,6 @@ import com.dayton.drone.event.LittleSyncEvent;
 import com.dayton.drone.event.LowMemoryEvent;
 import com.dayton.drone.event.ProfileChangedEvent;
 import com.dayton.drone.event.StepsGoalChangedEvent;
-import com.dayton.drone.event.TimeFramePacketReceivedEvent;
 import com.dayton.drone.event.TimerEvent;
 import com.dayton.drone.event.WorldClockChangedEvent;
 import com.dayton.drone.model.Steps;
@@ -154,6 +154,11 @@ public class SyncControllerImpl implements  SyncController{
     @Override
     public void findDevice() {
 
+    }
+
+    @Override
+    public void getBattery() {
+        sendRequest(new GetBatteryRequest(application));
     }
 
     /**
@@ -267,6 +272,11 @@ public class SyncControllerImpl implements  SyncController{
                     Log.i(TAG,"steps: " + steps + ",goal: " + goal);
                     EventBus.getDefault().post(new LittleSyncEvent(steps, goal));
                 }
+                else if((byte) GetBatteryRequest.HEADER == packet.getHeader())
+                {
+                    GetBatteryPacket getBatteryPacket = packet.newGetBatteryPacket();
+                    EventBus.getDefault().post(new BatteryStatusChangedEvent(getBatteryPacket.getBatteryStatus(), getBatteryPacket.getBatteryLevel()));
+                }
                 //system event: 0x02, this is sent by watch proactively,pls refer to Constants.SystemEvent
                 else if((byte) SystemEventPacket.HEADER == packet.getHeader())
                 {
@@ -274,8 +284,7 @@ public class SyncControllerImpl implements  SyncController{
                     Log.i(TAG,"SystemEventPacket return event value: " + systemEventPacket.getEvent());
 
                     if(systemEventPacket.getEvent() == Constants.SystemEvent.BatteryStatusChanged.rawValue()) {
-                        sendRequest(new GetBatteryRequest(application));
-                        EventBus.getDefault().post(new BatteryStatusChangedEvent());
+                        getBattery();
                     }
                     else if(systemEventPacket.getEvent() == Constants.SystemEvent.GoalCompleted.rawValue()) {
                         sendRequest(new GetActivityRequest(application));

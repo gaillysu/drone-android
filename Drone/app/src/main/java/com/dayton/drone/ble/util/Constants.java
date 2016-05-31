@@ -62,4 +62,13 @@ public class Constants {
         public  int rawValue() {return id;}
     }
 
+    public enum BatteryStatus {
+        InUse(0),Charging(1),Damaged(2),Calculating(3);
+        final int status;
+        private BatteryStatus(int status) {
+            this.status = status;
+        }
+        public  int rawValue() {return status;}
+    }
+
 }

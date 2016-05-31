@@ -3,6 +3,7 @@ package com.dayton.drone.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
 import android.view.View;
@@ -11,13 +12,25 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.activity.tutorial.SelectDeviceActivity;
 import com.dayton.drone.adapter.AddWatchMenuAdapter;
 import com.dayton.drone.adapter.AddWatchViewPagerAdapter;
+import com.dayton.drone.ble.model.request.init.GetSystemStatus;
+import com.dayton.drone.ble.util.Constants;
+import com.dayton.drone.event.BatteryStatusChangedEvent;
 import com.dayton.drone.model.Watches;
+
+import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
+import net.medcorp.library.ble.event.BLEFirmwareVersionReceivedEvent;
+import net.medcorp.library.ble.util.Optional;
+import net.medcorp.library.ble.util.QueuedMainThreadHandler;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +55,12 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
 
     @Bind(R.id.activity_addwatch_nowatch_layout)
     LinearLayout noWatchLayout;
+
+    private TextView batteryStateTextView;
+    private TextView versionTextView;
+    private TextView connectionStateTextView;
+
+    private List<String> firmwareVersion = new ArrayList<>();
 
     @Override
     protected void onCreate( Bundle savedInstanceState) {
@@ -81,8 +100,17 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
             noWatchLayout.setVisibility(View.GONE);
         }
         for(int i=0;i<watchesList.size();i++) {
-            LinearLayout LinearLayout = (LinearLayout) View.inflate(this, R.layout.activity_addwatch_watchinfo_layout, null);
-            viewList.add(LinearLayout);
+            LinearLayout linearLayout = (LinearLayout) View.inflate(this, R.layout.activity_addwatch_watchinfo_layout, null);
+            viewList.add(linearLayout);
+            batteryStateTextView = (TextView)linearLayout.findViewById(R.id.activity_addwatch_watchinfo_layout_batterystate_textview);
+            versionTextView = (TextView)linearLayout.findViewById(R.id.activity_addwatch_watchinfo_layout_version_textview);
+            connectionStateTextView = (TextView)linearLayout.findViewById(R.id.activity_addwatch_watchinfo_layout_connectionstate_textview);
+            if(getModel().getSyncController().isConnected())
+            {
+                connectionStateTextView.setText("Connected");
+                versionTextView.setText(formatFirmwareVersion(getModel().getSyncController().getFirmwareVersion(),getModel().getSyncController().getSoftwareVersion()));
+                getModel().getSyncController().getBattery();
+            }
             ImageView imageView = new ImageView(this);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams
                     (ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -147,5 +175,79 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+    private String formatFirmwareVersion(String bleVersion,String mcuVersion)
+    {
+        return bleVersion+"/"+mcuVersion;
+    }
+    @Subscribe
+    public void onEvent(final BLEConnectionStateChangedEvent stateChangedEvent) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                if(stateChangedEvent.isConnected()) {
+                    connectionStateTextView.setText("Connected");
+                    getModel().getSyncController().getBattery();
+                }
+                else
+                {
+                    connectionStateTextView.setText("Disconnected");
+                }
+            }
+        });
+    }
+
+    @Subscribe
+    public void onEvent(final BLEFirmwareVersionReceivedEvent bleFirmwareVersionReceivedEvent) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                if(bleFirmwareVersionReceivedEvent.getFirmwareTypes() == net.medcorp.library.ble.util.Constants.DfuFirmwareTypes.BLUETOOTH)
+                {
+                    firmwareVersion.add(0,bleFirmwareVersionReceivedEvent.getVersion());
+                }
+                if(bleFirmwareVersionReceivedEvent.getFirmwareTypes() == net.medcorp.library.ble.util.Constants.DfuFirmwareTypes.MCU)
+                {
+                    firmwareVersion.add(bleFirmwareVersionReceivedEvent.getVersion());
+                }
+                if(firmwareVersion.size()==2)
+                {
+                    versionTextView.setText(formatFirmwareVersion(firmwareVersion.get(0),firmwareVersion.get(1)));
+                    firmwareVersion.clear();
+                }
+            }
+        });
+    }
+
+    @Subscribe
+    public void onEvent(final BatteryStatusChangedEvent batteryStatusChangedEvent) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                if(batteryStatusChangedEvent.getState()== Constants.BatteryStatus.InUse.rawValue()) {
+                    batteryStateTextView.setText(batteryStatusChangedEvent.getLevel() + "%");
+                }
+                else if(batteryStatusChangedEvent.getState()==Constants.BatteryStatus.Charging.rawValue()){
+                    batteryStateTextView.setText("Charging" + "," + batteryStatusChangedEvent.getLevel() + "%");
+                }
+                else if(batteryStatusChangedEvent.getState()==Constants.BatteryStatus.Damaged.rawValue()){
+                    batteryStateTextView.setText("Damaged");
+                }
+                else if(batteryStatusChangedEvent.getState()==Constants.BatteryStatus.Calculating.rawValue()){
+                    batteryStateTextView.setText("Calculating");
+                }
+            }
+        });
     }
 }

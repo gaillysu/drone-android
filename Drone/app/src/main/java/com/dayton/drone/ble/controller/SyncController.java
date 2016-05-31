@@ -34,4 +34,9 @@ public interface SyncController {
      */
     void findDevice();
 
+    /**
+     * read the battery status and level,the result will be delivered by event bus
+     */
+    void getBattery();
+
 }

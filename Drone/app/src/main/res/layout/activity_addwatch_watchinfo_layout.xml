@@ -65,6 +65,7 @@ android:orientation="vertical">
             android:layout_marginLeft="10dp"
             android:orientation="vertical">
             <TextView
+                android:id="@+id/activity_addwatch_watchinfo_layout_batterystate_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/holo_blue_light"
@@ -72,6 +73,7 @@ android:orientation="vertical">
                 android:textSize="10sp"
                 />
             <TextView
+                android:id="@+id/activity_addwatch_watchinfo_layout_version_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/holo_blue_light"
@@ -80,6 +82,7 @@ android:orientation="vertical">
                 android:layout_marginTop="5dp"
                 />
             <TextView
+                android:id="@+id/activity_addwatch_watchinfo_layout_connectionstate_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/holo_blue_light"
