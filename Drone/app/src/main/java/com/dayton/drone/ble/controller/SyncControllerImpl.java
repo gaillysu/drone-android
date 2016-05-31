@@ -244,7 +244,7 @@ public class SyncControllerImpl implements  SyncController{
                     Steps steps = new Steps(activityPacket.getSteps(), activityPacket.getDate().getTime());
                     steps.setDate((Common.removeTimeFromDate(new Date(activityPacket.getDate().getTime()))).getTime());
                     steps.setUserID(application.getUser().getUserID());
-                    EventBus.getDefault().post(new TimeFramePacketReceivedEvent(steps));
+                    application.getStepsDatabaseHelper().update(steps);
                     //save the oldest activity date as colud sync starting date
                     if(theBigSyncStartDate.isEmpty() || (theBigSyncStartDate.notEmpty() && theBigSyncStartDate.get().getTime()>steps.getDate()))
                     {
@@ -357,10 +357,6 @@ public class SyncControllerImpl implements  SyncController{
         sendRequest(new SetUserProfileRequest(application,profileChangedEvent.getUser()));
     }
 
-    @Subscribe
-    public void onEvent(final TimeFramePacketReceivedEvent timeFramePacketReceivedEvent) {
-        application.getStepsDatabaseHelper().update(timeFramePacketReceivedEvent.getSteps());
-    }
     //local service
     static public class LocalService extends Service
     {

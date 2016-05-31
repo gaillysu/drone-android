@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
+import com.dayton.drone.event.BigSyncEvent;
 import com.dayton.drone.event.LittleSyncEvent;
 import com.dayton.drone.model.DailySteps;
 import com.dayton.drone.utils.CacheConstants;
@@ -149,77 +150,40 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         nextMonth.setVisibility(View.GONE);
         backMonth.setVisibility(View.GONE);
 
-        initHourlyData();
+        modifyChart(hourlyBarChart);
         modifyChart(lastMonthLineChart);
         modifyChart(lastWeekLineChart);
         modifyChart(thisWeekLineChart);
 
+        drawGraph();
+    }
+
+    private void drawGraph()
+    {
         StepsHandler stepsHandler = new StepsHandler(getModel().getStepsDatabaseHelper(),getModel().getUser());
+        setDataInChart(hourlyBarChart,stepsHandler.getDailySteps(selectedDate));
         setDataInChart(thisWeekLineChart, stepsHandler.getThisWeekSteps(selectedDate));
         setDataInChart(lastWeekLineChart, stepsHandler.getLastWeekSteps(selectedDate));
         setDataInChart(lastMonthLineChart, stepsHandler.getLastMonthSteps(selectedDate));
     }
-    public void initHourlyData() {
-        calendar.setCalendarData(new Date());
-        mTitleCalendarTextView.setText(new SimpleDateFormat("MMM").format(selectedDate));
-        hourlyBarChart.setDescription("");
-        hourlyBarChart.getLegend().setEnabled(false);
-        hourlyBarChart.setOnChartValueSelectedListener(this);
-        hourlyBarChart.setPinchZoom(false);
-        hourlyBarChart.setDrawGridBackground(false);
-        hourlyBarChart.setScaleEnabled(false);
-        hourlyBarChart.setDrawValueAboveBar(false);
-        hourlyBarChart.setDoubleTapToZoomEnabled(false);
-        hourlyBarChart.setDragEnabled(true);
-        hourlyBarChart.setSelected(false);
-
-
-        YAxis leftAxis = hourlyBarChart.getAxisLeft();
-        leftAxis.setDrawGridLines(true);
-        leftAxis.setEnabled(true);
-        leftAxis.setLabelCount(3, true);
-        leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
-        leftAxis.setAxisMinValue(0.0f);
-        leftAxis.setValueFormatter(new YAxisValueFormatter(){
-            @Override
-            public String getFormattedValue(float value, YAxis yAxis) {
-                int resValue = (int) value;
-                return resValue+"";
-            }
-        });
-        YAxis rightAxis = hourlyBarChart.getAxisRight();
-        rightAxis.setEnabled(false);
-        rightAxis.setAxisLineColor(R.color.grey);
-        rightAxis.setDrawGridLines(false);
-        rightAxis.setDrawLimitLinesBehindData(false);
-        rightAxis.setDrawLabels(false);
-
-        XAxis xAxis = hourlyBarChart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setDrawGridLines(false);
-        xAxis.setTextSize(10f);
-        xAxis.setTextColor(Color.BLACK);
-
+    private void setDataInChart(BarChart barChart, DailySteps dailySteps){
         SimpleDateFormat sdf = new SimpleDateFormat("HH: mm");
         List<String> xVals = new ArrayList<String>();
         List<BarEntry> yValue = new ArrayList<BarEntry>();
-
-        StepsHandler stepsHandler = new StepsHandler(getModel().getStepsDatabaseHelper(),getModel().getUser());
-        DailySteps dailySteps = stepsHandler.getDailySteps(selectedDate);
         for (int i = 0; i < dailySteps.getHourlySteps().length; i++) {
             yValue.add(new BarEntry(dailySteps.getHourlySteps()[i], i));
             xVals.add(i+":00");
         }
-        hourlyBarChart.setScaleMinima((.14f), 1f);
+        barChart.setScaleMinima((.14f), 1f);
         BarDataSet dataSet = new BarDataSet(yValue, "");
         dataSet.setDrawValues(false);
         dataSet.setColors(new int[]{getResources().getColor(R.color.colorPrimaryDark)});
         List<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
         dataSets.add(dataSet);
         BarData data = new BarData(xVals, dataSets);
-        hourlyBarChart.setData(data);
+        barChart.setData(data);
+        barChart.invalidate();
     }
-
     private void setDataInChart(LineChart lineChart, List<DailySteps> stepsList){
         SimpleDateFormat sdf = new SimpleDateFormat("d'/'M");
         List<String> xVals = new ArrayList<String>();
@@ -248,8 +212,49 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         LineData data = new LineData(xVals, dataSets);
         lineChart.setData(data);
         lineChart.animateY(2, Easing.EasingOption.EaseInCirc);
+        lineChart.invalidate();
     }
 
+    private void modifyChart(BarChart barChart){
+        calendar.setCalendarData(new Date());
+        mTitleCalendarTextView.setText(new SimpleDateFormat("MMM").format(selectedDate));
+        barChart.setDescription("");
+        barChart.getLegend().setEnabled(false);
+        barChart.setOnChartValueSelectedListener(this);
+        barChart.setPinchZoom(false);
+        barChart.setDrawGridBackground(false);
+        barChart.setScaleEnabled(false);
+        barChart.setDrawValueAboveBar(false);
+        barChart.setDoubleTapToZoomEnabled(false);
+        barChart.setDragEnabled(true);
+        barChart.setSelected(false);
+
+        YAxis leftAxis = barChart.getAxisLeft();
+        leftAxis.setDrawGridLines(true);
+        leftAxis.setEnabled(true);
+        leftAxis.setLabelCount(3, true);
+        leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
+        leftAxis.setAxisMinValue(0.0f);
+        leftAxis.setValueFormatter(new YAxisValueFormatter(){
+            @Override
+            public String getFormattedValue(float value, YAxis yAxis) {
+                int resValue = (int) value;
+                return resValue+"";
+            }
+        });
+        YAxis rightAxis = barChart.getAxisRight();
+        rightAxis.setEnabled(false);
+        rightAxis.setAxisLineColor(R.color.grey);
+        rightAxis.setDrawGridLines(false);
+        rightAxis.setDrawLimitLinesBehindData(false);
+        rightAxis.setDrawLabels(false);
+
+        XAxis xAxis = barChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        xAxis.setTextSize(10f);
+        xAxis.setTextColor(Color.BLACK);
+    }
     private void modifyChart(LineChart lineChart){
         lineChart.setContentDescription("");
         lineChart.setDescription("");
@@ -341,6 +346,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
             @Override
             public void OnItemClick(Date selectedStartDate, Date selectedEndDate, Date downDate) {
                 selectedDate = downDate;
+                drawGraph();
             }
         });
     }
@@ -395,6 +401,19 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
                 mProgressBar.setSmoothPercent(1.0f * event.getSteps() / event.getGoal());
                 SpUtils.putIntMethod(getApplicationContext(),CacheConstants.GOAL_STEP,event.getGoal());
                 SpUtils.putIntMethod(getApplicationContext(),CacheConstants.TODAY_STEP,event.getSteps());
+            }
+        });
+    }
+
+    @Subscribe
+    public void onEvent(final BigSyncEvent event) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                if(event.getStatus() == BigSyncEvent.BIG_SYNC_EVENT.STOPPED)
+                {
+                    drawGraph();
+                }
             }
         });
     }
