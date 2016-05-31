@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -103,7 +104,18 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
     @OnClick(R.id.activity_addwatch_back_imagebutton)
     public void back()
     {
+        startActivity(HomeActivity.class);
         finish();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            startActivity(HomeActivity.class);
+            finish();
+         return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @OnClick(R.id.activity_addwatch_add_imagebutton)

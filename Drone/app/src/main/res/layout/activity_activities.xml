@@ -197,6 +197,7 @@
                     android:background="@color/activities_calendar_show_bg_color">
                 <com.dayton.drone.view.CalendarView
                     android:id="@+id/calendar_date_view"
+                    android:paddingTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     />
