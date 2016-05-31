@@ -3,6 +3,7 @@ package com.dayton.drone.activity.tutorial;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -13,10 +14,14 @@ import com.dayton.drone.activity.HomeActivity;
 import com.dayton.drone.activity.base.BaseActivity;
 
 import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
+import net.medcorp.library.ble.event.BLEFirmwareVersionReceivedEvent;
 import net.medcorp.library.ble.event.BLESearchEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -41,6 +46,7 @@ public class ShowWatchActivity extends BaseActivity  {
     ImageView icon;
 
     private int searchCount = 0;
+    private List<String> firmwareVersion = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,15 +57,13 @@ public class ShowWatchActivity extends BaseActivity  {
         Intent intent = getIntent();
         int watchIconId = intent.getIntExtra("watchIconId", -1);
         icon.setImageResource(watchIconId);
-//        if(!getModel().getSyncController().isConnected()) {
-//            getModel().getSyncController().startConnect(true);
-//        }
-//        else{
-//            startActivity(HomeActivity.class);
-//            finish();
-//        }
-        startActivity(HomeActivity.class);
-        finish();
+        if(!getModel().getSyncController().isConnected()) {
+            getModel().getSyncController().startConnect(true);
+        }
+        else{
+            startActivity(HomeActivity.class);
+            finish();
+        }
     }
 
     @Override
@@ -103,7 +107,7 @@ public class ShowWatchActivity extends BaseActivity  {
     }
 
     @Subscribe
-    public void onEvent(BLEConnectionStateChangedEvent event){
+    public void onEvent(final BLEConnectionStateChangedEvent event){
         if (event.isConnected()){
             runOnUiThread(new Runnable() {
                 @Override
@@ -112,7 +116,7 @@ public class ShowWatchActivity extends BaseActivity  {
                     watchName.setVisibility(View.VISIBLE);
                     watchVersion.setVisibility(View.VISIBLE);
                     buletoothID.setVisibility(View.VISIBLE);
-                    //TODO how to go homeActivity? here assume auto go it after some seconds
+                    buletoothID.setText("MAC: "+event.getAddress());
                     new Handler(getMainLooper()).postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -123,5 +127,32 @@ public class ShowWatchActivity extends BaseActivity  {
                 }
             });
         }
+    }
+
+    @Subscribe
+    public void onEvent(final BLEFirmwareVersionReceivedEvent bleFirmwareVersionReceivedEvent) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                if(bleFirmwareVersionReceivedEvent.getFirmwareTypes() == net.medcorp.library.ble.util.Constants.DfuFirmwareTypes.BLUETOOTH)
+                {
+                    firmwareVersion.add(0,bleFirmwareVersionReceivedEvent.getVersion());
+                }
+                if(bleFirmwareVersionReceivedEvent.getFirmwareTypes() == net.medcorp.library.ble.util.Constants.DfuFirmwareTypes.MCU)
+                {
+                    firmwareVersion.add(bleFirmwareVersionReceivedEvent.getVersion());
+                }
+                if(firmwareVersion.size()==2)
+                {
+                    watchVersion.setText(formatFirmwareVersion(firmwareVersion.get(0),firmwareVersion.get(1)));
+                    firmwareVersion.clear();
+                }
+            }
+        });
+    }
+
+    private String formatFirmwareVersion(String bleVersion,String mcuVersion)
+    {
+        return "version: "+bleVersion+"/"+mcuVersion;
     }
 }

@@ -38,9 +38,6 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-        //TODO this is test hardcode
-        ed_account.setText("test@med-corp.net");
-        ed_password.setText("123456");
         nextImageButton.setVisibility(View.GONE);
     }
 
