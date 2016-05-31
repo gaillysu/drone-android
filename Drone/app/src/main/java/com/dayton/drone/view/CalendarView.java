@@ -283,7 +283,7 @@ public class CalendarView extends View implements View.OnTouchListener {
 		int year = calendar.get(Calendar.YEAR);
 		int month = calendar.get(Calendar.MONTH)+1;
 		int day = calendar.get(Calendar.DAY_OF_MONTH);
-		return month+"";
+		return year+"-"+month+"-"+day;
 	}
 
 	public String clickLeftMonth(){
@@ -359,32 +359,33 @@ public class CalendarView extends View implements View.OnTouchListener {
 				setSelectedDateByCoor(event.getX(), event.getY());
 				break;
 			case MotionEvent.ACTION_UP:
-				if (downDate != null) {
-					if(isSelectMore){
-						if (!completed) {
-							if (downDate.before(selectedStartDate)) {
-								selectedEndDate = selectedStartDate;
-								selectedStartDate = downDate;
-							} else {
-								selectedEndDate = downDate;
-							}
-							completed = true;
+				if(downIndex>=curStartIndex&&downIndex<curEndIndex) {
+					if (downDate != null) {
+						if (isSelectMore) {
+							if (!completed) {
+								if (downDate.before(selectedStartDate)) {
+									selectedEndDate = selectedStartDate;
+									selectedStartDate = downDate;
+								} else {
+									selectedEndDate = downDate;
+								}
+								completed = true;
 
-							onItemClickListener.OnItemClick(selectedStartDate,selectedEndDate,downDate);
+								onItemClickListener.OnItemClick(selectedStartDate, selectedEndDate, downDate);
+							} else {
+								selectedStartDate = selectedEndDate = downDate;
+								curDate = downDate;
+								completed = false;
+							}
 						} else {
 							selectedStartDate = selectedEndDate = downDate;
+							onItemClickListener.OnItemClick(selectedStartDate, selectedEndDate, downDate);
 							curDate = downDate;
-							completed = false;
+
 						}
-					}else{
-						selectedStartDate = selectedEndDate = downDate;
-						onItemClickListener.OnItemClick(selectedStartDate,selectedEndDate,downDate);
-						curDate = downDate;
-
+						invalidate();
 					}
-					invalidate();
 				}
-
 				break;
 		}
 		return true;
@@ -410,7 +411,7 @@ public class CalendarView extends View implements View.OnTouchListener {
 		public int bgColor = Color.parseColor("#ffffff");
 		private int textColor = Color.parseColor("#55000000");
 		private int btnColor = Color.parseColor("#FCFEFE");
-		private int borderColor = Color.parseColor("#00000000");
+		private int borderColor = Color.parseColor("#22000000");
 		public int todayNumberColor = Color.parseColor("#55000000");
 		public int cellDownColor = Color.parseColor("#FFFFFF");
 		public int cellSelectedColor = Color.parseColor("#C19149");
@@ -431,7 +432,8 @@ public class CalendarView extends View implements View.OnTouchListener {
 			cellHeight = (height - monthHeight - weekHeight) / 6f;
 			cellWidth = width / 7f;
 			borderPaint = new Paint();
-			borderPaint.setColor(borderColor);
+//			borderPaint.setColor(borderColor);
+			borderPaint.setColor(bgColor);
 			borderPaint.setStyle(Paint.Style.STROKE);
 			borderWidth = (float) (0.5 * density);
 

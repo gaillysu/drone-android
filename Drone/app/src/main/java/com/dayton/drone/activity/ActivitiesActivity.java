@@ -325,7 +325,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     }
 
     @OnClick(R.id.activities_activity_calendar_back_month)
-    public void mIvBackMouthClick() {
+    public void mIvBackMouthClick(){
         String leftMouth = calendar.clickLeftMonth();
         mTitleCalendarTextView.setText(leftMouth);
     }
@@ -346,6 +346,9 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
             @Override
             public void OnItemClick(Date selectedStartDate, Date selectedEndDate, Date downDate) {
                 selectedDate = downDate;
+                nextMonth.setVisibility(View.GONE);
+                backMonth.setVisibility(View.GONE);
+                calendarGroup.setVisibility(View.GONE);
                 drawGraph();
             }
         });
