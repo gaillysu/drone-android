@@ -83,8 +83,6 @@ public class UserDatabaseHelper implements iEntryDatabaseHelper<User> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-
         return false;
     }
 

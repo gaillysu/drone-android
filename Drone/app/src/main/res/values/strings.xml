@@ -37,7 +37,7 @@
     <string name="home_guide_profile">Profile</string>
     <string name="home_title_back_text">Back</string>
     <string name="home_title_save_text">Save</string>
-
+    <string name="profile_title_back_text">Cancel</string>
     <string name="fragment_home_title_calories">CALORIES</string>
     <string name="fragment_home_title_active_time">ACTIVE TIME</string>
     <string name="fragment_home_title_kilometer">KM</string>
@@ -60,6 +60,7 @@
     <string name="profile_edit_prompt">edit</string>
     <string name="profile_user_weight_unit">Kg</string>
     <string name="profile_user_height_unit">cm</string>
+    <string name="profile_edit_email_prompt">Mailbox cannot be edited</string>
     <string name="world_add_city_prompt">Add up to five cities</string>
     <string name="profile_prompt_user_edit">Enter the space, the success of the editorial department</string>
     <string name="profile_email_format_error_prompt">Mailbox format is not correct</string>
@@ -71,17 +72,4 @@
     <string name="profile_dialog_negative_button_text">Cancel</string>
     <string name="profile_save_text_dec">No Watch\nConnected</string>
 
-
-    <string-array name="user_select_dec_arr">
-        <item>Black Strap</item>
-        <item>Tone Split</item>
-        <item>Split Dial</item>
-        <item>Stainless Steel</item>
-        <item>Rose Tone</item>
-        <item>Crystal Bezel</item>
-    </string-array>
-    <string-array name="home_menu_text_data">
-        <item>ACTIVITIES</item>
-        <item>WORLD\nCLOCK</item>
-    </string-array>
 </resources>

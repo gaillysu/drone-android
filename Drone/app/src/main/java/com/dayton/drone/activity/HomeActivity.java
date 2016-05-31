@@ -86,6 +86,7 @@ public class HomeActivity extends BaseActivity {
     @OnClick(R.id.manager_fragment_title_right_add)
     public void addWatch() {
         startActivity(AddWatchActivity.class);
+        finish();
     }
 
     @OnClick(R.id.title_head_icon)

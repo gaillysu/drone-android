@@ -27,13 +27,14 @@
 
         <ImageButton
             android:id="@+id/world_clock_add_city_iv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_alignParentRight="true"
             android:layout_marginRight="20dp"
+            android:scaleType="fitXY"
             android:layout_marginTop="30dp"
             android:background="@android:color/transparent"
-            android:src="@mipmap/world_clock_add_icon"
+            android:src="@mipmap/choose_add_city_icon"
             />
     </RelativeLayout>
 
@@ -51,7 +52,7 @@
             android:text="afsd"
             android:textColor="@color/choose_adapter_text_color"
             android:textSize="28sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"/>s
 
         <ListView
             android:id="@+id/world_clock_select_city_list"

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="calendar_month_item_week">
+        <item>S</item>
+        <item>M</item>
+        <item>T</item>
+        <item>W</item>
+        <item>T</item>
+        <item>F</item>
+        <item>S</item>
+    </array>
+    <array name="user_select_dec_arr">
+        <item>Black Strap</item>
+        <item>Tone Split</item>
+        <item>Split Dial</item>
+        <item>Stainless Steel</item>
+        <item>Rose Tone</item>
+        <item>Crystal Bezel</item>
+    </array>
+    <array name="home_menu_text_data">
+        <item>ACTIVITIES</item>
+        <item>WORLD\nCLOCK</item>
+    </array>
+</resources>

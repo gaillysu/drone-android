@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.dayton.drone.R;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -419,7 +421,7 @@ public class CalendarView extends View implements View.OnTouchListener {
 		public Paint monthChangeBtnPaint;
 		public Paint cellBgPaint;
 		public Path boxPath;
-		public String[] weekText = { "S","M", "T", "W", "T", "F", " S "};
+		public String[] weekText = getResources().getStringArray(R.array.calendar_month_item_week);
 
 
 		public void init() {
