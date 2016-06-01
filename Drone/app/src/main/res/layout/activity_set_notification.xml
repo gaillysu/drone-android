@@ -68,7 +68,7 @@
          android:textSize="11sp"
          android:text="Getting annoyed by an added contact? Just swipe to the\nright to delete him or her!"/>
 
- <ListView
+ <com.baoyz.swipemenulistview.SwipeMenuListView
      android:id="@+id/activity_set_notification_contacts_listview"
      android:layout_width="match_parent"
      android:layout_height="match_parent"

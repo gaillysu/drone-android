@@ -3,12 +3,20 @@ package com.dayton.drone.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
+import android.view.MotionEvent;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuItem;
+import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.adapter.SetNotificationContactsAdapter;
@@ -33,8 +41,9 @@ import butterknife.OnClick;
  */
 public class SetNotificationActivity extends BaseActivity {
     private final String CONTACTSKEY = "contacts";
+    private final String APPLICATION = "unknown";
     @Bind(R.id.activity_set_notification_contacts_listview)
-    ListView contactsListView;
+    SwipeMenuListView contactsListView;
     List<Contact> contactsList;
     SetNotificationContactsAdapter setNotificationContactsAdapter;
 
@@ -44,7 +53,7 @@ public class SetNotificationActivity extends BaseActivity {
         setContentView(R.layout.activity_set_notification);
         ButterKnife.bind(this);
         contactsList = new ArrayList<>();
-        List<Notification> notifications = getModel().getNotificationDatabaseHelper().get("unknown");
+        List<Notification> notifications = getModel().getNotificationDatabaseHelper().get(APPLICATION);
         if(!notifications.isEmpty()) {
             try {
                 JSONArray jsonArray = new JSONObject(notifications.get(0).getContactsList()).getJSONArray(CONTACTSKEY);
@@ -57,6 +66,38 @@ public class SetNotificationActivity extends BaseActivity {
             }
         }
 
+        SwipeMenuCreator creator = new SwipeMenuCreator() {
+            @Override
+            public void create(SwipeMenu menu) {
+                // create "delete" item
+                SwipeMenuItem deleteItem = new SwipeMenuItem(
+                        getApplicationContext());
+                // set item background
+                deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9,0x3F, 0x25)));
+                deleteItem.setWidth(200);
+                deleteItem.setTitleSize(18);
+                deleteItem.setTitle("Delete");
+                deleteItem.setTitleColor(Color.WHITE);
+                menu.addMenuItem(deleteItem);
+            }
+        };
+        // set creator
+        contactsListView.setMenuCreator(creator);
+        contactsListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+                switch (index) {
+                    case 0:
+                        updateNotification(APPLICATION,contactsList,contactsList.get(position),false);
+                        contactsList.remove(position);
+                        setNotificationContactsAdapter.notifyDataSetChanged();
+                        break;
+                }
+                return false;
+            }
+        });
+
+        contactsListView.setSwipeDirection(SwipeMenuListView.DIRECTION_LEFT);
         setNotificationContactsAdapter = new SetNotificationContactsAdapter(this,R.layout.set_notification_contacts_list_item, contactsList);
         contactsListView.setAdapter(setNotificationContactsAdapter);
     }
@@ -111,33 +152,57 @@ public class SetNotificationActivity extends BaseActivity {
             //finish finding name and phone number
             if(!contactName.isEmpty() && !contactNumber.isEmpty())
             {
-                Notification notification = new Notification();
-                notification.setApplication("unknown");
-
                 Contact contact = new Contact();
                 contact.setName(contactName);
                 contact.setNumber(contactNumber);
-                contactsList.add(contact);
-
-                JSONObject jsonObject = new JSONObject();
-                JSONArray jsonArray = new JSONArray();
-                for(Contact contact1:contactsList)
+                if(!updateNotification(APPLICATION,contactsList,contact,true))
                 {
-                    try {
-                        jsonArray.put(new JSONObject(new Gson().toJson(contact1)));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    Toast.makeText(SetNotificationActivity.this,"Name has got existed",Toast.LENGTH_LONG).show();
+                    return;
                 }
-                try {
-                    jsonObject.put(CONTACTSKEY,jsonArray);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                notification.setContactsList(jsonObject.toString());
-                getModel().getNotificationDatabaseHelper().update(notification);
+                contactsList.add(contact);
                 setNotificationContactsAdapter.notifyDataSetChanged();
             }
         }
+    }
+
+    private boolean updateNotification(String application,List<Contact> contactsList,Contact contact,boolean added)
+    {
+        Notification notification = new Notification();
+        notification.setApplication(application);
+
+        JSONObject jsonObject = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        for(Contact contact1:contactsList)
+        {
+            if( contact.getNumber().equals(contact1.getNumber()) && contact.getName().equals(contact1.getName()))
+            {
+                if(added)
+                {
+                    return false;
+                }
+                else
+                {
+                    continue;
+                }
+            }
+            try {
+                jsonArray.put(new JSONObject(new Gson().toJson(contact1)));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            if(added)
+            {
+                jsonArray.put(new JSONObject(new Gson().toJson(contact)));
+            }
+            jsonObject.put(CONTACTSKEY,jsonArray);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        notification.setContactsList(jsonObject.toString());
+        getModel().getNotificationDatabaseHelper().update(notification);
+        return true;
     }
 }
