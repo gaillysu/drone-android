@@ -190,7 +190,7 @@ public class UserInfoActivity extends BaseActivity {
                         getModel().getUser().setUserEmail(createUserModel.getUser().getEmail());
                         getModel().getUser().setUserPassword(password);
                         getModel().getUser().setUserID(createUserModel.getUser().getId() + "");
-                        getModel().getUser().setUserIsLogin(true);
+//                        getModel().getUser().setUserIsLogin(true);
                         getModel().getUserDatabaseHelper().update(getModel().getUser());
                     }
                 }

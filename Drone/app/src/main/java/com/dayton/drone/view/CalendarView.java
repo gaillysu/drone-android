@@ -278,22 +278,22 @@ public class CalendarView extends View implements View.OnTouchListener {
 	}
 
 
-	public String getYearAndmonth() {
+	public Date getYearAndmonth() {
 		calendar.setTime(curDate);
 		int year = calendar.get(Calendar.YEAR);
 		int month = calendar.get(Calendar.MONTH)+1;
 		int day = calendar.get(Calendar.DAY_OF_MONTH);
-		return year+"-"+month+"-"+day;
+		return curDate;
 	}
 
-	public String clickLeftMonth(){
+	public Date clickLeftMonth(){
 		calendar.setTime(curDate);
 		calendar.add(Calendar.MONTH, -1);
 		curDate = calendar.getTime();
 		invalidate();
 		return getYearAndmonth();
 	}
-	public String clickRightMonth(){
+	public Date clickRightMonth(){
 		calendar.setTime(curDate);
 		calendar.add(Calendar.MONTH, 1);
 		curDate = calendar.getTime();
@@ -301,20 +301,20 @@ public class CalendarView extends View implements View.OnTouchListener {
 		return getYearAndmonth();
 	}
 
-	public String clickLeftDay(){
-		calendar.setTime(curDate);
-		calendar.add(Calendar.DAY_OF_MONTH,-1);
-		curDate = calendar.getTime();
-		invalidate();
-		return getYearAndmonth();
-	}
-	public String clickRightDay(){
-		calendar.setTime(curDate);
-		calendar.add(Calendar.DAY_OF_MONTH,1);
-		curDate = calendar.getTime();
-		invalidate();
-		return getYearAndmonth();
-	}
+//	public String clickLeftDay(){
+//		calendar.setTime(curDate);
+//		calendar.add(Calendar.DAY_OF_MONTH,-1);
+//		curDate = calendar.getTime();
+//		invalidate();
+//		return getYearAndmonth();
+//	}
+//	public String clickRightDay(){
+//		calendar.setTime(curDate);
+//		calendar.add(Calendar.DAY_OF_MONTH,1);
+//		curDate = calendar.getTime();
+//		invalidate();
+//		return getYearAndmonth();
+//	}
 	public void setCalendarData(Date date){
 		calendar.setTime(date);
 		invalidate();

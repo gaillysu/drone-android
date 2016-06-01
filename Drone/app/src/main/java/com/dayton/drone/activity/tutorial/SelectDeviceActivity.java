@@ -27,6 +27,8 @@ public class SelectDeviceActivity extends BaseActivity {
     GridView mShowWatchGridView;
     private SelectDeviceGridViewAdapter mGridViewAdapter;
     private int type;
+    private int loginType = 2>>4;
+    private int addWatchType= 5<<3;
 
     private String[] watchNameArray;
     private int[] droneImagesIdArray = new int[]{R.mipmap.welcome_drone_1,R.mipmap.welcome_drone_2,
@@ -66,9 +68,9 @@ public class SelectDeviceActivity extends BaseActivity {
         titleBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(type == 2>>4){
+                if(type == loginType){
                     startActivity(LoginActivity.class);
-                }else if(type == 5<<3){
+                }else if(type == addWatchType){
                     startActivity(AddWatchActivity.class);
                 }else {
                     startActivity(UserInfoActivity.class);

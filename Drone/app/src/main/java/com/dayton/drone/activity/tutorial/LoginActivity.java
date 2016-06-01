@@ -32,7 +32,6 @@ public class LoginActivity extends BaseActivity {
     @Bind(R.id.registe_next_iv)
     ImageButton nextImageButton;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +78,7 @@ public class LoginActivity extends BaseActivity {
                      getModel().getUser().setUserID(loginUserModel.getUser().getId()+"");
                      getModel().getUser().setUserEmail(loginUserModel.getUser().getEmail());
                      getModel().getUser().setUserPassword(ed_password.getText().toString());
-                     getModel().getUser().setUserIsLogin(true);
+//                     getModel().getUser().setUserIsLogin(true);
                      getModel().getUserDatabaseHelper().update(getModel().getUser());
                      getModel().getSyncActivityManager().launchSyncAll();
                      onLoginSuccess();

@@ -62,6 +62,7 @@ public class ShowWatchActivity extends BaseActivity  {
         }
         else{
             startActivity(HomeActivity.class);
+            getModel().getUser().setUserIsLogin(true);
             finish();
         }
     }
@@ -121,6 +122,7 @@ public class ShowWatchActivity extends BaseActivity  {
                         @Override
                         public void run() {
                             startActivity(HomeActivity.class);
+                            getModel().getUser().setUserIsLogin(true);
                             finish();
                         }
                     },10000);

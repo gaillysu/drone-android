@@ -28,7 +28,7 @@ public class HomeActivity extends BaseActivity {
     ListView homeMenuListView;
 
     private List<MenuBean> listData;
-
+    private int myRequestCode = 2>>5;
 
     private int[] homeMenuIconArray = {R.mipmap.mainmenu_activity_icon
             , R.mipmap.mainmenu_worldclock_icon};
@@ -98,7 +98,7 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == 2 >> 5) {
+        if (resultCode == myRequestCode) {
             boolean flag = data.getBooleanExtra("logOut", false);
             if (flag) {
                 getModel().getUser().setUserIsLogin(false);

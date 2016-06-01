@@ -325,15 +325,15 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     }
 
     @OnClick(R.id.activities_activity_calendar_back_month)
-    public void mIvBackMouthClick(){
-        String leftMouth = calendar.clickLeftMonth();
-        mTitleCalendarTextView.setText(leftMouth);
+    public void mIvBackMonthClick(){
+        Date leftMouth = calendar.clickLeftMonth();
+        mTitleCalendarTextView.setText(new SimpleDateFormat("MMM").format(leftMouth));
     }
 
     @OnClick(R.id.activities_activity_title_next_month)
-    public void mIvNextMouthClick() {
-        String rightMouth = calendar.clickRightMonth();
-        mTitleCalendarTextView.setText(rightMouth);
+    public void mIvNextMonthClick() {
+        Date rightMouth = calendar.clickRightMonth();
+        mTitleCalendarTextView.setText(new SimpleDateFormat("MMM").format(rightMouth));
     }
 
     @OnClick(R.id.activities_activity_title_date)

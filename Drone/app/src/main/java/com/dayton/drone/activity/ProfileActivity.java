@@ -64,7 +64,7 @@ public class ProfileActivity extends BaseActivity {
     RelativeLayout noWatchShow;
     private int userStepGoal;
     private int viewType = -1;
-
+    private int resultCode = 2>>5;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,7 +101,7 @@ public class ProfileActivity extends BaseActivity {
     public void back() {
         Intent intent = getIntent();
         intent.putExtra("logOut", false);
-        setResult(2 >> 5, intent);
+        setResult(resultCode, intent);
         finish();
     }
 
@@ -161,33 +161,6 @@ public class ProfileActivity extends BaseActivity {
     @OnClick(R.id.profile_activity_edit_email_ib)
     public void editUserEmailClick() {
         Toast.makeText(this ,getString(R.string.profile_edit_email_prompt),Toast.LENGTH_SHORT).show();
-//        emailAccount.requestFocus();
-//        emailAccount.setText("");
-//        emailAccount.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//            @Override
-//            public void onFocusChange(View view, boolean b) {
-//                if (!b) {
-//                    String email = emailAccount.getText().toString();
-//                    if (!TextUtils.isEmpty(email)) {
-//                        boolean flag = checkEmail(email);
-//                        if (!flag) {
-//                            mUser.setUserEmail(email);
-//                            emailAccount.setText(email);
-//                        } else {
-//                            if (mUser.getUserEmail() == null) {
-//                                emailAccount.setText(mUser.getUserEmail());
-//                                Toast.makeText(ProfileActivity.this,
-//                                        getString(R.string.profile_email_format_error_prompt), Toast.LENGTH_SHORT).show();
-//                            } else {
-//                                emailAccount.setText(mUser.getUserEmail());
-//                            }
-//                        }
-//                    } else {
-//                        emailAccount.setText(mUser.getUserEmail());
-//                    }
-//                }
-//            }
-//        });
     }
 
     @OnClick(R.id.profile_activity_edit_user_height)
@@ -255,7 +228,7 @@ public class ProfileActivity extends BaseActivity {
                     String goal = stepGoal.getText().toString();
                     if (!TextUtils.isEmpty(goal)) {
                         int goalStep = new Integer(goal).intValue();
-                        if (goalStep > 0 && goalStep < 1000000) {
+                        if (goalStep > 0 && goalStep < 10000000) {
                             stepGoal.setText(goalStep + "");
                         } else {
                             stepGoal.setText(goalStep);
@@ -281,10 +254,9 @@ public class ProfileActivity extends BaseActivity {
         if (!watchConnected) {
             noWatchShow.setVisibility(View.VISIBLE);
             AlphaAnimation alpha = new AlphaAnimation(1, 0);
-            alpha.setDuration(2000);
+            alpha.setDuration(1500);
             alpha.setFillAfter(true);
-            noWatchShow.startAnimation(alpha);
-            noWatchShow.setLayoutAnimationListener(new Animation.AnimationListener() {
+            alpha.setAnimationListener(new Animation.AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation animation) {
 
@@ -293,6 +265,7 @@ public class ProfileActivity extends BaseActivity {
                 @Override
                 public void onAnimationEnd(Animation animation) {
                     noWatchShow.setVisibility(View.GONE);
+                    saveUserCurrentEdit();
                 }
 
                 @Override
@@ -300,11 +273,12 @@ public class ProfileActivity extends BaseActivity {
 
                 }
             });
+            noWatchShow.startAnimation(alpha);
         }
-        saveUserCurrentEdit();
+
     }
 
-    private void saveUserCurrentEdit() {
+    public void saveUserCurrentEdit() {
         int currentGoalStep = new Integer(stepGoal.getText().toString()).intValue();
         SpUtils.putIntMethod(ProfileActivity.this, CacheConstants.GOAL_STEP, currentGoalStep);
         mUser.setLastName(accountName.getText().toString());
@@ -335,6 +309,10 @@ public class ProfileActivity extends BaseActivity {
             userStepGoal = currentGoalStep;
             EventBus.getDefault().post(new StepsGoalChangedEvent(userStepGoal));
         }
+        Intent intent = getIntent();
+        intent.putExtra("logOut", false);
+        setResult(resultCode, intent);
+        finish();
     }
 
     private void showDiaLogMethod(int id) {
@@ -347,10 +325,9 @@ public class ProfileActivity extends BaseActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 SpUtils.putIntMethod(ProfileActivity.this, CacheConstants.GOAL_STEP,10000);
                 getModel().getUser().setUserIsLogin(false);
-                getModel().getUserDatabaseHelper().removeAll();
                 Intent intent = getIntent();
                 intent.putExtra("logOut", true);
-                setResult(2 >> 5, intent);
+                setResult(resultCode, intent);
                 finish();
             }
         });
@@ -361,54 +338,6 @@ public class ProfileActivity extends BaseActivity {
             }
         });
         builder.show();
-
-        //        } else if (id == saveButton.getId()) {
-        //            builder.setTitle(R.string.profile_dialog_save_title_text).setMessage(R.string.profile_dialog_save_message_text);
-        //            builder.setPositiveButton(R.string.profile_dialog_save_positive_button_text, new DialogInterface.OnClickListener() {
-        //                @Override
-        //                public void onClick(DialogInterface dialogInterface, int i) {
-        //                    int currentGoalStep = new Integer(stepGoal.getText().toString()).intValue();
-        //                    SpUtils.putIntMethod(ProfileActivity.this, CacheConstants.GOAL_STEP, currentGoalStep);
-        //                    User user = getModel().getUser();
-        //                    user.setLastName(accountName.getText().toString());
-        //                    user.setFirstName(userFirstName.getText().toString());
-        //                    user.setUserEmail(emailAccount.getText().toString());
-        //                    String height = userHeight.getText().toString();
-        //                        if (height.contains(getString(R.string.profile_user_height_unit))) {
-        //                            int currentHeight = new Integer(height.substring(0, height.length() - 2)).intValue();
-        //                            user.setHeight(currentHeight);
-        //                        } else {
-        //                            user.setHeight(new Integer(height).intValue());
-        //                        }
-        //
-        //                    String weight = userWeight.getText().toString();
-        //                        if (weight.contains(getString(R.string.profile_user_weight_unit))) {
-        //                            double currentWeight = Double.parseDouble(weight.substring(0, weight.length() - 2));
-        //                            user.setWeight(currentWeight);
-        //                        } else {
-        //                            user.setWeight(Double.parseDouble(weight));
-        //                        }
-        //                    UserDatabaseHelper helper = getModel().getUserDatabaseHelper();
-        //                    if(userStepGoal!=currentGoalStep)
-        //                    {
-        //                        userStepGoal = currentGoalStep;
-        //                        EventBus.getDefault().post(new StepsGoalChangedEvent(userStepGoal));
-        //                    }
-        //                    if(helper.update(user))
-        //                    {
-        //                        EventBus.getDefault().post(new ProfileChangedEvent(user));
-        //                    }
-        //                }
-        //            });
-        //
-        //            builder.setNegativeButton(R.string.profile_dialog_save_negative_button_text, new DialogInterface.OnClickListener() {
-        //                @Override
-        //                public void onClick(DialogInterface dialogInterface, int i) {
-        //                    dialogInterface.dismiss();
-        //                }
-        //            });
-        //            builder.show();
-        //        }
     }
 
     public boolean checkEmail(String email) {
@@ -430,7 +359,7 @@ public class ProfileActivity extends BaseActivity {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             Intent intent = getIntent();
             intent.putExtra("logOut", false);
-            setResult(2 >> 5, intent);
+            setResult(resultCode, intent);
             finish();
             return true;
         }
