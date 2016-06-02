@@ -111,7 +111,7 @@ public class LoginActivity extends BaseActivity {
             ed_account.setError(null);
         }
         if (password.isEmpty()) {
-            ed_password.setError(getString(R.string.tips_user_account_password));
+            ed_password.setError(getString(R.string.tips_user_password));
             valid = false;
         } else {
             ed_password.setError(null);

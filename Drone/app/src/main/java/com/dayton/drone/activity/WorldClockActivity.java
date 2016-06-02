@@ -1,7 +1,6 @@
 package com.dayton.drone.activity;
 
 import android.content.Intent;
-import android.hardware.camera2.TotalCaptureResult;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -36,8 +35,7 @@ public class WorldClockActivity extends BaseActivity {
     TextView dateTv;
     @Bind(R.id.world_clock_select_city_list)
     ListView worldClockListView;
-    @Bind(R.id.content_title_dec_tv)
-    TextView titleTextView;
+
 
     private List<WorldClock> listData;
     private WorldClockAdapter worldClockAdapter;
@@ -50,7 +48,6 @@ public class WorldClockActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_world_clock);
         ButterKnife.bind(this);
-        titleTextView.setText(getString(R.string.world_clock_title_text));
         worldClockDatabase = getModel().getWorldClockDatabaseHelper();
         initData();
     }
@@ -101,17 +98,17 @@ public class WorldClockActivity extends BaseActivity {
 
     }
 
-    @OnClick(R.id.content_title_back_bt)
+    @OnClick(R.id.world_clock_back_icon_ib)
     public void backClick() {
         finish();
     }
 
-    @OnClick(R.id.world_clock_date_edit_bt)
-    public void editButtonClick() {
-        isShowEditIcon = !isShowEditIcon;
-        setListAdapter(isShowEditIcon);
-        worldClockAdapter.notifyDataSetChanged();
-    }
+//    @OnClick(R.id.world_clock_date_edit_bt)
+//    public void editButtonClick() {
+//        isShowEditIcon = !isShowEditIcon;
+//        setListAdapter(isShowEditIcon);
+//        worldClockAdapter.notifyDataSetChanged();
+//    }
 
     @OnClick(R.id.world_clock_add_city_iv)
     public void addCityClick() {

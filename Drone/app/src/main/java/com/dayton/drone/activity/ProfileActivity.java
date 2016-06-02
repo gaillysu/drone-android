@@ -64,7 +64,8 @@ public class ProfileActivity extends BaseActivity {
     RelativeLayout noWatchShow;
     private int userStepGoal;
     private int viewType = -1;
-    private int resultCode = 2>>5;
+    private int resultCode = 2 >> 5;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -160,7 +161,7 @@ public class ProfileActivity extends BaseActivity {
 
     @OnClick(R.id.profile_activity_edit_email_ib)
     public void editUserEmailClick() {
-        Toast.makeText(this ,getString(R.string.profile_edit_email_prompt),Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.profile_edit_email_prompt), Toast.LENGTH_SHORT).show();
     }
 
     @OnClick(R.id.profile_activity_edit_user_height)
@@ -300,12 +301,10 @@ public class ProfileActivity extends BaseActivity {
             mUser.setWeight(Double.parseDouble(weight));
         }
         UserDatabaseHelper helper = getModel().getUserDatabaseHelper();
-        if(helper.update(mUser))
-        {
+        if (helper.update(mUser)) {
             EventBus.getDefault().post(new ProfileChangedEvent(mUser));
         }
-        if(userStepGoal!=currentGoalStep)
-        {
+        if (userStepGoal != currentGoalStep) {
             userStepGoal = currentGoalStep;
             EventBus.getDefault().post(new StepsGoalChangedEvent(userStepGoal));
         }
@@ -321,16 +320,17 @@ public class ProfileActivity extends BaseActivity {
                 setMessage(getString(R.string.profile_dialog_log_out_message));
         builder.setPositiveButton(getString(R.string.profile_dialog_positive_button_text),
                 new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                SpUtils.putIntMethod(ProfileActivity.this, CacheConstants.GOAL_STEP,10000);
-                getModel().getUser().setUserIsLogin(false);
-                Intent intent = getIntent();
-                intent.putExtra("logOut", true);
-                setResult(resultCode, intent);
-                finish();
-            }
-        });
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        SpUtils.putIntMethod(ProfileActivity.this, CacheConstants.GOAL_STEP, 10000);
+                        getModel().getUser().setUserIsLogin(false);
+                        getModel().getUserDatabaseHelper().update(getModel().getUser());
+                        Intent intent = getIntent();
+                        intent.putExtra("logOut", true);
+                        setResult(resultCode, intent);
+                        finish();
+                    }
+                });
         builder.setNegativeButton(R.string.profile_dialog_negative_button_text, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {

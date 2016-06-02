@@ -4,40 +4,44 @@
               android:layout_height="match_parent"
               android:background="@color/world_clock_bg_color"
               android:orientation="vertical">
-
-    <include
-        android:id="@+id/world_clock_title"
-        layout="@layout/content_title_layout"
-        ></include>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="4"
-        android:background="@mipmap/world_clock">
-
-        <ImageButton
-            android:id="@+id/world_clock_date_edit_bt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="30dp"
-            android:background="@android:color/transparent"
-            android:src="@mipmap/world_clock_edit_icon"/>
-
-        <ImageButton
-            android:id="@+id/world_clock_add_city_iv"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp"
-            android:scaleType="fitXY"
-            android:layout_marginTop="30dp"
-            android:background="@android:color/transparent"
-            android:src="@mipmap/choose_add_city_icon"
-            />
-    </RelativeLayout>
-
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@color/user_info_sex_bg"
+    >
+   <ImageButton
+       android:id="@+id/world_clock_back_icon_ib"
+       android:layout_width="25dp"
+       android:layout_height="25dp"
+       android:layout_marginLeft="10dp"
+       android:layout_centerVertical="true"
+       android:background="@android:color/transparent"
+       android:src="@mipmap/world_clock_back_icon"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textSize="20sp"
+        android:textColor="@android:color/white"
+        android:text="@string/world_clock_title_text"/>
+    <ImageButton
+        android:id="@+id/world_clock_add_city_iv"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginRight="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:background="@android:color/transparent"
+        android:src="@mipmap/world_clock_add_city_icon"
+        />
+</RelativeLayout>
+   <ImageView
+       android:layout_width="match_parent"
+       android:layout_height="0dp"
+       android:layout_weight="3"
+       android:layout_marginTop="15dp"
+       android:scaleType="fitXY"
+       android:src="@mipmap/world_clock"/>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
