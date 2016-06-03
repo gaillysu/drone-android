@@ -23,4 +23,11 @@
     <color name="activities_calendar_show_bg_color">#b0000000</color>
     <color name="grey">#666666</color>
     <color name="profile_watch_is_connected">#5C5D5D</color>
+    <color name="add_watch_activity_prompt_user">#7b7b7b</color>
+    <color name="add_watch_activity_prompt_text_color">#cccccc</color>
+    <color name="add_watch_activity_shop_address_text_color">#85befc</color>
+    <color name="add_watch_activity_watch_dec_text_color">#666666</color>
+    <color name="add_watch_activity_view_bg">#939393</color>
+    <color name="add_watch_activity_view_bg_color">#e1e1e1</color>
+    <color name="add_watch_activity_content_bg">#ededed</color>
 </resources>

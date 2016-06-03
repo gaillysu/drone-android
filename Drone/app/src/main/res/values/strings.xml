@@ -73,4 +73,18 @@
     <string name="profile_dialog_negative_button_text">Cancel</string>
     <string name="profile_save_text_dec">No Watch\nConnected</string>
 
+
+    <string name="add_watch_activity_watch_dec_is_connected">Not Connected</string>
+    <string name="add_watch_activity_content_contacts_notification">Contacts Notifications</string>
+    <string name="add_watch_activity_content_my_notification">My Notifications</string>
+    <string name="add_watch_activity_content_forget_watch">Forget This Watch</string>
+
+    <string name="add_watch_activity_watch_dec">DRONE Precision Timepieces...</string>
+    <string name="add_watch_activity_prompt_user">HOLD YOUR DRONE !</string>
+    <string name="add_watch_activity_prompt_user_one">It appears that you haven\'t </string>
+    <string name="add_watch_activity_prompt_user_two">connected a device yet.</string>
+    <string name="add_watch_activity_prompt_user_three">Perhaps you\'d like to</string>
+    <string name="add_watch_activity_prompt_user_four">purchase one ...</string>
+    <string name="add_watch_activity_shop_address">http://www.hsn.com/shop/drone-\npresented-by-shaquille-oneal/13040</string>
+    <string name="add_watch_activity_shop_address_path">http://www.hsn.com/shop/drone-presented-by-shaquille-oneal/13040</string>
 </resources>

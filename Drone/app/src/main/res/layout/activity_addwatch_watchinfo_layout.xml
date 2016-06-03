@@ -1,98 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
-android:id="@+id/activity_addwatch_watchinfo_layout"
-android:layout_below="@id/activity_addwatch_header_layout"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:background="@android:color/white"
-android:orientation="vertical">
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="DRONE Precision Timepieces Watch"
-    android:textColor="@android:color/black"
-    android:textSize="16sp"
-    android:layout_marginTop="15dp"
-    android:layout_gravity="center"/>
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginTop="30dp">
-    <ImageView
-        android:layout_width="180dp"
-        android:layout_height="180dp"
-        android:src="@mipmap/welcome_drone_1"/>
+    android:id="@+id/activity_addwatch_watchinfo_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_below="@id/activity_addwatch_header_layout"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:text="@string/add_watch_activity_watch_dec"
+        android:maxLength="50"
+        android:textColor="@color/add_watch_activity_watch_dec_text_color"
+        android:textSize="18sp"/>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:orientation="horizontal">
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:text="Battery state:"
-                android:textSize="10sp"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:text="Version:"
-                android:textSize="10sp"
-                android:layout_marginTop="5dp"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:text="Connection state:"
-                android:textSize="10sp"
-                android:layout_marginTop="5dp"
-                />
-        </LinearLayout>
+
+        <ImageView
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:src="@mipmap/welcome_drone_1"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:layout_marginLeft="10dp"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/activity_addwatch_watchinfo_layout_batterystate_textview"
+            android:orientation="horizontal">
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/holo_blue_light"
-                android:text="Not Connected"
-                android:textSize="10sp"
-                />
-            <TextView
-                android:id="@+id/activity_addwatch_watchinfo_layout_version_textview"
+                android:layout_marginTop="30dp"
+                android:orientation="vertical">
+
+                <TextView
+                 style="@style/add_watch_activity_state_dec_text_style"
+                    android:text="Battery state:"
+
+                    />
+
+                <TextView
+                    style="@style/add_watch_activity_state_dec_text_style"
+                    android:text="Version:"
+                    />
+
+                <TextView
+                    style="@style/add_watch_activity_state_dec_text_style"
+                    android:text="Connection state:"
+
+
+                    />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/holo_blue_light"
-                android:text="Unknown"
-                android:textSize="10sp"
-                android:layout_marginTop="5dp"
-                />
-            <TextView
-                android:id="@+id/activity_addwatch_watchinfo_layout_connectionstate_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/holo_blue_light"
-                android:text="Disconnected"
-                android:textSize="10sp"
-                android:layout_marginTop="5dp"
-                />
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="30dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/activity_addwatch_watchinfo_layout_batterystate_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_watch_activity_watch_dec_is_connected"
+                    android:textColor="@android:color/holo_blue_light"
+                    android:textSize="10sp"
+                    />
+
+                <TextView
+                    android:id="@+id/activity_addwatch_watchinfo_layout_version_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/add_watch_activity_watch_dec_is_connected"
+                    android:textColor="@android:color/holo_blue_light"
+                    android:textSize="10sp"
+                    />
+
+                <TextView
+                    android:id="@+id/activity_addwatch_watchinfo_layout_connectionstate_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/add_watch_activity_watch_dec_is_connected"
+                    android:textColor="@android:color/holo_blue_light"
+                    android:textSize="10sp"
+                    />
+            </LinearLayout>
         </LinearLayout>
+
     </LinearLayout>
-
-</LinearLayout>
 
 </LinearLayout>
