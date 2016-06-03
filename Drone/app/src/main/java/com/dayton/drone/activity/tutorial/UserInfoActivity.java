@@ -142,7 +142,7 @@ public class UserInfoActivity extends BaseActivity {
 
     @OnClick(R.id.registe_next_iv)
     public void next() {
-        String birthday = tv_userBirth.getText().toString();
+        final String birthday = tv_userBirth.getText().toString();
         String height = tv_userHeight.getText().toString();
         String weight = tv_userWeight.getText().toString();
         String firstName = editFirstName.getText().toString();
@@ -155,23 +155,16 @@ public class UserInfoActivity extends BaseActivity {
             final String password = intent.getStringExtra("password");
             final int h = new Integer(height.substring(0, 3));
             final double w = Double.parseDouble(weight.substring(0, weight.length() - 2));
-            int age = 25;
-            try {
-                age = new Date().getYear() - new SimpleDateFormat("yyyy-MM-dd").parse(birthday).getYear();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
 
             CreateUser createUser = new CreateUser();
             createUser.setEmail(account);
             createUser.setPassword(password);
-            createUser.setFirst_name(account);
-            createUser.setLast_name(account);
             createUser.setLength(h);
-            createUser.setAge(age);
+            createUser.setBirthday(birthday);
             createUser.setFirst_name(firstName);
             createUser.setLast_name(lastName);
-            final int finalAge = age;
+            createUser.setWeight((float) w);
+            createUser.setSex(gender);
             getModel().getRetrofitManager().execute(new CreateUserRequest(createUser, getModel().getRetrofitManager().getAccessToken()), new RequestListener<CreateUserModel>() {
                 @Override
                 public void onRequestFailure(SpiceException spiceException) {
@@ -183,14 +176,14 @@ public class UserInfoActivity extends BaseActivity {
                     if (createUserModel.getStatus() == Constants.STATUS_CODE.STATUS_SUCCESS) {
                         getModel().getUser().setFirstName(createUserModel.getUser().getFirst_name());
                         getModel().getUser().setLastName(createUserModel.getUser().getLast_name());
-                        getModel().getUser().setAge(finalAge);
+                        getModel().getUser().setBirthday(birthday);
                         getModel().getUser().setHeight(h);
                         getModel().getUser().setWeight(w);
                         getModel().getUser().setGender(gender);
                         getModel().getUser().setUserEmail(createUserModel.getUser().getEmail());
                         getModel().getUser().setUserPassword(password);
                         getModel().getUser().setUserID(createUserModel.getUser().getId() + "");
-//                        getModel().getUser().setUserIsLogin(true);
+                        getModel().getUser().setUserIsLogin(true);
                         getModel().getUserDatabaseHelper().update(getModel().getUser());
                     }
                 }

@@ -91,7 +91,6 @@ public class SyncControllerImpl implements  SyncController{
         autoSyncTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                //TODO : connected with watch is idle status, enable this little sync request.
                 sendRequest(new GetStepsGoalRequest(application));
                 EventBus.getDefault().post(new TimerEvent());
                 startAutoSyncTimer();
