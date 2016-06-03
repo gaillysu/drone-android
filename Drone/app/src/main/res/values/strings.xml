@@ -73,4 +73,9 @@
     <string name="profile_dialog_negative_button_text">Cancel</string>
     <string name="profile_save_text_dec">No Watch\nConnected</string>
 
+    <string name="in_app_notification_found_watch">Found watch!</string>
+    <string name="in_app_notification_bluetooth_disabled">Bluetooth is disabled. Enable Bluetooth.</string>
+    <string name="in_app_notification_watch_disconnected">Watch disconnected.</string>
+    <string name="in_app_notification_searching">Searching for watch...</string>
+
 </resources>

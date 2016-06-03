@@ -1,6 +1,7 @@
 package com.dayton.drone.activity;
 
 
+import android.Manifest;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -10,11 +11,12 @@ import android.os.Looper;
 import android.support.v4.content.ContextCompat;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
+import android.support.design.widget.Snackbar;
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.event.BigSyncEvent;
@@ -42,6 +44,11 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.liulishuo.magicprogresswidget.MagicProgressCircle;
+
+import net.medcorp.library.ble.event.BLEBluetoothOffEvent;
+import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
+import net.medcorp.library.ble.event.BLESearchEvent;
+import net.medcorp.library.permission.PermissionRequestDialogBuilder;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -421,6 +428,36 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         });
     }
 
+    @Subscribe
+    public void onEvent(BLEBluetoothOffEvent event){
+        showStateString(R.string.in_app_notification_bluetooth_disabled);
+    }
+    @Subscribe
+    public void onEvent(BLEConnectionStateChangedEvent event){
+        if(event.isConnected())
+        {
+            showStateString(R.string.in_app_notification_found_watch);
+        }
+        else {
+            showStateString(R.string.in_app_notification_watch_disconnected);
+        }
+    }
+    @Subscribe
+    public void onEvent(final BLESearchEvent event) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                if(event.getSearchEvent() == BLESearchEvent.SEARCH_EVENT.ON_SEARCHING)
+                {
+                    PermissionRequestDialogBuilder builder =new PermissionRequestDialogBuilder(ActivitiesActivity.this);
+                    builder.addPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
+                    builder.askForPermission(ActivitiesActivity.this,1);
+                    showStateString(R.string.in_app_notification_searching);
+                }
+            }
+        });
+    }
+
     @Override
     public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
         hourlyBarChart.highlightValue(e.getXIndex(), dataSetIndex);
@@ -428,5 +465,14 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
 
     @Override
     public void onNothingSelected() {
+    }
+
+    public void showStateString(int resId)
+    {
+        Snackbar snackbar = Snackbar.make(((ViewGroup)findViewById(android.R.id.content)).getChildAt(0),"",Snackbar.LENGTH_LONG);
+        TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+        tv.setTextColor(Color.WHITE);
+        tv.setText(getString(resId));
+        snackbar.show();
     }
 }

@@ -3,6 +3,7 @@ package com.dayton.drone.activity.tutorial;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -50,7 +51,7 @@ public class LoginActivity extends BaseActivity {
     @OnClick(R.id.login_activity_login_bt)
     public void loginClick(){
          if(!validate()){
-             onLoginFailed();
+             onLoginFailed("invalid email or password");
              return;
          }
         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
@@ -68,7 +69,7 @@ public class LoginActivity extends BaseActivity {
              @Override
              public void onRequestFailure(SpiceException spiceException) {
                  progressDialog.dismiss();
-                 onLoginFailed();
+                 onLoginFailed(""+spiceException.getCause());
              }
 
              @Override
@@ -78,10 +79,14 @@ public class LoginActivity extends BaseActivity {
                      getModel().getUser().setUserID(loginUserModel.getUser().getId()+"");
                      getModel().getUser().setUserEmail(loginUserModel.getUser().getEmail());
                      getModel().getUser().setUserPassword(ed_password.getText().toString());
-//                     getModel().getUser().setUserIsLogin(true);
+                     getModel().getUser().setUserIsLogin(true);
                      getModel().getUserDatabaseHelper().update(getModel().getUser());
                      getModel().getSyncActivityManager().launchSyncAll();
                      onLoginSuccess();
+                 }
+                 else{
+                     Log.e("LoginActivity",loginUserModel.getMessage() + ",state:" + loginUserModel.getStatus());
+                     onLoginFailed(loginUserModel.getMessage());
                  }
              }
          });
@@ -96,8 +101,8 @@ public class LoginActivity extends BaseActivity {
         finish();
     }
 
-    private void onLoginFailed() {
-        Toast.makeText(getBaseContext(), "log in got failed", Toast.LENGTH_LONG).show();
+    private void onLoginFailed(String message) {
+        Toast.makeText(getBaseContext(), "log in got failed," + message, Toast.LENGTH_LONG).show();
     }
 
     private boolean validate() {
