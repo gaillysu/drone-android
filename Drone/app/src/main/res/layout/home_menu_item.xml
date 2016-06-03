@@ -2,13 +2,14 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             android:background="@drawable/home_activity_ll_select">
+             android:background="@drawable/home_activity_ll_select"
+             >
 
     <ImageView
         android:id="@+id/home_adapter_menu_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="2dp"/>
+        android:layout_marginLeft="10dp"/>
 
     <RelativeLayout
         android:id="@+id/home_activity_list_adapter_item"

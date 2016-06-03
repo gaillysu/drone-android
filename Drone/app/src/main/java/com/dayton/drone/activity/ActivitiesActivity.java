@@ -1,13 +1,13 @@
 package com.dayton.drone.activity;
 
 
+import android.Manifest;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.view.KeyEvent;
 import android.view.View;
@@ -16,7 +16,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
+import android.support.design.widget.Snackbar;
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.event.BigSyncEvent;
@@ -47,6 +47,8 @@ import com.liulishuo.magicprogresswidget.MagicProgressCircle;
 
 import net.medcorp.library.ble.event.BLEBluetoothOffEvent;
 import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
+import net.medcorp.library.ble.event.BLESearchEvent;
+import net.medcorp.library.permission.PermissionRequestDialogBuilder;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -440,21 +442,21 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
             showStateString(R.string.in_app_notification_watch_disconnected);
         }
     }
-//    @Subscribe
-//    public void onEvent(final BLESearchEvent event) {
-//        new Handler(Looper.getMainLooper()).post(new Runnable() {
-//            @Override
-//            public void run() {
-//                if(event.getSearchEvent() == BLESearchEvent.SEARCH_EVENT.ON_SEARCHING)
-//                {
-//                    PermissionRequestDialogBuilder builder =new PermissionRequestDialogBuilder(ActivitiesActivity.this);
-//                    builder.addPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
-//                    builder.askForPermission(ActivitiesActivity.this,1);
-//                    showStateString(R.string.in_app_notification_searching);
-//                }
-//            }
-//        });
-//    }
+    @Subscribe
+    public void onEvent(final BLESearchEvent event) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                if(event.getSearchEvent() == BLESearchEvent.SEARCH_EVENT.ON_SEARCHING)
+                {
+                    PermissionRequestDialogBuilder builder =new PermissionRequestDialogBuilder(ActivitiesActivity.this);
+                    builder.addPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
+                    builder.askForPermission(ActivitiesActivity.this,1);
+                    showStateString(R.string.in_app_notification_searching);
+                }
+            }
+        });
+    }
 
     @Override
     public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
