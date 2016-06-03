@@ -8,14 +8,20 @@ import com.dayton.drone.network.restapi.Drone;
  */
 public class GetStepsRequest extends BaseRequest<GetStepsModel,Drone> {
     String userID;
+    String token;
+    String start_date;
+    String end_date;
 
-    public GetStepsRequest(String userID) {
+    public GetStepsRequest(String userID,String token,String start_date,String end_date) {
         super(GetStepsModel.class, Drone.class);
         this.userID = userID;
+        this.token = token;
+        this.start_date = start_date;
+        this.end_date = end_date;
     }
 
     @Override
     public GetStepsModel loadDataFromNetwork() throws Exception {
-        return getService().stepsGet(userID,buildAuthorization(),CONTENT_TYPE);
+        return getService().stepsGet(userID,token,start_date,end_date,buildAuthorization(),CONTENT_TYPE);
     }
 }

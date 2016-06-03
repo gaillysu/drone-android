@@ -1,9 +1,9 @@
 package com.dayton.drone.network.response.model;
 
 /**
- * Created by med on 16/5/3.
+ * Created by med on 16/6/3.
  */
-public class StepsWithTimeZone {
+public class DateWithTimeZone {
     private String date;
     private int timezone_type;
     private String timezone;

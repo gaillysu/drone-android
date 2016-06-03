@@ -19,11 +19,11 @@ public class UserBean {
     private int id = 1;
 
     /**
-     * default age
+     * user birthday, "YYYY-MM-DD"
      */
-    public static final String fAge = "age";
+    public static final String fBirthday = "birthday";
     @DatabaseField
-    private int age = 35;
+    private String birthday = "2000-01-01";
 
     /**
      * default weight, 75kg
@@ -95,12 +95,12 @@ public class UserBean {
         this.id = id;
     }
 
-    public int getAge() {
-        return age;
+    public String getBirthday() {
+        return birthday;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
     }
 
     public double getWeight() {
