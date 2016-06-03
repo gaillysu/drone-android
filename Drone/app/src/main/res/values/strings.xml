@@ -87,4 +87,10 @@
     <string name="add_watch_activity_prompt_user_four">purchase one ...</string>
     <string name="add_watch_activity_shop_address">http://www.hsn.com/shop/drone-\npresented-by-shaquille-oneal/13040</string>
     <string name="add_watch_activity_shop_address_path">http://www.hsn.com/shop/drone-presented-by-shaquille-oneal/13040</string>
+
+    <string name="in_app_notification_found_watch">Found watch!</string>
+    <string name="in_app_notification_bluetooth_disabled">Bluetooth is disabled. Enable Bluetooth.</string>
+    <string name="in_app_notification_watch_disconnected">Watch disconnected.</string>
+    <string name="in_app_notification_searching">Searching for watch...</string>
+
 </resources>

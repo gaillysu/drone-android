@@ -10,6 +10,7 @@ import com.dayton.drone.ble.model.packet.SystemStatusPacket;
 import net.medcorp.library.ble.model.response.MEDRawData;
 import net.medcorp.library.ble.util.HexUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,7 +22,12 @@ public class DronePacket {
 
     public DronePacket(List<MEDRawData> packets)
     {
-        mPackets = packets;
+        //make sure the mPackets always has values during the DronePacket object life period
+        mPackets = new ArrayList<MEDRawData>(packets.size());
+        for(MEDRawData medRawData:packets)
+        {
+            mPackets.add(medRawData);
+        }
     }
 
     public byte getHeader()

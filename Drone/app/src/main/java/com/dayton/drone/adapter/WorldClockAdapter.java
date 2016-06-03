@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.dayton.drone.R;
 import com.dayton.drone.model.WorldClock;
+import com.dayton.drone.view.SlideView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -23,19 +24,20 @@ import butterknife.ButterKnife;
 /**
  * Created by Administrator on 2016/5/10.
  */
-public class WorldClockAdapter extends BaseAdapter {
+public class WorldClockAdapter extends BaseAdapter implements SlideView.OnSlideListener {
     private List<WorldClock> list;
     private Context context;
-    private boolean isShowEditIcon;
+//    private boolean isShowEditIcon;
     private String minutesTime;
     private String hourDay;
 
     private static DeleteItemInterface deleteItemInterface;
+    private SlideView mLastSlideViewWithStatusOn;
 
-    public WorldClockAdapter(List<WorldClock> listData, Context context, boolean flag) {
+    public WorldClockAdapter(List<WorldClock> listData, Context context) {
         this.list = listData;
         this.context = context;
-        this.isShowEditIcon = flag;
+//        this.isShowEditIcon = flag;
     }
 
     @Override
@@ -55,11 +57,16 @@ public class WorldClockAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup viewGroup) {
-        ViewHolder holder = null;
+        ViewHolder holder;
+        SlideView slideView = (SlideView) convertView;
+
         if (convertView == null) {
-            convertView = View.inflate(context, R.layout.worlde_clock_adapter_layout, null);
-            holder = new ViewHolder(convertView);
-            convertView.setTag(holder);
+            View itemView = View.inflate(context, R.layout.worlde_clock_adapter_layout, null);
+            slideView = new SlideView(context);
+            slideView.setContentView(itemView);
+            holder = new ViewHolder(slideView);
+            slideView.setOnSlideListener(WorldClockAdapter.this);
+            slideView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
@@ -141,12 +148,12 @@ public class WorldClockAdapter extends BaseAdapter {
             }
         }
 
-
-        if (isShowEditIcon) {
-            holder.deleteIcon.setVisibility(View.GONE);
-        } else {
-            holder.deleteIcon.setVisibility(View.VISIBLE);
-        }
+//
+//        if (isShowEditIcon) {
+//            holder.deleteIcon.setVisibility(View.GONE);
+//        } else {
+//            holder.deleteIcon.setVisibility(View.VISIBLE);
+//        }
 
         holder.deleteIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,6 +163,16 @@ public class WorldClockAdapter extends BaseAdapter {
         });
 
         return convertView;
+    }
+
+    @Override
+    public void onSlide(View view, int status) {
+        if (mLastSlideViewWithStatusOn != null && mLastSlideViewWithStatusOn != view) {
+            mLastSlideViewWithStatusOn.shrink();
+        }
+        if (status == SLIDE_STATUS_ON) {
+            mLastSlideViewWithStatusOn = (SlideView) view;
+        }
     }
 
 

@@ -58,14 +58,24 @@
             android:textSize="28sp"
             android:textStyle="bold"/>s
 
-        <ListView
+        <!--<ListView-->
+            <!--android:id="@+id/world_clock_select_city_list"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:paddingLeft="10dp"-->
+            <!--android:divider="@android:color/white"-->
+            <!--android:layout_below="@id/world_clock_date_tv">-->
+        <!--</ListView>-->
+
+        <slideview.ListViewCompat
             android:id="@+id/world_clock_select_city_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:divider="@android:color/white"
-            android:layout_below="@id/world_clock_date_tv">
-        </ListView>
-
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:cacheColorHint="#00000000"
+            android:divider="@null"
+            android:drawSelectorOnTop="false"
+            android:listSelector="@android:color/transparent"
+            android:scrollbars="none" />
     </RelativeLayout>
 </LinearLayout>

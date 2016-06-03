@@ -118,7 +118,7 @@ public class WorldClockActivity extends BaseActivity {
     }
 
     public void setListAdapter(boolean isShow) {
-        worldClockAdapter = new WorldClockAdapter(listData, this, isShow);
+        worldClockAdapter = new WorldClockAdapter(listData, this);
         worldClockListView.setAdapter(worldClockAdapter);
     }
 

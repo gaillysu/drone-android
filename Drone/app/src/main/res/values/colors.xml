@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#d7d7d7</color>
-    <color name="colorPrimaryDark">#d59e4d</color>
+    <color name="notification_bg_color">#e3c48e</color>
+    <color name="colorPrimaryDark">#d09d42</color>
     <color name="colorAccent">#FF4081</color>
     <color name="line_color">#20000000</color>
     <color name="user_info_sex_bg">#FFC99342</color>
@@ -30,4 +31,5 @@
     <color name="add_watch_activity_view_bg">#939393</color>
     <color name="add_watch_activity_view_bg_color">#e1e1e1</color>
     <color name="add_watch_activity_content_bg">#ededed</color>
+    <color name="notification_delete_bg">#3d3ba6</color>
 </resources>
