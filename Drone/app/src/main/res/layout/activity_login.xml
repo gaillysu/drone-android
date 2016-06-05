@@ -34,6 +34,7 @@
             android:background="@null"
             android:textColor="#88000000"
             android:hint="Email"
+            android:textColorHint="#88000000"
             android:inputType="textWebEmailAddress"
             android:paddingLeft="10dp"
             android:textSize="20sp"/>
@@ -50,6 +51,7 @@
             android:background="@null"
             android:hint="Password"
             android:textColor="#88000000"
+            android:textColorHint="#88000000"
             android:inputType="textPassword"
             android:paddingLeft="10dp"
             android:textSize="20sp"/>
