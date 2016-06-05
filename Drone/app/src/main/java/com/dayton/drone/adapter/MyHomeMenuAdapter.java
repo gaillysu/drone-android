@@ -12,9 +12,6 @@ import com.dayton.drone.bean.MenuBean;
 
 import java.util.List;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
 
 public class MyHomeMenuAdapter extends BaseAdapter {
 
@@ -57,11 +54,14 @@ public class MyHomeMenuAdapter extends BaseAdapter {
         if (holder == null) {
 
             convertView = View.inflate(mContext, R.layout.home_menu_item, null);
+            holder = new ViewHolder();
             convertView.setTag(holder);
-            holder = new ViewHolder(convertView);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
+
+        holder.mMenuIv = (ImageView) convertView.findViewById(R.id.home_adapter_menu_icon);
+        holder.mMenuTv = (TextView) convertView.findViewById(R.id.home_adapter_menu_tv);
 
         if (mData.get(position) != null) {
             MenuBean bean = mData.get(position);
@@ -72,14 +72,9 @@ public class MyHomeMenuAdapter extends BaseAdapter {
     }
 
     public static class ViewHolder {
-        @Bind(R.id.home_adapter_menu_icon)
-        ImageView mMenuIv;
-        @Bind(R.id.home_adapter_menu_tv)
-        TextView mMenuTv;
 
-        public ViewHolder(View view) {
-            ButterKnife.bind(this, view);
-        }
+        ImageView mMenuIv;
+        TextView mMenuTv;
     }
 }
 

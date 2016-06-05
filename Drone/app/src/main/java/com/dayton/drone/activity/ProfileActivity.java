@@ -28,6 +28,9 @@ import com.dayton.drone.utils.SpUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -62,6 +65,8 @@ public class ProfileActivity extends BaseActivity {
     Button logOut;
     @Bind(R.id.profile_save_no_watch_connected_show)
     RelativeLayout noWatchShow;
+    @Bind(R.id.profile_activity_user_birthday)
+    TextView userBirthdayTextView;
     private int userStepGoal;
     private int viewType = -1;
     private int resultCode = 2 >> 5;
@@ -74,6 +79,7 @@ public class ProfileActivity extends BaseActivity {
         saveButton.setVisibility(View.VISIBLE);
         userStepGoal = SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000);
         cancel.setText(getString(R.string.profile_title_back_text));
+
         stepGoal.setText(userStepGoal + "");
         titleText.setText(getString(R.string.home_guide_profile));
         mUser = getModel().getUser();
@@ -83,7 +89,7 @@ public class ProfileActivity extends BaseActivity {
                 getResources().getString(R.string.profile_edit_prompt));
         emailAccount.setText(mUser.getUserEmail() != null ? mUser.getUserEmail() :
                 getResources().getString(R.string.profile_edit_prompt));
-
+        userBirthdayTextView.setText(mUser.getBirthday());
         int userHeightValue = mUser.getHeight();
         if (userHeightValue > 50 && userHeightValue < 300) {
             userHeight.setText(userHeightValue + getResources().getString(R.string.profile_user_height_unit));
@@ -279,12 +285,45 @@ public class ProfileActivity extends BaseActivity {
 
     }
 
+
+    @OnClick(R.id.profile_activity_edit_user_birthday)
+    public void editUserBirthday(){
+        userBirthdayTextView.setText("");
+        viewType = 1;
+        final Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String formatDate = format.format(date);
+        DatePickerPopWin pickerPopWin = new DatePickerPopWin.Builder(ProfileActivity.this,
+                new DatePickerPopWin.OnDatePickedListener() {
+                    @Override
+                    public void onDatePickCompleted(int year, int month,
+                                                    int day, String dateDesc) {
+                        SimpleDateFormat dateFormat  = new SimpleDateFormat("MM/dd/yyyy");
+                        try {
+                            Date date = dateFormat.parse(dateDesc);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        userBirthdayTextView.setText(new SimpleDateFormat("MMM")
+                                .format(date)+"-"+day+"-"+year);
+                    }
+                }).viewStyle(viewType)
+                .viewTextSize(25) // pick view text size
+                .minYear(new Integer(formatDate.split("-")[0]).intValue()-100) //min year in loop
+                .maxYear(new Integer(formatDate.split("-")[0]).intValue()) // max year in loop
+                .dateChose((new Integer(formatDate.split("-")[0])-30)
+                        +"-"+formatDate.split("-")[1]+"-"+formatDate.split("-")[2]) // date chose when init popwindow
+                .build();
+        pickerPopWin.showPopWin(ProfileActivity.this);
+    }
+
     public void saveUserCurrentEdit() {
         int currentGoalStep = new Integer(stepGoal.getText().toString()).intValue();
         SpUtils.putIntMethod(ProfileActivity.this, CacheConstants.GOAL_STEP, currentGoalStep);
         mUser.setLastName(accountName.getText().toString());
         mUser.setFirstName(userFirstName.getText().toString());
         mUser.setUserEmail(emailAccount.getText().toString());
+        mUser.setBirthday(userBirthdayTextView.getText().toString());
         String height = userHeight.getText().toString();
         if (height.contains(getString(R.string.profile_user_height_unit))) {
             int currentHeight = new Integer(height.substring(0, height.length() - 2)).intValue();

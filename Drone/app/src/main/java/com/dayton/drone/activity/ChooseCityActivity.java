@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.dayton.drone.R;
@@ -34,6 +36,13 @@ public class ChooseCityActivity extends BaseActivity {
     ListView cityListView;
     @Bind(R.id.choose_activity_list_index_sidebar)
     SideBar sideBar;
+    @Bind(R.id.world_clock_open_search)
+    LinearLayout searchLinearLayout;
+    @Bind(R.id.world_clock_user_search_city)
+    EditText userSearchCityEdit;
+    @Bind(R.id.world_clock_city_edit_ll)
+    LinearLayout editSearchContent;
+
     private boolean isChooseCity = false;
     private List<WorldClock> worldClockDataList;
     private WorldClockDatabaseHelper worldClockDatabase;
@@ -124,6 +133,18 @@ public class ChooseCityActivity extends BaseActivity {
         }
         return mSortList;
 
+    }
+
+    @OnClick(R.id.world_clock_open_search)
+    public void startSearchCity(){
+        searchLinearLayout.setVisibility(View.GONE);
+        editSearchContent.setVisibility(View.VISIBLE);
+    }
+
+    @OnClick(R.id.world_clock_search_city)
+    public void startSearchCityBt(){
+        String searchCityName = userSearchCityEdit.getText().toString();
+        //TODO
     }
 
 }

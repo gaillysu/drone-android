@@ -78,7 +78,7 @@ public class UserInfoActivity extends BaseActivity {
     @OnClick(R.id.user_birthday)
     public void putUserBarthday() {
         viewType = 1;
-        Date date = new Date(System.currentTimeMillis());
+        final Date date = new Date(System.currentTimeMillis());
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String formatDate = format.format(date);
         DatePickerPopWin pickerPopWin = new DatePickerPopWin.Builder(UserInfoActivity.this,
@@ -86,14 +86,20 @@ public class UserInfoActivity extends BaseActivity {
                     @Override
                     public void onDatePickCompleted(int year, int month,
                                                     int day, String dateDesc) {
-                        tv_userBirth.setText(dateDesc);
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                        try {
+                            Date date = dateFormat.parse(dateDesc);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        tv_userBirth.setText(new SimpleDateFormat("MMM").format(date)+"-"+day + "-"+year);
                     }
                 }).viewStyle(viewType)
                 .viewTextSize(25) // pick view text size
-                .minYear(new Integer(formatDate.split("-")[0]).intValue()-100) //min year in loop
+                .minYear(new Integer(formatDate.split("-")[0]).intValue() - 100) //min year in loop
                 .maxYear(new Integer(formatDate.split("-")[0]).intValue()) // max year in loop
-                .dateChose((new Integer(formatDate.split("-")[0])-30)
-                        +"-"+formatDate.split("-")[1]+"-"+formatDate.split("-")[2]) // date chose when init popwindow
+                .dateChose((new Integer(formatDate.split("-")[0]) - 30)
+                        + "-" + formatDate.split("-")[1] + "-" + formatDate.split("-")[2]) // date chose when init popwindow
                 .build();
         pickerPopWin.showPopWin(UserInfoActivity.this);
     }
@@ -142,13 +148,13 @@ public class UserInfoActivity extends BaseActivity {
 
     @OnClick(R.id.registe_next_iv)
     public void next() {
-        final String birthday = tv_userBirth.getText().toString();
+       final String birthday = tv_userBirth.getText().toString();
         String height = tv_userHeight.getText().toString();
         String weight = tv_userWeight.getText().toString();
         String firstName = editFirstName.getText().toString();
         String lastName = editLastName.getText().toString();
-        if (!(TextUtils.isEmpty(birthday) || TextUtils.isEmpty(height)
-                || TextUtils.isEmpty(weight) || TextUtils.isEmpty(firstName) || TextUtils.isEmpty(lastName))) {
+        if (!(TextUtils.isEmpty(birthday) || TextUtils.isEmpty(height) || TextUtils.
+                isEmpty(weight) || TextUtils.isEmpty(firstName) || TextUtils.isEmpty(lastName))) {
 
             Intent intent = getIntent();
             final String account = intent.getStringExtra("account");

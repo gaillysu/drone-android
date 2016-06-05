@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.view.KeyEvent;
 import android.view.View;
@@ -16,7 +17,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.support.design.widget.Snackbar;
+
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.event.BigSyncEvent;
@@ -224,7 +225,9 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
 
     private void modifyChart(BarChart barChart){
         calendar.setCalendarData(new Date());
-        mTitleCalendarTextView.setText(new SimpleDateFormat("MMM").format(selectedDate));
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String day = dateFormat.format(new Date());
+        mTitleCalendarTextView.setText(new SimpleDateFormat("MMM").format(selectedDate)+day.split("-")[2]);
         barChart.setDescription("");
         barChart.getLegend().setEnabled(false);
         barChart.setOnChartValueSelectedListener(this);
@@ -334,13 +337,13 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     @OnClick(R.id.activities_activity_calendar_back_month)
     public void mIvBackMonthClick(){
         Date leftMouth = calendar.clickLeftMonth();
-        mTitleCalendarTextView.setText(new SimpleDateFormat("MMM").format(leftMouth));
+//        mTitleCalendarTextView.setText(new SimpleDateFormat("MMM").format(leftMouth));
     }
 
     @OnClick(R.id.activities_activity_title_next_month)
     public void mIvNextMonthClick() {
         Date rightMouth = calendar.clickRightMonth();
-        mTitleCalendarTextView.setText(new SimpleDateFormat("MMM").format(rightMouth));
+//        mTitleCalendarTextView.setText(new SimpleDateFormat("MMM").format(rightMouth));
     }
 
     @OnClick(R.id.activities_activity_title_date)
@@ -356,6 +359,8 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
                 nextMonth.setVisibility(View.GONE);
                 backMonth.setVisibility(View.GONE);
                 calendarGroup.setVisibility(View.GONE);
+                mTitleCalendarTextView.setText(new SimpleDateFormat("MMM")
+                        .format(downDate)+new SimpleDateFormat("yyyy-MM-dd").format(downDate).split("-")[2]);
                 drawGraph();
             }
         });
