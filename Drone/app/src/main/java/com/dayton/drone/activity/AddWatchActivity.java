@@ -80,7 +80,7 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
 
         List<View> viewList = new ArrayList<>();
         List<Watches>  watchesList = getModel().getWatchesDatabaseHelper().getAll(getModel().getUser().getUserID());
-        if(watchesList.isEmpty())
+        if(watchesList.isEmpty()&&getModel().getSyncController().isConnected())
         {
             watchesList.add(new Watches());
             new Handler().postDelayed(new Runnable() {
@@ -152,7 +152,7 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
         return super.onKeyDown(keyCode, event);
     }
 
-    @OnClick(R.id.activity_addwatch_add_imagebutton)
+    @OnClick(R.id.activity_addwatch_footer_layout)
     public void addWatch()
     {
         Intent intent  = new Intent(this ,SelectDeviceActivity.class);

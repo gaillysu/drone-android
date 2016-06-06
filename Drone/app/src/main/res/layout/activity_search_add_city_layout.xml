@@ -37,11 +37,6 @@
                 android:textStyle="bold"/>
         </RelativeLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/user_info_gender_default_text_color"/>
-
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -50,31 +45,34 @@
                 android:id="@+id/world_clock_city_edit_ll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:visibility="gone"
-                android:orientation="horizontal">
+               >
 
                 <EditText
                     android:id="@+id/world_clock_user_search_city"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="5dp"
                     android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
+                    android:drawableLeft="@mipmap/search"
+                    android:layout_marginRight="5dp"
                     android:layout_marginTop="8dp"
+                    android:imeOptions="actionSearch"
                     android:layout_weight="1"
                     android:background="@drawable/world_clock_search_bg"
                     />
 
-                <ImageButton
+                <Button
                     android:id="@+id/world_clock_search_city"
-                    android:layout_width="30dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="10dp"
                     android:background="@android:color/transparent"
-                    android:scaleType="fitXY"
-                    android:src="@mipmap/world_clock_search_city"
-                    android:tint="@android:color/white"/>
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    android:text="@string/cancel_update"/>
             </LinearLayout>
 
             <LinearLayout
@@ -101,6 +99,7 @@
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="8dp"
                     android:gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
                     android:hint="@string/world_clock_search_city_hint"
                     android:textColor="@color/login_text_color"
                     android:textSize="20sp"
@@ -108,7 +107,6 @@
             </LinearLayout>
 
         </FrameLayout>
-
 
     </LinearLayout>
 
@@ -131,5 +129,12 @@
             android:layout_width="30.0dip"
             android:layout_height="fill_parent"
             android:layout_gravity="right|center"/>
+
+        <ListView
+            android:id="@+id/choose_activity_search_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/add_watch_activity_prompt_text_color"
+            android:visibility="gone"></ListView>
     </FrameLayout>
 </LinearLayout>

@@ -25,9 +25,9 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="180dp"
-            android:layout_height="180dp"
-            android:src="@mipmap/welcome_drone_1"/>
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@mipmap/welcome_logo_1"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -70,6 +70,7 @@
                     android:id="@+id/activity_addwatch_watchinfo_layout_batterystate_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
                     android:text="@string/add_watch_activity_watch_dec_is_connected"
                     android:textColor="@android:color/holo_blue_light"
                     android:textSize="10sp"

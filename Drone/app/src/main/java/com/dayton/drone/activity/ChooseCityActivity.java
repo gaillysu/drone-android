@@ -11,6 +11,7 @@ import android.widget.ListView;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
+import com.dayton.drone.adapter.MySearchResultAdapter;
 import com.dayton.drone.adapter.SortAdapter;
 import com.dayton.drone.database.entry.WorldClockDatabaseHelper;
 import com.dayton.drone.model.SortModel;
@@ -42,15 +43,18 @@ public class ChooseCityActivity extends BaseActivity {
     EditText userSearchCityEdit;
     @Bind(R.id.world_clock_city_edit_ll)
     LinearLayout editSearchContent;
+    @Bind(R.id.choose_activity_search_list_view)
+    ListView showSearchResultListView;
 
     private boolean isChooseCity = false;
     private List<WorldClock> worldClockDataList;
     private WorldClockDatabaseHelper worldClockDatabase;
-//    private ChooseCityAdapter cityAdapter;
+    //    private ChooseCityAdapter cityAdapter;
     private SortAdapter adapter;
     private CharacterParser characterParser;
     private List<SortModel> SourceDateList;
     private PinyinComparator pinyinComparator;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,12 +67,12 @@ public class ChooseCityActivity extends BaseActivity {
         characterParser = CharacterParser.getInstance();
         cityListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position , long Id) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long Id) {
                 isChooseCity = true;
-                WorldClock worldClock =  worldClockDataList.get(position);
+                WorldClock worldClock = worldClockDataList.get(position);
                 Intent intent = getIntent();
                 intent.putExtra("isChooseFlag", isChooseCity);
-                intent.putExtra("worldClock",worldClock.getTimeZoneName());
+                intent.putExtra("worldClock", worldClock.getTimeZoneName());
                 setResult(0, intent);
                 finish();
             }
@@ -79,7 +83,7 @@ public class ChooseCityActivity extends BaseActivity {
             @Override
             public void onTouchingLetterChanged(String s) {
                 int position = adapter.getPositionForSection(s.charAt(0));
-                if(position != -1){
+                if (position != -1) {
                     cityListView.setSelection(position);
                 }
 
@@ -107,25 +111,25 @@ public class ChooseCityActivity extends BaseActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK){
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             back(false);
             return true;
         }
         return super.onKeyDown(keyCode, event);
     }
 
-    private List<SortModel> filledData(List<WorldClock> worldClockList){
+    private List<SortModel> filledData(List<WorldClock> worldClockList) {
         List<SortModel> mSortList = new ArrayList<SortModel>();
 
-        for(int i=0; i<worldClockList.size(); i++){
+        for (int i = 0; i < worldClockList.size(); i++) {
             SortModel sortModel = new SortModel();
             sortModel.setName(worldClockList.get(i).getTimeZoneTitle().split(",")[0]);
             String pinyin = worldClockList.get(i).getTimeZoneCategory();
             String sortString = pinyin.substring(0, 1).toUpperCase();
 
-            if(sortString.matches("[A-Z]")){
+            if (sortString.matches("[A-Z]")) {
                 sortModel.setSortLetters(sortString.toUpperCase());
-            }else{
+            } else {
                 sortModel.setSortLetters("#");
             }
 
@@ -136,15 +140,39 @@ public class ChooseCityActivity extends BaseActivity {
     }
 
     @OnClick(R.id.world_clock_open_search)
-    public void startSearchCity(){
+    public void startSearchCity() {
         searchLinearLayout.setVisibility(View.GONE);
         editSearchContent.setVisibility(View.VISIBLE);
+        showSearchResultListView.setVisibility(View.VISIBLE);
+        //       userSearchCityEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        //            @Override
+        //            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+        //                if(actionId == EditorInfo.IME_ACTION_SEND||(keyEvent!=null&&keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER)){
+        //                    search();
+        //                    return true;
+        //                }
+        //                return false;
+        //            }
+        //        });
+    }
+
+    private void search() {
+
+        final List<WorldClock> searchResult = new ArrayList<>();
+        String userInputSearchCityName = userSearchCityEdit.getText().toString();
+        for (WorldClock bean : worldClockDataList) {
+            if (bean.getTimeZoneName().contains(bean.getTimeZoneName())) {
+                searchResult.add(bean);
+            }
+        }
+        if (searchResult.size() > 0) {
+            showSearchResultListView.setAdapter(new MySearchResultAdapter(ChooseCityActivity.this, searchResult));
+        }
     }
 
     @OnClick(R.id.world_clock_search_city)
-    public void startSearchCityBt(){
-        String searchCityName = userSearchCityEdit.getText().toString();
-        //TODO
+    public void startSearchCityBt() {
+        back(false);
     }
 
 }

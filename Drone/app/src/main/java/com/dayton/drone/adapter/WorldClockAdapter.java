@@ -36,12 +36,12 @@ public class WorldClockAdapter extends BaseAdapter implements SlideView.OnSlideL
 
     @Override
     public int getCount() {
-        return list.size()==0?list.size():0 ;
+        return list.size() !=0?list.size():0 ;
     }
 
     @Override
     public Object getItem(int i) {
-        return list.get(i)==null?list.get(i):null ;
+        return list.get(i)!=null?list.get(i):null ;
     }
 
     @Override
