@@ -14,6 +14,8 @@ import com.dayton.drone.activity.HomeActivity;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.adapter.WelcomeViewpagerAdapter;
 
+import net.medcorp.library.ble.service.BLEServiceProvider;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +52,8 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         ButterKnife.bind(this);
         handler = new Handler();
         initDate();
-
+        BLEServiceProvider provider = new BLEServiceProvider(this);
+        provider.startAdvertising();
     }
 
     private void initDate() {
