@@ -1,7 +1,6 @@
 package com.dayton.drone.ble.notification;
 
 import android.app.AlertDialog;
-import android.app.Application;
 import android.app.Notification;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -16,19 +15,23 @@ import android.util.Log;
 
 import com.dayton.drone.application.ApplicationModel;
 import com.dayton.drone.ble.datasource.GattAttributesDataSourceImpl;
-import com.dayton.drone.ble.model.request.notification.DroneNotificationRequest;
+import com.dayton.drone.ble.model.ancs.Call;
+import com.dayton.drone.ble.model.ancs.Email;
+import com.dayton.drone.ble.model.ancs.Facebook;
+import com.dayton.drone.ble.model.ancs.NotificationDataSource;
+import com.dayton.drone.ble.model.ancs.Sms;
+import com.dayton.drone.ble.model.ancs.Wechat;
+import com.dayton.drone.ble.model.ancs.Whatsapp;
+import com.dayton.drone.ble.model.request.notification.DroneNotificationTrigger;
 
 import net.medcorp.library.ble.controller.ConnectionController;
 import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
-import net.medcorp.library.ble.model.request.BLERequestData;
 import net.medcorp.library.ble.util.Optional;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by med on 16/4/25.
@@ -40,7 +43,7 @@ public class DroneNotificationListenerService extends NotificationListenerServic
     final private String TAG = DroneNotificationListenerService.class.getName();
     final static int TIME_BETWEEN_TWO_NOTIFS = 5000;
     static long lastNotificationTimeStamps = 0;
-    static Optional<BLERequestData> pendingBLERequestData = new Optional<>();
+    static Optional<DroneNotificationTrigger> pendingDroneNotificationTrigger = new Optional<>();
 
     private ApplicationModel application;
 
@@ -70,22 +73,20 @@ public class DroneNotificationListenerService extends NotificationListenerServic
     public void onEvent(BLEConnectionStateChangedEvent stateChangedEvent) {
         if(stateChangedEvent.isConnected())
         {
-            if(pendingBLERequestData.notEmpty())
+            if(pendingDroneNotificationTrigger.notEmpty())
             {
-                ConnectionController.Singleton.getInstance(DroneNotificationListenerService.this, new GattAttributesDataSourceImpl(DroneNotificationListenerService.this))
-                        .sendRequest(pendingBLERequestData.get());
-                pendingBLERequestData.set(null);
+                pendingDroneNotificationTrigger.get().doNotificationAlert();
             }
         }
         else
         {
             //discard it when got disconnection
-            if(pendingBLERequestData.notEmpty()) {
-                pendingBLERequestData.set(null);
+            if(pendingDroneNotificationTrigger.notEmpty()) {
+                pendingDroneNotificationTrigger.set(null);
             }
         }
     }
-    private void sendNotificationRequest()
+    private void sendNotification(NotificationDataSource datasource)
     {
         if((new Date().getTime() - lastNotificationTimeStamps)< TIME_BETWEEN_TWO_NOTIFS){
             return;
@@ -94,27 +95,58 @@ public class DroneNotificationListenerService extends NotificationListenerServic
         if(ConnectionController.Singleton.getInstance(this, new GattAttributesDataSourceImpl(this)).inOTAMode()){
             return;
         }
-
-        DroneNotificationRequest droneNotificationRequest = new DroneNotificationRequest(application);
+        DroneNotificationTrigger droneNotificationTrigger = new DroneNotificationTrigger(application.getSyncController().getGattServerService(),datasource);
         if(application.getSyncController().isConnected())
         {
-            ConnectionController.Singleton.getInstance(DroneNotificationListenerService.this, new GattAttributesDataSourceImpl(DroneNotificationListenerService.this))
-                    .sendRequest(droneNotificationRequest);
+            droneNotificationTrigger.doNotificationAlert();
         }
         else {
             //pending this request until reconnect success, and send it
-            pendingBLERequestData.set(droneNotificationRequest);
+            pendingDroneNotificationTrigger.set(droneNotificationTrigger);
             application.getSyncController().startConnect(false);
         }
     }
     @Override
-    public void onNotificationPosted(StatusBarNotification sbn) {
-        if(sbn == null) {
+    public void onNotificationPosted(StatusBarNotification statusBarNotification) {
+        if(statusBarNotification == null) {
             return;
         }
-        Notification notification = sbn.getNotification();
-        Log.i(TAG, "onNotificationPosted: " + sbn.getPackageName());
-        //TODO here use filter (package name or contacts name) to send watch notification request
+
+        Notification notification = statusBarNotification.getNotification();
+        Log.v(TAG, "got system Notification : "+statusBarNotification.getPackageName());
+
+        if (notification != null)
+        {
+            if(statusBarNotification.getPackageName().equals("com.google.android.talk")
+                    || statusBarNotification.getPackageName().equals("com.android.mms")
+                    || statusBarNotification.getPackageName().equals("com.google.android.apps.messaging")
+                    || statusBarNotification.getPackageName().equals("com.sonyericsson.conversations")
+                    || statusBarNotification.getPackageName().equals("com.htc.sense.mms")
+                    || statusBarNotification.getPackageName().equals("com.google.android.talk")
+                    ) {
+                //BLE keep-connect service will process this message
+                //if(helper.getState(new SmsNotification()).isOn())
+                    sendNotification(new Sms());
+            } else if(statusBarNotification.getPackageName().equals("com.android.email")
+                    || statusBarNotification.getPackageName().equals("com.google.android.email")
+                    || statusBarNotification.getPackageName().equals("com.google.android.gm")
+                    || statusBarNotification.getPackageName().equals("com.kingsoft.email")
+                    || statusBarNotification.getPackageName().equals("com.tencent.androidqqmail")
+                    || statusBarNotification.getPackageName().equals("com.outlook.Z7")){
+                //if(helper.getState(new EmailNotification()).isOn())
+                    sendNotification(new Email());
+            }
+            else if(statusBarNotification.getPackageName().equals("com.facebook.katana")){
+                //if(helper.getState(new FacebookNotification()).isOn())
+                    sendNotification(new Facebook());
+            } else if(statusBarNotification.getPackageName().equals("com.tencent.mm")){
+                //if(helper.getState(new WeChatNotification()).isOn())
+                    sendNotification(new Wechat());
+            } else if(statusBarNotification.getPackageName().equals("com.whatsapp")){
+                //if(helper.getState(new WhatsappNotification()).isOn())
+                    sendNotification(new Whatsapp());
+            }
+        }
     }
 
     @Override
@@ -154,6 +186,7 @@ public class DroneNotificationListenerService extends NotificationListenerServic
             switch (state){
                 case TelephonyManager.CALL_STATE_RINGING:
                     Log.i(TAG, "onCallStateChanged:" + incomingNumber);
+                    sendNotification(new Call(0));
                     break;
             }
         }

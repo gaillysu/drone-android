@@ -15,6 +15,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.dayton.drone.application.ApplicationModel;
 import com.dayton.drone.ble.datasource.GattAttributesDataSourceImpl;
@@ -36,7 +37,9 @@ import com.dayton.drone.ble.model.request.setting.SetUserProfileRequest;
 import com.dayton.drone.ble.model.request.sync.GetActivityRequest;
 import com.dayton.drone.ble.model.request.sync.GetStepsGoalRequest;
 import com.dayton.drone.ble.model.request.worldclock.SetWorldClockRequest;
+import com.dayton.drone.ble.server.GattServerService;
 import com.dayton.drone.ble.util.Constants;
+import com.dayton.drone.event.BLENoSupportPeripheryModeEvent;
 import com.dayton.drone.event.BLEPairStatusChangedEvent;
 import com.dayton.drone.event.BatteryStatusChangedEvent;
 import com.dayton.drone.event.BigSyncEvent;
@@ -160,6 +163,11 @@ public class SyncControllerImpl implements  SyncController{
         sendRequest(new GetBatteryRequest(application));
     }
 
+    @Override
+    public GattServerService getGattServerService() {
+        return gattServerService;
+    }
+
     /**
      * send request  package to watch by using a queue
      * @param request
@@ -240,6 +248,8 @@ public class SyncControllerImpl implements  SyncController{
                         EventBus.getDefault().post(new BigSyncEvent(theBigSyncStartDate.get(), BigSyncEvent.BIG_SYNC_EVENT.STARTED));
                         sendRequest(new GetActivityRequest(application));
                     }
+                    //here start ANCS service
+                    application.bindService(new Intent(application, GattServerService.class), gattServiceConnection, Activity.BIND_AUTO_CREATE);
                 }
                 else if((byte) GetActivityRequest.HEADER == packet.getHeader())
                 {
@@ -430,6 +440,26 @@ public class SyncControllerImpl implements  SyncController{
         public void onServiceConnected(ComponentName name, IBinder service) {
             Log.v(TAG, name+" Service connected");
             localBinder = (LocalService.LocalBinder)service;
+        }
+    };
+
+    private GattServerService gattServerService = null;
+    private ServiceConnection gattServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            GattServerService.LocalBinder gattServerBinder = (GattServerService.LocalBinder)service;
+            gattServerService = gattServerBinder.getService();
+            if(!gattServerService.initialize())
+            {
+                EventBus.getDefault().post(new BLENoSupportPeripheryModeEvent());
+            }
+            else{
+                Toast.makeText(gattServerService,"ANCS Advertise starting...",Toast.LENGTH_LONG).show();
+            }
         }
     };
 }
