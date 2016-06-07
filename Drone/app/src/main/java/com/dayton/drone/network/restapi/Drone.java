@@ -19,6 +19,7 @@ import retrofit.http.POST;
 import retrofit.http.PUT;
 import retrofit.http.Path;
 import retrofit.http.GET;
+import retrofit.http.Query;
 
 /**
  * Created by med on 16/4/29.
@@ -42,5 +43,5 @@ public interface Drone {
     UpdateStepsModel stepsUpdate(@Body UpdateStepsObject object,@Header("Authorization") String auth,@Header("Content-Type") String type);
 
     @GET("/steps/user/{USER_ID}")
-    GetStepsModel stepsGet(@Path("USER_ID") String userID,@Header("Authorization") String auth,@Header("Content-Type") String type);
+    GetStepsModel stepsGet(@Path("USER_ID") String userID, @Query("token") String token,@Query("start_date") String start_date,@Query("end_date") String end_date,@Header("Authorization") String auth, @Header("Content-Type") String type);
 }

@@ -4,11 +4,11 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.dayton.drone.R;
 import com.dayton.drone.model.WorldClock;
+import com.dayton.drone.view.SlideView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -17,35 +17,31 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
 /**
  * Created by Administrator on 2016/5/10.
  */
-public class WorldClockAdapter extends BaseAdapter {
+public class WorldClockAdapter extends BaseAdapter implements SlideView.OnSlideListener {
     private List<WorldClock> list;
     private Context context;
-    private boolean isShowEditIcon;
     private String minutesTime;
     private String hourDay;
 
     private static DeleteItemInterface deleteItemInterface;
+    private SlideView mLastSlideViewWithStatusOn;
 
-    public WorldClockAdapter(List<WorldClock> listData, Context context, boolean flag) {
+    public WorldClockAdapter(List<WorldClock> listData, Context context) {
         this.list = listData;
         this.context = context;
-        this.isShowEditIcon = flag;
     }
 
     @Override
     public int getCount() {
-        return list.size() > 0 ? list.size() : 0;
+        return list.size() !=0?list.size():0 ;
     }
 
     @Override
     public Object getItem(int i) {
-        return list.get(i) == null ? list.get(i) : null;
+        return list.get(i)!=null?list.get(i):null ;
     }
 
     @Override
@@ -53,18 +49,31 @@ public class WorldClockAdapter extends BaseAdapter {
         return i;
     }
 
+
     @Override
     public View getView(final int position, View convertView, ViewGroup viewGroup) {
-        ViewHolder holder = null;
-        if (convertView == null) {
-            convertView = View.inflate(context, R.layout.worlde_clock_adapter_layout, null);
-            holder = new ViewHolder(convertView);
-            convertView.setTag(holder);
+        ViewHolder holder;
+        SlideView slideView = (SlideView) convertView;
+        if (slideView == null) {
+            View itemView = View.inflate(context, R.layout.worlde_clock_adapter_layout, null);
+
+            slideView = new SlideView(context);
+            slideView.setContentView(itemView);
+
+            holder = new ViewHolder(slideView);
+
+            slideView.setOnSlideListener(WorldClockAdapter.this);
+            slideView.setTag(holder);
+
         } else {
-            holder = (ViewHolder) convertView.getTag();
+            holder = (ViewHolder) slideView.getTag();
         }
 
+
         WorldClock bean = list.get(position);
+        bean.slideView = slideView;
+        bean.slideView.shrink();
+
         if (bean != null) {
             String name = bean.getTimeZoneName();
 
@@ -74,35 +83,35 @@ public class WorldClockAdapter extends BaseAdapter {
             LATime.setTimeInMillis(calendar.getTimeInMillis());
 
             int date = LATime.get(Calendar.DATE);
-            int hour= LATime.get(Calendar.HOUR_OF_DAY);
+            int hour = LATime.get(Calendar.HOUR_OF_DAY);
             int minutes = LATime.get(Calendar.MINUTE);
 
-            if (name != null&& name.contains("/")) {
+            if (name != null && name.contains("/")) {
                 String[] cityDec = name.split("/");
                 holder.cityName.setText(cityDec[1]);
-            }else{
+            } else {
                 holder.cityName.setText(name);
             }
-            if(minutes <10){
-                minutesTime = "0"+minutes;
-            }else{
-                minutesTime = minutes+"";
+            if (minutes < 10) {
+                minutesTime = "0" + minutes;
+            } else {
+                minutesTime = minutes + "";
             }
 
-            if(hour <10){
-                hourDay ="0"+hour;
+            if (hour < 10) {
+                hourDay = "0" + hour;
 
-            }else{
-                hourDay =""+hour;
+            } else {
+                hourDay = "" + hour;
             }
 
             if (hour > 12) {
-                holder.cityCurrentTime.setText(hourDay+ ":" +minutesTime+ " PM");
+                holder.cityCurrentTime.setText(hourDay + ":" + minutesTime + " PM");
             } else {
-                holder.cityCurrentTime.setText(hourDay + ":" +minutesTime+ " AM");
+                holder.cityCurrentTime.setText(hourDay + ":" + minutesTime + " AM");
             }
 
-            if(hour == 0){
+            if (hour == 0) {
                 hour = 24;
             }
 
@@ -113,8 +122,8 @@ public class WorldClockAdapter extends BaseAdapter {
 
             if (currentDay > date) {
                 holder.cityDay.setText(context.getResources().getString(R.string.world_clock_Yesterday_tv));
-                int cityTimeDifference = 24-hour +currentTime;
-                holder.timeDifference.setText(","+cityTimeDifference+
+                int cityTimeDifference = 24 - hour + currentTime;
+                holder.timeDifference.setText("," + cityTimeDifference +
                         context.getResources().getString(R.string.world_clock_city_time_difference_behind));
 
             } else if (currentDay == date) {
@@ -122,14 +131,14 @@ public class WorldClockAdapter extends BaseAdapter {
                 holder.cityDay.setText(context.getResources().getString(R.string.world_clock_today_tv));
 
                 if (hour > currentTime) {
-                    int cityTimeDifference =hour-currentTime;
-                    holder.timeDifference.setText("," + cityTimeDifference+
+                    int cityTimeDifference = hour - currentTime;
+                    holder.timeDifference.setText("," + cityTimeDifference +
                             context.getResources().getString(R.string.world_clock_city_time_difference_ahead));
-                } else if(hour<currentTime){
-                    int cityTimeDifference =currentTime -hour;
-                    holder.timeDifference.setText("," +cityTimeDifference+
+                } else if (hour < currentTime) {
+                    int cityTimeDifference = currentTime - hour;
+                    holder.timeDifference.setText("," + cityTimeDifference +
                             context.getResources().getString(R.string.world_clock_city_time_difference_behind));
-                }else{
+                } else {
                     holder.timeDifference.setText("");
                 }
             } else {
@@ -141,39 +150,41 @@ public class WorldClockAdapter extends BaseAdapter {
             }
         }
 
-
-        if (isShowEditIcon) {
-            holder.deleteIcon.setVisibility(View.GONE);
-        } else {
-            holder.deleteIcon.setVisibility(View.VISIBLE);
-        }
-
-        holder.deleteIcon.setOnClickListener(new View.OnClickListener() {
+        holder.deleteHolder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 deleteItemInterface.deleteItem(position);
             }
         });
 
-        return convertView;
+        return slideView;
+    }
+
+    @Override
+    public void onSlide(View view, int status) {
+        if (mLastSlideViewWithStatusOn != null && mLastSlideViewWithStatusOn != view) {
+            mLastSlideViewWithStatusOn.shrink();
+        }
+        if (status == SLIDE_STATUS_ON) {
+            mLastSlideViewWithStatusOn = (SlideView) view;
+        }
     }
 
 
     static class ViewHolder {
 
-        @Bind(R.id.world_clock_item_city)
-        TextView cityName;
-        @Bind(R.id.world_clock_item_city_time)
-        TextView cityCurrentTime;
-        @Bind(R.id.world_clock_item_current_day)
-        TextView cityDay;
-        @Bind(R.id.world_clock_item_time_difference)
-        TextView timeDifference;
-        @Bind(R.id.world_clock_delete_icon)
-        ImageButton deleteIcon;
+        private TextView cityName;
+        private TextView cityCurrentTime;
+        private TextView cityDay;
+        private TextView timeDifference;
+        public ViewGroup deleteHolder;
 
         public ViewHolder(View view) {
-            ButterKnife.bind(this, view);
+            cityName = (TextView) view.findViewById(R.id.world_clock_item_city);
+            cityCurrentTime = (TextView) view.findViewById(R.id.world_clock_item_city_time);
+            cityDay = (TextView) view.findViewById(R.id.world_clock_item_current_day);
+            timeDifference = (TextView) view.findViewById(R.id.world_clock_item_time_difference);
+            deleteHolder= (ViewGroup) view.findViewById(R.id.holder);
         }
     }
 

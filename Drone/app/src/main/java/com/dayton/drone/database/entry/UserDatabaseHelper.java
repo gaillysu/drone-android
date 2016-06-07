@@ -148,7 +148,7 @@ public class UserDatabaseHelper implements iEntryDatabaseHelper<User> {
 
     private User convertToNormal(UserBean userDAO) {
         User user = new User();
-        user.setAge(userDAO.getAge());
+        user.setBirthday(userDAO.getBirthday());
         user.setHeight(userDAO.getHeight());
         user.setWeight(userDAO.getWeight());
         user.setFirstName(userDAO.getFirstName());
@@ -165,7 +165,7 @@ public class UserDatabaseHelper implements iEntryDatabaseHelper<User> {
     public UserBean convertToBean(User user) {
         UserBean userDAO = new UserBean();
         userDAO.setHeight(user.getHeight());
-        userDAO.setAge(user.getAge());
+        userDAO.setBirthday(user.getBirthday());
         userDAO.setWeight(user.getWeight());
         userDAO.setFirstName(user.getFirstName());
         userDAO.setLastName(user.getLastName());

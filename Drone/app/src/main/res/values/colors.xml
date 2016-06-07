@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#d7d7d7</color>
-    <color name="colorPrimaryDark">#d59e4d</color>
+    <color name="notification_bg_color">#e3c48e</color>
+    <color name="colorPrimaryDark">#d09d42</color>
     <color name="colorAccent">#FF4081</color>
     <color name="line_color">#20000000</color>
-    <color name="user_info_sex_bg">#FFC99342</color>
+    <color name="user_info_sex_bg">#d09d42</color>
+    <color name="login_text_color">#989898</color>
     <color name="progress_start_color">#614777</color>
     <color name="progress_end_color">#dc9b39</color>
     <color name="home_content_activity_guide_bg">#995A5A5A</color>
@@ -22,4 +24,12 @@
     <color name="activities_calendar_show_bg_color">#b0000000</color>
     <color name="grey">#666666</color>
     <color name="profile_watch_is_connected">#5C5D5D</color>
+    <color name="add_watch_activity_prompt_user">#7b7b7b</color>
+    <color name="add_watch_activity_prompt_text_color">#cccccc</color>
+    <color name="add_watch_activity_shop_address_text_color">#85befc</color>
+    <color name="add_watch_activity_watch_dec_text_color">#666666</color>
+    <color name="add_watch_activity_view_bg">#939393</color>
+    <color name="add_watch_activity_view_bg_color">#e1e1e1</color>
+    <color name="add_watch_activity_content_bg">#ededed</color>
+    <color name="notification_delete_bg">#3d3ba6</color>
 </resources>

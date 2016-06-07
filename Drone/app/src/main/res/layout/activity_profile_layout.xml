@@ -148,6 +148,7 @@
 
             </LinearLayout>
 
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -187,13 +188,34 @@
                 <ImageButton
                     android:id="@+id/profile_activity_edit_goal_ib"
                     style="@style/profile_activity_image_button_style"/>
-            </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/profile_user_bg"/>
+            </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/profile_user_bg"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <TextView
+                style="@style/profile_activity_text_style"
+                android:text="@string/profile_birthday_dec"/>
+            <TextView
+                android:id="@+id/profile_activity_user_birthday"
+                style="@style/profile_activity_text_style"
+                android:text="sdaf"/>
+
+            <ImageButton
+                android:id="@+id/profile_activity_edit_user_birthday"
+                style="@style/profile_activity_image_button_style"/>
+
         </LinearLayout>
+        </LinearLayout>
+
+
         </LinearLayout>
         <Button
             android:id="@+id/profile_activity_log_out_bt"

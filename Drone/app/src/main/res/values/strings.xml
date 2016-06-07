@@ -7,7 +7,8 @@
     <string name="login_register">Register</string>
     <string name="register_email"> Register with your email</string>
     <string name="third_party_login">Or register with your social media</string>
-    <string name="tips_user_account_password">Account of password is not null</string>
+    <string name="tips_user_account_password">E-mail must not be empty</string>
+    <string name="tips_user_password"> P-Password must not be empty</string>
     <string name="user_account_error">Account of password is error</string>
     <string name="user_info_clue">Tell us little bit about your self.</string>
     <string name="user_info_share">We promissed we will never share this info</string>
@@ -36,6 +37,7 @@
     <string name="home_guide_setting">WATCH\n\tSETTING</string>
     <string name="home_guide_profile">Profile</string>
     <string name="home_title_back_text">Back</string>
+
     <string name="home_title_save_text">Save</string>
     <string name="profile_title_back_text">Cancel</string>
     <string name="fragment_home_title_calories">CALORIES</string>
@@ -49,6 +51,7 @@
     <string name="world_clock_title_text">World Clock</string>
     <string name="choose_activity_title_choose_city_tv">Choose a City</string>
     <string name="choose_activity_title_cancel">Cancel</string>
+    <string name="no_search_result">Did not find the city</string>
     <string name="gallery_activity_title">GALLERY</string>
     <string name="world_clock_Yesterday_tv">yesterday</string>
     <string name="world_clock_today_tv">today</string>
@@ -62,6 +65,7 @@
     <string name="profile_user_height_unit">cm</string>
     <string name="profile_edit_email_prompt">Mailbox cannot be edited</string>
     <string name="world_add_city_prompt">Add up to five cities</string>
+    <string name="world_clock_search_city_hint">Search</string>
     <string name="profile_prompt_user_edit">Enter the space, the success of the editorial department</string>
     <string name="profile_email_format_error_prompt">Mailbox format is not correct</string>
     <string name="profile_user_height_error">illegal input</string>
@@ -71,5 +75,26 @@
     <string name="profile_dialog_positive_button_text">Sure</string>
     <string name="profile_dialog_negative_button_text">Cancel</string>
     <string name="profile_save_text_dec">No Watch\nConnected</string>
+    <string name="profile_birthday_dec">Birthday :</string>
+
+
+    <string name="add_watch_activity_watch_dec_is_connected">Not Connected</string>
+    <string name="add_watch_activity_content_contacts_notification">Contacts Notifications</string>
+    <string name="add_watch_activity_content_my_notification">My Notifications</string>
+    <string name="add_watch_activity_content_forget_watch">Forget This Watch</string>
+
+    <string name="add_watch_activity_watch_dec">DRONE Precision Timepieces...</string>
+    <string name="add_watch_activity_prompt_user">HOLD YOUR DRONE !</string>
+    <string name="add_watch_activity_prompt_user_one">It appears that you haven\'t </string>
+    <string name="add_watch_activity_prompt_user_two">connected a device yet.</string>
+    <string name="add_watch_activity_prompt_user_three">Perhaps you\'d like to</string>
+    <string name="add_watch_activity_prompt_user_four">purchase one ...</string>
+    <string name="add_watch_activity_shop_address">http://www.hsn.com/shop/drone-\npresented-by-shaquille-oneal/13040</string>
+    <string name="add_watch_activity_shop_address_path">http://www.hsn.com/shop/drone-presented-by-shaquille-oneal/13040</string>
+
+    <string name="in_app_notification_found_watch">Found watch!</string>
+    <string name="in_app_notification_bluetooth_disabled">Bluetooth is disabled. Enable Bluetooth.</string>
+    <string name="in_app_notification_watch_disconnected">Watch disconnected.</string>
+    <string name="in_app_notification_searching">Searching for watch...</string>
 
 </resources>

@@ -4,32 +4,112 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:background="@color/user_info_sex_bg"
-        android:gravity="center_vertical"
-        >
+        android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/choose_activity_cancel_bt"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:background="@android:color/transparent"
-            android:scaleType="fitXY"
-            android:src="@mipmap/choose_city_back_icon"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/user_info_sex_bg"
+            android:gravity="center_vertical"
+            >
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/choose_activity_title_choose_city_tv"
-            android:textColor="@color/choose_adapter_text_color"
-            android:textSize="20sp"
-            android:textStyle="bold"/>
-    </RelativeLayout>
+            <ImageButton
+                android:id="@+id/choose_activity_cancel_bt"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:background="@android:color/transparent"
+                android:scaleType="fitXY"
+                android:src="@mipmap/choose_city_back_icon"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/choose_activity_title_choose_city_tv"
+                android:textColor="@color/choose_adapter_text_color"
+                android:textSize="22sp"
+                android:textStyle="bold"/>
+        </RelativeLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/world_clock_city_edit_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                >
+
+                <EditText
+                    android:id="@+id/world_clock_user_search_city"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/world_clock_search_bg"
+                    android:drawableLeft="@mipmap/search"
+                    android:imeOptions="actionSearch"
+                    />
+
+                <Button
+                    android:id="@+id/world_clock_search_city"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="10dp"
+                    android:background="@android:color/transparent"
+                    android:text="@string/cancel_update"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/world_clock_open_search"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/world_clock_search_bg"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@mipmap/world_clock_search_city"
+                    android:tint="@color/login_text_color"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="38dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_vertical"
+                    android:hint="@string/world_clock_search_city_hint"
+                    android:textColor="@color/login_text_color"
+                    android:textSize="20sp"
+                    />
+            </LinearLayout>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
 
     <FrameLayout
         android:layout_width="fill_parent"
@@ -38,8 +118,7 @@
         <ListView
             android:id="@+id/choose_activity_city_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
+            android:layout_height="wrap_content"
             android:background="@color/world_clock_bg_color"
             android:divider="@android:color/white"
             android:scrollbars="none"
@@ -50,5 +129,12 @@
             android:layout_width="30.0dip"
             android:layout_height="fill_parent"
             android:layout_gravity="right|center"/>
+
+        <ListView
+            android:id="@+id/choose_activity_search_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/add_watch_activity_prompt_text_color"
+            android:visibility="gone"></ListView>
     </FrameLayout>
 </LinearLayout>

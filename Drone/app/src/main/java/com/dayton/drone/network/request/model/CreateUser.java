@@ -8,8 +8,11 @@ public class CreateUser {
     private String last_name;
     private String email;
     private String password;
-    private int    age;
+    private String birthday;
     private float length;
+    private float weight;
+    private int sex;
+
 
     public String getFirst_name() {
         return first_name;
@@ -43,12 +46,12 @@ public class CreateUser {
         this.password = password;
     }
 
-    public int getAge() {
-        return age;
+    public String getBirthday() {
+        return birthday;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
     }
 
     public float getLength() {
@@ -57,5 +60,21 @@ public class CreateUser {
 
     public void setLength(float length) {
         this.length = length;
+    }
+
+    public float getWeight() {
+        return weight;
+    }
+
+    public void setWeight(float weight) {
+        this.weight = weight;
+    }
+
+    public int getSex() {
+        return sex;
+    }
+
+    public void setSex(int sex) {
+        this.sex = sex;
     }
 }

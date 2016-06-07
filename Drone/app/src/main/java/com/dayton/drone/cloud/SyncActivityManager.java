@@ -175,7 +175,9 @@ public class SyncActivityManager {
     private void downloadSteps(final Date startDate, final Date endDate)
     {
         //TODO API should add a filter to query: ?startdate=...& enddate=...
-        getModel().getRetrofitManager().execute(new GetStepsRequest(getModel().getUser().getUserID()), new RequestListener<GetStepsModel>() {
+        String start_date = new SimpleDateFormat("yyyy-MM-dd").format(startDate);
+        String end_date = new SimpleDateFormat("yyyy-MM-dd").format(endDate);
+        getModel().getRetrofitManager().execute(new GetStepsRequest(getModel().getUser().getUserID(),getModel().getRetrofitManager().getAccessToken(),start_date,end_date),new RequestListener<GetStepsModel>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 spiceException.printStackTrace();
@@ -240,9 +242,9 @@ public class SyncActivityManager {
         updateUser.setFirst_name(profileChangedEvent.getUser().getFirstName());
         updateUser.setLast_name(profileChangedEvent.getUser().getLastName());
         updateUser.setEmail(profileChangedEvent.getUser().getUserEmail());
-        updateUser.setPassword(profileChangedEvent.getUser().getUserPassword());
         updateUser.setLength(profileChangedEvent.getUser().getHeight());
-        updateUser.setAge(profileChangedEvent.getUser().getAge());
+        updateUser.setBirthday(profileChangedEvent.getUser().getBirthday());
+        updateUser.setSex(profileChangedEvent.getUser().getGender());
         getModel().getRetrofitManager().execute(new UpdateUserRequest(updateUser, getModel().getRetrofitManager().getAccessToken()), new RequestListener<UpdateUserModel>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {

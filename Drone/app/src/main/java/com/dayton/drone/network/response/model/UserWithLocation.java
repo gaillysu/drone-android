@@ -11,6 +11,8 @@ public class UserWithLocation {
     private float length;
     private String last_longitude;
     private String last_latitude;
+    private float weight;
+    private DateWithTimeZone birthday;
 
 
     public int getId() {
@@ -67,5 +69,21 @@ public class UserWithLocation {
 
     public void setLast_latitude(String last_latitude) {
         this.last_latitude = last_latitude;
+    }
+
+    public float getWeight() {
+        return weight;
+    }
+
+    public void setWeight(float weight) {
+        this.weight = weight;
+    }
+
+    public DateWithTimeZone getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(DateWithTimeZone birthday) {
+        this.birthday = birthday;
     }
 }

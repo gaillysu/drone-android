@@ -33,6 +33,7 @@
         <activity
             android:name=".activity.tutorial.SplashActivity"
             android:configChanges="screenLayout|orientation"
+            android:screenOrientation="portrait"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -48,34 +49,48 @@
             />
         <activity
             android:name=".activity.tutorial.LoginActivity"
+            android:screenOrientation="portrait"
             />
         <activity
             android:name=".activity.tutorial.RegisterActivity"
             android:configChanges="screenLayout|orientation"
             android:launchMode="singleTop"
+            android:screenOrientation="portrait"
             />
         <activity
             android:name=".activity.tutorial.UserInfoActivity"
             android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleTop"
+            android:screenOrientation="portrait"
            />
         <activity
             android:name=".activity.tutorial.SelectDeviceActivity"
             android:configChanges="keyboardHidden|screenLayout|orientation"
+            android:screenOrientation="portrait"
             android:launchMode="singleTop" />
         <activity android:name=".activity.tutorial.ShowWatchActivity"
                   android:configChanges="keyboardHidden|screenLayout|orientation"
+                  android:screenOrientation="portrait"
                   android:launchMode="singleTop"/>
         <activity android:name=".activity.HomeActivity"
+                  android:screenOrientation="portrait"
                   android:launchMode="singleTop"/>
         <activity android:name=".activity.ActivitiesActivity"
+                  android:screenOrientation="portrait"
                   android:launchMode="singleTop"/>
-        <activity android:name=".activity.WorldClockActivity"/>
-        <activity android:name=".activity.GalleryActivity"/>
-        <activity android:name=".activity.ChooseCityActivity"/>
-        <activity android:name=".activity.AddWatchActivity"/>
-        <activity android:name=".activity.ProfileActivity"/>
-        <activity android:name=".activity.SetNotificationActivity"/>
+        <activity android:name=".activity.WorldClockActivity"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".activity.GalleryActivity"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".activity.ChooseCityActivity"
+                  android:windowSoftInputMode="adjustPan"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".activity.AddWatchActivity"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".activity.ProfileActivity"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".activity.SetNotificationActivity"
+                  android:screenOrientation="portrait"/>
         <!-- register all services used in the application -->
         <service
             android:name="net.medcorp.library.ble.ble.MEDBTService"

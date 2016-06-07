@@ -2,6 +2,7 @@ package com.dayton.drone.activity.tutorial;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -20,19 +21,19 @@ import butterknife.ButterKnife;
  */
 public class SelectDeviceActivity extends BaseActivity {
     @Bind(R.id.registe_back_iv)
-   ImageButton titleBack;
+    ImageButton titleBack;
     @Bind(R.id.registe_next_iv)
     ImageButton titleNext;
     @Bind(R.id.select_user_device)
     GridView mShowWatchGridView;
     private SelectDeviceGridViewAdapter mGridViewAdapter;
     private int type;
-    private int loginType = 2>>4;
-    private int addWatchType= 5<<3;
+    private int loginType = 2 >> 4;
+    private int addWatchType = 5<<3;
 
     private String[] watchNameArray;
-    private int[] droneImagesIdArray = new int[]{R.mipmap.welcome_drone_1,R.mipmap.welcome_drone_2,
-            R.mipmap.welcome_drone_3,R.mipmap.welcome_drone_4,R.mipmap.welcome_drone_5,R.mipmap.welcome_drone_6};
+    private int[] droneImagesIdArray = new int[]{R.mipmap.welcome_logo_1, R.mipmap.welcome_logo_2,
+            R.mipmap.welcome_logo_3, R.mipmap.welcome_logo_4, R.mipmap.welcome_logo_5, R.mipmap.welcome_logo_6};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +41,7 @@ public class SelectDeviceActivity extends BaseActivity {
         setContentView(R.layout.activtiy_user_select_watch);
         ButterKnife.bind(this);
         Intent intent = getIntent();
-        type = intent.getIntExtra("type",-1);
+        type = intent.getIntExtra("type", -1);
         initView();
 
     }
@@ -49,7 +50,7 @@ public class SelectDeviceActivity extends BaseActivity {
 
         titleNext.setVisibility(View.GONE);
         watchNameArray = this.getResources().getStringArray(R.array.user_select_dec_arr);
-        mGridViewAdapter = new SelectDeviceGridViewAdapter(droneImagesIdArray,watchNameArray,this);
+        mGridViewAdapter = new SelectDeviceGridViewAdapter(droneImagesIdArray, watchNameArray, this);
         mShowWatchGridView.setAdapter(mGridViewAdapter);
 
         mShowWatchGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -57,9 +58,9 @@ public class SelectDeviceActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 int iconId = droneImagesIdArray[position];
                 String watchName = watchNameArray[position];
-                Intent intent =new Intent(SelectDeviceActivity.this,ShowWatchActivity.class);
-                intent.putExtra("watchIconId",iconId);
-                intent.putExtra("selectWatchName",watchName);
+                Intent intent = new Intent(SelectDeviceActivity.this, ShowWatchActivity.class);
+                intent.putExtra("watchIconId", iconId);
+                intent.putExtra("selectWatchName", watchName);
                 startActivity(intent);
                 finish();
             }
@@ -68,15 +69,31 @@ public class SelectDeviceActivity extends BaseActivity {
         titleBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(type == loginType){
+                if (type == loginType) {
                     startActivity(LoginActivity.class);
-                }else if(type == addWatchType){
+                } else if (type == addWatchType) {
                     startActivity(AddWatchActivity.class);
-                }else {
+                } else {
                     startActivity(UserInfoActivity.class);
                 }
                 finish();
             }
         });
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (type == loginType) {
+                startActivity(LoginActivity.class);
+            } else if (type == addWatchType) {
+                startActivity(AddWatchActivity.class);
+            } else {
+                startActivity(UserInfoActivity.class);
+            }
+            finish();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

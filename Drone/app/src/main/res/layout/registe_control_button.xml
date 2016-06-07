@@ -12,7 +12,7 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginLeft="5dp"
-        android:background="@mipmap/left_arrow"
+        android:background="@mipmap/left_bt"
         android:padding="10dp"/>
 
     <ImageButton
@@ -21,6 +21,6 @@
         android:layout_height="30dp"
         android:layout_alignParentRight="true"
         android:layout_marginRight="5dp"
-        android:background="@mipmap/right_arrow"
+        android:background="@mipmap/right_bt"
         android:padding="10dp"/>
 </RelativeLayout>

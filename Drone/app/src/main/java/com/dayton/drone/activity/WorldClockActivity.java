@@ -1,11 +1,9 @@
 package com.dayton.drone.activity;
 
 import android.content.Intent;
-import android.hardware.camera2.TotalCaptureResult;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +14,7 @@ import com.dayton.drone.database.entry.WorldClockDatabaseHelper;
 import com.dayton.drone.event.TimerEvent;
 import com.dayton.drone.event.WorldClockChangedEvent;
 import com.dayton.drone.model.WorldClock;
+import com.dayton.drone.view.ListViewCompat;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -34,14 +33,13 @@ import butterknife.OnClick;
 public class WorldClockActivity extends BaseActivity {
     @Bind(R.id.world_clock_date_tv)
     TextView dateTv;
-    @Bind(R.id.world_clock_select_city_list)
-    ListView worldClockListView;
-    @Bind(R.id.content_title_dec_tv)
-    TextView titleTextView;
+
+   private ListViewCompat worldClockListView;
+
 
     private List<WorldClock> listData;
     private WorldClockAdapter worldClockAdapter;
-    private boolean isShowEditIcon = true;
+
     private int requestCode = 3 >> 2;
     private WorldClockDatabaseHelper worldClockDatabase;
 
@@ -49,8 +47,8 @@ public class WorldClockActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_world_clock);
+        worldClockListView = (ListViewCompat) findViewById(R.id.world_clock_select_city_list);
         ButterKnife.bind(this);
-        titleTextView.setText(getString(R.string.world_clock_title_text));
         worldClockDatabase = getModel().getWorldClockDatabaseHelper();
         initData();
     }
@@ -86,7 +84,8 @@ public class WorldClockActivity extends BaseActivity {
         dateTv.setText(new SimpleDateFormat("MMM").format(date)+ currentTimeArray[2] + ", " + currentTimeArray[0]);
 
         listData = worldClockDatabase.getSelected();
-        setListAdapter(isShowEditIcon);
+        worldClockAdapter = new WorldClockAdapter(listData, this);
+        worldClockListView.setAdapter(worldClockAdapter);
         worldClockAdapter.onDeleteItemListener(new WorldClockAdapter.DeleteItemInterface() {
             @Override
             public void deleteItem(int position) {
@@ -101,16 +100,9 @@ public class WorldClockActivity extends BaseActivity {
 
     }
 
-    @OnClick(R.id.content_title_back_bt)
+    @OnClick(R.id.world_clock_back_icon_ib)
     public void backClick() {
         finish();
-    }
-
-    @OnClick(R.id.world_clock_date_edit_bt)
-    public void editButtonClick() {
-        isShowEditIcon = !isShowEditIcon;
-        setListAdapter(isShowEditIcon);
-        worldClockAdapter.notifyDataSetChanged();
     }
 
     @OnClick(R.id.world_clock_add_city_iv)
@@ -120,8 +112,8 @@ public class WorldClockActivity extends BaseActivity {
 
     }
 
-    public void setListAdapter(boolean isShow) {
-        worldClockAdapter = new WorldClockAdapter(listData, this, isShow);
+    public void setListAdapter() {
+        worldClockAdapter = new WorldClockAdapter(listData, this);
         worldClockListView.setAdapter(worldClockAdapter);
     }
 
@@ -130,7 +122,7 @@ public class WorldClockActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == this.requestCode) {
             boolean flag = data.getBooleanExtra("isChooseFlag", true);
-            if (flag == true) {
+            if (flag) {
                String timeZoneName =data.getStringExtra("worldClock");
                 if(worldClockDatabase.getSelected().size()==5)
                 {

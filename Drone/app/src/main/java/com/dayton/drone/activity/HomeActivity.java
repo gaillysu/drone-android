@@ -43,6 +43,7 @@ public class HomeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
+        getModel().getUser().setUserIsLogin(true);
         initData();
         adapter = new MyHomeMenuAdapter(listData, this);
         homeMenuListView.setAdapter(adapter);
@@ -107,6 +108,7 @@ public class HomeActivity extends BaseActivity {
             } else {
                 getModel().getUser().setUserIsLogin(true);
             }
+            getModel().getUserDatabaseHelper().update(getModel().getUser());
         }
     }
 }

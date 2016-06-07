@@ -1,5 +1,6 @@
 package com.dayton.drone.activity.tutorial;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,6 +17,7 @@ import com.dayton.drone.activity.base.BaseActivity;
 import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
 import net.medcorp.library.ble.event.BLEFirmwareVersionReceivedEvent;
 import net.medcorp.library.ble.event.BLESearchEvent;
+import net.medcorp.library.permission.PermissionRequestDialogBuilder;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -62,7 +64,6 @@ public class ShowWatchActivity extends BaseActivity  {
         }
         else{
             startActivity(HomeActivity.class);
-            getModel().getUser().setUserIsLogin(true);
             finish();
         }
     }
@@ -101,6 +102,9 @@ public class ShowWatchActivity extends BaseActivity  {
                             selectConnectingStatus.setText(R.string.bluetooth_connecting);
                         }
                         selectConnectingStatus.setText(selectConnectingStatus.getText() + ".");
+                        PermissionRequestDialogBuilder builder =new PermissionRequestDialogBuilder(ShowWatchActivity.this);
+                        builder.addPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
+                        builder.askForPermission(ShowWatchActivity.this,1);
                     }
                 });
                 break;
@@ -122,7 +126,6 @@ public class ShowWatchActivity extends BaseActivity  {
                         @Override
                         public void run() {
                             startActivity(HomeActivity.class);
-                            getModel().getUser().setUserIsLogin(true);
                             finish();
                         }
                     },10000);

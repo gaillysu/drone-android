@@ -1,6 +1,7 @@
 package com.dayton.drone.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -8,26 +9,20 @@ import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.activity.tutorial.SelectDeviceActivity;
-import com.dayton.drone.adapter.AddWatchMenuAdapter;
 import com.dayton.drone.adapter.AddWatchViewPagerAdapter;
-import com.dayton.drone.ble.model.request.init.GetSystemStatus;
 import com.dayton.drone.ble.util.Constants;
 import com.dayton.drone.event.BatteryStatusChangedEvent;
 import com.dayton.drone.model.Watches;
 
 import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
 import net.medcorp.library.ble.event.BLEFirmwareVersionReceivedEvent;
-import net.medcorp.library.ble.util.Optional;
-import net.medcorp.library.ble.util.QueuedMainThreadHandler;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -44,8 +39,8 @@ import butterknife.OnClick;
  */
 public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageChangeListener{
 
-    @Bind(R.id.activity_addwatch_menu_listview)
-    ListView addwatchMenuListview;
+//    @Bind(R.id.activity_addwatch_menu_listview)
+//    ListView addwatchMenuListview;
 
     @Bind(R.id.activity_addwatch_viewpager)
     ViewPager addwatchViewPager;
@@ -67,25 +62,25 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addwatch);
         ButterKnife.bind(this);
-        List<String> listMenu = new ArrayList<String>();
-        listMenu.add("Contacts Notifications");
-        listMenu.add("Forget this watch");
-        addwatchMenuListview.setAdapter(new AddWatchMenuAdapter(listMenu,this));
-        addwatchMenuListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(position==0) {
-                    startActivity(SetNotificationActivity.class);
-                }
-                else if(position==1) {
-                    getModel().getSyncController().forgetDevice();
-                }
-            }
-        });
+//        List<String> listMenu = new ArrayList<String>();
+//        listMenu.add("Contacts Notifications");
+//        listMenu.add("Forget this watch");
+//        addwatchMenuListview.setAdapter(new AddWatchMenuAdapter(listMenu,this));
+//        addwatchMenuListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                if(position==0) {
+//                    startActivity(SetNotificationActivity.class);
+//                }
+//                else if(position==1) {
+//                    getModel().getSyncController().forgetDevice();
+//                }
+//            }
+//        });
 
         List<View> viewList = new ArrayList<>();
         List<Watches>  watchesList = getModel().getWatchesDatabaseHelper().getAll(getModel().getUser().getUserID());
-        if(watchesList.isEmpty())
+        if(watchesList.isEmpty()&&getModel().getSyncController().isConnected())
         {
             watchesList.add(new Watches());
             new Handler().postDelayed(new Runnable() {
@@ -93,7 +88,7 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
                 public void run() {
                     noWatchLayout.setVisibility(View.GONE);
                 }
-            },1200);
+            },1500);
         }
         else
         {
@@ -136,6 +131,17 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
         finish();
     }
 
+    @OnClick(R.id.activity_add_watch_contacts_notifications)
+    public void ContactsNotifications(){
+        startActivity(SetNotificationActivity.class);
+    }
+
+    @OnClick(R.id.activity_add_watch_forget_watch)
+    public void forgetNotification(){
+        getModel().getSyncController().forgetDevice();
+        finish();
+    }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(keyCode == KeyEvent.KEYCODE_BACK){
@@ -146,11 +152,12 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
         return super.onKeyDown(keyCode, event);
     }
 
-    @OnClick(R.id.activity_addwatch_add_imagebutton)
+    @OnClick(R.id.activity_addwatch_footer_layout)
     public void addWatch()
     {
         Intent intent  = new Intent(this ,SelectDeviceActivity.class);
-        intent.putExtra("type",5<<3);
+        int type = 5<<3;
+        intent.putExtra("type",type);
         startActivity(intent);
         finish();
     }
@@ -249,5 +256,15 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
                 }
             }
         });
+    }
+
+    @OnClick(R.id.activity_add_watch_open_shop)
+    public void openShop(){
+        Intent intent = new Intent();
+        intent.setAction("android.intent.action.VIEW");
+        String path = getResources().getString(R.string.add_watch_activity_shop_address_path);
+        Uri shopPath = Uri.parse(path);
+        intent.setData(shopPath);
+        startActivity(intent);
     }
 }

@@ -7,7 +7,7 @@ public class StepsDetail {
     private int id;
     private int uid;
     private String steps;
-    private StepsWithTimeZone date;
+    private DateWithTimeZone date;
 
     public int getId() {
         return id;
@@ -33,11 +33,11 @@ public class StepsDetail {
         this.steps = steps;
     }
 
-    public StepsWithTimeZone getDate() {
+    public DateWithTimeZone getDate() {
         return date;
     }
 
-    public void setDate(StepsWithTimeZone date) {
+    public void setDate(DateWithTimeZone date) {
         this.date = date;
     }
 

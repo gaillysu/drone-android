@@ -9,6 +9,9 @@ public class UserWithID {
     private String last_name;
     private String email;
     private float length;
+    private float weight;
+    private int   sex;
+    private DateWithTimeZone birthday;
 
     public int getId() {
         return id;
@@ -50,4 +53,27 @@ public class UserWithID {
         this.length = length;
     }
 
+    public float getWeight() {
+        return weight;
+    }
+
+    public void setWeight(float weight) {
+        this.weight = weight;
+    }
+
+    public int getSex() {
+        return sex;
+    }
+
+    public void setSex(int sex) {
+        this.sex = sex;
+    }
+
+    public DateWithTimeZone getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(DateWithTimeZone birthday) {
+        this.birthday = birthday;
+    }
 }
