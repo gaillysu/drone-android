@@ -45,7 +45,7 @@ dependencies {
     compile 'com.octo.android.robospice:robospice-retrofit:1.4.14'
     compile 'com.google.android.gms:play-services-appindexing:9.0.1'
     compile 'com.baoyz.swipemenulistview:library:1.3.0'
-    compile 'com.liulishuo.magicprogresswidget:library:1.0.9'
-    compile 'com.brucetoo.pickview:library:1.1.1'
     compile 'com.android.support:design:23.2.0'
+    compile project(':wheelpicklib')
+    compile project(':progressbarlibrary')
 }
