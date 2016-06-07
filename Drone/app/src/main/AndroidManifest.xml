@@ -83,6 +83,7 @@
         <activity android:name=".activity.GalleryActivity"
                   android:screenOrientation="portrait"/>
         <activity android:name=".activity.ChooseCityActivity"
+                  android:windowSoftInputMode="adjustPan"
                   android:screenOrientation="portrait"/>
         <activity android:name=".activity.AddWatchActivity"
                   android:screenOrientation="portrait"/>

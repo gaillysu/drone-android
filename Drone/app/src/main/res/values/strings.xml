@@ -51,6 +51,7 @@
     <string name="world_clock_title_text">World Clock</string>
     <string name="choose_activity_title_choose_city_tv">Choose a City</string>
     <string name="choose_activity_title_cancel">Cancel</string>
+    <string name="no_search_result">Did not find the city</string>
     <string name="gallery_activity_title">GALLERY</string>
     <string name="world_clock_Yesterday_tv">yesterday</string>
     <string name="world_clock_today_tv">today</string>

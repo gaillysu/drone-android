@@ -7,7 +7,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.dayton.drone.R;
-import com.dayton.drone.model.WorldClock;
+import com.dayton.drone.model.SortModel;
 
 import java.util.List;
 
@@ -16,8 +16,8 @@ import java.util.List;
  */
 public class MySearchResultAdapter extends BaseAdapter {
     private Context context;
-    private List<WorldClock> searchResult;
-    public MySearchResultAdapter(Context context , List<WorldClock> searchResult){
+    private List<SortModel> searchResult;
+    public MySearchResultAdapter(Context context , List<SortModel> searchResult){
         this.context = context;
         this.searchResult = searchResult;
     }
@@ -40,16 +40,16 @@ public class MySearchResultAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         ViewHolder holder = null;
         if (view == null){
-            view = View.inflate(context, R.layout.choose_city_adapter_item,null);
+            view = View.inflate(context, R.layout.search_list_item,null);
             holder = new ViewHolder();
             view.setTag(holder);
         }else{
             holder = (ViewHolder) view.getTag();
         }
         holder.searchCityName = (TextView) view.findViewById(R.id.choose_adapter_item_tv);
-        holder.searchCityName.setText(searchResult.get(i).getTimeZoneName());
+        holder.searchCityName.setText(searchResult.get(i).getName());
 
-        return null;
+        return view;
     }
     private static class ViewHolder{
         TextView searchCityName;
