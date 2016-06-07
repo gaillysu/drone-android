@@ -1,18 +1,17 @@
 package com.dayton.drone.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
@@ -60,6 +59,7 @@ public class ChooseCityActivity extends BaseActivity {
     private List<SortModel> SourceDateList;
     private PinyinComparator pinyinComparator;
     private List<SortModel> searchResult;
+    private MySearchResultAdapter searchAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +74,13 @@ public class ChooseCityActivity extends BaseActivity {
         cityListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long Id) {
-                selectAddCity(position);
+                isChooseCity = true;
+                WorldClock worldClock = worldClockDataList.get(position);
+                Intent intent = getIntent();
+                intent.putExtra("isChooseFlag", isChooseCity);
+                intent.putExtra("worldClock", worldClock.getTimeZoneName());
+                setResult(0, intent);
+                finish();
             }
         });
 
@@ -102,15 +108,6 @@ public class ChooseCityActivity extends BaseActivity {
         back(isChooseCity);
     }
 
-    public void selectAddCity(int position){
-        isChooseCity = true;
-        WorldClock worldClock = worldClockDataList.get(position);
-        Intent intent = getIntent();
-        intent.putExtra("isChooseFlag", isChooseCity);
-        intent.putExtra("worldClock", worldClock.getTimeZoneName());
-        setResult(0, intent);
-        finish();
-    }
 
     private void back(boolean flag) {
         Intent intent = getIntent();
@@ -133,7 +130,9 @@ public class ChooseCityActivity extends BaseActivity {
 
         for (int i = 0; i < worldClockList.size(); i++) {
             SortModel sortModel = new SortModel();
+
             sortModel.setName(worldClockList.get(i).getTimeZoneTitle().split(",")[0]);
+            sortModel.setTimeZoneName(worldClockList.get(i).getTimeZoneName());
             String pinyin = worldClockList.get(i).getTimeZoneCategory();
             String sortString = pinyin.substring(0, 1).toUpperCase();
 
@@ -149,15 +148,35 @@ public class ChooseCityActivity extends BaseActivity {
 
     }
 
+
+    TextWatcher myTextWatcher = new TextWatcher() {
+
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            searchResult.clear();
+            search();
+            searchAdapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+
+        }
+    };
+
+
     @OnClick(R.id.world_clock_open_search)
     public void startSearchCity() {
         searchLinearLayout.setVisibility(View.GONE);
         editSearchContent.setVisibility(View.VISIBLE);
         showSearchResultListView.setVisibility(View.VISIBLE);
-        userSearchCityEdit.setFocusable(true);
         searchResult = new ArrayList<>();
-        InputMethodManager imm = (InputMethodManager) ChooseCityActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+
         userSearchCityEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
             @Override
@@ -171,26 +190,35 @@ public class ChooseCityActivity extends BaseActivity {
                 return false;
             }
         });
+        userSearchCityEdit.addTextChangedListener(myTextWatcher);
         showSearchResultListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                selectAddCity(position);
+                isChooseCity = true;
+                SortModel  sortModel = searchResult.get(position);
+                Intent intent = getIntent();
+                intent.putExtra("isChooseFlag", isChooseCity);
+                intent.putExtra("worldClock", sortModel.getTimeZoneName());
+                setResult(0, intent);
+                finish();
             }
         });
     }
 
-    private void search() {
 
+    private void search() {
         String userInputSearchCityName = userSearchCityEdit.getText().toString();
-        for (SortModel bean : SourceDateList) {
-            if (bean.getName().contains(userInputSearchCityName)) {
-                searchResult.add(bean);
+        if (!userInputSearchCityName.isEmpty()) {
+            for (SortModel bean : SourceDateList) {
+                if (bean.getName().contains(userInputSearchCityName)) {
+                    searchResult.add(bean);
+                }
             }
-        }
-        if (searchResult.size() > 0) {
-            showSearchResultListView.setAdapter(new MySearchResultAdapter(ChooseCityActivity.this, searchResult));
-        } else {
-            Toast.makeText(this, getString(R.string.no_search_result), Toast.LENGTH_SHORT).show();
+            if (searchResult.size() > 0) {
+                Collections.sort(searchResult, pinyinComparator);
+                searchAdapter = new MySearchResultAdapter(ChooseCityActivity.this, searchResult);
+                showSearchResultListView.setAdapter(searchAdapter);
+            }
         }
     }
 

@@ -4,7 +4,16 @@ public class SortModel {
 
 	private String name;
 	private String sortLetters;
-	
+
+	public String getTimeZoneName() {
+		return timeZoneName;
+	}
+
+	public void setTimeZoneName(String timeZoneName) {
+		this.timeZoneName = timeZoneName;
+	}
+
+	private String timeZoneName;
 	public String getName() {
 		return name;
 	}
