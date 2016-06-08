@@ -57,7 +57,7 @@ public class LoginActivity extends BaseActivity {
         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
         progressDialog.setIndeterminate(true);
         progressDialog.setCancelable(false);
-        progressDialog.setMessage("logging in...");
+        progressDialog.setMessage(getString(R.string.user_login_dialog_text));
         progressDialog.show();
 
         LoginUser userLogin = new LoginUser();

@@ -91,6 +91,10 @@
                   android:screenOrientation="portrait"/>
         <activity android:name=".activity.SetNotificationActivity"
                   android:screenOrientation="portrait"/>
+        <activity android:name=".activity.ForgetPasswordActivity"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".activity.ChangePasswordActivity"
+                  android:screenOrientation="portrait"/>
         <!-- register all services used in the application -->
         <service
             android:name="net.medcorp.library.ble.ble.MEDBTService"

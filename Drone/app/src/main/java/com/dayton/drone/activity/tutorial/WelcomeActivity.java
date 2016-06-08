@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.dayton.drone.R;
+import com.dayton.drone.activity.ForgetPasswordActivity;
 import com.dayton.drone.activity.HomeActivity;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.adapter.WelcomeViewpagerAdapter;
@@ -122,6 +123,12 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     @OnClick(R.id.register_bt)
     public void openRegisteActivity() {
         startActivity(RegisterActivity.class);
+        finish();
+    }
+
+    @OnClick(R.id.open_forget_password_page_bt)
+    public void openForgetPasswordPage(){
+        startActivity(ForgetPasswordActivity.class);
         finish();
     }
 

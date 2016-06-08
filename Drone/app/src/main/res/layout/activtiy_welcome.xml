@@ -51,7 +51,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="75dp"
         android:layout_marginRight="75dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="15dp"
         android:layout_marginTop="5dp"
         android:orientation="vertical"
         >
@@ -75,5 +75,14 @@
             android:text="@string/login_register"
             android:textColor="@color/app_text_color_criterion"
             />
+        <Button
+            android:id="@+id/open_forget_password_page_bt"
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+            android:layout_marginTop="4dp"
+            android:background="@android:color/transparent"
+            android:textSize="20sp"
+            android:textColor="@color/app_text_color_criterion"
+            android:text="@string/login_forget_password"/>
     </LinearLayout>
 </RelativeLayout>

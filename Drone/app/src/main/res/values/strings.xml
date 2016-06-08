@@ -5,6 +5,14 @@
     <string name="cancel_update">Cancel</string>
     <string name="login">Login</string>
     <string name="login_register">Register</string>
+    <string name="login_forget_password">Forget Password</string>
+    <string name="forget_password_change">Change Password</string>
+    <string name="forget_password_edit_hint">Your Email</string>
+    <string name="forget_password_dialog_text">Please wait...</string>
+    <string name="forget_password_dec">Please fill in your e-mail to set a \n new password</string>
+    <string name="forget_new_password">New password</string>
+    <string name="forget_repeat_password">Confirm new password</string>
+    <string name="change_password_error">Passwords don\'t match with each other.</string>
     <string name="register_email"> Register with your email</string>
     <string name="third_party_login">Or register with your social media</string>
     <string name="tips_user_account_password">mail must not be empty</string>
@@ -24,7 +32,7 @@
     <string name="user_info_activity_edit_first_name_hint">First Name</string>
     <string name="user_info_activity_edit_last_name_hint">Last Name</string>
     <string name="user_step_goal">GOAL:</string>
-
+    <string name="user_login_dialog_text">logging in...</string>
     <string name="user_info_first_name_error">First name may not be empty</string>
     <string name="user_info_birthday_error">Birthday may not be empty</string>
     <string name="user_info_weight_error">Weight may not be empty</string>
