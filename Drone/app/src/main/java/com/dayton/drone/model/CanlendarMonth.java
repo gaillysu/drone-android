@@ -7,7 +7,7 @@ import java.util.Date;
  * Created by med on 16/5/27.
  */
 public class CanlendarMonth {
-    final Date currentDay;
+    private final Date currentDay;
     private Date monthStart;
     private  Date monthEnd;
 

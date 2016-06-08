@@ -3,18 +3,16 @@ package com.dayton.drone.utils;
 import com.dayton.drone.model.CanlendarMonth;
 import com.dayton.drone.model.CanlendarWeek;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.TimeZone;
 
 /**
  * Created by med on 16/5/25.
  */
 public class Common {
 
-    public static long ONEDAY = 24*60*60*1000l;
+    public static long ONE_DAY = 24*60*60*1000L;
 
 
     /**
@@ -30,8 +28,7 @@ public class Common {
         calBeginning.set(Calendar.MINUTE, 0);
         calBeginning.set(Calendar.SECOND, 0);
         calBeginning.set(Calendar.MILLISECOND, 0);
-        Date today = calBeginning.getTime();
-        return today;
+        return calBeginning.getTime();
     }
 
     public static CanlendarWeek getThisweek(Date date)
@@ -42,7 +39,7 @@ public class Common {
     public static CanlendarWeek getLastweek(Date date)
     {
         CanlendarWeek thisweek = new CanlendarWeek(date);
-        Date lastWeekend = new Date(thisweek.getWeekStart().getTime() - ONEDAY);
+        Date lastWeekend = new Date(thisweek.getWeekStart().getTime() - ONE_DAY);
         return new CanlendarWeek(lastWeekend);
     }
 
@@ -52,26 +49,17 @@ public class Common {
 
     public static CanlendarMonth getLastMonth(Date date){
         CanlendarMonth canlendarMonth = new CanlendarMonth(date);
-        Date lastMonthDate = new Date(canlendarMonth.getMonthStart().getTime() - ONEDAY);
+        Date lastMonthDate = new Date(canlendarMonth.getMonthStart().getTime() - ONE_DAY);
         return new CanlendarMonth(lastMonthDate);
     }
-    /**
-     *
-     * @param date
-     * @return the Date  is "date - 6 days"
-     */
+
     public static Date getLast7Days(Date date)
     {
-        return new Date(date.getTime()-6*ONEDAY);
+        return new Date(date.getTime()-6* ONE_DAY);
     }
 
-    /**
-     *
-     * @param date
-     * @return the Date  is "date - 29 days"
-     */
     public static Date getLast30Days(Date date)
     {
-        return new Date(date.getTime()-29*ONEDAY);
+        return new Date(date.getTime()-29* ONE_DAY);
     }
 }

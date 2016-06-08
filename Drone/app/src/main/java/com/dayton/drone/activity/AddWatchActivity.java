@@ -39,13 +39,10 @@ import butterknife.OnClick;
  */
 public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageChangeListener{
 
-//    @Bind(R.id.activity_addwatch_menu_listview)
-//    ListView addwatchMenuListview;
-
-    @Bind(R.id.activity_addwatch_viewpager)
+    @Bind(R.id.activity_add_watch_viewpager)
     ViewPager addwatchViewPager;
 
-    @Bind(R.id.activity_addwatch_view_pager_currentpage_layout)
+    @Bind(R.id.activity_add_watch_view_pager_current_page_layout)
     LinearLayout viewPagerGroupLayout;
 
     @Bind(R.id.activity_addwatch_nowatch_layout)
@@ -102,7 +99,7 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
             connectionStateTextView = (TextView)linearLayout.findViewById(R.id.activity_addwatch_watchinfo_layout_connectionstate_textview);
             if(getModel().getSyncController().isConnected())
             {
-                connectionStateTextView.setText("Connected");
+                connectionStateTextView.setText(R.string.add_watch_connected);
                 versionTextView.setText(formatFirmwareVersion(getModel().getSyncController().getFirmwareVersion(),getModel().getSyncController().getSoftwareVersion()));
                 getModel().getSyncController().getBattery();
             }
@@ -121,10 +118,10 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
             }
         }
         addwatchViewPager.setAdapter(new AddWatchViewPagerAdapter(viewList));
-        addwatchViewPager.setOnPageChangeListener(this);
+        addwatchViewPager.addOnPageChangeListener(this);
     }
 
-    @OnClick(R.id.activity_addwatch_back_imagebutton)
+    @OnClick(R.id.activity_add_watch_back_imagebutton)
     public void back()
     {
         startActivity(HomeActivity.class);
@@ -204,12 +201,13 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
             @Override
             public void run() {
                 if(stateChangedEvent.isConnected()) {
-                    connectionStateTextView.setText("Connected");
+
+                    connectionStateTextView.setText(R.string.add_watch_connected);
                     getModel().getSyncController().getBattery();
                 }
                 else
                 {
-                    connectionStateTextView.setText("Disconnected");
+                    connectionStateTextView.setText(R.string.add_watch_disconnected);
                 }
             }
         });
@@ -246,13 +244,13 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
                     batteryStateTextView.setText(batteryStatusChangedEvent.getLevel() + "%");
                 }
                 else if(batteryStatusChangedEvent.getState()==Constants.BatteryStatus.Charging.rawValue()){
-                    batteryStateTextView.setText("Charging" + "," + batteryStatusChangedEvent.getLevel() + "%");
+                    batteryStateTextView.setText(getString(R.string.add_watch_charging) + "," + batteryStatusChangedEvent.getLevel() + "%");
                 }
                 else if(batteryStatusChangedEvent.getState()==Constants.BatteryStatus.Damaged.rawValue()){
-                    batteryStateTextView.setText("Damaged");
+                    batteryStateTextView.setText(R.string.add_watch_damaged);
                 }
                 else if(batteryStatusChangedEvent.getState()==Constants.BatteryStatus.Calculating.rawValue()){
-                    batteryStateTextView.setText("Calculating");
+                    batteryStateTextView.setText(R.string.add_watch_calculating);
                 }
             }
         });

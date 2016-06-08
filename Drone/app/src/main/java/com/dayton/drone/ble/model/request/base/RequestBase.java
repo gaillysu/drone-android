@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.dayton.drone.ble.datasource.GattAttributesDataSourceImpl;
 
-import net.medcorp.library.ble.datasource.GattAttributesDataSource;
 import net.medcorp.library.ble.model.request.BLERequestData;
 
 /**
@@ -15,7 +14,7 @@ import net.medcorp.library.ble.model.request.BLERequestData;
  */
 public abstract  class RequestBase extends BLERequestData {
 
-    public RequestBase(Context context) {
+    protected RequestBase(Context context) {
         super(new GattAttributesDataSourceImpl(context));
     }
 

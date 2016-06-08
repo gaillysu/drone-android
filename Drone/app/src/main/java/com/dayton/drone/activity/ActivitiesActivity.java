@@ -5,6 +5,7 @@ import android.Manifest;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -44,6 +45,10 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.liulishuo.magicprogresswidget.MagicProgressCircle;
 
 import net.medcorp.library.ble.event.BLEBluetoothOffEvent;
@@ -58,14 +63,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-/**
- * Created by boy on 2016/4/22.
- */
 public class ActivitiesActivity extends BaseActivity implements OnChartValueSelectedListener {
 
     @Bind(R.id.home_fragment_progress_bar)
@@ -139,6 +142,11 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     private Date selectedDate = new Date(); //the selected date comes from calendar.
     private int guidePage = 1;
     private boolean isShowCalendar = false;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,7 +158,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         boolean mIsFirst = SpUtils.getBoolean(this, CacheConstants.IS_FIRST, true);
         mProgressBar.setStartColor(R.color.progress_start_color);
         mProgressBar.setEndColor(R.color.progress_end_color);
-        mProgressBar.setSmoothPercent(1.0f*SpUtils.getIntMethod(this, CacheConstants.TODAY_STEP, 0)/SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000));
+        mProgressBar.setSmoothPercent(1.0f * SpUtils.getIntMethod(this, CacheConstants.TODAY_STEP, 0) / SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000));
         homeMiddleTv.setText(SpUtils.getIntMethod(this, CacheConstants.TODAY_STEP, 0) + "");
         userStepGoalTextView.setText(getResources().getString(R.string.user_step_goal)
                 + SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000));
@@ -164,23 +172,25 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         modifyChart(thisWeekLineChart);
 
         drawGraph();
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
-    private void drawGraph()
-    {
-        StepsHandler stepsHandler = new StepsHandler(getModel().getStepsDatabaseHelper(),getModel().getUser());
-        setDataInChart(hourlyBarChart,stepsHandler.getDailySteps(selectedDate));
+    private void drawGraph() {
+        StepsHandler stepsHandler = new StepsHandler(getModel().getStepsDatabaseHelper(), getModel().getUser());
+        setDataInChart(hourlyBarChart, stepsHandler.getDailySteps(selectedDate));
         setDataInChart(thisWeekLineChart, stepsHandler.getThisWeekSteps(selectedDate));
         setDataInChart(lastWeekLineChart, stepsHandler.getLastWeekSteps(selectedDate));
         setDataInChart(lastMonthLineChart, stepsHandler.getLastMonthSteps(selectedDate));
     }
-    private void setDataInChart(BarChart barChart, DailySteps dailySteps){
-        SimpleDateFormat sdf = new SimpleDateFormat("HH: mm");
+
+    private void setDataInChart(BarChart barChart, DailySteps dailySteps) {
         List<String> xVals = new ArrayList<String>();
         List<BarEntry> yValue = new ArrayList<BarEntry>();
         for (int i = 0; i < dailySteps.getHourlySteps().length; i++) {
             yValue.add(new BarEntry(dailySteps.getHourlySteps()[i], i));
-            xVals.add(i+":00");
+            xVals.add(i + ":00");
         }
         barChart.setScaleMinima((.14f), 1f);
         BarDataSet dataSet = new BarDataSet(yValue, "");
@@ -192,8 +202,9 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         barChart.setData(data);
         barChart.invalidate();
     }
-    private void setDataInChart(LineChart lineChart, List<DailySteps> stepsList){
-        SimpleDateFormat sdf = new SimpleDateFormat("d'/'M");
+
+    private void setDataInChart(LineChart lineChart, List<DailySteps> stepsList) {
+        SimpleDateFormat sdf = new SimpleDateFormat("d'/'M", Locale.US);
         List<String> xVals = new ArrayList<String>();
         List<Entry> yValue = new ArrayList<Entry>();
 
@@ -223,11 +234,11 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         lineChart.invalidate();
     }
 
-    private void modifyChart(BarChart barChart){
+    private void modifyChart(BarChart barChart) {
         calendar.setCalendarData(new Date());
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         String day = dateFormat.format(new Date());
-        mTitleCalendarTextView.setText(new SimpleDateFormat("MMM").format(selectedDate)+day.split("-")[2]);
+        mTitleCalendarTextView.setText(new SimpleDateFormat("MMM", Locale.US).format(selectedDate) + day.split("-")[2]);
         barChart.setDescription("");
         barChart.getLegend().setEnabled(false);
         barChart.setOnChartValueSelectedListener(this);
@@ -245,11 +256,11 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         leftAxis.setLabelCount(3, true);
         leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
         leftAxis.setAxisMinValue(0.0f);
-        leftAxis.setValueFormatter(new YAxisValueFormatter(){
+        leftAxis.setValueFormatter(new YAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, YAxis yAxis) {
                 int resValue = (int) value;
-                return resValue+"";
+                return resValue + "";
             }
         });
         YAxis rightAxis = barChart.getAxisRight();
@@ -265,7 +276,8 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         xAxis.setTextSize(10f);
         xAxis.setTextColor(Color.BLACK);
     }
-    private void modifyChart(LineChart lineChart){
+
+    private void modifyChart(LineChart lineChart) {
         lineChart.setContentDescription("");
         lineChart.setDescription("");
         lineChart.setNoDataTextDescription("");
@@ -305,17 +317,17 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     }
 
     @OnClick(R.id.activities_activity_shadow_home_guide_view)
-    public void guideViewClick(){
+    public void guideViewClick() {
         ++guidePage;
         switch (guidePage) {
             case 2:
                 titleDec.setBackgroundResource(R.drawable.user_guide_bg);
-                showCalendar.setBackgroundDrawable(new BitmapDrawable());
+                showCalendar.setBackground(new BitmapDrawable());
                 activitiesGuide.setVisibility(View.VISIBLE);
                 titleGuide.setVisibility(View.GONE);
                 break;
             case 3:
-                titleDec.setBackgroundDrawable(new BitmapDrawable());
+                titleDec.setBackground(new BitmapDrawable());
                 guideBar.setBackgroundResource(R.drawable.user_guide_bg);
                 activitiesGuide.setVisibility(View.GONE);
                 barGuide.setVisibility(View.VISIBLE);
@@ -323,7 +335,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
             case 4:
                 barGuide.setVisibility(View.GONE);
                 hourlyBarChart.setBackgroundResource(R.drawable.user_guide_bg);
-                guideBar.setBackgroundDrawable(new BitmapDrawable());
+                guideBar.setBackground(new BitmapDrawable ());
                 chartGuideDec.setVisibility(View.VISIBLE);
                 break;
             case 5:
@@ -335,7 +347,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     }
 
     @OnClick(R.id.activities_activity_calendar_back_month)
-    public void mIvBackMonthClick(){
+    public void mIvBackMonthClick() {
         Date leftMouth = calendar.clickLeftMonth();
 //        mTitleCalendarTextView.setText(new SimpleDateFormat("MMM").format(leftMouth));
     }
@@ -359,8 +371,8 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
                 nextMonth.setVisibility(View.GONE);
                 backMonth.setVisibility(View.GONE);
                 calendarGroup.setVisibility(View.GONE);
-                mTitleCalendarTextView.setText(new SimpleDateFormat("MMM")
-                        .format(downDate)+new SimpleDateFormat("yyyy-MM-dd").format(downDate).split("-")[2]);
+                mTitleCalendarTextView.setText(new SimpleDateFormat("MMM", Locale.US)
+                        .format(downDate) + new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(downDate).split("-")[2]);
                 drawGraph();
             }
         });
@@ -368,21 +380,21 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
 
 
     @OnClick(R.id.activities_title_back)
-    public void backOnClick(){
-        if(isShowCalendar){
+    public void backOnClick() {
+        if (isShowCalendar) {
             calendarGroup.setVisibility(View.GONE);
             nextMonth.setVisibility(View.GONE);
             backMonth.setVisibility(View.GONE);
             isShowCalendar = false;
-        }else{
+        } else {
             finish();
         }
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK){
-            if(isShowCalendar){
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (isShowCalendar) {
                 calendarGroup.setVisibility(View.GONE);
                 nextMonth.setVisibility(View.GONE);
                 backMonth.setVisibility(View.GONE);
@@ -396,13 +408,25 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     @Override
     public void onStart() {
         super.onStart();
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
         EventBus.getDefault().register(this);
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
     }
 
     @Override
     public void onStop() {
         EventBus.getDefault().unregister(this);
         super.onStop();
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.disconnect();
     }
 
     @Subscribe
@@ -414,8 +438,8 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
                 userStepGoalTextView.setText(getResources().getString(R.string.user_step_goal)
                         + event.getGoal());
                 mProgressBar.setSmoothPercent(1.0f * event.getSteps() / event.getGoal());
-                SpUtils.putIntMethod(getApplicationContext(),CacheConstants.GOAL_STEP,event.getGoal());
-                SpUtils.putIntMethod(getApplicationContext(),CacheConstants.TODAY_STEP,event.getSteps());
+                SpUtils.putIntMethod(getApplicationContext(), CacheConstants.GOAL_STEP, event.getGoal());
+                SpUtils.putIntMethod(getApplicationContext(), CacheConstants.TODAY_STEP, event.getSteps());
             }
         });
     }
@@ -425,8 +449,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                if(event.getStatus() == BigSyncEvent.BIG_SYNC_EVENT.STOPPED)
-                {
+                if (event.getStatus() == BigSyncEvent.BIG_SYNC_EVENT.STOPPED) {
                     drawGraph();
                 }
             }
@@ -434,29 +457,28 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     }
 
     @Subscribe
-    public void onEvent(BLEBluetoothOffEvent event){
+    public void onEvent(BLEBluetoothOffEvent event) {
         showStateString(R.string.in_app_notification_bluetooth_disabled);
     }
+
     @Subscribe
-    public void onEvent(BLEConnectionStateChangedEvent event){
-        if(event.isConnected())
-        {
+    public void onEvent(BLEConnectionStateChangedEvent event) {
+        if (event.isConnected()) {
             showStateString(R.string.in_app_notification_found_watch);
-        }
-        else {
+        } else {
             showStateString(R.string.in_app_notification_watch_disconnected);
         }
     }
+
     @Subscribe
     public void onEvent(final BLESearchEvent event) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                if(event.getSearchEvent() == BLESearchEvent.SEARCH_EVENT.ON_SEARCHING)
-                {
-                    PermissionRequestDialogBuilder builder =new PermissionRequestDialogBuilder(ActivitiesActivity.this);
+                if (event.getSearchEvent() == BLESearchEvent.SEARCH_EVENT.ON_SEARCHING) {
+                    PermissionRequestDialogBuilder builder = new PermissionRequestDialogBuilder(ActivitiesActivity.this);
                     builder.addPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
-                    builder.askForPermission(ActivitiesActivity.this,1);
+                    builder.askForPermission(ActivitiesActivity.this, 1);
                     showStateString(R.string.in_app_notification_searching);
                 }
             }
@@ -472,12 +494,27 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     public void onNothingSelected() {
     }
 
-    public void showStateString(int resId)
-    {
-        Snackbar snackbar = Snackbar.make(((ViewGroup)findViewById(android.R.id.content)).getChildAt(0),"",Snackbar.LENGTH_LONG);
+    private void showStateString(int resId) {
+        Snackbar snackbar = Snackbar.make(((ViewGroup) findViewById(android.R.id.content)).getChildAt(0), "", Snackbar.LENGTH_LONG);
         TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
         tv.setTextColor(Color.WHITE);
         tv.setText(getString(resId));
         snackbar.show();
+    }
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("Activities Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
     }
 }

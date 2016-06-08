@@ -6,10 +6,9 @@ package com.dayton.drone.network;
 public class Constants {
 
     public interface  STATUS_CODE {
-        public final static int STATUS_SUCCESS  = 1;
-        public final static int STATUS_NOFOUND  = -1;
-        public final static int STATUS_NOAUTH   = -2;
-        public final static int STATUS_BADPARAM = -3;
+        int STATUS_SUCCESS  = 1;
+        int STATUS_NOFOUND  = -1;
+        int STATUS_NOAUTH   = -2;
+        int STATUS_BADPARAM = -3;
     }
-
 }

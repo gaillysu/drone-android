@@ -13,8 +13,8 @@ public class BigSyncEvent {
         STOPPED
     }
 
-    public final Date startSyncDate; // the big sync start date, end date is now()
-    public final BIG_SYNC_EVENT status;
+    private final Date startSyncDate; // the big sync start date, end date is now()
+    private final BIG_SYNC_EVENT status;
 
     public BigSyncEvent(Date startSyncDate, BIG_SYNC_EVENT status) {
         this.startSyncDate = startSyncDate;

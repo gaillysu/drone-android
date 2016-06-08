@@ -3,11 +3,12 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
-    <include layout="@layout/content_title_layout"></include>
+    <include layout="@layout/content_title_layout"/>
+
     <ListView
         android:id="@+id/activity_gallery_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@null"
-        android:background="@android:color/white"></ListView>
+        android:background="@android:color/white"/>
 </LinearLayout>

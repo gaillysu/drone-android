@@ -17,7 +17,6 @@ public class SlideView extends LinearLayout {
 
     private static final String TAG = "SlideView";
 
-    private Context mContext;
     private LinearLayout mViewContent;
     private RelativeLayout mHolder;
     private Scroller mScroller;
@@ -30,15 +29,15 @@ public class SlideView extends LinearLayout {
     private static final int TAN = 2;
 
     public interface OnSlideListener {
-        public static final int SLIDE_STATUS_OFF = 0;
-        public static final int SLIDE_STATUS_START_SCROLL = 1;
-        public static final int SLIDE_STATUS_ON = 2;
+        int SLIDE_STATUS_OFF = 0;
+        int SLIDE_STATUS_START_SCROLL = 1;
+        int SLIDE_STATUS_ON = 2;
 
         /**
          * @param view current SlideView
          * @param status SLIDE_STATUS_ON or SLIDE_STATUS_OFF
          */
-        public void onSlide(View view, int status);
+        void onSlide(View view, int status);
     }
 
     public SlideView(Context context) {
@@ -52,11 +51,10 @@ public class SlideView extends LinearLayout {
     }
 
     private void initView() {
-        mContext = getContext();
-        mScroller = new Scroller(mContext);
+        mScroller = new Scroller(getContext());
 
         setOrientation(LinearLayout.HORIZONTAL);
-        View.inflate(mContext, R.layout.slide_view_merge, this);
+        View.inflate(getContext(), R.layout.slide_view_merge, this);
         mViewContent = (LinearLayout) findViewById(R.id.view_content);
         mHolderWidth = Math.round(TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP, mHolderWidth, getResources()

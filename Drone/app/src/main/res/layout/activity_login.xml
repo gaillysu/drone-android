@@ -5,7 +5,7 @@
               android:background="@android:color/white"
               android:orientation="vertical">
 
-    <include layout="@layout/registe_control_button"/>
+    <include layout="@layout/register_control_button"/>
     <ImageView
         android:id="@+id/register_drone_logo"
         android:layout_width="match_parent"
@@ -18,12 +18,11 @@
         android:id="@+id/register_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_marginLeft="60dp"
         android:layout_marginRight="60dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="50dp"
-        android:background="@drawable/registe_edit_bg"
+        android:background="@drawable/register_edit_bg"
         android:orientation="vertical"
         >
 
@@ -33,10 +32,11 @@
             android:layout_height="50dp"
             android:background="@null"
             android:textColor="#88000000"
-            android:hint="Email"
+            android:hint="@string/activity_email"
             android:textColorHint="#88000000"
             android:inputType="textWebEmailAddress"
-            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
             android:textSize="20sp"/>
 
         <View
@@ -49,11 +49,12 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@null"
-            android:hint="Password"
+            android:hint="@string/login_password"
             android:textColor="#88000000"
             android:textColorHint="#88000000"
             android:inputType="textPassword"
-            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
             android:textSize="20sp"/>
     </LinearLayout>
     <Button
@@ -81,7 +82,6 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/registe_tv"
         android:layout_marginTop="20dp"
         android:layout_gravity="center_horizontal"
         >
@@ -90,20 +90,22 @@
             android:id="@+id/google_account_login"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_marginEnd="15dp"
             android:src="@mipmap/login_google_icon"/>
 
         <ImageView
             android:id="@+id/face_book_account_login"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginLeft="60dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
             android:src="@mipmap/login_facebook_icon"/>
 
         <ImageView
             android:id="@+id/Twitter_account_login"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginLeft="60dp"
+            android:layout_marginStart="15dp"
             android:src="@mipmap/login_twitter_icon"/>
     </LinearLayout>
 </LinearLayout>

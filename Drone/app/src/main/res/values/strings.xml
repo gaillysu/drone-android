@@ -15,14 +15,16 @@
     <string name="change_password_error">Passwords don\'t match with each other.</string>
     <string name="register_email"> Register with your email</string>
     <string name="third_party_login">Or register with your social media</string>
-    <string name="tips_user_account_password">mail must not be empty</string>
+
+    <string name="tips_user_account_password">Email must not be empty</string>
     <string name="tips_user_password">Password must not be empty</string>
+
     <string name="user_account_error">Account of password is error</string>
     <string name="user_info_clue">Tell us little bit about your self.</string>
     <string name="user_info_share">We promissed we will never share this info</string>
     <string name="user_sex_female">Female</string>
     <string name="user_sex_male">Male</string>
-    <string name="user_info_brithday">Birth</string>
+    <string name="user_info_birthday">Birth</string>
     <string name="user_info_height">Height</string>
     <string name="user_info_weight">Weight</string>
     <string name="user_device_select">Setting up your device.</string>
@@ -42,47 +44,50 @@
     <string name="retry_connecting">Retry</string>
     <string name="watch_name">Drone Watch</string>
     <string name="watch_version">version 1.0.3</string>
-    <string name="watch_buletooth_id">IMEI 156420156233</string>
+    <string name="watch_bluetooth_id">IMEI 156420156233</string>
     <string name="connecting_fail">Fail</string>
     <string name="start_smart_watch">Open</string>
+
     <string name="home_guide_clock">WORLD\n\tCLOCK</string>
-    <string name="home_guide_analysis">保证ANALYISIS</string>
+    <string name="home_guide_analysis">ANALYSIS</string>
     <string name="home_guide_setting">WATCH\n\tSETTING</string>
     <string name="home_guide_profile">Profile</string>
     <string name="home_title_back_text">Back</string>
-
+    <string name="home_content_activity_progress_middle_dec">SLEEP</string>
     <string name="home_title_save_text">Save</string>
+
     <string name="profile_title_back_text">Cancel</string>
+
     <string name="fragment_home_title_calories">CALORIES</string>
     <string name="fragment_home_title_active_time">ACTIVE TIME</string>
     <string name="fragment_home_title_kilometer">KM</string>
-    <string name="fragment_home_guide_see_history_dec">See your previous activies</string>
+    <string name="fragment_home_guide_see_history_dec">See your previous activities</string>
     <string name="fragment_home_guide_see_data_dec">Here is your data from Drone</string>
     <string name="fragment_home_guide_meter_dec">Click the dashboard to see floors</string>
     <string name="fragment_home_guide_histogram_dec">The bar graph will presenting your activities durations</string>
-    <string name="home_content_activity_progress_middle_dec">SLEEP</string>
-    <string name="world_clock_title_text">World Clock</string>
+
     <string name="choose_activity_title_choose_city_tv">Choose a City</string>
     <string name="choose_activity_title_cancel">Cancel</string>
     <string name="add_city_toast_text">World clock is limited by 5 clocks</string>
 
-
-
     <string name="no_search_result">Did not find the city</string>
+
     <string name="gallery_activity_title">GALLERY</string>
+    <string name="world_clock_title_text">World Clock</string>
     <string name="world_clock_Yesterday_tv">Yesterday</string>
     <string name="world_clock_today_tv">Today</string>
     <string name="world_clock_Tomorrow_tv">Tomorrow</string>
     <string name="world_clock_city_time_difference_behind">hours behind</string>
     <string name="world_clock_city_time_difference_ahead">hours ahead</string>
+    <string name="world_add_city_prompt">Add up to five cities</string>
+    <string name="world_clock_search_city_hint">Search</string>
+
     <string name="profile_activity_user_goal">GOAL</string>
     <string name="profile_bottom_tv">GOAl NOTIFICATION </string>
     <string name="profile_edit_prompt">edit</string>
     <string name="profile_user_weight_unit">Kg</string>
     <string name="profile_user_height_unit">cm</string>
     <string name="profile_edit_email_prompt">Mailbox cannot be edited</string>
-    <string name="world_add_city_prompt">Add up to five cities</string>
-    <string name="world_clock_search_city_hint">Search</string>
     <string name="profile_prompt_user_edit">Enter the space, the success of the editorial department</string>
     <string name="profile_email_format_error_prompt">Mailbox format is not correct</string>
     <string name="profile_user_height_error">illegal input</string>
@@ -94,24 +99,50 @@
     <string name="profile_save_text_dec">No Watch\nConnected</string>
     <string name="profile_birthday_dec">Birthday :</string>
 
-
     <string name="add_watch_activity_watch_dec_is_connected">Not Connected</string>
     <string name="add_watch_activity_content_contacts_notification">Contacts Notifications</string>
     <string name="add_watch_activity_content_my_notification">My Notifications</string>
     <string name="add_watch_activity_content_forget_watch">Forget This Watch</string>
-
-    <string name="add_watch_activity_watch_dec">DRONE Precision Timepieces...</string>
+    <string name="add_watch_activity_watch_dec">DRONE Precision Timepieces…</string>
     <string name="add_watch_activity_prompt_user">HOLD YOUR DRONE !</string>
     <string name="add_watch_activity_prompt_user_one">It appears that you haven\'t </string>
     <string name="add_watch_activity_prompt_user_two">connected a device yet.</string>
     <string name="add_watch_activity_prompt_user_three">Perhaps you\'d like to</string>
-    <string name="add_watch_activity_prompt_user_four">purchase one ...</string>
+    <string name="add_watch_activity_prompt_user_four">purchase one…</string>
     <string name="add_watch_activity_shop_address">http://www.hsn.com/shop/drone-\npresented-by-shaquille-oneal/13040</string>
     <string name="add_watch_activity_shop_address_path">http://www.hsn.com/shop/drone-presented-by-shaquille-oneal/13040</string>
+    <string name="add_watch_connected">Connected</string>
+    <string name="add_watch_disconnected">Disconnected</string>
+    <string name="add_watch_damaged">Damaged</string>
+    <string name="add_watch_calculating">Calculating</string>
+    <string name="add_watch_charging">Charging</string>
 
     <string name="in_app_notification_found_watch">Found watch!</string>
     <string name="in_app_notification_bluetooth_disabled">Bluetooth is disabled. Enable Bluetooth.</string>
     <string name="in_app_notification_watch_disconnected">Watch disconnected.</string>
-    <string name="in_app_notification_searching">Searching for watch...</string>
+    <string name="in_app_notification_searching">Searching for watch…</string>
 
+    <string name="show_watch_failed_searching">Failed searching for devices.</string>
+    <string name="show_watch_connected">Connected</string>
+
+    <string name="login_password">Password</string>
+    <string name="activity_email">Email</string>
+
+    <string name="register_table_email">Email</string>
+    <string name="register_table_password">Password</string>
+    <string name="add_watch_watches">Watches</string>
+    <string name="activities_last_week">LAST WEEK</string>
+    <string name="activities_this_week">THIS WEEK</string>
+    <string name="activities_last_30_days">LAST 30 DAYS</string>
+    <string name="activities_steps">STEPS</string>
+    <string name="activities__0">0</string>
+    <string name="notifications_the_idea">The Idea</string>
+    <string name="notifications_explanation">Don\'t want to be notified by everyone on your\nwatch? Just add the contacts you want to get\nnotified by pressing on the plus button!</string>
+    <string name="notifications_explenation_2">Getting annoyed by an added contact? Just swipe to the\nright to delete him or her!</string>
+    <string name="watch_info_connection_state">Connection state:</string>
+    <string name="watch_info_version">Version:</string>
+    <string name="watch_info_battery_state">Battery state:</string>
+    <string name="notifications_contacts_notifications">Contacts Notifications</string>
+    <string name="notifications_notifications">Notifications</string>
+    <string name="token">ZQpFYPBMqFbUQq8E99FztS2x6yQ2v1Ei</string>
 </resources>

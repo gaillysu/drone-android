@@ -20,13 +20,12 @@ import butterknife.ButterKnife;
  * Created by boy on 2016/4/19.
  */
 public class SelectDeviceActivity extends BaseActivity {
-    @Bind(R.id.registe_back_iv)
+    @Bind(R.id.register_back_iv)
     ImageButton titleBack;
-    @Bind(R.id.registe_next_iv)
+    @Bind(R.id.register_next_iv)
     ImageButton titleNext;
     @Bind(R.id.select_user_device)
-    GridView mShowWatchGridView;
-    private SelectDeviceGridViewAdapter mGridViewAdapter;
+    GridView showWatchGridView;
     private int type;
     private int loginType = 2 >> 4;
     private int addWatchType = 5<<3;
@@ -50,10 +49,10 @@ public class SelectDeviceActivity extends BaseActivity {
 
         titleNext.setVisibility(View.GONE);
         watchNameArray = this.getResources().getStringArray(R.array.user_select_dec_arr);
-        mGridViewAdapter = new SelectDeviceGridViewAdapter(droneImagesIdArray, watchNameArray, this);
-        mShowWatchGridView.setAdapter(mGridViewAdapter);
+        SelectDeviceGridViewAdapter gridViewAdapter = new SelectDeviceGridViewAdapter(droneImagesIdArray, watchNameArray, this);
+        showWatchGridView.setAdapter(gridViewAdapter);
 
-        mShowWatchGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        showWatchGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 int iconId = droneImagesIdArray[position];

@@ -6,7 +6,7 @@
               android:orientation="vertical">
 
     <include
-        layout="@layout/registe_control_button"
+        layout="@layout/register_control_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"/>

@@ -2,6 +2,7 @@ package com.dayton.drone.network;
 
 import android.content.Context;
 
+import com.dayton.drone.R;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.request.SpiceRequest;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -12,14 +13,13 @@ import com.octo.android.robospice.request.listener.RequestListener;
 public class RetrofitManager {
     private Context context;
     private SpiceManager spiceManager;
-
     public  RetrofitManager(Context context){
         this.context = context;
         spiceManager = new SpiceManager(RetrofitService.class);
         startSpiceManager();
     }
 
-    public void startSpiceManager()
+    private void startSpiceManager()
     {
         if(!spiceManager.isStarted()) {
             spiceManager.start(context);
@@ -36,6 +36,6 @@ public class RetrofitManager {
         spiceManager.execute(request, listener);
     }
     public String getAccessToken(){
-        return "ZQpFYPBMqFbUQq8E99FztS2x6yQ2v1Ei";
+        return context.getString(R.string.token);
     }
 }

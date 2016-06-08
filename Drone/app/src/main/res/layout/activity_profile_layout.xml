@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/content_title_layout"></include>
+        <include layout="@layout/content_title_layout"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -59,8 +59,7 @@
                     android:id="@+id/profile_activity_user_fist_name"
                     style="@style/profile_activity_text_style"
                     android:maxLength="20"
-                    android:maxLines="1"
-                    android:text="sdaf"/>
+                    android:maxLines="1" />
 
                 <ImageButton
                     android:id="@+id/profile_activity_edit_fist_name_ib"
@@ -85,8 +84,7 @@
 
                 <TextView
                     android:id="@+id/profile_activity_user_email_account"
-                    style="@style/profile_activity_text_style"
-                    android:text="sdaf"/>
+                    style="@style/profile_activity_text_style"/>
 
                 <ImageButton
                     android:id="@+id/profile_activity_edit_email_ib"
@@ -110,10 +108,8 @@
                 <TextView
                     android:id="@+id/profile_activity_user_height"
                     style="@style/profile_activity_text_style"
-                    android:inputType="number"
                     android:maxLength="5"
-                    android:maxLines="1"
-                    android:text="sdaf"/>
+                    android:maxLines="1" />
 
                 <ImageButton
                     android:id="@+id/profile_activity_edit_user_height"
@@ -137,10 +133,8 @@
                 <TextView
                     android:id="@+id/profile_activity_user_weight"
                     style="@style/profile_activity_text_style"
-                    android:inputType="numberDecimal"
                     android:maxLength="7"
-                    android:maxLines="1"
-                    android:text="sdaf"/>
+                    android:maxLines="1" />
 
                 <ImageButton
                     android:id="@+id/profile_activity_edit_user_weight"
@@ -166,7 +160,7 @@
                     android:id="@+id/profile_activity_user_goal"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="24dp"
+                    android:layout_marginStart="24dp"
                     android:layout_weight="1"
                     android:text="@string/profile_activity_user_goal"
                     android:textColor="@color/home_list_adapter_item_tv_color"
@@ -177,7 +171,7 @@
                     style="@style/profile_activity_text_style"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginEnd="20dp"
                     android:layout_weight="1"
                     android:inputType="number"
                     android:maxLength="7"
@@ -205,8 +199,7 @@
                 android:text="@string/profile_birthday_dec"/>
             <TextView
                 android:id="@+id/profile_activity_user_birthday"
-                style="@style/profile_activity_text_style"
-                android:text="sdaf"/>
+                style="@style/profile_activity_text_style" />
 
             <ImageButton
                 android:id="@+id/profile_activity_edit_user_birthday"

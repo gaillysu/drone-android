@@ -37,6 +37,6 @@ public class ActivityPacket extends DronePacket {
                 getPackets().get(0).getRawData()[3],
                 getPackets().get(0).getRawData()[4],
                 getPackets().get(0).getRawData()[5]});
-        return new Date(date*1000l);
+        return new Date(date* 1000L);
     }
 }

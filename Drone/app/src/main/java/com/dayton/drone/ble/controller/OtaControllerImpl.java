@@ -11,10 +11,8 @@ import net.medcorp.library.ble.util.Constants;
  */
 public class OtaControllerImpl implements OtaController {
 
-    private ApplicationModel applicationModel;
     public OtaControllerImpl(ApplicationModel applicationModel)
     {
-        this.applicationModel = applicationModel;
     }
 
     @Override

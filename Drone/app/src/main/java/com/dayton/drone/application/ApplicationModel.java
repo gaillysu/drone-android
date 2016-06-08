@@ -2,42 +2,30 @@ package com.dayton.drone.application;
 
 import android.app.Application;
 
-import com.dayton.drone.ble.controller.OtaControllerImpl;
 import com.dayton.drone.ble.controller.SyncController;
 import com.dayton.drone.ble.controller.SyncControllerImpl;
 import com.dayton.drone.cloud.SyncActivityManager;
 import com.dayton.drone.database.entry.NotificationDatabaseHelper;
-import com.dayton.drone.database.entry.SleepDatabaseHelper;
 import com.dayton.drone.database.entry.StepsDatabaseHelper;
 import com.dayton.drone.database.entry.UserDatabaseHelper;
 import com.dayton.drone.database.entry.WatchesDatabaseHelper;
 import com.dayton.drone.database.entry.WorldClockDatabaseHelper;
-import com.dayton.drone.event.BigSyncEvent;
 import com.dayton.drone.model.User;
 import com.dayton.drone.network.RetrofitManager;
-import com.dayton.drone.utils.Common;
 
-import net.medcorp.library.ble.controller.OtaController;
 import net.medcorp.library.ble.util.Optional;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-
-import java.util.Date;
 
 /**
  * Created by karl-john on 18/3/16.
  */
 public class ApplicationModel extends Application {
     private SyncController syncController;
-    private OtaController otaController;
     private RetrofitManager retrofitManager;
     private SyncActivityManager syncActivityManager;
     private User   user;
     private UserDatabaseHelper userDatabaseHelper;
     private WorldClockDatabaseHelper worldClockDatabaseHelper;
     private StepsDatabaseHelper stepsDatabaseHelper;
-    private SleepDatabaseHelper sleepDatabaseHelper;
     private NotificationDatabaseHelper notificationDatabaseHelper;
     private WatchesDatabaseHelper watchesDatabaseHelper;
 
@@ -46,13 +34,11 @@ public class ApplicationModel extends Application {
     {
         super.onCreate();
         syncController = new SyncControllerImpl(this);
-        otaController  = new OtaControllerImpl(this);
         retrofitManager = new RetrofitManager(this);
         syncActivityManager = new SyncActivityManager(this);
         userDatabaseHelper = new UserDatabaseHelper(this);
         worldClockDatabaseHelper = new WorldClockDatabaseHelper(this);
         stepsDatabaseHelper = new StepsDatabaseHelper(this);
-        sleepDatabaseHelper = new SleepDatabaseHelper(this);
         notificationDatabaseHelper = new NotificationDatabaseHelper(this);
         watchesDatabaseHelper = new WatchesDatabaseHelper(this);
         Optional<User> loginUser = userDatabaseHelper.getLoginUser();
@@ -67,10 +53,6 @@ public class ApplicationModel extends Application {
 
     public SyncController getSyncController() {
         return syncController;
-    }
-
-    public OtaController getOtaController() {
-        return otaController;
     }
 
     public RetrofitManager getRetrofitManager(){

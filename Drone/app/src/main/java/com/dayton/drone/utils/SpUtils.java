@@ -13,7 +13,7 @@ public class SpUtils {
                 (CacheConstants.SP_Name,Context.MODE_PRIVATE);
        SharedPreferences.Editor editor =  sharedPreferences.edit();
         editor.putBoolean(name,values);
-        editor.commit();
+        editor.apply();
     }
 
     public static boolean getBoolean(Context context,String name, boolean defaultValue){
@@ -26,7 +26,7 @@ public class SpUtils {
         SharedPreferences sharedPreferences = context.getSharedPreferences(CacheConstants.SP_Name,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor =  sharedPreferences.edit();
         editor.putInt(goal,values);
-        editor.commit();
+        editor.apply();
     }
 
     public static int getIntMethod(Context context,String name, int defaultValues){

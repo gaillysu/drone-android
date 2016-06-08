@@ -20,7 +20,6 @@ import com.dayton.drone.adapter.SortAdapter;
 import com.dayton.drone.database.entry.WorldClockDatabaseHelper;
 import com.dayton.drone.model.SortModel;
 import com.dayton.drone.model.WorldClock;
-import com.dayton.drone.view.CharacterParser;
 import com.dayton.drone.view.PinyinComparator;
 import com.dayton.drone.view.SideBar;
 
@@ -52,10 +51,8 @@ public class ChooseCityActivity extends BaseActivity {
 
     private boolean isChooseCity = false;
     private List<WorldClock> worldClockDataList;
-    private WorldClockDatabaseHelper worldClockDatabase;
     //    private ChooseCityAdapter cityAdapter;
     private SortAdapter adapter;
-    private CharacterParser characterParser;
     private List<SortModel> SourceDateList;
     private PinyinComparator pinyinComparator;
     private List<SortModel> searchResult;
@@ -67,10 +64,9 @@ public class ChooseCityActivity extends BaseActivity {
         setContentView(R.layout.activity_search_add_city_layout);
         ButterKnife.bind(this);
 
-        worldClockDatabase = getModel().getWorldClockDatabaseHelper();
+        WorldClockDatabaseHelper worldClockDatabase = getModel().getWorldClockDatabaseHelper();
         worldClockDataList = worldClockDatabase.getAll();
         pinyinComparator = new PinyinComparator();
-        characterParser = CharacterParser.getInstance();
         cityListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long Id) {
@@ -105,7 +101,7 @@ public class ChooseCityActivity extends BaseActivity {
     @OnClick(R.id.choose_activity_cancel_bt)
     public void cancelClick() {
         isChooseCity = false;
-        back(isChooseCity);
+        back(false);
     }
 
 
@@ -149,7 +145,7 @@ public class ChooseCityActivity extends BaseActivity {
     }
 
 
-    TextWatcher myTextWatcher = new TextWatcher() {
+    private TextWatcher myTextWatcher = new TextWatcher() {
 
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

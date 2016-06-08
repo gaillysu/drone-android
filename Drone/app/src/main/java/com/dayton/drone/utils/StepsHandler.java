@@ -52,7 +52,7 @@ public class StepsHandler {
     {
         List<DailySteps> dailyStepsList = new ArrayList<>();
         CanlendarWeek canlendarWeek =  Common.getThisweek(date);
-        for(long start = canlendarWeek.getWeekStart().getTime();start<=canlendarWeek.getWeekEnd().getTime();start+=Common.ONEDAY)
+        for(long start = canlendarWeek.getWeekStart().getTime();start<=canlendarWeek.getWeekEnd().getTime();start+=Common.ONE_DAY)
         {
             dailyStepsList.add(getDailySteps(new Date(start)));
         }
@@ -63,7 +63,7 @@ public class StepsHandler {
     {
         List<DailySteps> dailyStepsList = new ArrayList<>();
         CanlendarWeek canlendarWeek =  Common.getLastweek(date);
-        for(long start = canlendarWeek.getWeekStart().getTime();start<=canlendarWeek.getWeekEnd().getTime();start+=Common.ONEDAY)
+        for(long start = canlendarWeek.getWeekStart().getTime();start<=canlendarWeek.getWeekEnd().getTime();start+=Common.ONE_DAY)
         {
             dailyStepsList.add(getDailySteps(new Date(start)));
         }
@@ -74,7 +74,7 @@ public class StepsHandler {
     {
         List<DailySteps> dailyStepsList = new ArrayList<>();
         CanlendarMonth canlendarMonth = Common.getLastMonth(date);
-        for(long start = canlendarMonth.getMonthStart().getTime();start<=canlendarMonth.getMonthEnd().getTime();start+=Common.ONEDAY)
+        for(long start = canlendarMonth.getMonthStart().getTime();start<=canlendarMonth.getMonthEnd().getTime();start+=Common.ONE_DAY)
         {
             dailyStepsList.add(getDailySteps(new Date(start)));
         }

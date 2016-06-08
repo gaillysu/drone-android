@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_below="@id/activity_addwatch_header_layout"
+    android:layout_below="@id/activity_add_watch_header_layout"
     android:background="@android:color/white"
     android:orientation="vertical">
 
@@ -42,18 +42,18 @@
 
                 <TextView
                  style="@style/add_watch_activity_state_dec_text_style"
-                    android:text="Battery state:"
+                    android:text="@string/watch_info_battery_state"
 
                     />
 
                 <TextView
                     style="@style/add_watch_activity_state_dec_text_style"
-                    android:text="Version:"
+                    android:text="@string/watch_info_version"
                     />
 
                 <TextView
                     style="@style/add_watch_activity_state_dec_text_style"
-                    android:text="Connection state:"
+                    android:text="@string/watch_info_connection_state"
 
 
                     />
@@ -62,7 +62,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="30dp"
                 android:orientation="vertical">
 
@@ -73,7 +73,7 @@
                     android:layout_marginTop="5dp"
                     android:text="@string/add_watch_activity_watch_dec_is_connected"
                     android:textColor="@android:color/holo_blue_light"
-                    android:textSize="10sp"
+                    android:textSize="12sp"
                     />
 
                 <TextView
@@ -83,7 +83,7 @@
                     android:layout_marginTop="5dp"
                     android:text="@string/add_watch_activity_watch_dec_is_connected"
                     android:textColor="@android:color/holo_blue_light"
-                    android:textSize="10sp"
+                    android:textSize="12sp"
                     />
 
                 <TextView
@@ -93,7 +93,7 @@
                     android:layout_marginTop="5dp"
                     android:text="@string/add_watch_activity_watch_dec_is_connected"
                     android:textColor="@android:color/holo_blue_light"
-                    android:textSize="10sp"
+                    android:textSize="12sp"
                     />
             </LinearLayout>
         </LinearLayout>

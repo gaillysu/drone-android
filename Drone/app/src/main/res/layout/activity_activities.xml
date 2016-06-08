@@ -20,17 +20,11 @@
 
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/activities_include_title">
+                android:layout_height="wrap_content">
 
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -43,7 +37,7 @@
                             <TextView
                                 android:id="@+id/activities_guide_dec_actvies"
                                 style="@style/home_content_activity_guide_text_style"
-                                android:layout_gravity="right"
+                                android:layout_gravity="end"
                                 android:background="@drawable/tip_up_icon"
                                 android:gravity="center"
                                 android:padding="5dp"
@@ -78,14 +72,14 @@
                                     <TextView
                                         android:id="@+id/activities_progress_middle_dec"
                                         style="@style/home_content_activity_progress_middle_text_style"
-                                        android:text="STEPS"
+                                        android:text="@string/activities_steps"
                                         android:textColor="@color/home_content_text_color"
                                         />
 
                                     <TextView
                                         android:id="@+id/activities_progress_middle_tv"
                                         style="@style/home_content_activity_progress_middle_text_style"
-                                        android:text="0"
+                                        android:text="@string/activities__0"
                                         android:textColor="@color/user_info_sex_bg"
                                         />
 
@@ -100,7 +94,7 @@
                             <TextView
                                 android:id="@+id/activities_guide_dec_bar"
                                 style="@style/home_content_activity_guide_text_style"
-                                android:layout_gravity="right"
+                                android:layout_gravity="end"
                                 android:background="@drawable/tip_up_icon"
                                 android:gravity="center"
                                 android:padding="5dp"
@@ -111,8 +105,8 @@
                             <TextView
                                 android:id="@+id/activities_guide_dec_chart"
                                 style="@style/home_content_activity_guide_text_style"
-                                android:layout_gravity="right"
-                                android:layout_marginLeft="150dp"
+                                android:layout_gravity="end"
+                                android:layout_marginStart="150dp"
                                 android:background="@drawable/tip_down_icon"
                                 android:gravity="center"
                                 android:paddingBottom="25dp"
@@ -139,7 +133,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="20dp"
-                            android:text="THIS WEEK"
+                            android:text="@string/activities_this_week"
                             android:textColor="@android:color/black"
                             android:textSize="20sp"/>
 
@@ -160,7 +154,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="20dp"
-                            android:text="LAST WEEK"
+                            android:text="@string/activities_last_week"
                             android:textColor="@android:color/black"
                             android:textSize="20sp"/>
 
@@ -182,7 +176,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="20dp"
-                            android:text="LAST 30 DAYS"
+                            android:text="@string/activities_last_30_days"
                             android:textColor="@android:color/black"
                             android:textSize="20sp"/>
 
@@ -196,7 +190,6 @@
                             android:background="@android:color/white"
                             >
                         </com.github.mikephil.charting.charts.LineChart>
-                    </LinearLayout>
                 </FrameLayout>
             </ScrollView>
             <LinearLayout
@@ -219,7 +212,7 @@
         <TextView
             android:id="@+id/activities_guide_title_dec"
             style="@style/home_content_activity_guide_text_style"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_below="@id/activities_include_title"
             android:background="@drawable/tip_up_icon"
             android:gravity="center"

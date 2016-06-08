@@ -30,7 +30,7 @@ public class LoginActivity extends BaseActivity {
     EditText ed_account;
     @Bind(R.id.register_edit_password_ed)
     EditText ed_password;
-    @Bind(R.id.registe_next_iv)
+    @Bind(R.id.register_next_iv)
     ImageButton nextImageButton;
 
     @Override
@@ -41,7 +41,7 @@ public class LoginActivity extends BaseActivity {
         nextImageButton.setVisibility(View.GONE);
     }
 
-    @OnClick(R.id.registe_back_iv)
+    @OnClick(R.id.register_back_iv)
     public void back(){
         startActivity(WelcomeActivity.class);
         getModel().getUser().setUserIsLogin(false);
