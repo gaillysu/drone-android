@@ -23,7 +23,7 @@ public class ForgetPasswordActivity extends BaseActivity {
 
     @Bind(R.id.forget_activity_edit_change_password_email_et)
     EditText emailAddressEdit;
-    @Bind(R.id.registe_next_iv)
+    @Bind(R.id.register_back_iv)
     ImageButton nextPageImageButton;
 
     @Override
@@ -59,7 +59,7 @@ public class ForgetPasswordActivity extends BaseActivity {
         return true;
     }
 
-    @OnClick(R.id.registe_back_iv)
+    @OnClick(R.id.register_back_iv)
     public void backLOginPage() {
         startActivity(WelcomeActivity.class);
         finish();

@@ -18,10 +18,12 @@ import butterknife.OnClick;
  */
 public class ChangePasswordActivity extends BaseActivity {
 
-    @Bind(R.id.registe_next_iv)
+    @Bind(R.id.register_next_iv)
     ImageButton nextButton;
+
     @Bind(R.id.change_password_new_password)
     EditText firstInputPasswordEditText;
+
     @Bind(R.id.repeat_edit_password_ed)
     EditText repeatPasswordEditText;
 
@@ -33,7 +35,7 @@ public class ChangePasswordActivity extends BaseActivity {
         nextButton.setVisibility(View.GONE);
     }
 
-    @OnClick(R.id.registe_back_iv)
+    @OnClick(R.id.register_back_iv)
     public void backClick() {
         startActivity(ForgetPasswordActivity.class);
         finish();
