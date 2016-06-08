@@ -88,7 +88,7 @@ public class ShowWatchActivity extends BaseActivity  {
                 runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    selectConnectingStatus.setText("Fail");
+                    selectConnectingStatus.setText(R.string.show_watch_failed_searching);
                     retryConnecting_bt.setVisibility(View.VISIBLE);
                 }
             });
@@ -117,7 +117,7 @@ public class ShowWatchActivity extends BaseActivity  {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    selectConnectingStatus.setText("Connected");
+                    selectConnectingStatus.setText(R.string.show_watch_connected);
                     watchName.setVisibility(View.VISIBLE);
                     watchVersion.setVisibility(View.VISIBLE);
                     buletoothID.setVisibility(View.VISIBLE);

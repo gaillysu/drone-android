@@ -28,7 +28,6 @@ public class HomeActivity extends BaseActivity {
     ListView homeMenuListView;
 
     private List<MenuBean> listData;
-    private int myRequestCode = 2>>5;
 
     private int[] homeMenuIconArray = {R.mipmap.mainmenu_activity_icon
             , R.mipmap.mainmenu_worldclock_icon};
@@ -36,7 +35,6 @@ public class HomeActivity extends BaseActivity {
     private String[] homeMenuTextArray;
     private final String activities = "ACTIVITIES";
     private final String clock = "WORLD\nCLOCK";
-    private MyHomeMenuAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +43,7 @@ public class HomeActivity extends BaseActivity {
         ButterKnife.bind(this);
         getModel().getUser().setUserIsLogin(true);
         initData();
-        adapter = new MyHomeMenuAdapter(listData, this);
+        MyHomeMenuAdapter adapter = new MyHomeMenuAdapter(listData, this);
         homeMenuListView.setAdapter(adapter);
         homeMenuListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -99,6 +97,7 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        int myRequestCode = 2 >> 5;
         if (resultCode == myRequestCode) {
             boolean flag = data.getBooleanExtra("logOut", false);
             if (flag) {

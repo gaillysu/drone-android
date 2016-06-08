@@ -115,8 +115,7 @@ public class UserDatabaseHelper implements iEntryDatabaseHelper<User> {
     // find all
     @Override
     public List<Optional<User>> getAll(String userId) {
-        List<Optional<User>> userList = get(userId);
-        return userList;
+        return get(userId);
     }
 
     // convert list

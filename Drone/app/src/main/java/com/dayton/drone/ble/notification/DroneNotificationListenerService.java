@@ -1,7 +1,6 @@
 package com.dayton.drone.ble.notification;
 
 import android.app.AlertDialog;
-import android.app.Application;
 import android.app.Notification;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -27,8 +26,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by med on 16/4/25.
@@ -37,10 +34,10 @@ import java.util.TimerTask;
  * it will auto start when received a system notification
  */
 public class DroneNotificationListenerService extends NotificationListenerService  {
-    final private String TAG = DroneNotificationListenerService.class.getName();
-    final static int TIME_BETWEEN_TWO_NOTIFS = 5000;
-    static long lastNotificationTimeStamps = 0;
-    static Optional<BLERequestData> pendingBLERequestData = new Optional<>();
+    private final String TAG = DroneNotificationListenerService.class.getName();
+    private final static int TIME_BETWEEN_TWO_NOTIFS = 5000;
+    private static long lastNotificationTimeStamps = 0;
+    private static Optional<BLERequestData> pendingBLERequestData = new Optional<>();
 
     private ApplicationModel application;
 
@@ -121,12 +118,7 @@ public class DroneNotificationListenerService extends NotificationListenerServic
     public void onNotificationRemoved(StatusBarNotification sbn) {
     }
 
-
-    /**
-     * popup a dialog to let user enable the app access system notification
-     * @param ctx
-     */
-    public static void getNotificationAccessPermission(final Context ctx) {
+    private static void getNotificationAccessPermission(final Context ctx) {
         ContentResolver contentResolver = ctx.getContentResolver();
         String enabledNotificationListeners = Settings.Secure.getString(contentResolver, "enabled_notification_listeners");
         String packageName = ctx.getPackageName();

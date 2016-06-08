@@ -72,7 +72,7 @@ public class SideBar extends View {
 
 		switch (action) {
 		case MotionEvent.ACTION_UP:
-			setBackgroundDrawable(new ColorDrawable(0x00000000));
+			setBackground(new ColorDrawable(0x00000000));
 			choose = -1;//
 			invalidate();
 			if (mTextDialog != null) {
@@ -106,7 +106,7 @@ public class SideBar extends View {
 	}
 
 	public interface OnTouchingLetterChangedListener {
-		public void onTouchingLetterChanged(String s);
+		 void onTouchingLetterChanged(String s);
 	}
 
 }

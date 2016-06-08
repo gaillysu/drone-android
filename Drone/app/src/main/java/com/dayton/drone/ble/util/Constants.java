@@ -15,7 +15,7 @@ public class Constants {
         SubscribedToNotifications(7),
         SystemReset(8);
         private int status;
-        private SystemStatus(int status) {this.status = status;}
+        SystemStatus(int status) {this.status = status;}
         public  int rawValue() {return status;}
     }
 
@@ -24,7 +24,7 @@ public class Constants {
          LowMemory(2),
          ActivityDataAvailable(3),
          BatteryStatusChanged(5);
-        private SystemEvent(int event) {
+        SystemEvent(int event) {
             this.event = event;
         }
         final private int event;
@@ -46,7 +46,7 @@ public class Constants {
         Enabled(4),
         ClockFormat(8),
         SleepConfig(9);
-        private SystemConfigID(int id) {
+        SystemConfigID(int id) {
             this.id = id;
         }
         final private int id;
@@ -56,7 +56,7 @@ public class Constants {
     public enum ApplicationID {
         WorldClock(1),ActivityTracking(2);
         final int id;
-        private ApplicationID(int id) {
+        ApplicationID(int id) {
             this.id = id;
         }
         public  int rawValue() {return id;}
@@ -65,7 +65,7 @@ public class Constants {
     public enum BatteryStatus {
         InUse(0),Charging(1),Damaged(2),Calculating(3);
         final int status;
-        private BatteryStatus(int status) {
+        BatteryStatus(int status) {
             this.status = status;
         }
         public  int rawValue() {return status;}

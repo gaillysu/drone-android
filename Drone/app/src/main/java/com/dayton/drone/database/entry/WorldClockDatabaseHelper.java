@@ -6,10 +6,7 @@ import android.util.Log;
 import com.dayton.drone.database.DatabaseHelper;
 import com.dayton.drone.database.bean.WorldClockBean;
 import com.dayton.drone.model.WorldClock;
-import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
-
-import net.medcorp.library.ble.util.Optional;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,7 +14,6 @@ import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimeZone;
 
 /**
  * Created by med on 16/5/9.
@@ -32,14 +28,7 @@ public class WorldClockDatabaseHelper {
         initDatabase(context);
     }
 
-
-    /**
-     * timezone.txt is a json format file, it comes from iOS timezone.plist
-     * generate steps: copy all timezone.plist to website: http://json2plist.sinaapp.com, get json string,
-     * and save it to /assets/localtimezone/timezone.txt
-     * @param context
-     */
-    public void initDatabase(Context context) {
+    private void initDatabase(Context context) {
         if(getAll().isEmpty())
         {
             try {

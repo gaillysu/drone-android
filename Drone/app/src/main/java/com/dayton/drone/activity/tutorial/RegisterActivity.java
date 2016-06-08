@@ -30,13 +30,13 @@ public class RegisterActivity extends BaseActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick(R.id.registe_back_iv)
+    @OnClick(R.id.register_back_iv)
     public void goBackActivity() {
         startActivity(WelcomeActivity.class);
         finish();
     }
 
-    @OnClick(R.id.registe_next_iv)
+    @OnClick(R.id.register_next_iv)
     public void nextActivity() {
         String email = ed_email.getText().toString();
         String password = ed_password.getText().toString();

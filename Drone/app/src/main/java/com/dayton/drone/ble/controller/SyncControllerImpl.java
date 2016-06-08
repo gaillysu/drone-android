@@ -102,6 +102,20 @@ public class SyncControllerImpl implements  SyncController{
         this.application = application;
         connectionController = ConnectionController.Singleton.getInstance(application,new GattAttributesDataSourceImpl(application));
         EventBus.getDefault().register(this);
+        ServiceConnection serviceConnection = new ServiceConnection() {
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                Log.v(TAG, name + " Service disconnected");
+                localBinder = null;
+            }
+
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                Log.v(TAG, name + " Service connected");
+                localBinder = (LocalService.LocalBinder) service;
+            }
+        };
         application.getApplicationContext().bindService(new Intent(application, LocalService.class), serviceConnection, Activity.BIND_AUTO_CREATE);
         startAutoSyncTimer();
     }
@@ -160,10 +174,6 @@ public class SyncControllerImpl implements  SyncController{
         sendRequest(new GetBatteryRequest(application));
     }
 
-    /**
-     * send request  package to watch by using a queue
-     * @param request
-     */
     private void sendRequest(final BLERequestData request) {
         if(connectionController.inOTAMode()) {
             return;
@@ -207,7 +217,7 @@ public class SyncControllerImpl implements  SyncController{
                     QueuedMainThreadHandler.getInstance(QueuedMainThreadHandler.QueueType.SyncController).next();
                     return;
                 }
-                if((byte) GetSystemStatus.HEADER == packet.getHeader())
+                if(GetSystemStatus.HEADER == packet.getHeader())
                 {
                     SystemStatusPacket systemStatusPacket = packet.newSystemStatusPacket();
                     Log.i(TAG,"GetSystemStatus return status value: " + systemStatusPacket.getStatus());
@@ -241,7 +251,7 @@ public class SyncControllerImpl implements  SyncController{
                         sendRequest(new GetActivityRequest(application));
                     }
                 }
-                else if((byte) GetActivityRequest.HEADER == packet.getHeader())
+                else if(GetActivityRequest.HEADER == packet.getHeader())
                 {
                     ActivityPacket activityPacket = packet.newActivityPacket();
                     Log.i(TAG,activityPacket.getDate().toString() + " time frame steps: " + activityPacket.getSteps());
@@ -263,7 +273,7 @@ public class SyncControllerImpl implements  SyncController{
                         EventBus.getDefault().post(new BigSyncEvent(theBigSyncStartDate.get(), BigSyncEvent.BIG_SYNC_EVENT.STOPPED));
                     }
                 }
-                else if((byte) GetStepsGoalRequest.HEADER == packet.getHeader())
+                else if(GetStepsGoalRequest.HEADER == packet.getHeader())
                 {
                     GetStepsGoalPacket getStepsGoalPacket = packet.newGetStepsGoalPacket();
                     int steps = getStepsGoalPacket.getSteps();
@@ -271,13 +281,13 @@ public class SyncControllerImpl implements  SyncController{
                     Log.i(TAG,"steps: " + steps + ",goal: " + goal);
                     EventBus.getDefault().post(new LittleSyncEvent(steps, goal));
                 }
-                else if((byte) GetBatteryRequest.HEADER == packet.getHeader())
+                else if(GetBatteryRequest.HEADER == packet.getHeader())
                 {
                     GetBatteryPacket getBatteryPacket = packet.newGetBatteryPacket();
                     EventBus.getDefault().post(new BatteryStatusChangedEvent(getBatteryPacket.getBatteryStatus(), getBatteryPacket.getBatteryLevel()));
                 }
                 //system event: 0x02, this is sent by watch proactively,pls refer to Constants.SystemEvent
-                else if((byte) SystemEventPacket.HEADER == packet.getHeader())
+                else if(SystemEventPacket.HEADER == packet.getHeader())
                 {
                     SystemEventPacket systemEventPacket = packet.newSystemEventPacket();
                     Log.i(TAG,"SystemEventPacket return event value: " + systemEventPacket.getEvent());
@@ -418,18 +428,4 @@ public class SyncControllerImpl implements  SyncController{
     }
     private LocalService.LocalBinder localBinder = null;
 
-    private ServiceConnection serviceConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            Log.v(TAG, name+" Service disconnected");
-            localBinder = null;
-        }
-
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            Log.v(TAG, name+" Service connected");
-            localBinder = (LocalService.LocalBinder)service;
-        }
-    };
 }

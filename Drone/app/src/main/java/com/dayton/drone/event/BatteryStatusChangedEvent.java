@@ -4,8 +4,8 @@ package com.dayton.drone.event;
  * Created by med on 16/4/14.
  */
 public class BatteryStatusChangedEvent {
-    final byte state;
-    final byte level;
+    private final byte state;
+    private final byte level;
 
     public BatteryStatusChangedEvent(byte state, byte level) {
         this.state = state;

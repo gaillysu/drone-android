@@ -1,8 +1,6 @@
 package com.dayton.drone.cloud;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 
 import com.dayton.drone.application.ApplicationModel;
@@ -10,23 +8,21 @@ import com.dayton.drone.event.BigSyncEvent;
 import com.dayton.drone.event.ProfileChangedEvent;
 import com.dayton.drone.model.Steps;
 import com.dayton.drone.network.Constants;
+import com.dayton.drone.network.request.CreateStepsRequest;
+import com.dayton.drone.network.request.GetStepsRequest;
 import com.dayton.drone.network.request.UpdateStepsRequest;
 import com.dayton.drone.network.request.UpdateUserRequest;
 import com.dayton.drone.network.request.model.CreateSteps;
 import com.dayton.drone.network.request.model.StepsWithID;
 import com.dayton.drone.network.request.model.UpdateUser;
 import com.dayton.drone.network.response.model.CreateStepsModel;
-import com.dayton.drone.network.request.CreateStepsRequest;
 import com.dayton.drone.network.response.model.GetStepsModel;
-import com.dayton.drone.network.request.GetStepsRequest;
 import com.dayton.drone.network.response.model.StepsDetail;
 import com.dayton.drone.network.response.model.UpdateStepsModel;
 import com.dayton.drone.network.response.model.UpdateUserModel;
 import com.dayton.drone.utils.Common;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
-
-import net.medcorp.library.ble.util.Optional;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -37,6 +33,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by med on 16/4/29.
@@ -48,7 +45,7 @@ public class SyncActivityManager {
 
     private final String TAG = "SyncActivityManager";
     private Context context;
-    final long INTERVAL_DATE = 365 * 24 * 60 * 60 *1000l;//user can get all data in a year
+    final long INTERVAL_DATE = 365 * 24 * 60 * 60 *1000L;//user can get all data in a year
 
     public SyncActivityManager(Context context)
     {
@@ -57,11 +54,7 @@ public class SyncActivityManager {
     }
     private ApplicationModel getModel() {return (ApplicationModel)context;}
 
-    /**
-     * when big sync got end (FIFO == 0), invoke this function
-     * @parameter theDay
-     */
-    public void launchSyncDailyHourlySteps(Date theDay)
+    private void launchSyncDailyHourlySteps(Date theDay)
     {
         final List<Steps> stepsList = getModel().getStepsDatabaseHelper().convertToNormalList(getModel().getStepsDatabaseHelper().get(getModel().getUser().getUserID(),Common.removeTimeFromDate(theDay)));
         if(stepsList.isEmpty()) {
@@ -69,7 +62,7 @@ public class SyncActivityManager {
         }
         final CreateSteps createSteps = new CreateSteps();
         createSteps.setUid(Integer.parseInt(stepsList.get(0).getUserID()));
-        createSteps.setDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date(stepsList.get(0).getTimeFrame())));
+        createSteps.setDate(new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(new Date(stepsList.get(0).getTimeFrame())));
         createSteps.setSteps(stepsList.get(0).getHourlySteps());
         getModel().getRetrofitManager().execute(new CreateStepsRequest(createSteps, getModel().getRetrofitManager().getAccessToken()), new RequestListener<CreateStepsModel>() {
             @Override
@@ -105,7 +98,7 @@ public class SyncActivityManager {
                         StepsWithID stepsWithID = new StepsWithID();
                         stepsWithID.setId(createStepsModel.getSteps().getId());
                         stepsWithID.setUid(Integer.parseInt(stepsList.get(0).getUserID()));
-                        stepsWithID.setDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date(stepsList.get(0).getTimeFrame())));
+                        stepsWithID.setDate(new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(new Date(stepsList.get(0).getTimeFrame())));
                         stepsWithID.setSteps(stepsList.get(0).getHourlySteps());
                         updateSteps(stepsWithID, stepsList);
                     }
@@ -156,14 +149,14 @@ public class SyncActivityManager {
     public void launchSyncAll(){
         uploadSteps(new Date());
         downloadSteps(Common.getLast30Days(new Date()), new Date());
-        uploadSleep(new Date());
-        downloadSleep(new Date(), new Date());
+//        uploadSleep(new Date());
+//        downloadSleep(new Date(), new Date());
     }
 
     private void uploadSteps( Date theDay)
     {
         Date start = Common.getLast7Days(theDay);
-        for(long startDay = start.getTime();startDay<=theDay.getTime();startDay+=Common.ONEDAY)
+        for(long startDay = start.getTime();startDay<=theDay.getTime();startDay+=Common.ONE_DAY)
         {
             List<Steps> stepsList = getModel().getStepsDatabaseHelper().convertToNormalList(getModel().getStepsDatabaseHelper().get(getModel().getUser().getUserID(),Common.removeTimeFromDate(new Date(startDay))));
             if(!stepsList.isEmpty() && (stepsList.get(0).getCloudID())<0)
@@ -175,8 +168,8 @@ public class SyncActivityManager {
     private void downloadSteps(final Date startDate, final Date endDate)
     {
         //TODO API should add a filter to query: ?startdate=...& enddate=...
-        String start_date = new SimpleDateFormat("yyyy-MM-dd").format(startDate);
-        String end_date = new SimpleDateFormat("yyyy-MM-dd").format(endDate);
+        String start_date = new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(startDate);
+        String end_date = new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(endDate);
         getModel().getRetrofitManager().execute(new GetStepsRequest(getModel().getUser().getUserID(),getModel().getRetrofitManager().getAccessToken(),start_date,end_date),new RequestListener<GetStepsModel>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
@@ -194,7 +187,7 @@ public class SyncActivityManager {
                                 && stepsDetail.getSteps().startsWith("[")
                                 && stepsDetail.getSteps().endsWith("]"))
                         {
-                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.000000");
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.000000", Locale.US);
                             try {
                                 Date date = sdf.parse(stepsDetail.getDate().getDate());
                                 Steps steps = new Steps(0,0);
@@ -214,21 +207,12 @@ public class SyncActivityManager {
 
     }
 
-    private void uploadSleep(Date theDay)
-    {
-
-    }
-    private void downloadSleep(final Date startDate, final Date endDate)
-    {
-
-    }
-
     @Subscribe
     public void onEvent(final BigSyncEvent event) {
         if(event.getStatus() == BigSyncEvent.BIG_SYNC_EVENT.STOPPED)
         {
             Date today = new Date();
-            for(long start = event.getStartSyncDate().getTime();start<=today.getTime();start+= Common.ONEDAY)
+            for(long start = event.getStartSyncDate().getTime();start<=today.getTime();start+= Common.ONE_DAY)
             {
                 launchSyncDailyHourlySteps(new Date(start));
             }
@@ -255,7 +239,7 @@ public class SyncActivityManager {
             public void onRequestSuccess(UpdateUserModel updateUserModel) {
                 Log.i(TAG,updateUserModel.getMessage());
                 if(updateUserModel.getStatus()==1) {
-
+                    //Todo hello?
                 }
             }
         });

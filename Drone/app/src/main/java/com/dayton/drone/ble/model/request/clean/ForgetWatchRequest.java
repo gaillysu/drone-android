@@ -9,7 +9,7 @@ import com.dayton.drone.ble.model.request.base.RequestBase;
  * this class used for drop the connection and unpair watch
  */
 public class ForgetWatchRequest extends RequestBase {
-    public final static byte HEADER = (byte)0x23;
+    private final static byte HEADER = (byte)0x23;
     public ForgetWatchRequest(Context context) {
         super(context);
     }

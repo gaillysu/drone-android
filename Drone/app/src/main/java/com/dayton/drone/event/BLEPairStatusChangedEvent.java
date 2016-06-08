@@ -7,7 +7,7 @@ public class BLEPairStatusChangedEvent {
     /**
      * status:BluetoothDevice.BOND_BONDED,BluetoothDevice.BOND_NONE
      */
-    final int status;
+    private final int status;
 
     public BLEPairStatusChangedEvent(int status) {
         this.status = status;

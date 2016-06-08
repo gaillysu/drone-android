@@ -21,7 +21,7 @@
             android:id="@+id/activity_set_notification_title_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Notifications"
+            android:text="@string/notifications_notifications"
             android:textColor="@android:color/white"
             android:textSize="22sp"
             android:layout_centerInParent="true"/>
@@ -30,9 +30,9 @@
             android:id="@+id/activity_set_notification_add_imagebutton"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:background="@android:color/transparent"
             android:src="@mipmap/world_clock_add_city_icon"/>
     </RelativeLayout>
@@ -48,7 +48,7 @@
         android:layout_marginTop="10dp"
         android:textColor="@android:color/white"
         android:textSize="20sp"
-        android:text="The Idea"/>
+        android:text="@string/notifications_the_idea"/>
 
      <TextView
          android:layout_width="wrap_content"
@@ -59,7 +59,7 @@
          android:textColor="@android:color/white"
          android:textSize="13sp"
          android:textStyle="normal"
-         android:text="Don't want to be notified by everyone on your\nwatch? Just add the contacts you want to get\nnotified by pressing on the plus button!"/>
+         android:text="@string/notifications_explanation"/>
 
      <TextView
          android:layout_width="wrap_content"
@@ -68,8 +68,8 @@
          android:gravity="center"
          android:layout_marginTop="10dp"
          android:textColor="@android:color/white"
-         android:textSize="11sp"
-         android:text="Getting annoyed by an added contact? Just swipe to the\nright to delete him or her!"/>
+         android:textSize="12sp"
+         android:text="@string/notifications_explenation_2"/>
 
  <com.baoyz.swipemenulistview.SwipeMenuListView
      android:id="@+id/activity_set_notification_contacts_listview"

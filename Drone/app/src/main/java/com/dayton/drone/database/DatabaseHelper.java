@@ -41,7 +41,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private Dao<NotificationBean,Integer> notificationBean = null;
     private Dao<WorldClockBean,Integer> worldClockBean = null;
     private Dao<WatchesBean,Integer> watchesBean = null;
-    public static DatabaseHelper instance;
+    private static DatabaseHelper instance;
 
     public static synchronized DatabaseHelper getHelperInstance(Context context) {
         if (instance == null) {
@@ -53,7 +53,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         return instance;
     }
 
-    public DatabaseHelper(Context context) {
+    private DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

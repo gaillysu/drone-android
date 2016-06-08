@@ -8,7 +8,7 @@
         android:id="@+id/choose_adapter_item_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="18dp"
+        android:layout_marginStart="18dp"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
         android:layout_centerVertical="true"
@@ -18,8 +18,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="15dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="15dp"
         android:layout_alignParentBottom="true"
         android:background="@color/choose_adapter_list_item_view_color"/>
 </RelativeLayout>

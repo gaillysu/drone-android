@@ -22,6 +22,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -77,11 +78,11 @@ public class WorldClockActivity extends BaseActivity {
 
     public void initData() {
         Date date = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         String currentTime = format.format(date);
         String[] currentTimeArray = currentTime.split("-");
 
-        dateTv.setText(new SimpleDateFormat("MMM").format(date)+ currentTimeArray[2] + ", " + currentTimeArray[0]);
+        dateTv.setText(new SimpleDateFormat("MMM", Locale.US).format(date)+ currentTimeArray[2] + ", " + currentTimeArray[0]);
 
         listData = worldClockDatabase.getSelected();
         worldClockAdapter = new WorldClockAdapter(listData, this);

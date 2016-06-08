@@ -5,14 +5,14 @@
               android:orientation="vertical">
     <!-- header-->
     <RelativeLayout
-        android:id="@+id/activity_addwatch_header_layout"
+        android:id="@+id/activity_add_watch_header_layout"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="@color/colorPrimaryDark"
         android:orientation="vertical">
 
         <ImageButton
-            android:id="@+id/activity_addwatch_back_imagebutton"
+            android:id="@+id/activity_add_watch_back_imagebutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -20,11 +20,11 @@
             android:src="@mipmap/left_arrpw_1"/>
 
         <TextView
-            android:id="@+id/activity_addwatch_title_textview"
+            android:id="@+id/activity_add_watch_title_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Watches"
+            android:text="@string/add_watch_watches"
             android:textColor="@android:color/white"
             android:textSize="24sp"/>
     </RelativeLayout>
@@ -42,36 +42,24 @@
             android:orientation="vertical">
 
             <RelativeLayout
-                android:id="@+id/activity_addwatch_watch_infomation_relativelayout"
+                android:id="@+id/activity_add_watch_watch_information_relativelayout"
                 android:layout_width="match_parent"
-                android:layout_height="280dp"
-                android:layout_below="@id/activity_addwatch_header_layout">
+                android:layout_height="280dp">
 
                 <android.support.v4.view.ViewPager
-                    android:id="@+id/activity_addwatch_viewpager"
+                    android:id="@+id/activity_add_watch_viewpager"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
 
                 <LinearLayout
-                    android:id="@+id/activity_addwatch_view_pager_currentpage_layout"
+                    android:id="@+id/activity_add_watch_view_pager_current_page_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="8dp"
                     android:orientation="horizontal"/>
-
             </RelativeLayout>
-
-            <!--<ListView-->
-                <!--android:id="@+id/activity_addwatch_menu_listview"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_above="@+id/activity_addwatch_footer_layout"-->
-                <!--android:layout_below="@id/activity_addwatch_watch_infomation_relativelayout"-->
-                <!--&gt;-->
-                <!---->
-            <!--</ListView>-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -87,22 +75,8 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:layout_centerInParent="true"
                 android:text="@string/add_watch_activity_content_contacts_notification"
                 android:textSize="25sp"/>
-                <!--<View-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="1dp"-->
-                    <!--android:background="@color/add_watch_activity_view_bg_color"/>-->
-            <!--<TextView-->
-                <!--android:id="@+id/activity_add_watch_my_notification"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="0dp"-->
-                <!--android:layout_weight="1"-->
-                <!--android:gravity="center"-->
-                <!--android:layout_centerInParent="true"-->
-                <!--android:text="@string/add_watch_activity_content_my_notification"-->
-                <!--android:textSize="25sp"/>-->
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
@@ -113,7 +87,6 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:layout_centerInParent="true"
                 android:text="@string/add_watch_activity_content_forget_watch"
                 android:textSize="25sp"/>
             </LinearLayout>
@@ -130,7 +103,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
+                android:layout_marginStart="30dp"
                 android:layout_marginTop="50dp"
                 android:src="@mipmap/mydevices_hold_drone_icon"/>
 
@@ -190,7 +163,6 @@
         android:id="@+id/activity_addwatch_footer_layout"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_alignParentBottom="true"
         android:background="@color/colorPrimaryDark"
         android:orientation="vertical">
 

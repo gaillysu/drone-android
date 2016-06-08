@@ -33,7 +33,7 @@ public class CalendarView extends View implements View.OnTouchListener {
 	private boolean completed = false;
 	private boolean isSelectMore = false;
 
-	public OnItemClickListener onItemClickListener;
+	private OnItemClickListener onItemClickListener;
 
 	public CalendarView(Context context) {
 		super(context);
@@ -58,7 +58,7 @@ public class CalendarView extends View implements View.OnTouchListener {
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		surface.width = getResources().getDisplayMetrics().widthPixels;
-		surface.height = (int) (getResources().getDisplayMetrics().heightPixels*2/5);
+		surface.height = getResources().getDisplayMetrics().heightPixels*2/5;
 
 		widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(surface.width,
 				View.MeasureSpec.EXACTLY);
@@ -131,9 +131,8 @@ public class CalendarView extends View implements View.OnTouchListener {
 	private void calculateDate() {
 		calendar.setTime(curDate);
 		calendar.set(Calendar.DAY_OF_MONTH, 1);
-		int dayInWeek = calendar.get(Calendar.DAY_OF_WEEK);
 
-		int monthStart = dayInWeek;
+		int monthStart = calendar.get(Calendar.DAY_OF_WEEK);
 		if (monthStart == 1) {
 			monthStart = 8;
 		}
@@ -256,17 +255,11 @@ public class CalendarView extends View implements View.OnTouchListener {
 	}
 
 	private boolean isLastMonth(int i) {
-		if (i < curStartIndex) {
-			return true;
-		}
-		return false;
+		return i < curStartIndex;
 	}
 
 	private boolean isNextMonth(int i) {
-		if (i >= curEndIndex) {
-			return true;
-		}
-		return false;
+		return i >= curEndIndex;
 	}
 
 	private int getXByIndex(int i) {
@@ -278,7 +271,7 @@ public class CalendarView extends View implements View.OnTouchListener {
 	}
 
 
-	public Date getYearAndmonth() {
+	private Date getYearAndMonth() {
 		calendar.setTime(curDate);
 		int year = calendar.get(Calendar.YEAR);
 		int month = calendar.get(Calendar.MONTH)+1;
@@ -291,30 +284,16 @@ public class CalendarView extends View implements View.OnTouchListener {
 		calendar.add(Calendar.MONTH, -1);
 		curDate = calendar.getTime();
 		invalidate();
-		return getYearAndmonth();
+		return getYearAndMonth();
 	}
 	public Date clickRightMonth(){
 		calendar.setTime(curDate);
 		calendar.add(Calendar.MONTH, 1);
 		curDate = calendar.getTime();
 		invalidate();
-		return getYearAndmonth();
+		return getYearAndMonth();
 	}
 
-//	public String clickLeftDay(){
-//		calendar.setTime(curDate);
-//		calendar.add(Calendar.DAY_OF_MONTH,-1);
-//		curDate = calendar.getTime();
-//		invalidate();
-//		return getYearAndmonth();
-//	}
-//	public String clickRightDay(){
-//		calendar.setTime(curDate);
-//		calendar.add(Calendar.DAY_OF_MONTH,1);
-//		curDate = calendar.getTime();
-//		invalidate();
-//		return getYearAndmonth();
-//	}
 	public void setCalendarData(Date date){
 		calendar.setTime(date);
 		invalidate();

@@ -166,36 +166,19 @@ public class StepsDatabaseHelper {
         return stepsList;
     }
 
-    /**
-     *
-     * @param userId
-     * @param date
-     * @return
-     */
     public List<Steps> getThisWeekSteps(String userId,Date date)
     {
        CanlendarWeek canlendarWeek =  Common.getThisweek(date);
        return getStepsBetweenDate(userId,canlendarWeek.getWeekStart(),canlendarWeek.getWeekEnd());
     }
 
-    /**
-     *
-     * @param userId
-     * @param date
-     * @return
-     */
+
     public List<Steps> getLastWeekSteps(String userId,Date date)
     {
         CanlendarWeek canlendarWeek =  Common.getLastweek(date);
         return getStepsBetweenDate(userId,canlendarWeek.getWeekStart(),canlendarWeek.getWeekEnd());
     }
 
-    /**
-     *
-     * @param userId
-     * @param date
-     * @return return date up to date-30 steps ??? or according to the calendar Month???
-     */
     public List<Steps> getLastMonthSteps(String userId,Date date)
     {
         return getStepsBetweenDate(userId,Common.getLast30Days(date),date);
@@ -208,7 +191,7 @@ public class StepsDatabaseHelper {
         Date start = Common.removeTimeFromDate(startDate);
         Date end = Common.removeTimeFromDate(endDate);
 
-        for(long timeStamp = start.getTime();timeStamp<=end.getTime();timeStamp+=Common.ONEDAY)
+        for(long timeStamp = start.getTime();timeStamp<=end.getTime();timeStamp+=Common.ONE_DAY)
         {
             stepsList.addAll(convertToNormalList(get(userId,new Date(timeStamp))));
         }

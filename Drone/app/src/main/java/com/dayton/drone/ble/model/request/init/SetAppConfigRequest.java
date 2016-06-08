@@ -10,7 +10,7 @@ import com.dayton.drone.ble.util.Constants;
  */
 public class SetAppConfigRequest extends RequestBase{
     public final static byte HEADER = (byte)0x04;
-    final Constants.ApplicationID id;
+    private final Constants.ApplicationID id;
     public SetAppConfigRequest(Context context, Constants.ApplicationID id) {
         super(context);
         this.id = id;

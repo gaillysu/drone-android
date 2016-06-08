@@ -49,5 +49,5 @@
         android:textSize="10sp"
         android:visibility="gone"
         android:layout_marginTop="1dp"
-        android:text="@string/watch_buletooth_id"/>
+        android:text="@string/watch_bluetooth_id"/>
 </LinearLayout>

@@ -7,7 +7,7 @@ import java.util.Date;
  * Created by med on 16/5/25.
  */
 public  class CanlendarWeek {
-    final Date currentDay;
+    private final Date currentDay;
     private Date weekStart;
     private  Date weekEnd;
 
@@ -19,8 +19,8 @@ public  class CanlendarWeek {
     {
         Calendar cal = Calendar.getInstance();
         cal.setTime(currentDay);
-        weekStart =  new Date(currentDay.getTime()-(cal.get(Calendar.DAY_OF_WEEK)-1)*24*60*60*1000l);
-        weekEnd = new Date(weekStart.getTime()+6*24*60*60*1000l);
+        weekStart =  new Date(currentDay.getTime()-(cal.get(Calendar.DAY_OF_WEEK)-1)*24*60*60*1000L);
+        weekEnd = new Date(weekStart.getTime()+6*24*60*60*1000L);
     }
 
     public Date getCurrentDay() {

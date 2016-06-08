@@ -8,7 +8,6 @@ import com.dayton.drone.ble.model.packet.SystemEventPacket;
 import com.dayton.drone.ble.model.packet.SystemStatusPacket;
 
 import net.medcorp.library.ble.model.response.MEDRawData;
-import net.medcorp.library.ble.util.HexUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +33,7 @@ public class DronePacket {
     {
         return mPackets.get(0).getRawData()[1];
     }
-    public List<MEDRawData> getPackets()
+    protected List<MEDRawData> getPackets()
     {
         return mPackets;
     }

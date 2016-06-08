@@ -15,6 +15,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 
 /**
@@ -23,10 +24,8 @@ import java.util.TimeZone;
 public class WorldClockAdapter extends BaseAdapter implements SlideView.OnSlideListener {
     private List<WorldClock> list;
     private Context context;
-    private String minutesTime;
-    private String hourDay;
 
-    private static DeleteItemInterface deleteItemInterface;
+    private DeleteItemInterface deleteItemInterface;
     private SlideView mLastSlideViewWithStatusOn;
 
     public WorldClockAdapter(List<WorldClock> listData, Context context) {
@@ -92,12 +91,14 @@ public class WorldClockAdapter extends BaseAdapter implements SlideView.OnSlideL
             } else {
                 holder.cityName.setText(name);
             }
+            String minutesTime;
             if (minutes < 10) {
                 minutesTime = "0" + minutes;
             } else {
                 minutesTime = minutes + "";
             }
 
+            String hourDay;
             if (hour < 10) {
                 hourDay = "0" + hour;
 
@@ -116,9 +117,9 @@ public class WorldClockAdapter extends BaseAdapter implements SlideView.OnSlideL
             }
 
             Date currentDate = new Date();
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            int currentTime = new Integer(format.format(currentDate).split(" ")[1].split(":")[0]);
-            int currentDay = new Integer(format.format(currentDate).split(" ")[0].split("-")[2]);
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+            int currentTime = Integer.valueOf(format.format(currentDate).split(" ")[1].split(":")[0]);
+            int currentDay = Integer.valueOf(format.format(currentDate).split(" ")[0].split("-")[2]);
 
             if (currentDay > date) {
                 holder.cityDay.setText(context.getResources().getString(R.string.world_clock_Yesterday_tv));
@@ -171,15 +172,15 @@ public class WorldClockAdapter extends BaseAdapter implements SlideView.OnSlideL
     }
 
 
-    static class ViewHolder {
+    private class ViewHolder {
 
         private TextView cityName;
         private TextView cityCurrentTime;
         private TextView cityDay;
         private TextView timeDifference;
-        public ViewGroup deleteHolder;
+        ViewGroup deleteHolder;
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             cityName = (TextView) view.findViewById(R.id.world_clock_item_city);
             cityCurrentTime = (TextView) view.findViewById(R.id.world_clock_item_city_time);
             cityDay = (TextView) view.findViewById(R.id.world_clock_item_current_day);

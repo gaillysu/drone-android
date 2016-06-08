@@ -11,7 +11,7 @@ public class SetGoalRequest extends RequestBase {
     public final static byte HEADER = (byte)0x12;
     public final static int DEFAULTSTEPSGOAL = 10000;
     private final int stepsGoal;
-    private final int timeFrame = 0;//always 0x00
+
     public SetGoalRequest(Context context, int stepsGoal) {
         super(context);
         this.stepsGoal = stepsGoal;
@@ -26,7 +26,7 @@ public class SetGoalRequest extends RequestBase {
                         (byte) (stepsGoal>>8&0xFF),
                         (byte) (stepsGoal>>16&0xFF),
                         (byte) (stepsGoal>>24&0xFF),
-                        (byte) (timeFrame &0xFF)
+                        (byte) (0)
                 }
         };
     }

@@ -16,7 +16,7 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:background="@android:color/transparent"
             android:src="@mipmap/world_clock_back_icon"/>
 
@@ -32,9 +32,9 @@
             android:id="@+id/world_clock_add_city_iv"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
             android:background="@android:color/transparent"
             android:src="@mipmap/world_clock_add_city_icon"
             />
@@ -60,9 +60,7 @@
             android:id="@+id/world_clock_date_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:layout_gravity="center"
-            android:text="afsd"
             android:textColor="@color/choose_adapter_text_color"
             android:textSize="28sp"
             android:textStyle="bold"/>
@@ -80,9 +78,9 @@
             android:id="@+id/world_clock_select_city_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/world_clock_date_tv"
             android:divider="@android:color/white"
-            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
             android:scrollbars="none"/>
     </LinearLayout>
 </LinearLayout>

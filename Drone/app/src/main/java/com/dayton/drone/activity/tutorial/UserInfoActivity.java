@@ -20,6 +20,7 @@ import com.octo.android.robospice.request.listener.RequestListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -63,7 +64,6 @@ public class UserInfoActivity extends BaseActivity {
         tv_sexMale.setBackgroundColor(getResources().getColor(android.R.color.transparent));
         tv_sexFemale.setTextColor(getResources().getColor(R.color.user_info_gender_select_text_color));
         tv_sexMale.setTextColor(getResources().getColor(R.color.user_info_gender_default_text_color));
-
     }
 
     @OnClick(R.id.user_info_sex_male_tv)
@@ -79,26 +79,26 @@ public class UserInfoActivity extends BaseActivity {
     public void putUserBarthday() {
         viewType = 1;
         final Date date = new Date(System.currentTimeMillis());
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         String formatDate = format.format(date);
         DatePickerPopWin pickerPopWin = new DatePickerPopWin.Builder(UserInfoActivity.this,
                 new DatePickerPopWin.OnDatePickedListener() {
                     @Override
                     public void onDatePickCompleted(int year, int month,
                                                     int day, String dateDesc) {
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.US);
                         try {
                             Date date = dateFormat.parse(dateDesc);
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
-                        tv_userBirth.setText(new SimpleDateFormat("MMM").format(date)+"-"+day + "-"+year);
+                        tv_userBirth.setText(new SimpleDateFormat("MMM", Locale.US).format(date)+"-"+day + "-"+year);
                     }
                 }).viewStyle(viewType)
                 .viewTextSize(25) // pick view text size
-                .minYear(new Integer(formatDate.split("-")[0]).intValue() - 100) //min year in loop
-                .maxYear(new Integer(formatDate.split("-")[0]).intValue()) // max year in loop
-                .dateChose((new Integer(formatDate.split("-")[0]) - 30)
+                .minYear(Integer.valueOf(formatDate.split("-")[0]) - 100) //min year in loop
+                .maxYear(Integer.valueOf(formatDate.split("-")[0])) // max year in loop
+                .dateChose((Integer.valueOf(formatDate.split("-")[0]) - 30)
                         + "-" + formatDate.split("-")[1] + "-" + formatDate.split("-")[2]) // date chose when init popwindow
                 .build();
         pickerPopWin.showPopWin(UserInfoActivity.this);
@@ -140,15 +140,15 @@ public class UserInfoActivity extends BaseActivity {
     }
 
 
-    @OnClick(R.id.registe_back_iv)
+    @OnClick(R.id.register_back_iv)
     public void back() {
         startActivity(RegisterActivity.class);
         finish();
     }
 
-    @OnClick(R.id.registe_next_iv)
+    @OnClick(R.id.register_next_iv)
     public void next() {
-       final String birthday = tv_userBirth.getText().toString();
+        final String birthday = tv_userBirth.getText().toString();
         String height = tv_userHeight.getText().toString();
         String weight = tv_userWeight.getText().toString();
         String firstName = editFirstName.getText().toString();
@@ -159,7 +159,7 @@ public class UserInfoActivity extends BaseActivity {
             Intent intent = getIntent();
             final String account = intent.getStringExtra("account");
             final String password = intent.getStringExtra("password");
-            final int h = new Integer(height.substring(0, 3));
+            final int h = Integer.valueOf(height.substring(0, 3));
             final double w = Double.parseDouble(weight.substring(0, weight.length() - 2));
 
             CreateUser createUser = new CreateUser();
@@ -202,6 +202,4 @@ public class UserInfoActivity extends BaseActivity {
                     R.string.user_info_about, Toast.LENGTH_SHORT).show();
         }
     }
-
-
 }

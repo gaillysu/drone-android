@@ -31,6 +31,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -234,7 +235,7 @@ public class ProfileActivity extends BaseActivity {
                 if (!b) {
                     String goal = stepGoal.getText().toString();
                     if (!TextUtils.isEmpty(goal)) {
-                        int goalStep = new Integer(goal).intValue();
+                        int goalStep = Integer.valueOf(goal);
                         if (goalStep > 0 && goalStep < 10000000) {
                             stepGoal.setText(goalStep + "");
                         } else {
@@ -291,34 +292,34 @@ public class ProfileActivity extends BaseActivity {
         userBirthdayTextView.setText("");
         viewType = 1;
         final Date date = new Date(System.currentTimeMillis());
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         String formatDate = format.format(date);
         DatePickerPopWin pickerPopWin = new DatePickerPopWin.Builder(ProfileActivity.this,
                 new DatePickerPopWin.OnDatePickedListener() {
                     @Override
                     public void onDatePickCompleted(int year, int month,
                                                     int day, String dateDesc) {
-                        SimpleDateFormat dateFormat  = new SimpleDateFormat("MM/dd/yyyy");
+                        SimpleDateFormat dateFormat  = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
                         try {
                             Date date = dateFormat.parse(dateDesc);
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
-                        userBirthdayTextView.setText(new SimpleDateFormat("MMM")
+                        userBirthdayTextView.setText(new SimpleDateFormat("MMM", Locale.US)
                                 .format(date)+"-"+day+"-"+year);
                     }
                 }).viewStyle(viewType)
                 .viewTextSize(25) // pick view text size
-                .minYear(new Integer(formatDate.split("-")[0]).intValue()-100) //min year in loop
-                .maxYear(new Integer(formatDate.split("-")[0]).intValue()) // max year in loop
-                .dateChose((new Integer(formatDate.split("-")[0])-30)
+                .minYear(Integer.valueOf(formatDate.split("-")[0]) -100) //min year in loop
+                .maxYear(Integer.valueOf(formatDate.split("-")[0])) // max year in loop
+                .dateChose((Integer.valueOf(formatDate.split("-")[0])-30)
                         +"-"+formatDate.split("-")[1]+"-"+formatDate.split("-")[2]) // date chose when init popwindow
                 .build();
         pickerPopWin.showPopWin(ProfileActivity.this);
     }
 
     public void saveUserCurrentEdit() {
-        int currentGoalStep = new Integer(stepGoal.getText().toString()).intValue();
+        int currentGoalStep = Integer.valueOf(stepGoal.getText().toString());
         SpUtils.putIntMethod(ProfileActivity.this, CacheConstants.GOAL_STEP, currentGoalStep);
         mUser.setLastName(accountName.getText().toString());
         mUser.setFirstName(userFirstName.getText().toString());
@@ -326,10 +327,10 @@ public class ProfileActivity extends BaseActivity {
         mUser.setBirthday(userBirthdayTextView.getText().toString());
         String height = userHeight.getText().toString();
         if (height.contains(getString(R.string.profile_user_height_unit))) {
-            int currentHeight = new Integer(height.substring(0, height.length() - 2)).intValue();
+            int currentHeight = Integer.valueOf(height.substring(0, height.length() - 2));
             mUser.setHeight(currentHeight);
         } else {
-            mUser.setHeight(new Integer(height).intValue());
+            mUser.setHeight(Integer.valueOf(height));
         }
 
         String weight = userWeight.getText().toString();

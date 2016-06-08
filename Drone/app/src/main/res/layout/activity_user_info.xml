@@ -5,7 +5,7 @@
               android:background="@android:color/white"
               android:orientation="vertical">
 
-    <include layout="@layout/registe_control_button"/>
+    <include layout="@layout/register_control_button"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,13 +30,16 @@
     android:layout_marginRight="50dp"
     android:layout_marginTop="20dp"
     android:orientation="vertical"
-    android:background="@drawable/registe_edit_bg"
+    android:background="@drawable/register_edit_bg"
+    android:baselineAligned="false"
     >
     <EditText
         android:id="@+id/user_info_activity_first_name_ed"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:paddingLeft="10dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+
         android:inputType="text"
         android:textSize="20sp"
         android:background="@android:color/transparent"
@@ -53,7 +56,8 @@
         android:inputType="text"
         android:textSize="20sp"
         android:hint="@string/user_info_activity_edit_last_name_hint"
-        android:paddingLeft="10dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
         android:background="@android:color/transparent"/>
 </LinearLayout>
     <LinearLayout
@@ -64,14 +68,14 @@
         android:layout_marginRight="50dp"
         android:layout_marginLeft="50dp"
         android:orientation="horizontal"
-        >
+        android:baselineAligned="false">
 
         <LinearLayout
 
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/registe_edit_bg">
+            android:background="@drawable/register_edit_bg">
 
             <TextView
                 android:id="@+id/user_info_sex_male_tv"
@@ -88,7 +92,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/registe_edit_bg">
+            android:background="@drawable/register_edit_bg">
 
             <TextView
                android:id="@+id/user_info_sex_female_tv"
@@ -108,7 +112,7 @@
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
         android:layout_marginTop="25dp"
-        android:background="@drawable/registe_edit_bg"
+        android:background="@drawable/register_edit_bg"
         android:orientation="vertical"
         >
 
@@ -122,8 +126,9 @@
                 android:layout_height="50dp"
                 android:textSize="20sp"
                 android:gravity="center_vertical"
-                android:hint="@string/user_info_brithday"
-                android:paddingLeft="10dp"
+                android:hint="@string/user_info_birthday"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 />
         </LinearLayout>
 
@@ -144,7 +149,8 @@
                 android:textSize="20sp"
                 android:gravity="center_vertical"
                 android:hint="@string/user_info_height"
-                android:paddingLeft="10dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 />
         </LinearLayout>
 
@@ -164,7 +170,8 @@
                 android:textSize="20sp"
                 android:gravity="center_vertical"
                 android:hint="@string/user_info_weight"
-                android:paddingLeft="10dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 />
         </LinearLayout>
 

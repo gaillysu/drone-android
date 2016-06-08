@@ -9,8 +9,8 @@ import com.dayton.drone.ble.model.request.base.RequestBase;
  */
 public class SetContactsFilterRequest extends RequestBase{
     public final static byte HEADER = (byte)0x18;
-    final byte clearContactsList;
-    final byte clearContactsApplication;
+    private final byte clearContactsList;
+    private final byte clearContactsApplication;
 
     public SetContactsFilterRequest(Context context, byte clearContactsList, byte clearContactsApplication) {
         super(context);
