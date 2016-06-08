@@ -1,6 +1,7 @@
 package com.dayton.drone.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -11,6 +12,10 @@ import android.widget.Toast;
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.activity.tutorial.WelcomeActivity;
+import com.dayton.drone.network.request.RequestTokenRequest;
+import com.dayton.drone.network.response.model.RequestTokenResponse;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -23,6 +28,7 @@ public class ForgetPasswordActivity extends BaseActivity {
 
     @Bind(R.id.forget_activity_edit_change_password_email_et)
     EditText emailAddressEdit;
+
     @Bind(R.id.register_back_iv)
     ImageButton nextPageImageButton;
 
@@ -38,25 +44,35 @@ public class ForgetPasswordActivity extends BaseActivity {
     public void changePasswordClick() {
         String changePasswordEmail = emailAddressEdit.getText().toString();
         if (!changePasswordEmail.isEmpty()) {
-            if (checkEmailIsRegister(changePasswordEmail)) {
-                startActivity(ChangePasswordActivity.class);
-                finish();
-            } else {
-                Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
-            }
+            ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setCancelable(false);
+            progressDialog.setMessage(getString(R.string.forget_password_dialog_text));
+            progressDialog.show();
+
+            getModel().getRetrofitManager().execute(new RequestTokenRequest(getModel().getRetrofitManager().getAccessToken(), changePasswordEmail), new RequestListener<RequestTokenResponse>() {
+                @Override
+                public void onRequestFailure(SpiceException spiceException) {
+                    Toast.makeText(ForgetPasswordActivity.this,getString(R.string.email_is_error),Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onRequestSuccess(RequestTokenResponse requestTokenResponse) {
+                    String email = requestTokenResponse.getEmail();
+                    String token = requestTokenResponse.getPassword_token();
+                    int id  = requestTokenResponse.getId();
+                    Intent intent = new Intent(ForgetPasswordActivity.this,ChangePasswordActivity.class);
+                    intent.putExtra("email",email);
+                    intent.putExtra("token",token);
+                    intent.putExtra("id",id);
+                    startActivity(intent);
+                }
+            });
         }else{
             emailAddressEdit.setError(getString(R.string.tips_user_account_password));
         }
-    }
 
-    private boolean checkEmailIsRegister(String changePasswordEmail) {
-        ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setCancelable(false);
-        progressDialog.setMessage(getString(R.string.forget_password_dialog_text));
-        progressDialog.show();
-        
-        return true;
+
     }
 
     @OnClick(R.id.register_back_iv)
