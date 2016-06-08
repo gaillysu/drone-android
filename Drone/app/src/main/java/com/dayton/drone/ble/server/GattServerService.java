@@ -8,8 +8,10 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
+import android.util.Log;
 
 import net.medcorp.library.ble.service.BLEServiceProvider;
+import net.medcorp.library.ble.util.HexUtils;
 
 /**
  * Created by med on 16/6/6.
@@ -17,7 +19,7 @@ import net.medcorp.library.ble.service.BLEServiceProvider;
 public class GattServerService extends Service {
     private final static String TAG = GattServerService.class.getSimpleName();
     private BLEServiceProvider bleServiceProvider;
-
+    private int notificationID;
 
     public class LocalBinder extends Binder {
       public  GattServerService getService() {
@@ -54,11 +56,19 @@ public class GattServerService extends Service {
     }
 
     public void sendNotificationAlert(byte[] data){
+        int nid = HexUtils.bytesToInt(new byte[]{data[1],data[2],data[3],data[4]});
+        notificationID = nid;
+        Log.i(TAG,"BLE server send alert notification,notificationID: " + nid + "value: " + data);
         bleServiceProvider.sendNotificationAlert(data);
     }
 
     public void sendNotificationData(byte[] data){
+        int nid = HexUtils.bytesToInt(new byte[]{data[1],data[2],data[3],data[4]});
+        Log.i(TAG,"BLE server send data notification,notificationID: " + nid + "value: " + data);
         bleServiceProvider.sendNotificationData(data);
     }
 
+    public int getNotificationID() {
+        return notificationID;
+    }
 }

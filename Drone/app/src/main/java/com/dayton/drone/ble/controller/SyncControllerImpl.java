@@ -37,6 +37,7 @@ import com.dayton.drone.ble.model.request.setting.SetUserProfileRequest;
 import com.dayton.drone.ble.model.request.sync.GetActivityRequest;
 import com.dayton.drone.ble.model.request.sync.GetStepsGoalRequest;
 import com.dayton.drone.ble.model.request.worldclock.SetWorldClockRequest;
+import com.dayton.drone.ble.notification.DroneNotificationListenerService;
 import com.dayton.drone.ble.server.GattServerService;
 import com.dayton.drone.ble.util.Constants;
 import com.dayton.drone.event.BLENoSupportPeripheryModeEvent;
@@ -57,9 +58,12 @@ import com.dayton.drone.utils.Common;
 import net.medcorp.library.ble.controller.ConnectionController;
 import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
 import net.medcorp.library.ble.event.BLEResponseDataEvent;
+import net.medcorp.library.ble.event.BLEServerConnectionStateChangedEvent;
+import net.medcorp.library.ble.event.BLEServerWriteRequestEvent;
 import net.medcorp.library.ble.model.request.BLERequestData;
 import net.medcorp.library.ble.model.response.BLEResponseData;
 import net.medcorp.library.ble.model.response.MEDRawData;
+import net.medcorp.library.ble.util.HexUtils;
 import net.medcorp.library.ble.util.Optional;
 import net.medcorp.library.ble.util.QueuedMainThreadHandler;
 
@@ -106,6 +110,7 @@ public class SyncControllerImpl implements  SyncController{
         connectionController = ConnectionController.Singleton.getInstance(application,new GattAttributesDataSourceImpl(application));
         EventBus.getDefault().register(this);
         application.getApplicationContext().bindService(new Intent(application, LocalService.class), serviceConnection, Activity.BIND_AUTO_CREATE);
+        application.getApplicationContext().bindService(new Intent(application, DroneNotificationListenerService.class), notificationServiceConnection, Activity.BIND_AUTO_CREATE);
         startAutoSyncTimer();
     }
 
@@ -375,6 +380,35 @@ public class SyncControllerImpl implements  SyncController{
         sendRequest(new SetUserProfileRequest(application,profileChangedEvent.getUser()));
     }
 
+    @Subscribe
+    public void onEvent(BLEServerConnectionStateChangedEvent event) {
+        Log.i(TAG,"BLE server connection status: "+event.isStatus());
+    }
+    @Subscribe
+    public void onEvent(BLEServerWriteRequestEvent event) {
+        int notificationID = HexUtils.bytesToInt(new byte[]{event.getValue()[1],event.getValue()[2],event.getValue()[3],event.getValue()[4]});
+        Log.i(TAG,"BLE server got write request notificationID: "+notificationID + ",value: "+event.getValue());
+        //read attributes command
+        if(event.getValue()[0] == 1)
+        {
+            //byte[] valueResponse = new byte[100];
+            //if(gattServerService.getNotificationID() == notificationID)
+            //{
+            //    gattServerService.sendNotificationData(event.getValue());
+            //}
+        }
+        //trigger action,such as drop call
+        else if(event.getValue()[0] == 3)
+        {
+
+        }
+        //read extended attributes command
+        else if(event.getValue()[0] == 5)
+        {
+
+        }
+    }
+
     //local service
     static public class LocalService extends Service
     {
@@ -460,6 +494,18 @@ public class SyncControllerImpl implements  SyncController{
             else{
                 Toast.makeText(gattServerService,"ANCS Advertise starting...",Toast.LENGTH_LONG).show();
             }
+        }
+    };
+
+    private ServiceConnection notificationServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            Log.v(TAG, name+" Service disconnected");
+        }
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            Log.v(TAG, name+" Service connected");
         }
     };
 }

@@ -17,6 +17,7 @@ import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.adapter.SetNotificationContactsAdapter;
+import com.dayton.drone.ble.notification.DroneNotificationListenerService;
 import com.dayton.drone.model.Contact;
 import com.dayton.drone.model.Notification;
 import com.google.gson.Gson;
@@ -96,6 +97,7 @@ public class SetNotificationActivity extends BaseActivity {
         contactsListView.setSwipeDirection(SwipeMenuListView.DIRECTION_LEFT);
         setNotificationContactsAdapter = new SetNotificationContactsAdapter(this,R.layout.set_notification_contacts_list_item, contactsList);
         contactsListView.setAdapter(setNotificationContactsAdapter);
+        DroneNotificationListenerService.getNotificationAccessPermission(this);
     }
 
     @OnClick(R.id.activity_set_notification_back_imagebutton)

@@ -59,7 +59,6 @@ public class DroneNotificationListenerService extends NotificationListenerServic
         callStateListener = new CallStateListener();
         telephonyManager.listen(callStateListener, PhoneStateListener.LISTEN_CALL_STATE);
         EventBus.getDefault().register(this);
-        getNotificationAccessPermission(application);
     }
 
     @Override
@@ -111,13 +110,19 @@ public class DroneNotificationListenerService extends NotificationListenerServic
         if(statusBarNotification == null) {
             return;
         }
-
         Notification notification = statusBarNotification.getNotification();
-        Log.v(TAG, "got system Notification : "+statusBarNotification.getPackageName());
-
+        Log.v(TAG, "got system Notification : "+statusBarNotification);
         if (notification != null)
         {
-            if(statusBarNotification.getPackageName().equals("com.google.android.talk")
+            if(statusBarNotification.getPackageName().equals("com.android.incallui") && statusBarNotification.getTag().contains("incall"))
+            {
+                sendNotification(new Call(true,statusBarNotification.getId()));
+            }
+            else if(statusBarNotification.getPackageName().equals("com.android.server.telecom") && statusBarNotification.getTag().contains("missed_call"))
+            {
+                sendNotification(new Call(false,statusBarNotification.getId()));
+            }
+            else if(statusBarNotification.getPackageName().equals("com.google.android.talk")
                     || statusBarNotification.getPackageName().equals("com.android.mms")
                     || statusBarNotification.getPackageName().equals("com.google.android.apps.messaging")
                     || statusBarNotification.getPackageName().equals("com.sonyericsson.conversations")
@@ -126,7 +131,7 @@ public class DroneNotificationListenerService extends NotificationListenerServic
                     ) {
                 //BLE keep-connect service will process this message
                 //if(helper.getState(new SmsNotification()).isOn())
-                    sendNotification(new Sms());
+                    sendNotification(new Sms(statusBarNotification.getId()));
             } else if(statusBarNotification.getPackageName().equals("com.android.email")
                     || statusBarNotification.getPackageName().equals("com.google.android.email")
                     || statusBarNotification.getPackageName().equals("com.google.android.gm")
@@ -134,17 +139,17 @@ public class DroneNotificationListenerService extends NotificationListenerServic
                     || statusBarNotification.getPackageName().equals("com.tencent.androidqqmail")
                     || statusBarNotification.getPackageName().equals("com.outlook.Z7")){
                 //if(helper.getState(new EmailNotification()).isOn())
-                    sendNotification(new Email());
+                    sendNotification(new Email(statusBarNotification.getId()));
             }
             else if(statusBarNotification.getPackageName().equals("com.facebook.katana")){
                 //if(helper.getState(new FacebookNotification()).isOn())
-                    sendNotification(new Facebook());
+                    sendNotification(new Facebook(statusBarNotification.getId()));
             } else if(statusBarNotification.getPackageName().equals("com.tencent.mm")){
                 //if(helper.getState(new WeChatNotification()).isOn())
-                    sendNotification(new Wechat());
+                    sendNotification(new Wechat(statusBarNotification.getId()));
             } else if(statusBarNotification.getPackageName().equals("com.whatsapp")){
                 //if(helper.getState(new WhatsappNotification()).isOn())
-                    sendNotification(new Whatsapp());
+                    sendNotification(new Whatsapp(statusBarNotification.getId()));
             }
         }
     }
@@ -186,7 +191,7 @@ public class DroneNotificationListenerService extends NotificationListenerServic
             switch (state){
                 case TelephonyManager.CALL_STATE_RINGING:
                     Log.i(TAG, "onCallStateChanged:" + incomingNumber);
-                    sendNotification(new Call(0));
+                    //sendNotification(new Call(0));
                     break;
             }
         }

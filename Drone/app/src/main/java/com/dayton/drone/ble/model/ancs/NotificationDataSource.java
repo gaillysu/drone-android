@@ -4,9 +4,10 @@ package com.dayton.drone.ble.model.ancs;
  * Created by med on 16/6/7.
  */
 public abstract class NotificationDataSource {
-    private static int notificationID = 0;
+    private final int notificationID;
+    public NotificationDataSource(int notificationID){this.notificationID = notificationID;}
     int getAlertType(){return 1;}
-    abstract int getAlertCategory();
+    abstract byte getAlertCategory();
     int getPriority(){return 3;}
     public byte[] getPayLoad(){
         int notificationID = getNotificationID();
@@ -21,7 +22,6 @@ public abstract class NotificationDataSource {
         };
     }
     int getNotificationID(){
-        notificationID++;
         return notificationID;
     }
 }
