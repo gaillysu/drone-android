@@ -262,7 +262,7 @@ public class ProfileActivity extends BaseActivity {
         if (!watchConnected) {
             noWatchShow.setVisibility(View.VISIBLE);
             AlphaAnimation alpha = new AlphaAnimation(1, 0);
-            alpha.setDuration(1500);
+            alpha.setDuration(2000);
             alpha.setFillAfter(true);
             alpha.setAnimationListener(new Animation.AnimationListener() {
                 @Override

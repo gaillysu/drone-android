@@ -75,7 +75,6 @@
      android:id="@+id/activity_set_notification_contacts_listview"
      android:layout_width="match_parent"
      android:layout_height="match_parent"
-     android:divider="@drawable/contacts_listview_divider"
      android:dividerHeight="1dp"
      android:layout_marginTop="10dp"/>
  </LinearLayout>

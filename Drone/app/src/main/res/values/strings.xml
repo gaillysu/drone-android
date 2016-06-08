@@ -8,8 +8,9 @@
     <string name="register_email"> Register with your email</string>
     <string name="third_party_login">Or register with your social media</string>
 
-    <string name="tips_user_account_password">E-mail must not be empty</string>
-    <string name="tips_user_password"> P-Password must not be empty</string>
+    <string name="tips_user_account_password">Email must not be empty</string>
+    <string name="tips_user_password">Password must not be empty</string>
+
     <string name="user_account_error">Account of password is error</string>
     <string name="user_info_clue">Tell us little bit about your self.</string>
     <string name="user_info_share">We promissed we will never share this info</string>
@@ -25,6 +26,11 @@
     <string name="user_info_activity_edit_first_name_hint">First Name</string>
     <string name="user_info_activity_edit_last_name_hint">Last Name</string>
     <string name="user_step_goal">GOAL:</string>
+
+    <string name="user_info_first_name_error">First name may not be empty</string>
+    <string name="user_info_birthday_error">Birthday may not be empty</string>
+    <string name="user_info_weight_error">Weight may not be empty</string>
+    <string name="user_info_height_error">Length may not be empty</string>
 
     <string name="bluetooth_connecting">Connecting</string>
     <string name="retry_connecting">Retry</string>
@@ -54,14 +60,14 @@
 
     <string name="choose_activity_title_choose_city_tv">Choose a City</string>
     <string name="choose_activity_title_cancel">Cancel</string>
+    <string name="add_city_toast_text">World clock is limited by 5 clocks</string>
 
     <string name="no_search_result">Did not find the city</string>
 
     <string name="gallery_activity_title">GALLERY</string>
-
     <string name="world_clock_title_text">World Clock</string>
-    <string name="world_clock_Yesterday_tv">yesterday</string>
-    <string name="world_clock_today_tv">today</string>
+    <string name="world_clock_Yesterday_tv">Yesterday</string>
+    <string name="world_clock_today_tv">Today</string>
     <string name="world_clock_Tomorrow_tv">Tomorrow</string>
     <string name="world_clock_city_time_difference_behind">hours behind</string>
     <string name="world_clock_city_time_difference_ahead">hours ahead</string>

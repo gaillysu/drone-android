@@ -4,7 +4,7 @@
               android:layout_height="wrap_content"
               android:layout_marginStart="10dp"
               android:orientation="horizontal"
-              android:paddingTop="10dp">
+              android:paddingTop="5dp">
 
         <RelativeLayout
             android:layout_marginStart="5dp"
@@ -15,13 +15,13 @@
             <TextView
                 android:id="@+id/world_clock_item_city"
                 style="@style/world_clock_adapter_tv_style"
-                android:textSize="20sp"/>
+                android:textSize="22sp"/>
 
             <TextView
                 android:id="@+id/world_clock_item_city_time"
                 style="@style/world_clock_adapter_tv_style"
                 android:layout_alignParentEnd="true"
-                android:textSize="20sp"/>
+                android:textSize="22sp"/>
         </RelativeLayout>
 
         <LinearLayout
@@ -32,12 +32,12 @@
             <TextView
                 android:id="@+id/world_clock_item_current_day"
                 style="@style/world_clock_adapter_tv_style"
-                android:textSize="16sp"/>
+                android:textSize="18sp"/>
 
             <TextView
                 android:id="@+id/world_clock_item_time_difference"
                 style="@style/world_clock_adapter_tv_style"
                 android:maxLines="1"
-                android:textSize="16sp"/>
+                android:textSize="18sp"/>
         </LinearLayout>
 </LinearLayout>

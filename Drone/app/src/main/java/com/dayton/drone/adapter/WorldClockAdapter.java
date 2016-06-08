@@ -85,12 +85,16 @@ public class WorldClockAdapter extends BaseAdapter implements SlideView.OnSlideL
             int hour = LATime.get(Calendar.HOUR_OF_DAY);
             int minutes = LATime.get(Calendar.MINUTE);
 
-            if (name != null && name.contains("/")) {
-                String[] cityDec = name.split("/");
-                holder.cityName.setText(cityDec[1]);
-            } else {
-                holder.cityName.setText(name);
+            if(name.contains("_")) {
+                name = name.replace("_","");
             }
+            
+                if (name != null && name.contains("/")) {
+                    String[] cityDec = name.split("/");
+                    holder.cityName.setText(cityDec[1]);
+                } else {
+                    holder.cityName.setText(name);
+                }
             String minutesTime;
             if (minutes < 10) {
                 minutesTime = "0" + minutes;
@@ -106,10 +110,10 @@ public class WorldClockAdapter extends BaseAdapter implements SlideView.OnSlideL
                 hourDay = "" + hour;
             }
 
-            if (hour > 12) {
-                holder.cityCurrentTime.setText(hourDay + ":" + minutesTime + " PM");
-            } else {
+            if (hour <= 12) {
                 holder.cityCurrentTime.setText(hourDay + ":" + minutesTime + " AM");
+            } else {
+                holder.cityCurrentTime.setText(hourDay + ":" + minutesTime + " PM");
             }
 
             if (hour == 0) {
@@ -124,7 +128,7 @@ public class WorldClockAdapter extends BaseAdapter implements SlideView.OnSlideL
             if (currentDay > date) {
                 holder.cityDay.setText(context.getResources().getString(R.string.world_clock_Yesterday_tv));
                 int cityTimeDifference = 24 - hour + currentTime;
-                holder.timeDifference.setText("," + cityTimeDifference +
+                holder.timeDifference.setText(",-" + cityTimeDifference +
                         context.getResources().getString(R.string.world_clock_city_time_difference_behind));
 
             } else if (currentDay == date) {
@@ -133,11 +137,11 @@ public class WorldClockAdapter extends BaseAdapter implements SlideView.OnSlideL
 
                 if (hour > currentTime) {
                     int cityTimeDifference = hour - currentTime;
-                    holder.timeDifference.setText("," + cityTimeDifference +
+                    holder.timeDifference.setText(", -" + cityTimeDifference +" "+
                             context.getResources().getString(R.string.world_clock_city_time_difference_ahead));
                 } else if (hour < currentTime) {
                     int cityTimeDifference = currentTime - hour;
-                    holder.timeDifference.setText("," + cityTimeDifference +
+                    holder.timeDifference.setText(", -" + cityTimeDifference +" "+
                             context.getResources().getString(R.string.world_clock_city_time_difference_behind));
                 } else {
                     holder.timeDifference.setText("");
@@ -146,7 +150,7 @@ public class WorldClockAdapter extends BaseAdapter implements SlideView.OnSlideL
 
                 holder.cityDay.setText(context.getResources().getString(R.string.world_clock_Tomorrow_tv));
 
-                holder.timeDifference.setText("," + (24 - currentTime) +
+                holder.timeDifference.setText(", -" + (24 - currentTime) +" "+
                         context.getResources().getString(R.string.world_clock_city_time_difference_ahead));
             }
         }

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
@@ -41,8 +40,18 @@ public class RegisterActivity extends BaseActivity {
         String email = ed_email.getText().toString();
         String password = ed_password.getText().toString();
         if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
-            Toast.makeText(RegisterActivity.this,
-                    R.string.tips_user_account_password, Toast.LENGTH_SHORT).show();
+
+            if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                ed_email.setError(getString(R.string.tips_user_account_password));
+            } else {
+                ed_email.setError(null);
+            }
+            if (password.isEmpty()) {
+                ed_password.setError(getString(R.string.tips_user_password));
+            } else {
+                ed_password.setError(null);
+            }
+
         } else {
             Intent intent = new Intent(RegisterActivity.this, UserInfoActivity.class);
             intent.putExtra("account", email);

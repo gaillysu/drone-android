@@ -51,7 +51,7 @@ public class LoginActivity extends BaseActivity {
     @OnClick(R.id.login_activity_login_bt)
     public void loginClick(){
          if(!validate()){
-             onLoginFailed("invalid email or password");
+//             onLoginFailed("invalid email or password");
              return;
          }
         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
