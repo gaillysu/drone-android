@@ -20,8 +20,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -34,8 +36,12 @@ public class WorldClockActivity extends BaseActivity {
     @Bind(R.id.world_clock_date_tv)
     TextView dateTv;
 
+    @Bind(R.id.world_clock_localhost_city)
+    TextView localCity;
+    @Bind(R.id.world_clock_item_city_time)
+    TextView localTime;
    private ListViewCompat worldClockListView;
-
+    public static String FORMAT_LONG = "yyyy-MM-dd HH:mm:ss";
 
     private List<WorldClock> listData;
     private WorldClockAdapter worldClockAdapter;
@@ -49,6 +55,18 @@ public class WorldClockActivity extends BaseActivity {
         setContentView(R.layout.activity_world_clock);
         worldClockListView = (ListViewCompat) findViewById(R.id.world_clock_select_city_list);
         ButterKnife.bind(this);
+        SimpleDateFormat format = new SimpleDateFormat(FORMAT_LONG);
+        Calendar calendar = Calendar.getInstance();
+        TimeZone timeZone = calendar.getTimeZone();
+        String timeName = timeZone.getID().split("/")[1];
+        localCity.setText(timeName);
+        String[] localTimeStr = format.format(calendar.getTime()).split(" ");
+        if(new Integer(localTimeStr[1].split(":")[0]).intValue()<=12) {
+
+            localTime.setText(localTimeStr[1].split(":")[0] + ":" + localTimeStr[1].split(":")[1]+" PM");
+        }else{
+            localTime.setText(localTimeStr[1].split(":")[0] + ":" + localTimeStr[1].split(":")[1]+" AM");
+        }
         worldClockDatabase = getModel().getWorldClockDatabaseHelper();
         initData();
     }
@@ -126,7 +144,8 @@ public class WorldClockActivity extends BaseActivity {
                String timeZoneName =data.getStringExtra("worldClock");
                 if(worldClockDatabase.getSelected().size()==5)
                 {
-                    Toast.makeText(WorldClockActivity.this,"Max 5 clock limited", Toast.LENGTH_LONG).show();
+                    Toast.makeText(WorldClockActivity.this,getResources().getString(R.string.add_city_toast_text)
+                            , Toast.LENGTH_LONG).show();
                     return;
                 }
                 WorldClock worldClock=  new WorldClock();

@@ -10,7 +10,7 @@
         android:id="@+id/register_drone_logo"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="120dp"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
         android:src="@mipmap/dronelogo"/>
@@ -22,7 +22,7 @@
         android:layout_marginLeft="60dp"
         android:layout_marginRight="60dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="50dp"
         android:background="@drawable/registe_edit_bg"
         android:orientation="vertical"
         >
@@ -62,7 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:background="@android:color/transparent"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="5dp"
         android:text="@string/login"
         android:textColor="@color/user_info_sex_bg"/>
     <TextView
@@ -70,7 +70,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/register_ll"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="5dp"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
         android:textStyle="bold"
@@ -96,14 +96,14 @@
             android:id="@+id/face_book_account_login"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="60dp"
             android:src="@mipmap/login_facebook_icon"/>
 
         <ImageView
             android:id="@+id/Twitter_account_login"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="60dp"
             android:src="@mipmap/login_twitter_icon"/>
     </LinearLayout>
 </LinearLayout>

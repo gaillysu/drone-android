@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bruce.pickerview.popwindow.DatePickerPopWin;
 import com.dayton.drone.R;
@@ -154,7 +153,7 @@ public class UserInfoActivity extends BaseActivity {
         String firstName = editFirstName.getText().toString();
         String lastName = editLastName.getText().toString();
         if (!(TextUtils.isEmpty(birthday) || TextUtils.isEmpty(height) || TextUtils.
-                isEmpty(weight) || TextUtils.isEmpty(firstName) || TextUtils.isEmpty(lastName))) {
+                isEmpty(weight) || TextUtils.isEmpty(firstName))) {
 
             Intent intent = getIntent();
             final String account = intent.getStringExtra("account");
@@ -198,8 +197,27 @@ public class UserInfoActivity extends BaseActivity {
             startActivity(SelectDeviceActivity.class);
             finish();
         } else {
-            Toast.makeText(UserInfoActivity.this,
-                    R.string.user_info_about, Toast.LENGTH_SHORT).show();
+            if(firstName.isEmpty()){
+                editFirstName.setError(getString(R.string.user_info_first_name_error));
+            }else{
+                editFirstName.setError(null);
+            }
+            if(birthday.isEmpty()){
+                tv_userBirth.setError(getString(R.string.user_info_birthday_error));
+            }else{
+                tv_userBirth.setError(null);
+            }
+            if(height.isEmpty()){
+                tv_userHeight.setError(getString(R.string.user_info_height_error));
+            }else{
+                tv_userHeight.setError(null);
+            }
+
+            if(weight.isEmpty()){
+                tv_userWeight.setError(getString(R.string.user_info_weight_error));
+            }else{
+                tv_userWeight.setError(null);
+            }
         }
     }
 
