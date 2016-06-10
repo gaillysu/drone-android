@@ -7,7 +7,6 @@ import com.dayton.drone.network.request.model.RequestChangePasswordBody;
 import com.dayton.drone.network.request.model.RequestChangePasswordBodyParameters;
 import com.dayton.drone.network.response.model.RequestChangePasswordResponse;
 import com.dayton.drone.network.restapi.Drone;
-import com.google.gson.Gson;
 
 /**
  * Created by Administrator on 2016/6/8.
@@ -37,6 +36,8 @@ public class RequestChangePasswordRequest extends BaseRequest<RequestChangePassw
         body.setParms(parameters);
         Log.i("Karl", "object: " + new Gson().toJson(body));
         return body;
+        RequestChangePasswordBodyParameters parameters = new RequestChangePasswordBodyParameters(email,token,password,id);
+        return new RequestChangePasswordBody(token,parameters);
     }
 
     @Override
