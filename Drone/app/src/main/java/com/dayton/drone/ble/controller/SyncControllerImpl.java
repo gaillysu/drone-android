@@ -59,6 +59,9 @@ import net.medcorp.library.ble.controller.ConnectionController;
 import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
 import net.medcorp.library.ble.event.BLEResponseDataEvent;
 import net.medcorp.library.ble.event.BLEServerConnectionStateChangedEvent;
+import net.medcorp.library.ble.event.BLEServerNotificationSentEvent;
+import net.medcorp.library.ble.event.BLEServerReadRequestEvent;
+import net.medcorp.library.ble.event.BLEServerServiceAddedEvent;
 import net.medcorp.library.ble.event.BLEServerWriteRequestEvent;
 import net.medcorp.library.ble.model.request.BLERequestData;
 import net.medcorp.library.ble.model.response.BLEResponseData;
@@ -111,6 +114,7 @@ public class SyncControllerImpl implements  SyncController{
         EventBus.getDefault().register(this);
         application.getApplicationContext().bindService(new Intent(application, LocalService.class), serviceConnection, Activity.BIND_AUTO_CREATE);
         application.getApplicationContext().bindService(new Intent(application, DroneNotificationListenerService.class), notificationServiceConnection, Activity.BIND_AUTO_CREATE);
+        //application.bindService(new Intent(application, GattServerService.class), gattServiceConnection, Activity.BIND_AUTO_CREATE);
         startAutoSyncTimer();
     }
 
@@ -381,13 +385,30 @@ public class SyncControllerImpl implements  SyncController{
     }
 
     @Subscribe
+    public void onEvent(BLEServerServiceAddedEvent event) {
+        Log.i(TAG,"BLE server got service added: "+event.getServiceUUID()+",status: "+event.getStatus());
+        Toast.makeText(gattServerService,"BLE server got service added: "+event.getServiceUUID()+",status: "+event.getStatus(),Toast.LENGTH_LONG).show();
+    }
+    @Subscribe
     public void onEvent(BLEServerConnectionStateChangedEvent event) {
         Log.i(TAG,"BLE server connection status: "+event.isStatus());
+        Toast.makeText(gattServerService,"Ble server connection got "+ event.isStatus(),Toast.LENGTH_LONG).show();
+    }
+    @Subscribe
+    public void onEvent(BLEServerReadRequestEvent event) {
+        Log.i(TAG,"BLE server got read request");
+        Toast.makeText(gattServerService,"BLE server got read request",Toast.LENGTH_LONG).show();
+    }
+    @Subscribe
+    public void onEvent(BLEServerNotificationSentEvent event) {
+        Log.i(TAG,"BLE server notification got sent");
+        Toast.makeText(gattServerService,"BLE server notification got sent",Toast.LENGTH_LONG).show();
     }
     @Subscribe
     public void onEvent(BLEServerWriteRequestEvent event) {
         int notificationID = HexUtils.bytesToInt(new byte[]{event.getValue()[1],event.getValue()[2],event.getValue()[3],event.getValue()[4]});
         Log.i(TAG,"BLE server got write request notificationID: "+notificationID + ",value: "+event.getValue());
+        Toast.makeText(gattServerService,"BLE server got write request notificationID: "+notificationID + ",value: "+event.getValue(),Toast.LENGTH_LONG).show();
         //read attributes command
         if(event.getValue()[0] == 1)
         {

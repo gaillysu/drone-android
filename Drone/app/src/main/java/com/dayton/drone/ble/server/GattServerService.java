@@ -68,6 +68,12 @@ public class GattServerService extends Service {
         bleServiceProvider.sendNotificationData(data);
     }
 
+    public void sendNotificationCommand(byte[] data){
+        int nid = HexUtils.bytesToInt(new byte[]{data[1],data[2],data[3],data[4]});
+        Log.i(TAG,"BLE server send command notification,notificationID: " + nid + "value: " + data);
+        bleServiceProvider.sendNotificationCommand(data);
+    }
+
     public int getNotificationID() {
         return notificationID;
     }

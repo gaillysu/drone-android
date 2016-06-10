@@ -21,6 +21,16 @@ public abstract class NotificationDataSource {
                 (byte)getPriority(),1,0
         };
     }
+    public byte[] getCommandPayLoad(){
+        int notificationID = getNotificationID();
+        return new byte[]{(byte)0x01,
+                (byte) (notificationID&0xFF),
+                (byte) ((notificationID>>8)&0xFF),
+                (byte) ((notificationID>>16)&0xFF),
+                (byte) ((notificationID>>24)&0xFF),
+                (byte) 0x01,(byte)0x06
+        };
+    }
     int getNotificationID(){
         return notificationID;
     }
