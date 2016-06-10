@@ -4,10 +4,10 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
@@ -29,7 +29,7 @@ public class ForgetPasswordActivity extends BaseActivity {
     @Bind(R.id.forget_activity_edit_change_password_email_et)
     EditText emailAddressEdit;
 
-    @Bind(R.id.register_back_iv)
+    @Bind(R.id.register_next_iv)
     ImageButton nextPageImageButton;
 
     @Override
@@ -44,31 +44,38 @@ public class ForgetPasswordActivity extends BaseActivity {
     public void changePasswordClick() {
         String changePasswordEmail = emailAddressEdit.getText().toString();
         if (!changePasswordEmail.isEmpty()) {
-            ProgressDialog progressDialog = new ProgressDialog(this);
+            final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setIndeterminate(true);
             progressDialog.setCancelable(false);
             progressDialog.setMessage(getString(R.string.forget_password_dialog_text));
             progressDialog.show();
 
-            getModel().getRetrofitManager().execute(new RequestTokenRequest(getModel().getRetrofitManager().getAccessToken(), changePasswordEmail), new RequestListener<RequestTokenResponse>() {
+            getModel().getRetrofitManager().execute(new RequestTokenRequest(getModel()
+                    .getRetrofitManager().getAccessToken(), changePasswordEmail), new RequestListener<RequestTokenResponse>() {
                 @Override
                 public void onRequestFailure(SpiceException spiceException) {
-                    Toast.makeText(ForgetPasswordActivity.this,getString(R.string.email_is_error),Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
+                    emailAddressEdit.setError(getString(R.string.email_is_error));
                 }
 
                 @Override
                 public void onRequestSuccess(RequestTokenResponse requestTokenResponse) {
                     String email = requestTokenResponse.getEmail();
                     String token = requestTokenResponse.getPassword_token();
-                    int id  = requestTokenResponse.getId();
-                    Intent intent = new Intent(ForgetPasswordActivity.this,ChangePasswordActivity.class);
-                    intent.putExtra("email",email);
-                    intent.putExtra("token",token);
-                    intent.putExtra("id",id);
-                    startActivity(intent);
+                    int id = requestTokenResponse.getId();
+                    if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(token)) {
+                        Intent intent = new Intent(ForgetPasswordActivity.this, ChangePasswordActivity.class);
+                        intent.putExtra("email", email);
+                        intent.putExtra("token", token);
+                        intent.putExtra("id", id);
+                        startActivity(intent);
+                    } else {
+                        emailAddressEdit.setError(getString(R.string.forget_password_request_null));
+                    }
+                    progressDialog.dismiss();
                 }
             });
-        }else{
+        } else {
             emailAddressEdit.setError(getString(R.string.tips_user_account_password));
         }
 

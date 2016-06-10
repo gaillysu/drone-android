@@ -99,9 +99,9 @@ public class ChooseCityActivity extends BaseActivity {
     }
 
     @OnClick(R.id.choose_activity_cancel_bt)
-    public void cancelClick() {
-        isChooseCity = false;
-        back(false);
+    public void cancelClick(){
+        userSearchCityEdit.setText("");
+        editSearchContent.setVisibility(View.GONE);
     }
 
 
@@ -206,7 +206,7 @@ public class ChooseCityActivity extends BaseActivity {
         String userInputSearchCityName = userSearchCityEdit.getText().toString();
         if (!userInputSearchCityName.isEmpty()) {
             for (SortModel bean : SourceDateList) {
-                if (bean.getName().contains(userInputSearchCityName)) {
+                if (bean.getName().toLowerCase().contains(userInputSearchCityName.toLowerCase())) {
                     searchResult.add(bean);
                 }
             }

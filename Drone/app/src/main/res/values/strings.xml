@@ -10,6 +10,8 @@
     <string name="forget_password_edit_hint">Your Email</string>
     <string name="forget_password_dialog_text">Please wait...</string>
     <string name="email_is_error">Please check your email account</string>
+    <string name="forget_password_request_null">Account error...</string>
+
     <string name="forget_password_dec">Please fill in your e-mail to set a \n new password</string>
     <string name="forget_new_password">New password</string>
     <string name="forget_repeat_password">Confirm new password</string>
@@ -83,7 +85,7 @@
     <string name="world_add_city_prompt">Add up to five cities</string>
     <string name="world_clock_search_city_hint">Search</string>
 
-    <string name="profile_activity_user_goal">GOAL</string>
+    <string name="profile_activity_user_goal">Goal:</string>
     <string name="profile_bottom_tv">GOAl NOTIFICATION </string>
     <string name="profile_edit_prompt">edit</string>
     <string name="profile_user_weight_unit">Kg</string>

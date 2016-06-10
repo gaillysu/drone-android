@@ -1,15 +1,13 @@
-package com.dayton.drone.network.response.model;
-
-import com.dayton.drone.network.response.BaseResponse;
+package com.dayton.drone.network.request.model;
 
 /**
- * Created by Administrator on 2016/6/8.
+ * Created by Administrator on 2016/6/10.
  */
-public class RequestTokenResponse extends BaseResponse
-{
+public class ChangePasswordModel {
     private String password_token;
     private String email;
     private int id;
+    private String password;
 
     public String getPassword_token() {
         return password_token;
@@ -35,12 +33,11 @@ public class RequestTokenResponse extends BaseResponse
         this.id = id;
     }
 
-    @Override
-    public String toString() {
-        return "RequestTokenResponse{" +
-                "password_token='" + password_token + '\'' +
-                ", email='" + email + '\'' +
-                ", id=" + id +
-                '}';
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

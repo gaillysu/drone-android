@@ -6,11 +6,11 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.network.request.RequestChangePasswordRequest;
+import com.dayton.drone.network.request.model.ChangePasswordModel;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -60,13 +60,18 @@ public class ChangePasswordActivity extends BaseActivity {
     }
 
     private void ChangePassword(String newFirstInputPassword) {
+        ChangePasswordModel changePasswordModel = new ChangePasswordModel();
         Intent intent  = getIntent();
-        int id = intent.getIntExtra("id",-1);
-        String email = intent.getStringExtra("email");
-        String password_token  =intent.getStringExtra("token");
-        getModel().getRetrofitManager().execute(new RequestChangePasswordRequest(password_token, email, newFirstInputPassword, id), new RequestListener() {
+        changePasswordModel.setId(intent.getIntExtra("id",-1));
+        changePasswordModel.setEmail(intent.getStringExtra("email"));
+        changePasswordModel.setPassword_token(intent.getStringExtra("token"));
+        changePasswordModel.setPassword(newFirstInputPassword);
+
+        getModel().getRetrofitManager().execute(new RequestChangePasswordRequest(getModel()
+                .getRetrofitManager().getAccessToken(), changePasswordModel), new RequestListener() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
+
             }
 
             @Override

@@ -158,10 +158,9 @@
 
                 <TextView
                     android:id="@+id/profile_activity_user_goal"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
-                    android:layout_weight="1"
                     android:text="@string/profile_activity_user_goal"
                     android:textColor="@color/home_list_adapter_item_tv_color"
                     android:textSize="26sp"/>
@@ -173,8 +172,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="20dp"
                     android:layout_weight="1"
+                    android:paddingLeft="10dp"
                     android:inputType="number"
-                    android:maxLength="7"
+                    android:maxLength="8"
                     android:maxLines="1"
                     android:textColorHint="@color/home_list_adapter_item_tv_color"
                     android:textSize="25sp"/>
@@ -195,11 +195,16 @@
             android:gravity="center"
             android:orientation="horizontal">
             <TextView
-                style="@style/profile_activity_text_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:textColor="@color/home_list_adapter_item_tv_color"
+                android:textSize="26sp"
                 android:text="@string/profile_birthday_dec"/>
             <TextView
                 android:id="@+id/profile_activity_user_birthday"
-                style="@style/profile_activity_text_style" />
+                style="@style/profile_activity_text_style"
+                android:layout_marginLeft="10dp"/>
 
             <ImageButton
                 android:id="@+id/profile_activity_edit_user_birthday"

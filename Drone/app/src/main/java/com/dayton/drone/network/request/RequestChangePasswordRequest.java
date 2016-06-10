@@ -2,6 +2,7 @@ package com.dayton.drone.network.request;
 
 import android.util.Log;
 
+import com.dayton.drone.network.request.model.ChangePasswordModel;
 import com.dayton.drone.network.request.model.RequestChangePasswordBody;
 import com.dayton.drone.network.request.model.RequestChangePasswordBodyParameters;
 import com.dayton.drone.network.response.model.RequestChangePasswordResponse;
@@ -11,27 +12,29 @@ import com.google.gson.Gson;
 /**
  * Created by Administrator on 2016/6/8.
  */
-public class RequestChangePasswordRequest extends BaseRequest<RequestChangePasswordResponse,Drone> implements BaseRequest.BaseRetroRequestBody<RequestChangePasswordBody>
+public class RequestChangePasswordRequest extends BaseRequest<RequestChangePasswordResponse,Drone>
+        implements BaseRequest.BaseRetroRequestBody<RequestChangePasswordBody>
 
 {
+    private ChangePasswordModel changePasswordModel;
     private String token;
-    private String email;
-    private int id;
-    private String password;
 
-    public RequestChangePasswordRequest(String token, String email, String password, int id) {
+    public RequestChangePasswordRequest(String token,ChangePasswordModel changePasswordModel) {
         super(RequestChangePasswordResponse.class, Drone.class);
-        this.email = email;
-        this.id = id;
+
         this.token = token;
-        this.password = password;
+        this.changePasswordModel = changePasswordModel;
     }
 
 
     @Override
     public RequestChangePasswordBody buildRequestBody() {
-        RequestChangePasswordBodyParameters parameters = new RequestChangePasswordBodyParameters(email,token,password,id);
-        RequestChangePasswordBody body = new RequestChangePasswordBody(token,parameters);
+
+
+        RequestChangePasswordBodyParameters parameters = new RequestChangePasswordBodyParameters(token,changePasswordModel);
+        RequestChangePasswordBody body = new RequestChangePasswordBody();
+        body.setToken(token);
+        body.setParms(parameters);
         Log.i("Karl", "object: " + new Gson().toJson(body));
         return body;
     }

@@ -138,7 +138,6 @@ public class UserInfoActivity extends BaseActivity {
         pickerPopWin3.showPopWin(UserInfoActivity.this);
     }
 
-
     @OnClick(R.id.register_back_iv)
     public void back() {
         startActivity(RegisterActivity.class);
