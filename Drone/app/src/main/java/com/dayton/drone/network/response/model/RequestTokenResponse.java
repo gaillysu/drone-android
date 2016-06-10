@@ -7,40 +7,13 @@ import com.dayton.drone.network.response.BaseResponse;
  */
 public class RequestTokenResponse extends BaseResponse
 {
-    private String password_token;
-    private String email;
-    private int id;
+   private UserWithPasswordToken user;
 
-    public String getPassword_token() {
-        return password_token;
+    public UserWithPasswordToken getUser() {
+        return user;
     }
 
-    public void setPassword_token(String password_token) {
-        this.password_token = password_token;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    @Override
-    public String toString() {
-        return "RequestTokenResponse{" +
-                "password_token='" + password_token + '\'' +
-                ", email='" + email + '\'' +
-                ", id=" + id +
-                '}';
+    public void setUser(UserWithPasswordToken user) {
+        this.user = user;
     }
 }

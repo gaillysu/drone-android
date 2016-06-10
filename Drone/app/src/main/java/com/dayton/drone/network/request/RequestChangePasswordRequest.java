@@ -1,7 +1,5 @@
 package com.dayton.drone.network.request;
 
-import android.util.Log;
-
 import com.dayton.drone.network.request.model.ChangePasswordModel;
 import com.dayton.drone.network.request.model.RequestChangePasswordBody;
 import com.dayton.drone.network.request.model.RequestChangePasswordBodyParameters;
@@ -31,12 +29,6 @@ public class RequestChangePasswordRequest extends BaseRequest<RequestChangePassw
 
 
         RequestChangePasswordBodyParameters parameters = new RequestChangePasswordBodyParameters(token,changePasswordModel);
-        RequestChangePasswordBody body = new RequestChangePasswordBody();
-        body.setToken(token);
-        body.setParms(parameters);
-        Log.i("Karl", "object: " + new Gson().toJson(body));
-        return body;
-        RequestChangePasswordBodyParameters parameters = new RequestChangePasswordBodyParameters(email,token,password,id);
         return new RequestChangePasswordBody(token,parameters);
     }
 

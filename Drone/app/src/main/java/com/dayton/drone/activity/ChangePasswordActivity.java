@@ -1,16 +1,20 @@
 package com.dayton.drone.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.network.request.RequestChangePasswordRequest;
 import com.dayton.drone.network.request.model.ChangePasswordModel;
+import com.dayton.drone.network.response.model.RequestChangePasswordResponse;
+import com.dayton.drone.network.response.model.UserWithChangePassword;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -67,16 +71,27 @@ public class ChangePasswordActivity extends BaseActivity {
         changePasswordModel.setPassword_token(intent.getStringExtra("token"));
         changePasswordModel.setPassword(newFirstInputPassword);
 
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage(getString(R.string.forget_password_dialog_text));
+        progressDialog.show();
+
+
         getModel().getRetrofitManager().execute(new RequestChangePasswordRequest(getModel()
-                .getRetrofitManager().getAccessToken(), changePasswordModel), new RequestListener() {
+                .getRetrofitManager().getAccessToken(), changePasswordModel), new RequestListener<RequestChangePasswordResponse>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
+                Toast.makeText(ChangePasswordActivity.this,getString(R.string.change_password_fail),Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
 
             }
 
             @Override
-            public void onRequestSuccess(Object o) {
-
+            public void onRequestSuccess(RequestChangePasswordResponse requestChangePasswordResponse) {
+                progressDialog.dismiss();
+                UserWithChangePassword userMessage = requestChangePasswordResponse.getUser();
+               String name = userMessage.getLast_name();
             }
         });
 

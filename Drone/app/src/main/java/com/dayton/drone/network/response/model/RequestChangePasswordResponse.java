@@ -6,4 +6,14 @@ import com.dayton.drone.network.response.BaseResponse;
  * Created by Administrator on 2016/6/8.
  */
 public class RequestChangePasswordResponse extends BaseResponse {
+
+    private UserWithChangePassword user;
+
+    public UserWithChangePassword getUser() {
+        return user;
+    }
+
+    public void setUser(UserWithChangePassword user) {
+        this.user = user;
+    }
 }

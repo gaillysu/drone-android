@@ -60,17 +60,20 @@ public class ForgetPasswordActivity extends BaseActivity {
 
                 @Override
                 public void onRequestSuccess(RequestTokenResponse requestTokenResponse) {
-                    String email = requestTokenResponse.getEmail();
-                    String token = requestTokenResponse.getPassword_token();
-                    int id = requestTokenResponse.getId();
-                    if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(token)) {
-                        Intent intent = new Intent(ForgetPasswordActivity.this, ChangePasswordActivity.class);
-                        intent.putExtra("email", email);
-                        intent.putExtra("token", token);
-                        intent.putExtra("id", id);
-                        startActivity(intent);
-                    } else {
-                        emailAddressEdit.setError(getString(R.string.forget_password_request_null));
+                    if(requestTokenResponse != null) {
+                        String email = requestTokenResponse.getUser().getEmail();
+                        String token = requestTokenResponse.getUser().getPassword_token();
+                        int id = requestTokenResponse.getUser().getId();
+
+                        if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(token)) {
+                            Intent intent = new Intent(ForgetPasswordActivity.this, ChangePasswordActivity.class);
+                            intent.putExtra("email", email);
+                            intent.putExtra("token", token);
+                            intent.putExtra("id", id);
+                            startActivity(intent);
+                        } else {
+                            emailAddressEdit.setError(getString(R.string.forget_password_request_null));
+                        }
                     }
                     progressDialog.dismiss();
                 }
