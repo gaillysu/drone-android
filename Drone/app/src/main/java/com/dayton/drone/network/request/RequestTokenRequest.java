@@ -1,12 +1,9 @@
 package com.dayton.drone.network.request;
 
-import android.util.Log;
-
 import com.dayton.drone.network.request.model.RequestTokenBody;
 import com.dayton.drone.network.request.model.RequestTokenBodyParameters;
 import com.dayton.drone.network.response.model.RequestTokenResponse;
 import com.dayton.drone.network.restapi.Drone;
-import com.google.gson.Gson;
 
 /**
  * Created by Administrator on 2016/6/8.
@@ -30,8 +27,6 @@ public class RequestTokenRequest extends BaseRequest<RequestTokenResponse,Drone>
     @Override
     public RequestTokenBody buildRequestBody() {
         RequestTokenBodyParameters parameters = new RequestTokenBodyParameters(email);
-        RequestTokenBody body =  new RequestTokenBody(token,parameters);
-        Log.i("Karl", "object: " + new Gson().toJson(body));
-        return body;
+        return new RequestTokenBody(token,parameters);
     }
 }
