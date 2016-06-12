@@ -8,39 +8,7 @@ public class UserWithChangePassword {
     private int id;
     private String last_name;
     private String first_name;
-
-    private class birthday {
-
-        private String date;
-        private int timezone_type;
-        private String timezone;
-
-        public String getDate() {
-            return date;
-        }
-
-        public void setDate(String date) {
-            this.date = date;
-        }
-
-        public int getTimezone_type() {
-            return timezone_type;
-        }
-
-        public void setTimezone_type(int timezone_type) {
-            this.timezone_type = timezone_type;
-        }
-
-        public String getTimezone() {
-            return timezone;
-        }
-
-        public void setTimezone(String timezone) {
-            this.timezone = timezone;
-        }
-    }
-
-
+    private UserBirthdayData birthday;
     private int weight;
     private int length;
     private String last_longitude;
@@ -53,6 +21,15 @@ public class UserWithChangePassword {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+
+    public UserBirthdayData getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(UserBirthdayData birthday) {
+        this.birthday = birthday;
     }
 
     public String getLast_name() {
@@ -110,4 +87,38 @@ public class UserWithChangePassword {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    private class UserBirthdayData {
+
+        private String date;
+        private int timezone_type;
+        private String timezone;
+
+        public String getDate() {
+            return date;
+        }
+
+        public void setDate(String date) {
+            this.date = date;
+        }
+
+        public int getTimezone_type() {
+            return timezone_type;
+        }
+
+        public void setTimezone_type(int timezone_type) {
+            this.timezone_type = timezone_type;
+        }
+
+        public String getTimezone() {
+            return timezone;
+        }
+
+        public void setTimezone(String timezone) {
+            this.timezone = timezone;
+        }
+
+    }
 }
+
+

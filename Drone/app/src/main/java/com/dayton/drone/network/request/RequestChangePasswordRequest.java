@@ -1,16 +1,19 @@
 package com.dayton.drone.network.request;
 
+import android.util.Log;
+
 import com.dayton.drone.network.request.model.ChangePasswordModel;
-import com.dayton.drone.network.request.model.RequestChangePasswordBody;
-import com.dayton.drone.network.request.model.RequestChangePasswordBodyParameters;
+import com.dayton.drone.network.request.model.ChangePasswordObject;
+import com.dayton.drone.network.request.model.ChangePasswordUserParameters;
 import com.dayton.drone.network.response.model.RequestChangePasswordResponse;
 import com.dayton.drone.network.restapi.Drone;
+import com.google.gson.Gson;
 
 /**
  * Created by Administrator on 2016/6/8.
  */
 public class RequestChangePasswordRequest extends BaseRequest<RequestChangePasswordResponse,Drone>
-        implements BaseRequest.BaseRetroRequestBody<RequestChangePasswordBody>
+        implements BaseRequest.BaseRetroRequestBody<ChangePasswordObject>
 
 {
     private ChangePasswordModel changePasswordModel;
@@ -25,11 +28,14 @@ public class RequestChangePasswordRequest extends BaseRequest<RequestChangePassw
 
 
     @Override
-    public RequestChangePasswordBody buildRequestBody() {
-
-
-        RequestChangePasswordBodyParameters parameters = new RequestChangePasswordBodyParameters(token,changePasswordModel);
-        return new RequestChangePasswordBody(token,parameters);
+    public ChangePasswordObject buildRequestBody() {
+        ChangePasswordObject object = new ChangePasswordObject();
+        object.setToken(token);
+        ChangePasswordUserParameters parameters = new ChangePasswordUserParameters();
+        parameters.setUser(changePasswordModel);
+        object.setParams(parameters);
+        Log.i(this.getClass().getSimpleName(),"object:" + new Gson().toJson(object));
+        return object;
     }
 
     @Override

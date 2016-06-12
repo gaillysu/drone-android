@@ -7,14 +7,13 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
+import com.dayton.drone.activity.tutorial.WelcomeActivity;
 import com.dayton.drone.network.request.RequestChangePasswordRequest;
 import com.dayton.drone.network.request.model.ChangePasswordModel;
 import com.dayton.drone.network.response.model.RequestChangePasswordResponse;
-import com.dayton.drone.network.response.model.UserWithChangePassword;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -82,17 +81,16 @@ public class ChangePasswordActivity extends BaseActivity {
                 .getRetrofitManager().getAccessToken(), changePasswordModel), new RequestListener<RequestChangePasswordResponse>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
-                Toast.makeText(ChangePasswordActivity.this,getString(R.string.change_password_fail),Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
-
             }
 
             @Override
             public void onRequestSuccess(RequestChangePasswordResponse requestChangePasswordResponse) {
                 progressDialog.dismiss();
-                UserWithChangePassword userMessage = requestChangePasswordResponse.getUser();
-               String name = userMessage.getLast_name();
+                startActivity(WelcomeActivity.class);
+                finish();
             }
+
         });
 
     }
