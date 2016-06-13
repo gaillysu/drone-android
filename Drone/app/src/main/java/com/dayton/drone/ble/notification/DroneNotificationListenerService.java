@@ -6,12 +6,17 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.ContentObserver;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Handler;
 import android.provider.Settings;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.dayton.drone.application.ApplicationModel;
 import com.dayton.drone.ble.datasource.GattAttributesDataSourceImpl;
@@ -23,9 +28,12 @@ import com.dayton.drone.ble.model.ancs.Sms;
 import com.dayton.drone.ble.model.ancs.Wechat;
 import com.dayton.drone.ble.model.ancs.Whatsapp;
 import com.dayton.drone.ble.model.request.notification.DroneNotificationTrigger;
+import com.dayton.drone.ble.util.Constants;
 
 import net.medcorp.library.ble.controller.ConnectionController;
 import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
+import net.medcorp.library.ble.event.BLEServerWriteRequestEvent;
+import net.medcorp.library.ble.util.HexUtils;
 import net.medcorp.library.ble.util.Optional;
 
 import org.greenrobot.eventbus.EventBus;
@@ -50,6 +58,15 @@ public class DroneNotificationListenerService extends NotificationListenerServic
     private TelephonyManager telephonyManager;
     private CallStateListener callStateListener;
 
+    private String title;
+    private String subTitle;
+    private String message;
+    private String applicationName;
+    private int notificationID;
+
+    private SmsObserver smsObserver;
+    private Uri SMS_INBOX = Uri.parse("content://sms/inbox");
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -58,6 +75,8 @@ public class DroneNotificationListenerService extends NotificationListenerServic
         telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
         callStateListener = new CallStateListener();
         telephonyManager.listen(callStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+        smsObserver = new SmsObserver(this, null);
+        getContentResolver().registerContentObserver(SMS_INBOX,true,smsObserver);
         EventBus.getDefault().register(this);
     }
 
@@ -65,6 +84,7 @@ public class DroneNotificationListenerService extends NotificationListenerServic
     public void onDestroy() {
         super.onDestroy();
         telephonyManager.listen(callStateListener, PhoneStateListener.LISTEN_NONE);
+        getContentResolver().unregisterContentObserver(smsObserver);
         EventBus.getDefault().unregister(this);
     }
 
@@ -85,6 +105,64 @@ public class DroneNotificationListenerService extends NotificationListenerServic
             }
         }
     }
+    @Subscribe
+    public void onEvent(BLEServerWriteRequestEvent event) {
+        int notificationID = HexUtils.bytesToInt(new byte[]{event.getValue()[1],event.getValue()[2],event.getValue()[3],event.getValue()[4]});
+        Log.i(TAG,"BLE server got write request notificationID: "+notificationID + ",value: "+event.getValue());
+        Toast.makeText(application.getSyncController().getGattServerService(),"BLE server got write request notificationID: "+notificationID + ",value: "+event.getValue(),Toast.LENGTH_LONG).show();
+        //read attributes command
+        if(event.getValue()[0] == Constants.NotificationCommand.ReadAttributes.rawValue())
+        {
+            //byte[] valueResponse = new byte[100];
+            if(application.getSyncController().getGattServerService().getNotificationID() == notificationID)
+            {
+                //now ,only one attribute is asked at once time, which saved at offset "6" in the payload
+                byte[] responsePayload = new byte[0];
+                boolean usedAttribute = false;
+                if(event.getValue()[6] == Constants.AttributeCode.Title.rawValue())
+                {
+                    responsePayload = new byte[9+title.length()];
+                    System.arraycopy(event.getValue(),0,responsePayload,0,7);
+                    responsePayload[7] = (byte)title.length();
+                    responsePayload[8] = (byte)0;
+                    System.arraycopy(title.getBytes(),0,responsePayload,9,title.length());
+                    usedAttribute = true;
+                }
+                else if(event.getValue()[6] == Constants.AttributeCode.Text.rawValue())
+                {
+                    responsePayload = new byte[9+message.length()];
+                    System.arraycopy(event.getValue(),0,responsePayload,0,7);
+                    responsePayload[7] = (byte)message.length();
+                    responsePayload[8] = (byte)0;
+                    System.arraycopy(title.getBytes(),0,responsePayload,9,message.length());
+                    usedAttribute = true;
+                }
+                else if(event.getValue()[6] == Constants.AttributeCode.ApplicationName.rawValue())
+                {
+                    responsePayload = new byte[9+applicationName.length()];
+                    System.arraycopy(event.getValue(),0,responsePayload,0,7);
+                    responsePayload[7] = (byte)applicationName.length();
+                    responsePayload[8] = (byte)0;
+                    System.arraycopy(applicationName.getBytes(),0,responsePayload,9,applicationName.length());
+                    usedAttribute = true;
+                }
+                if(usedAttribute) {
+                    application.getSyncController().getGattServerService().sendNotificationData(responsePayload);
+                }
+            }
+        }
+        //trigger action,such as drop call
+        else if(event.getValue()[0] == Constants.NotificationCommand.TriggerAction.rawValue())
+        {
+
+        }
+        //read extended attributes command
+        else if(event.getValue()[0] == Constants.NotificationCommand.ReadExtendAttributes.rawValue())
+        {
+
+        }
+    }
+
     private void sendNotification(NotificationDataSource datasource)
     {
         if((new Date().getTime() - lastNotificationTimeStamps)< TIME_BETWEEN_TWO_NOTIFS){
@@ -110,6 +188,7 @@ public class DroneNotificationListenerService extends NotificationListenerServic
         if(statusBarNotification == null) {
             return;
         }
+        notificationID = statusBarNotification.getId();
         Notification notification = statusBarNotification.getNotification();
         Log.v(TAG, "got system Notification : "+statusBarNotification);
         if (notification != null)
@@ -131,7 +210,7 @@ public class DroneNotificationListenerService extends NotificationListenerServic
                     ) {
                 //BLE keep-connect service will process this message
                 //if(helper.getState(new SmsNotification()).isOn())
-                    sendNotification(new Sms(statusBarNotification.getId()));
+                //    sendNotification(new Sms(statusBarNotification.getId()));
             } else if(statusBarNotification.getPackageName().equals("com.android.email")
                     || statusBarNotification.getPackageName().equals("com.google.android.email")
                     || statusBarNotification.getPackageName().equals("com.google.android.gm")
@@ -191,9 +270,38 @@ public class DroneNotificationListenerService extends NotificationListenerServic
             switch (state){
                 case TelephonyManager.CALL_STATE_RINGING:
                     Log.i(TAG, "onCallStateChanged:" + incomingNumber);
-                    //sendNotification(new Call(0));
+                    title = incomingNumber;
+                    applicationName = "call";
                     break;
             }
         }
     }
+    //add sms listener to monitor incoming sms
+    class SmsObserver extends ContentObserver {
+
+        public SmsObserver(Context context, Handler handler) {
+            super(handler);
+        }
+        @Override
+        public void onChange(boolean selfChange) {
+            super.onChange(selfChange);
+            ContentResolver cr = getContentResolver();
+            String[] projection = new String[] { "address","person","body" };
+            String where = " date >  " + (System.currentTimeMillis() - 5 * 1000);
+            Cursor cur = cr.query(SMS_INBOX, projection, where, null, "date desc");
+            if (null == cur) {
+                return;
+            }
+            if (cur.moveToNext()) {
+                String number = cur.getString(cur.getColumnIndex("address"));
+                String name = cur.getString(cur.getColumnIndex("person"));
+                String body = cur.getString(cur.getColumnIndex("body"));
+                title = (name == null?number:name);
+                message = body;
+                applicationName = "sms";
+                sendNotification(new Sms(notificationID));
+            }
+        }
+    }
+
 }

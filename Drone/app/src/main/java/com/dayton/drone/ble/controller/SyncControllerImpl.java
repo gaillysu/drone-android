@@ -404,32 +404,6 @@ public class SyncControllerImpl implements  SyncController{
         Log.i(TAG,"BLE server notification got sent");
         Toast.makeText(gattServerService,"BLE server notification got sent",Toast.LENGTH_LONG).show();
     }
-    @Subscribe
-    public void onEvent(BLEServerWriteRequestEvent event) {
-        int notificationID = HexUtils.bytesToInt(new byte[]{event.getValue()[1],event.getValue()[2],event.getValue()[3],event.getValue()[4]});
-        Log.i(TAG,"BLE server got write request notificationID: "+notificationID + ",value: "+event.getValue());
-        Toast.makeText(gattServerService,"BLE server got write request notificationID: "+notificationID + ",value: "+event.getValue(),Toast.LENGTH_LONG).show();
-        //read attributes command
-        if(event.getValue()[0] == 1)
-        {
-            //byte[] valueResponse = new byte[100];
-            //if(gattServerService.getNotificationID() == notificationID)
-            //{
-            //    gattServerService.sendNotificationData(event.getValue());
-            //}
-        }
-        //trigger action,such as drop call
-        else if(event.getValue()[0] == 3)
-        {
-
-        }
-        //read extended attributes command
-        else if(event.getValue()[0] == 5)
-        {
-
-        }
-    }
-
     //local service
     static public class LocalService extends Service
     {
