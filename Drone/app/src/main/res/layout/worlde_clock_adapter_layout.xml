@@ -14,13 +14,13 @@
             <TextView
                 android:id="@+id/world_clock_item_city"
                 style="@style/world_clock_adapter_tv_style"
-                android:textSize="22sp"/>
+                android:textSize="20sp"/>
 
             <TextView
                 android:id="@+id/world_clock_item_city_time"
                 style="@style/world_clock_adapter_tv_style"
                 android:layout_alignParentEnd="true"
-                android:textSize="22sp"/>
+                android:textSize="20sp"/>
         </RelativeLayout>
 
         <LinearLayout

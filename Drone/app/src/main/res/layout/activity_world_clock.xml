@@ -62,8 +62,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textColor="@color/choose_adapter_text_color"
-            android:textSize="28sp"
-            android:textStyle="bold"/>
+            android:textSize="24sp"
+            />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -86,13 +86,13 @@
                     <TextView
                         android:id="@+id/world_clock_localhost_city"
                         style="@style/world_clock_adapter_tv_style"
-                        android:textSize="22sp"/>
+                        android:textSize="20sp"/>
 
                     <TextView
                         android:id="@+id/world_clock_item_city_time"
                         style="@style/world_clock_adapter_tv_style"
                         android:layout_alignParentRight="true"
-                        android:textSize="22sp"/>
+                        android:textSize="20sp"/>
                 </RelativeLayout>
                 <TextView
                     android:id="@+id/world_clock_item_current_day"
