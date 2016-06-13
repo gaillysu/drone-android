@@ -24,6 +24,7 @@
     <string name="login_failed_toast_text">Failed to login</string>
     <string name="tips_user_account_password">Email must not be empty</string>
     <string name="tips_user_password">Password must not be empty</string>
+    <string name="user_step_goal">GOAL:</string>
 
     <string name="user_account_error">Account of password is incorrect.</string>
     <string name="user_info_clue">Tell us little bit about your self.</string>
