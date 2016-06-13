@@ -100,7 +100,7 @@ public class WorldClockActivity extends BaseActivity {
         String currentTime = format.format(date);
         String[] currentTimeArray = currentTime.split("-");
 
-        dateTv.setText(new SimpleDateFormat("MMM", Locale.US).format(date)+ currentTimeArray[2] + ", " + currentTimeArray[0]);
+        dateTv.setText(new SimpleDateFormat("MMM", Locale.US).format(date)+"/"+currentTimeArray[2] + "/" + currentTimeArray[0]);
 
         listData = worldClockDatabase.getSelected();
         worldClockAdapter = new WorldClockAdapter(listData, this);
@@ -160,7 +160,8 @@ public class WorldClockActivity extends BaseActivity {
                 }
                 else
                 {
-                    Toast.makeText(WorldClockActivity.this,"Failed,Clock existed", Toast.LENGTH_LONG).show();
+                    Toast.makeText(WorldClockActivity.this,getString(R.string.world_clock_add_city_error)
+                            , Toast.LENGTH_LONG).show();
                 }
             }
         }

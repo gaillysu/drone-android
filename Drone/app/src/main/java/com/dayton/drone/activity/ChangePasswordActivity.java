@@ -77,11 +77,11 @@ public class ChangePasswordActivity extends BaseActivity {
             }
         }
     }
+    
     private RequestListener<RequestChangePasswordResponse> responseRequestListener = new RequestListener<RequestChangePasswordResponse>() {
         @Override
         public void onRequestFailure(SpiceException spiceException) {
             progressDialog.dismiss();
-
         }
 
         @Override

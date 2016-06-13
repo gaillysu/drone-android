@@ -48,7 +48,8 @@
     <GridView
         android:id="@+id/select_user_device"
         android:layout_width="220dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="20dp"
         android:layout_marginLeft="20dp"
@@ -58,4 +59,13 @@
         android:numColumns="2"
         android:scrollbars="none">
     </GridView>
+    <Button
+        android:id="@+id/select_activity_open_home_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:layout_gravity="center_horizontal"
+        android:textSize="18sp"
+        android:textColor="@android:color/darker_gray"
+        android:text="@string/select_device_pair_later_text"/>
 </LinearLayout>

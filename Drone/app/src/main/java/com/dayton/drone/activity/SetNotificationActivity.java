@@ -114,6 +114,10 @@ public class SetNotificationActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if(contactsList.size()>=10){
+            Toast.makeText(this,getString(R.string.add_notification_account_toast),Toast.LENGTH_SHORT).show();
+            return;
+        }
         if(requestCode == 1 && resultCode == Activity.RESULT_OK)
         {
             Uri contactData = data.getData();
