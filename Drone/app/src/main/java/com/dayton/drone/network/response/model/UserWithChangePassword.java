@@ -23,7 +23,6 @@ public class UserWithChangePassword {
         this.id = id;
     }
 
-
     public UserBirthdayData getBirthday() {
         return birthday;
     }

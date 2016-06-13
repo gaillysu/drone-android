@@ -12,7 +12,7 @@ public class GetStepsRequest extends BaseRequest<GetStepsModel,Drone> {
     String start_date;
     String end_date;
 
-    public GetStepsRequest(String userID,String token,String start_date,String end_date) {
+    public GetStepsRequest(String userID, String token, String start_date, String end_date) {
         super(GetStepsModel.class, Drone.class);
         this.userID = userID;
         this.token = token;
@@ -22,6 +22,6 @@ public class GetStepsRequest extends BaseRequest<GetStepsModel,Drone> {
 
     @Override
     public GetStepsModel loadDataFromNetwork() throws Exception {
-        return getService().stepsGet(userID,token,start_date,end_date,buildAuthorization(),CONTENT_TYPE);
+        return getService().stepsGet(userID, token, start_date, end_date, buildAuthorization(), CONTENT_TYPE);
     }
 }

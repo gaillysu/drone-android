@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
@@ -35,6 +36,8 @@ public class ChangePasswordActivity extends BaseActivity {
     @Bind(R.id.repeat_edit_password_ed)
     EditText repeatPasswordEditText;
 
+    private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,54 +47,49 @@ public class ChangePasswordActivity extends BaseActivity {
     }
 
     @OnClick(R.id.register_back_iv)
-    public void backClick() {
+    public void backButtonClick() {
         startActivity(ForgetPasswordActivity.class);
         finish();
     }
 
     @OnClick(R.id.forget_activity_change_password_bt)
-    public void chanagePassword() {
+    public void changePasswordClick() {
         String newFirstInputPassword = firstInputPasswordEditText.getText().toString();
         String repeatInputPassword = repeatPasswordEditText.getText().toString();
         if (!newFirstInputPassword.isEmpty() && !repeatInputPassword.isEmpty()) {
             if(newFirstInputPassword.equals(repeatInputPassword)){
-                ChangePassword(newFirstInputPassword);
+                ChangePasswordModel changePasswordModel = new ChangePasswordModel();
+                Intent intent  = getIntent();
+                changePasswordModel.setId(intent.getIntExtra("id",-1));
+                changePasswordModel.setEmail(intent.getStringExtra("email"));
+                changePasswordModel.setPassword_token(intent.getStringExtra("token"));
+                changePasswordModel.setPassword(newFirstInputPassword);
+
+                progressDialog = new ProgressDialog(this);
+                progressDialog.setIndeterminate(true);
+                progressDialog.setCancelable(false);
+                progressDialog.setMessage(getString(R.string.forget_password_dialog_text));
+                progressDialog.show();
+                getModel().getRetrofitManager().execute(new RequestChangePasswordRequest(getModel()
+                        .getRetrofitManager().getAccessToken(), changePasswordModel), responseRequestListener);
             }else{
                 repeatPasswordEditText.setError(getString(R.string.change_password_error));
             }
         }
     }
+    private RequestListener<RequestChangePasswordResponse> responseRequestListener = new RequestListener<RequestChangePasswordResponse>() {
+        @Override
+        public void onRequestFailure(SpiceException spiceException) {
+            progressDialog.dismiss();
 
-    private void ChangePassword(String newFirstInputPassword) {
-        ChangePasswordModel changePasswordModel = new ChangePasswordModel();
-        Intent intent  = getIntent();
-        changePasswordModel.setId(intent.getIntExtra("id",-1));
-        changePasswordModel.setEmail(intent.getStringExtra("email"));
-        changePasswordModel.setPassword_token(intent.getStringExtra("token"));
-        changePasswordModel.setPassword(newFirstInputPassword);
+        }
 
-        final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setCancelable(false);
-        progressDialog.setMessage(getString(R.string.forget_password_dialog_text));
-        progressDialog.show();
-
-
-        getModel().getRetrofitManager().execute(new RequestChangePasswordRequest(getModel()
-                .getRetrofitManager().getAccessToken(), changePasswordModel), new RequestListener<RequestChangePasswordResponse>() {
-            @Override
-            public void onRequestFailure(SpiceException spiceException) {
-                progressDialog.dismiss();
-            }
-
-            @Override
-            public void onRequestSuccess(RequestChangePasswordResponse requestChangePasswordResponse) {
-                progressDialog.dismiss();
-                startActivity(WelcomeActivity.class);
-                finish();
-            }
-
-        });
-
-    }
+        @Override
+        public void onRequestSuccess(RequestChangePasswordResponse requestChangePasswordResponse) {
+            progressDialog.dismiss();
+            startActivity(WelcomeActivity.class);
+            finish();
+            Toast.makeText(ChangePasswordActivity.this, R.string.password_password_changed, Toast.LENGTH_SHORT).show();
+        }
+    };
 }
