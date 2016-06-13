@@ -64,9 +64,9 @@ public class WorldClockActivity extends BaseActivity {
         String[] localTimeStr = format.format(calendar.getTime()).split(" ");
         if(new Integer(localTimeStr[1].split(":")[0]).intValue()<=12) {
 
-            localTime.setText(localTimeStr[1].split(":")[0] + ":" + localTimeStr[1].split(":")[1]+" PM");
-        }else{
             localTime.setText(localTimeStr[1].split(":")[0] + ":" + localTimeStr[1].split(":")[1]+" AM");
+        }else{
+            localTime.setText(localTimeStr[1].split(":")[0] + ":" + localTimeStr[1].split(":")[1]+" PM");
         }
         worldClockDatabase = getModel().getWorldClockDatabaseHelper();
         initData();

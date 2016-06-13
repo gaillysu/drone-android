@@ -21,9 +21,11 @@ import android.widget.TextView;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
+import com.dayton.drone.database.entry.StepsDatabaseHelper;
 import com.dayton.drone.event.BigSyncEvent;
 import com.dayton.drone.event.LittleSyncEvent;
 import com.dayton.drone.model.DailySteps;
+import com.dayton.drone.model.Steps;
 import com.dayton.drone.utils.CacheConstants;
 import com.dayton.drone.utils.SpUtils;
 import com.dayton.drone.utils.StepsHandler;
@@ -54,6 +56,7 @@ import com.liulishuo.magicprogresswidget.MagicProgressCircle;
 import net.medcorp.library.ble.event.BLEBluetoothOffEvent;
 import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
 import net.medcorp.library.ble.event.BLESearchEvent;
+import net.medcorp.library.ble.util.Optional;
 import net.medcorp.library.permission.PermissionRequestDialogBuilder;
 
 import org.greenrobot.eventbus.EventBus;
@@ -142,6 +145,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     private Date selectedDate = new Date(); //the selected date comes from calendar.
     private int guidePage = 1;
     private boolean isShowCalendar = false;
+    private StepsDatabaseHelper stepsDatabaseHelper;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -165,6 +169,10 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         calendar.setSelectMore(false);
         nextMonth.setVisibility(View.GONE);
         backMonth.setVisibility(View.GONE);
+        stepsDatabaseHelper = getModel().getStepsDatabaseHelper();
+        Date date = new Date(System.currentTimeMillis());
+        findCalories(date);
+
 
         modifyChart(hourlyBarChart);
         modifyChart(lastMonthLineChart);
@@ -175,6 +183,22 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
+
+    private void findCalories(Date date) {
+        Long timeActive = 0l;
+        int accountSteps=0;
+        List<Optional<Steps>> list = stepsDatabaseHelper.get(getModel().getUser().getUserID(),date);
+        for(int i = 0; i <list.size();i++){
+            Steps steps = list.get(i).get();
+            timeActive =  steps.getTimeFrame()/(60*1000);
+            accountSteps = steps.getDailySteps();
+        }
+        double calories = (2.0*3.5*getModel().getUser().getWeight())/200*timeActive;
+        caloriesTextView.setText(calories+"");
+        kmTextView.setText((getModel().getUser().getHeight()*0.45)/100*accountSteps/1000+"");
+        activeTimeTextView.setText(timeActive+"");
+
     }
 
     private void drawGraph() {
@@ -374,6 +398,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
                 mTitleCalendarTextView.setText(new SimpleDateFormat("MMM", Locale.US)
                         .format(downDate) + new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(downDate).split("-")[2]);
                 drawGraph();
+                findCalories(downDate);
             }
         });
     }

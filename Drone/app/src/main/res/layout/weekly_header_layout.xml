@@ -1,56 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:layout_marginTop ="10dp"
-android:layout_marginLeft="10dp"
-android:layout_marginRight="10dp"
-android:orientation="horizontal">
-<LinearLayout
-    style="@style/home_content_title_ll_style">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="10dp"
+    android:orientation="horizontal">
 
-    <TextView
-        style="@style/home_content_activity_last_title_text_style"
-        android:text="@string/fragment_home_title_calories"
-        />
+    <LinearLayout
+        style="@style/home_content_title_ll_style">
 
-    <TextView
-        android:id="@+id/weekly_header_layout_calories_textview"
-        style="@style/home_content_activity_last_title_content_style"
-        android:text="0"/>
-</LinearLayout>
+        <TextView
+            style="@style/home_content_activity_last_title_text_style"
+            android:text="@string/fragment_home_title_calories"
+            />
 
-<LinearLayout
-    style="@style/home_content_title_ll_style">
+        <TextView
+            android:id="@+id/weekly_header_layout_calories_textview"
+            style="@style/home_content_activity_last_title_content_style"
+            android:text="0"/>
+    </LinearLayout>
 
-    <TextView
-        style="@style/home_content_activity_last_title_text_style"
-        android:text="@string/fragment_home_title_active_time"
-        />
+    <LinearLayout
+        style="@style/home_content_title_ll_style">
 
-    <TextView
-        android:id="@+id/weekly_header_layout_active_time_textview"
-        style="@style/home_content_activity_last_title_content_style"
-        android:text="0"
-        />
-</LinearLayout>
+        <TextView
+            style="@style/home_content_activity_last_title_text_style"
+            android:text="@string/fragment_home_title_active_time"
+            />
 
-<LinearLayout
-    style="@style/home_content_title_ll_style"
-    >
+        <TextView
+            android:id="@+id/weekly_header_layout_active_time_textview"
+            style="@style/home_content_activity_last_title_content_style"
+            android:text="0"
+            />
+    </LinearLayout>
 
-    <TextView
-        style="@style/home_content_activity_last_title_text_style"
-        android:text="@string/fragment_home_title_kilometer"
-        />
+    <LinearLayout
+        style="@style/home_content_title_ll_style"
+        >
 
-    <TextView
-        android:id="@+id/weekly_header_layout_km_textview"
-        style="@style/home_content_activity_last_title_content_style"
-        android:text="0"
-        />
-</LinearLayout>
+        <TextView
+            style="@style/home_content_activity_last_title_text_style"
+            android:text="@string/fragment_home_title_kilometer"
+            />
+
+        <TextView
+            android:id="@+id/weekly_header_layout_km_textview"
+            style="@style/home_content_activity_last_title_content_style"
+            android:text="0"
+            />
+    </LinearLayout>
 
 </LinearLayout>
