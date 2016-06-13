@@ -17,6 +17,7 @@
     <string name="forget_new_password">New password</string>
     <string name="forget_repeat_password">Confirm new password</string>
     <string name="change_password_error">Passwords don\'t match with each other.</string>
+    <string name="change_password_forget_password_error">Change password failed</string>
     <string name="register_email"> Register with your email</string>
     <string name="third_party_login">Or register with your social media</string>
 
@@ -34,6 +35,7 @@
     <string name="user_device_select">Setting up your device.</string>
     <string name="user_info_about">About your info is not null</string>
     <string name="user_select_dec">Don\'t have a device here?</string>
+    <string name="select_device_pair_later_text">Pair later</string>
     <string name="user_device_drone">Buy you drone here.</string>
     <string name="user_info_activity_edit_first_name_hint">First Name</string>
     <string name="user_info_activity_edit_last_name_hint">Last Name</string>

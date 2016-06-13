@@ -10,11 +10,13 @@ import android.widget.ImageButton;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.AddWatchActivity;
+import com.dayton.drone.activity.HomeActivity;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.adapter.SelectDeviceGridViewAdapter;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by boy on 2016/4/19.
@@ -94,5 +96,11 @@ public class SelectDeviceActivity extends BaseActivity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @OnClick(R.id.select_activity_open_home_activity)
+    public void openHomeActivity(){
+        startActivity(HomeActivity.class);
+        finish();
     }
 }

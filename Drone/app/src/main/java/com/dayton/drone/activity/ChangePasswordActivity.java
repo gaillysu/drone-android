@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
@@ -82,13 +83,20 @@ public class ChangePasswordActivity extends BaseActivity {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 progressDialog.dismiss();
+                Toast.makeText(ChangePasswordActivity.this,getString(
+                        R.string.change_password_forget_password_error),Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onRequestSuccess(RequestChangePasswordResponse requestChangePasswordResponse) {
                 progressDialog.dismiss();
-                startActivity(WelcomeActivity.class);
-                finish();
+                if(requestChangePasswordResponse.getUser() != null) {
+                    startActivity(WelcomeActivity.class);
+                    finish();
+                }else{
+                    Toast.makeText(ChangePasswordActivity.this,getString(
+                            R.string.change_password_forget_password_error),Toast.LENGTH_SHORT).show();
+                }
             }
 
         });
