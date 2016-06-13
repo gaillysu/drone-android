@@ -88,6 +88,7 @@
 
                 <ImageButton
                     android:id="@+id/profile_activity_edit_email_ib"
+                    android:visibility="gone"
                     style="@style/profile_activity_image_button_style"/>
 
 

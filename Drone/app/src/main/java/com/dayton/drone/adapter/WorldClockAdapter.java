@@ -137,11 +137,11 @@ public class WorldClockAdapter extends BaseAdapter implements SlideView.OnSlideL
 
                 if (hour > currentTime) {
                     int cityTimeDifference = hour - currentTime;
-                    holder.timeDifference.setText(", -" + cityTimeDifference +" "+
+                    holder.timeDifference.setText(", " + cityTimeDifference +" "+
                             context.getResources().getString(R.string.world_clock_city_time_difference_ahead));
                 } else if (hour < currentTime) {
                     int cityTimeDifference = currentTime - hour;
-                    holder.timeDifference.setText(", -" + cityTimeDifference +" "+
+                    holder.timeDifference.setText(", " + cityTimeDifference +" "+
                             context.getResources().getString(R.string.world_clock_city_time_difference_behind));
                 } else {
                     holder.timeDifference.setText("");

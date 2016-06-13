@@ -69,7 +69,7 @@ public class LoginActivity extends BaseActivity {
              @Override
              public void onRequestFailure(SpiceException spiceException) {
                  progressDialog.dismiss();
-                 onLoginFailed(""+spiceException.getCause());
+                 onLoginFailed();
              }
 
              @Override
@@ -86,7 +86,7 @@ public class LoginActivity extends BaseActivity {
                  }
                  else{
                      Log.e("LoginActivity",loginUserModel.getMessage() + ",state:" + loginUserModel.getStatus());
-                     onLoginFailed(loginUserModel.getMessage());
+                     onLoginFailed();
                  }
              }
          });
@@ -101,8 +101,8 @@ public class LoginActivity extends BaseActivity {
         finish();
     }
 
-    private void onLoginFailed(String message) {
-        Toast.makeText(getBaseContext(), "log in got failed," + message, Toast.LENGTH_LONG).show();
+    private void onLoginFailed() {
+        Toast.makeText(getBaseContext(), getString(R.string.login_failed_toast_text), Toast.LENGTH_LONG).show();
     }
 
     private boolean validate() {

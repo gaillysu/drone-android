@@ -20,7 +20,7 @@
     <string name="change_password_forget_password_error">Change password failed</string>
     <string name="register_email"> Register with your email</string>
     <string name="third_party_login">Or register with your social media</string>
-
+    <string name="login_failed_toast_text">Failed to login</string>
     <string name="tips_user_account_password">Email must not be empty</string>
     <string name="tips_user_password">Password must not be empty</string>
 
@@ -40,7 +40,7 @@
     <string name="user_info_activity_edit_first_name_hint">First Name</string>
     <string name="user_info_activity_edit_last_name_hint">Last Name</string>
     <string name="user_step_goal">GOAL:</string>
-    <string name="user_login_dialog_text">logging in...</string>
+    <string name="user_login_dialog_text">Logging in...</string>
     <string name="user_info_first_name_error">First name may not be empty</string>
     <string name="user_info_birthday_error">Birthday may not be empty</string>
     <string name="user_info_weight_error">Weight may not be empty</string>
@@ -74,7 +74,8 @@
 
     <string name="choose_activity_title_choose_city_tv">Choose a City</string>
     <string name="choose_activity_title_cancel">Cancel</string>
-    <string name="add_city_toast_text">World clock is limited by 5 clocks</string>
+    <string name="add_city_toast_text">World clock is limited by 5 clocks.</string>
+    <string name="world_clock_add_city_error">Failed,Clock existed</string>
 
     <string name="no_search_result">Did not find the city</string>
 
@@ -122,6 +123,7 @@
     <string name="add_watch_damaged">Damaged</string>
     <string name="add_watch_calculating">Calculating</string>
     <string name="add_watch_charging">Charging</string>
+    <string name="add_notification_account_toast">You can only add 10 contacts</string>
 
     <string name="in_app_notification_found_watch">Found watch!</string>
     <string name="in_app_notification_bluetooth_disabled">Bluetooth is disabled. Enable Bluetooth.</string>
