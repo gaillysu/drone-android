@@ -8,9 +8,10 @@
     <string name="login_forget_password">Forget Password</string>
     <string name="forget_password_change">Change Password</string>
     <string name="forget_password_edit_hint">Your Email</string>
-    <string name="forget_password_dialog_text">Please wait...</string>
-    <string name="forget_password_request_null">Account error...</string>
-    <string name="change_password_fail">Modify password failed</string>
+    <string name="forget_password_dialog_text">Please wait…</string>
+    <string name="forget_password_request_null">Couldn\'t change password</string>
+    <string name="change_password_fail">Change password failed</string>
+    <string name="password_password_changed">Password changed</string>
 
     <string name="email_is_error">Your e-mail does not exist</string>
     <string name="forget_password_dec">Please fill in your e-mail to set a \n new password</string>
@@ -23,20 +24,21 @@
     <string name="login_failed_toast_text">Failed to login</string>
     <string name="tips_user_account_password">Email must not be empty</string>
     <string name="tips_user_password">Password must not be empty</string>
+    <string name="user_step_goal">GOAL:</string>
 
-    <string name="user_account_error">Account of password is error</string>
+    <string name="user_account_error">Account of password is incorrect.</string>
     <string name="user_info_clue">Tell us little bit about your self.</string>
-    <string name="user_info_share">We promissed we will never share this info</string>
+    <string name="user_info_share">We promise, we will never share this information</string>
     <string name="user_sex_female">Female</string>
     <string name="user_sex_male">Male</string>
     <string name="user_info_birthday">Birth</string>
     <string name="user_info_height">Height</string>
     <string name="user_info_weight">Weight</string>
     <string name="user_device_select">Setting up your device.</string>
-    <string name="user_info_about">About your info is not null</string>
     <string name="user_select_dec">Don\'t have a device here?</string>
+    <string name="user_login_dialog_text">Logging in…</string>
     <string name="select_device_pair_later_text">Pair later</string>
-    <string name="user_device_drone">Buy you drone here.</string>
+    <string name="user_device_drone">Buy you Drone here.</string>
     <string name="user_info_activity_edit_first_name_hint">First Name</string>
     <string name="user_info_activity_edit_last_name_hint">Last Name</string>
     <string name="user_step_goal">Goal:</string>
@@ -46,7 +48,7 @@
     <string name="user_info_weight_error">Weight may not be empty</string>
     <string name="user_info_height_error">Length may not be empty</string>
 
-    <string name="bluetooth_connecting">Connecting</string>
+    <string name="bluetooth_connecting">Connecting…</string>
     <string name="retry_connecting">Retry</string>
     <string name="watch_name">Drone Watch</string>
     <string name="watch_version">version 1.0.3</string>
@@ -111,7 +113,7 @@
     <string name="add_watch_activity_content_my_notification">My Notifications</string>
     <string name="add_watch_activity_content_forget_watch">Forget This Watch</string>
     <string name="add_watch_activity_watch_dec">DRONE Precision Timepieces…</string>
-    <string name="add_watch_activity_prompt_user">HOLD YOUR DRONE !</string>
+    <string name="add_watch_activity_prompt_user">HOLD YOUR DRONE!</string>
     <string name="add_watch_activity_prompt_user_one">It appears that you haven\'t </string>
     <string name="add_watch_activity_prompt_user_two">connected a device yet.</string>
     <string name="add_watch_activity_prompt_user_three">Perhaps you\'d like to</string>
