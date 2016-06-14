@@ -84,22 +84,21 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
 //            }
 //        });
 
+
         List<View> viewList = new ArrayList<>();
         List<Watches>  watchesList = getModel().getWatchesDatabaseHelper().getAll(getModel().getUser().getUserID());
-        if(watchesList.isEmpty())
-        {
-            watchesList.add(new Watches());
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    noWatchLayout.setVisibility(View.GONE);
-                }
-            },1500);
-        }
-        else
-        {
-            noWatchLayout.setVisibility(View.GONE);
-        }
+            if (watchesList.isEmpty()) {
+                watchesList.add(new Watches());
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        noWatchLayout.setVisibility(View.GONE);
+                    }
+                }, 1500);
+            } else {
+                noWatchLayout.setVisibility(View.GONE);
+            }
+
         for(int i=0;i<watchesList.size();i++) {
             LinearLayout linearLayout = (LinearLayout) View.inflate(this, R.layout.activity_addwatch_watchinfo_layout, null);
             viewList.add(linearLayout);
@@ -125,6 +124,7 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
             if(watchesList.size()>1) {
                 viewPagerGroupLayout.addView(imageView, lp);
             }
+
         }
         addwatchViewPager.setAdapter(new AddWatchViewPagerAdapter(viewList));
         addwatchViewPager.addOnPageChangeListener(this);
@@ -145,6 +145,7 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
     @OnClick(R.id.activity_add_watch_forget_watch)
     public void forgetNotification(){
         getModel().getSyncController().forgetDevice();
+        startActivity(HomeActivity.class);
         finish();
     }
 
@@ -158,7 +159,7 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
         return super.onKeyDown(keyCode, event);
     }
 
-    @OnClick(R.id.activity_addwatch_footer_layout)
+    @OnClick(R.id.activity_addwatch_add_imagebutton)
     public void addWatch()
     {
         Intent intent  = new Intent(this ,SelectDeviceActivity.class);

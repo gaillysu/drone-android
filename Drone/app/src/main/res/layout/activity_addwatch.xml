@@ -169,8 +169,8 @@
 
         <ImageButton
             android:id="@+id/activity_addwatch_add_imagebutton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:background="@android:color/transparent"
             android:src="@mipmap/world_clock_add_city_icon"/>

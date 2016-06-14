@@ -39,7 +39,7 @@ public class WelcomeViewpagerAdapter extends PagerAdapter {
         position = position%imageIdArray.size();
         ImageView imageView = imageIdArray.get(position);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams
-                (ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                (ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         imageView.setLayoutParams(lp);
         container.addView(imageView);
         return imageView;
