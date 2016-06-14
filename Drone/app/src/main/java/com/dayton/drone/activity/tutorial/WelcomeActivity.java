@@ -1,5 +1,6 @@
 package com.dayton.drone.activity.tutorial;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
@@ -14,6 +15,7 @@ import com.dayton.drone.activity.ForgetPasswordActivity;
 import com.dayton.drone.activity.HomeActivity;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.adapter.WelcomeViewpagerAdapter;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import net.medcorp.library.ble.service.BLEServiceProvider;
 
@@ -50,6 +52,14 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             return;
         }
         setContentView(R.layout.activtiy_welcome);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            setTranslucentStatus(true);
+            SystemBarTintManager tintManager = new SystemBarTintManager(this);
+            tintManager.setStatusBarTintEnabled(true);
+            tintManager.setStatusBarTintResource(R.color.user_info_gender_select_text_color);//通知栏所需颜色
+        }
+
         ButterKnife.bind(this);
         handler = new Handler();
         initDate();

@@ -2,6 +2,7 @@ package com.dayton.drone.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.dayton.drone.network.request.model.ChangePasswordModel;
 import com.dayton.drone.network.response.model.RequestChangePasswordResponse;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -42,6 +44,15 @@ public class ChangePasswordActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activtiy_change_password);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            setTranslucentStatus(true);
+            SystemBarTintManager tintManager = new SystemBarTintManager(this);
+            tintManager.setStatusBarTintEnabled(true);
+            tintManager.setStatusBarTintResource(R.color.user_info_gender_select_text_color);//通知栏所需颜色
+        }
+
         ButterKnife.bind(this);
         nextButton.setVisibility(View.GONE);
     }

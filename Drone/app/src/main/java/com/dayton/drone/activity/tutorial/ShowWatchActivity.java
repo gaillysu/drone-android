@@ -2,6 +2,7 @@ package com.dayton.drone.activity.tutorial;
 
 import android.Manifest;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.dayton.drone.R;
 import com.dayton.drone.activity.HomeActivity;
 import com.dayton.drone.activity.base.BaseActivity;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
 import net.medcorp.library.ble.event.BLEFirmwareVersionReceivedEvent;
@@ -54,6 +56,13 @@ public class ShowWatchActivity extends BaseActivity  {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_watch);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            setTranslucentStatus(true);
+            SystemBarTintManager tintManager = new SystemBarTintManager(this);
+            tintManager.setStatusBarTintEnabled(true);
+            tintManager.setStatusBarTintResource(R.color.user_info_gender_select_text_color);//通知栏所需颜色
+        }
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         Intent intent = getIntent();

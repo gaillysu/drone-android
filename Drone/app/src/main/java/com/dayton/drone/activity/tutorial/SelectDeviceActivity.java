@@ -1,6 +1,7 @@
 package com.dayton.drone.activity.tutorial;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -13,6 +14,7 @@ import com.dayton.drone.activity.AddWatchActivity;
 import com.dayton.drone.activity.HomeActivity;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.adapter.SelectDeviceGridViewAdapter;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -40,6 +42,12 @@ public class SelectDeviceActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activtiy_user_select_watch);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            setTranslucentStatus(true);
+            SystemBarTintManager tintManager = new SystemBarTintManager(this);
+            tintManager.setStatusBarTintEnabled(true);
+            tintManager.setStatusBarTintResource(R.color.user_info_gender_select_text_color);//通知栏所需颜色
+        }
         ButterKnife.bind(this);
         Intent intent = getIntent();
         type = intent.getIntExtra("type", -1);

@@ -1,6 +1,7 @@
 package com.dayton.drone.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -22,6 +23,7 @@ import com.dayton.drone.model.SortModel;
 import com.dayton.drone.model.WorldClock;
 import com.dayton.drone.view.PinyinComparator;
 import com.dayton.drone.view.SideBar;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -62,8 +64,15 @@ public class ChooseCityActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_add_city_layout);
-        ButterKnife.bind(this);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            setTranslucentStatus(true);
+            SystemBarTintManager tintManager = new SystemBarTintManager(this);
+            tintManager.setStatusBarTintEnabled(true);
+            tintManager.setStatusBarTintResource(R.color.user_info_sex_bg);//通知栏所需颜色
+        }
+
+        ButterKnife.bind(this);
         WorldClockDatabaseHelper worldClockDatabase = getModel().getWorldClockDatabaseHelper();
         worldClockDataList = worldClockDatabase.getAll();
         pinyinComparator = new PinyinComparator();

@@ -1,82 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:paddingTop="25dp">
     <!-- header-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="@color/colorPrimaryDark"
         android:orientation="vertical">
+
         <ImageButton
             android:id="@+id/activity_set_notification_back_imagebutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:tint ="@color/notification_delete_bg"
             android:background="@android:color/transparent"
-            android:src="@mipmap/left_arrpw_1"/>
+            android:src="@mipmap/left_arrpw_1"
+            android:tint="@color/notification_delete_bg"/>
+
         <TextView
             android:id="@+id/activity_set_notification_title_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:text="@string/notifications_notifications"
             android:textColor="@android:color/white"
-            android:textSize="22sp"
-            android:layout_centerInParent="true"/>
+            android:textSize="22sp"/>
 
         <ImageButton
             android:id="@+id/activity_set_notification_add_imagebutton"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_marginEnd="10dp"
-            android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
             android:background="@android:color/transparent"
             android:src="@mipmap/world_clock_add_city_icon"/>
     </RelativeLayout>
- <LinearLayout
-     android:layout_width="match_parent"
-     android:layout_height="match_parent"
-     android:background="@color/notification_bg_color"
-     android:orientation="vertical">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="10dp"
-        android:textColor="@android:color/white"
-        android:textSize="20sp"
-        android:text="@string/notifications_the_idea"/>
 
-     <TextView
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_gravity="center"
-         android:gravity="center"
-         android:layout_marginTop="10dp"
-         android:textColor="@android:color/white"
-         android:textSize="13sp"
-         android:textStyle="normal"
-         android:text="@string/notifications_explanation"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/notification_bg_color"
+        android:orientation="vertical">
 
-     <TextView
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_gravity="center"
-         android:gravity="center"
-         android:layout_marginTop="10dp"
-         android:textColor="@android:color/white"
-         android:textSize="12sp"
-         android:text="@string/notifications_explenation_2"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:text="@string/notifications_the_idea"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"/>
 
- <com.baoyz.swipemenulistview.SwipeMenuListView
-     android:id="@+id/activity_set_notification_contacts_listview"
-     android:layout_width="match_parent"
-     android:layout_height="match_parent"
-     android:dividerHeight="1dp"
-     android:layout_marginTop="10dp"/>
- </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="@string/notifications_explanation"
+            android:textColor="@android:color/white"
+            android:textSize="13sp"
+            android:textStyle="normal"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="@string/notifications_explenation_2"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"/>
+
+        <com.baoyz.swipemenulistview.SwipeMenuListView
+            android:id="@+id/activity_set_notification_contacts_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:dividerHeight="1dp"/>
+    </LinearLayout>
 
 </LinearLayout>

@@ -1,5 +1,6 @@
 package com.dayton.drone.activity;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -7,6 +8,7 @@ import android.widget.TextView;
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.adapter.GalleryListAdapter;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -29,6 +31,14 @@ public class GalleryActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery_layout);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            setTranslucentStatus(true);
+            SystemBarTintManager tintManager = new SystemBarTintManager(this);
+            tintManager.setStatusBarTintEnabled(true);
+            tintManager.setStatusBarTintResource(R.color.user_info_sex_bg);//通知栏所需颜色
+        }
+
         ButterKnife.bind(this);
         titleTextView.setText(getString(R.string.gallery_activity_title));
         listView.setAdapter(new GalleryListAdapter(this ,droneImagesIdArray));

@@ -1,6 +1,7 @@
 package com.dayton.drone.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -15,6 +16,7 @@ import com.dayton.drone.event.TimerEvent;
 import com.dayton.drone.event.WorldClockChangedEvent;
 import com.dayton.drone.model.WorldClock;
 import com.dayton.drone.view.ListViewCompat;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -54,6 +56,14 @@ public class WorldClockActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_world_clock);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            setTranslucentStatus(true);
+            SystemBarTintManager tintManager = new SystemBarTintManager(this);
+            tintManager.setStatusBarTintEnabled(true);
+            tintManager.setStatusBarTintResource(R.color.user_info_sex_bg);//通知栏所需颜色
+        }
+
         worldClockListView = (ListViewCompat) findViewById(R.id.world_clock_select_city_list);
         ButterKnife.bind(this);
         SimpleDateFormat format = new SimpleDateFormat(FORMAT_LONG);

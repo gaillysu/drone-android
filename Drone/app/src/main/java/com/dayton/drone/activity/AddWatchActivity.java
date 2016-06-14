@@ -2,6 +2,7 @@ package com.dayton.drone.activity;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -20,6 +21,7 @@ import com.dayton.drone.adapter.AddWatchViewPagerAdapter;
 import com.dayton.drone.ble.util.Constants;
 import com.dayton.drone.event.BatteryStatusChangedEvent;
 import com.dayton.drone.model.Watches;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
 import net.medcorp.library.ble.event.BLEFirmwareVersionReceivedEvent;
@@ -58,6 +60,13 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
     protected void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addwatch);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            setTranslucentStatus(true);
+            SystemBarTintManager tintManager = new SystemBarTintManager(this);
+            tintManager.setStatusBarTintEnabled(true);
+            tintManager.setStatusBarTintResource(R.color.user_info_sex_bg);//通知栏所需颜色
+        }
+
         ButterKnife.bind(this);
 //        List<String> listMenu = new ArrayList<String>();
 //        listMenu.add("Contacts Notifications");

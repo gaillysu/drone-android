@@ -3,6 +3,7 @@ package com.dayton.drone.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -25,6 +26,7 @@ import com.dayton.drone.event.StepsGoalChangedEvent;
 import com.dayton.drone.model.User;
 import com.dayton.drone.utils.CacheConstants;
 import com.dayton.drone.utils.SpUtils;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -76,6 +78,14 @@ public class ProfileActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_layout);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            setTranslucentStatus(true);
+            SystemBarTintManager tintManager = new SystemBarTintManager(this);
+            tintManager.setStatusBarTintEnabled(true);
+            tintManager.setStatusBarTintResource(R.color.user_info_sex_bg);//通知栏所需颜色
+        }
+
         ButterKnife.bind(this);
         saveButton.setVisibility(View.VISIBLE);
         userStepGoal = SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000);

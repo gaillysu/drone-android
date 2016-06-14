@@ -1,6 +1,7 @@
 package com.dayton.drone.activity.tutorial;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.EditText;
@@ -15,6 +16,7 @@ import com.dayton.drone.network.request.model.CreateUser;
 import com.dayton.drone.network.response.model.CreateUserModel;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -53,6 +55,14 @@ public class UserInfoActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            setTranslucentStatus(true);
+            SystemBarTintManager tintManager = new SystemBarTintManager(this);
+            tintManager.setStatusBarTintEnabled(true);
+            tintManager.setStatusBarTintResource(R.color.user_info_gender_select_text_color);//通知栏所需颜色
+        }
+
         ButterKnife.bind(this);
     }
 

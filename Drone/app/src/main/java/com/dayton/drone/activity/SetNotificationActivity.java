@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.widget.Toast;
@@ -20,6 +21,7 @@ import com.dayton.drone.adapter.SetNotificationContactsAdapter;
 import com.dayton.drone.model.Contact;
 import com.dayton.drone.model.Notification;
 import com.google.gson.Gson;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,6 +49,14 @@ public class SetNotificationActivity extends BaseActivity {
     protected void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_notification);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            setTranslucentStatus(true);
+            SystemBarTintManager tintManager = new SystemBarTintManager(this);
+            tintManager.setStatusBarTintEnabled(true);
+            tintManager.setStatusBarTintResource(R.color.user_info_sex_bg);//通知栏所需颜色
+        }
+
         ButterKnife.bind(this);
         contactsList = new ArrayList<>();
         List<Notification> notifications = getModel().getNotificationDatabaseHelper().get(APPLICATION);
