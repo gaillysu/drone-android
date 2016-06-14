@@ -69,7 +69,7 @@ public class ChooseCityActivity extends BaseActivity {
             setTranslucentStatus(true);
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
             tintManager.setStatusBarTintEnabled(true);
-            tintManager.setStatusBarTintResource(R.color.user_info_sex_bg);//通知栏所需颜色
+            tintManager.setStatusBarTintResource(R.color.user_info_sex_bg);
         }
 
         ButterKnife.bind(this);

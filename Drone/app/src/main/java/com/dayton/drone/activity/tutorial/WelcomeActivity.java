@@ -1,5 +1,6 @@
 package com.dayton.drone.activity.tutorial;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -47,7 +48,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         super.onCreate(savedInstanceState);
         //if one user has got logged in, directly entry main menu screen
         if (getModel().getUser().isUserIsLogin()) {
-            startActivity(HomeActivity.class);
+            Intent intent  = new Intent(this ,HomeActivity.class);
+            intent.putExtra("logOut",false);
+            startActivity(intent);
             finish();
             return;
         }
@@ -57,7 +60,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             setTranslucentStatus(true);
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
             tintManager.setStatusBarTintEnabled(true);
-            tintManager.setStatusBarTintResource(R.color.user_info_gender_select_text_color);//通知栏所需颜色
+            tintManager.setStatusBarTintResource(R.color.user_info_gender_select_text_color);
         }
 
         ButterKnife.bind(this);

@@ -61,7 +61,7 @@ public class WorldClockActivity extends BaseActivity {
             setTranslucentStatus(true);
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
             tintManager.setStatusBarTintEnabled(true);
-            tintManager.setStatusBarTintResource(R.color.user_info_sex_bg);//通知栏所需颜色
+            tintManager.setStatusBarTintResource(R.color.user_info_sex_bg);
         }
 
         worldClockListView = (ListViewCompat) findViewById(R.id.world_clock_select_city_list);
@@ -110,14 +110,14 @@ public class WorldClockActivity extends BaseActivity {
         String currentTime = format.format(date);
         String[] currentTimeArray = currentTime.split("-");
 
-        dateTv.setText(new SimpleDateFormat("MMM", Locale.US).format(date)+"/"+currentTimeArray[2] + "/" + currentTimeArray[0]);
+        dateTv.setText(currentTimeArray[2]+" "+new SimpleDateFormat("MMM", Locale.US).format(date) + " " + currentTimeArray[0]);
 
         listData = worldClockDatabase.getSelected();
         worldClockAdapter = new WorldClockAdapter(listData, this);
         worldClockListView.setAdapter(worldClockAdapter);
-        worldClockAdapter.onDeleteItemListener(new WorldClockAdapter.DeleteItemInterface() {
-            @Override
-            public void deleteItem(int position) {
+                worldClockAdapter.onDeleteItemListener(new WorldClockAdapter.DeleteItemInterface() {
+                    @Override
+                    public void deleteItem(int position) {
                 if(worldClockDatabase.update(listData.get(position),false))
                 {
                     listData.remove(position);

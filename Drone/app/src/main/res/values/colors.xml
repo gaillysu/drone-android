@@ -7,8 +7,8 @@
     <color name="line_color">#20000000</color>
     <color name="user_info_sex_bg">#d09d42</color>
     <color name="login_text_color">#989898</color>
-    <color name="progress_start_color">#614777</color>
-    <color name="progress_end_color">#dc9b39</color>
+    <color name="progress_start_color">#6A4E75</color>
+    <color name="progress_end_color">#936F5F</color>
     <color name="home_content_activity_guide_bg">#995A5A5A</color>
     <color name="home_content_text_color">#88000000</color>
     <color name="world_clock_bg_color">#e6c68e</color>

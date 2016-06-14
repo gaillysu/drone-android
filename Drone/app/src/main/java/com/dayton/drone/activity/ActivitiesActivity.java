@@ -163,7 +163,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
             setTranslucentStatus(true);
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
             tintManager.setStatusBarTintEnabled(true);
-            tintManager.setStatusBarTintResource(R.color.user_info_sex_bg);//通知栏所需颜色
+            tintManager.setStatusBarTintResource(R.color.user_info_sex_bg);
         }
 
         ButterKnife.bind(this);
@@ -173,7 +173,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         mProgressBar.setStartColor(R.color.progress_start_color);
         mProgressBar.setEndColor(R.color.progress_end_color);
         mProgressBar.setSmoothPercent(1.0f * SpUtils.getIntMethod(this, CacheConstants.TODAY_STEP, 0)
-                / SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000)+0.5f);
+                /SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000));
         homeMiddleTv.setText(SpUtils.getIntMethod(this, CacheConstants.TODAY_STEP, 0) + "");
         userStepGoalTextView.setText(getResources().getString(R.string.user_step_goal)
                 + SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000));

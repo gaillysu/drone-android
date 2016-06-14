@@ -57,7 +57,7 @@
                     style="@style/home_content_activity_progress_middle_text_style"
                     android:text="@string/activities__0"
                     android:textColor="@color/user_info_sex_bg"
-                    android:textSize="25sp"
+                    android:textSize="28sp"
                     />
 
                 <TextView

@@ -281,6 +281,7 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
             case 2://height
                 for (int j = 120; j < 300; j++) {
                     heightList.add(format2LenStr(j));
+
                 }
                 middleLoopView.setArrayList((ArrayList) heightList);
                 middleLoopView.setInitPosition(middlePos);
@@ -344,10 +345,10 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
                     }
                     break;
                 case 2:
-                    middlePos = calendar.get(Calendar.DATE);
+                    middlePos = new Integer(dateStr).intValue()-120;
                     break;
                 case 3:
-                    leftPos = calendar.get(Calendar.DATE);
+                    leftPos = new Integer(dateStr).intValue()-25;
                     break;
             }
         }
@@ -369,7 +370,7 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
 
             showAtLocation(activity.getWindow().getDecorView(), Gravity.BOTTOM,
                     0, 0);
-            trans.setDuration(400);
+            trans.setDuration(200);
             trans.setInterpolator(new AccelerateDecelerateInterpolator());
 
             pickerContainerV.startAnimation(trans);
@@ -385,7 +386,7 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
                 Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0,
                 Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 1);
 
-        trans.setDuration(400);
+        trans.setDuration(300);
         trans.setInterpolator(new AccelerateInterpolator());
         trans.setAnimationListener(new AnimationListener() {
 

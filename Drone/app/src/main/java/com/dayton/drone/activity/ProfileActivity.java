@@ -72,7 +72,7 @@ public class ProfileActivity extends BaseActivity {
     @Bind(R.id.profile_activity_log_out_bt)
     Button logOut;
     @Bind(R.id.profile_save_no_watch_connected_show)
-    RelativeLayout noWatchShow;
+    RelativeLayout noWatchConnect;
     @Bind(R.id.profile_activity_user_birthday)
     TextView userBirthdayTextView;
     private int userStepGoal;
@@ -88,7 +88,7 @@ public class ProfileActivity extends BaseActivity {
             setTranslucentStatus(true);
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
             tintManager.setStatusBarTintEnabled(true);
-            tintManager.setStatusBarTintResource(R.color.user_info_sex_bg);//通知栏所需颜色
+            tintManager.setStatusBarTintResource(R.color.user_info_sex_bg);
         }
 
         ButterKnife.bind(this);
@@ -171,7 +171,8 @@ public class ProfileActivity extends BaseActivity {
                     } else {
                         if (mUser.getFirstName() == null) {
                             userFirstName.setText(getResources().getString(R.string.profile_edit_prompt));
-                            Toast.makeText(ProfileActivity.this, R.string.profile_prompt_user_edit, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ProfileActivity.this, getString(R.string.profile_prompt_user_edit),
+                                    Toast.LENGTH_SHORT).show();
                         } else {
                             userFirstName.setText(mUser.getFirstName());
                         }
@@ -190,6 +191,7 @@ public class ProfileActivity extends BaseActivity {
     public void editUserHeight() {
         userHeight.setText("");
         viewType = 2;
+
         DatePickerPopWin pickerPopWin2 = new DatePickerPopWin.Builder(ProfileActivity.this,
                 new DatePickerPopWin.OnDatePickedListener() {
                     @Override
@@ -199,7 +201,7 @@ public class ProfileActivity extends BaseActivity {
                     }
                 }).viewStyle(viewType)
                 .viewTextSize(25)
-                .dateChose("0-173-0")
+                .dateChose(mUser.getHeight()+"")
                 .build();
         pickerPopWin2.showPopWin(ProfileActivity.this);
         pickerPopWin2.setOnDismissListener(new PopupWindow.OnDismissListener() {
@@ -226,7 +228,7 @@ public class ProfileActivity extends BaseActivity {
                     }
                 }).viewStyle(viewType)
                 .viewTextSize(25)
-                .dateChose("52-0-0")
+                .dateChose(new Double(mUser.getWeight()).intValue()+"")
                 .build();
         pickerPopWin3.showPopWin(ProfileActivity.this);
         pickerPopWin3.setOnDismissListener(new PopupWindow.OnDismissListener() {
@@ -275,7 +277,7 @@ public class ProfileActivity extends BaseActivity {
     public void saveEdit() {
         boolean watchConnected = getModel().getSyncController().isConnected();
         if (!watchConnected) {
-            noWatchShow.setVisibility(View.VISIBLE);
+            noWatchConnect.setVisibility(View.VISIBLE);
             AlphaAnimation alpha = new AlphaAnimation(1, 0);
             alpha.setDuration(2000);
             alpha.setFillAfter(true);
@@ -287,7 +289,7 @@ public class ProfileActivity extends BaseActivity {
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
-                    noWatchShow.setVisibility(View.GONE);
+                    noWatchConnect.setVisibility(View.GONE);
                     saveUserCurrentEdit();
                 }
 
@@ -296,7 +298,7 @@ public class ProfileActivity extends BaseActivity {
 
                 }
             });
-            noWatchShow.startAnimation(alpha);
+            noWatchConnect.startAnimation(alpha);
         }
 
     }

@@ -46,7 +46,7 @@ public class SelectDeviceActivity extends BaseActivity {
             setTranslucentStatus(true);
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
             tintManager.setStatusBarTintEnabled(true);
-            tintManager.setStatusBarTintResource(R.color.user_info_gender_select_text_color);//通知栏所需颜色
+            tintManager.setStatusBarTintResource(R.color.user_info_gender_select_text_color);
         }
         ButterKnife.bind(this);
         Intent intent = getIntent();
@@ -108,7 +108,9 @@ public class SelectDeviceActivity extends BaseActivity {
 
     @OnClick(R.id.select_activity_open_home_activity)
     public void openHomeActivity(){
-        startActivity(HomeActivity.class);
+        Intent intent  = new Intent(this ,HomeActivity.class);
+        intent.putExtra("logOut",false);
+        startActivity(intent);
         finish();
     }
 }

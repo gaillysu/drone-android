@@ -43,7 +43,7 @@ public class ForgetPasswordActivity extends BaseActivity {
             setTranslucentStatus(true);
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
             tintManager.setStatusBarTintEnabled(true);
-            tintManager.setStatusBarTintResource(R.color.user_info_gender_select_text_color);//通知栏所需颜色
+            tintManager.setStatusBarTintResource(R.color.user_info_gender_select_text_color);
         }
         ButterKnife.bind(this);
         nextPageImageButton.setVisibility(View.GONE);

@@ -86,7 +86,7 @@ public class WorldClockAdapter extends BaseAdapter implements SlideView.OnSlideL
             int minutes = LATime.get(Calendar.MINUTE);
 
             if(name.contains("_")) {
-                name = name.replace("_","");
+                name = name.replace("_"," ");
             }
             
                 if (name != null && name.contains("/")) {

@@ -60,7 +60,7 @@ public class UserInfoActivity extends BaseActivity {
             setTranslucentStatus(true);
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
             tintManager.setStatusBarTintEnabled(true);
-            tintManager.setStatusBarTintResource(R.color.user_info_gender_select_text_color);//通知栏所需颜色
+            tintManager.setStatusBarTintResource(R.color.user_info_gender_select_text_color);
         }
 
         ButterKnife.bind(this);
@@ -125,7 +125,7 @@ public class UserInfoActivity extends BaseActivity {
                     }
                 }).viewStyle(viewType)
                 .viewTextSize(25)
-                .dateChose("0-215-0")
+                .dateChose("170")
                 .build();
         pickerPopWin2.showPopWin(UserInfoActivity.this);
     }
@@ -143,7 +143,7 @@ public class UserInfoActivity extends BaseActivity {
                     }
                 }).viewStyle(viewType)
                 .viewTextSize(25)
-                .dateChose("52-0-0")
+                .dateChose("60")
                 .build();
         pickerPopWin3.showPopWin(UserInfoActivity.this);
     }

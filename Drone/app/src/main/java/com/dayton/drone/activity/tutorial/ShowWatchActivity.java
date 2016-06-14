@@ -61,7 +61,7 @@ public class ShowWatchActivity extends BaseActivity  {
             setTranslucentStatus(true);
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
             tintManager.setStatusBarTintEnabled(true);
-            tintManager.setStatusBarTintResource(R.color.user_info_gender_select_text_color);//通知栏所需颜色
+            tintManager.setStatusBarTintResource(R.color.user_info_gender_select_text_color);
         }
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
@@ -72,7 +72,9 @@ public class ShowWatchActivity extends BaseActivity  {
             getModel().getSyncController().startConnect(true);
         }
         else{
-            startActivity(HomeActivity.class);
+            Intent action  = new Intent(this ,HomeActivity.class);
+            action.putExtra("logOut",false);
+            startActivity(action);
             finish();
         }
     }
@@ -134,7 +136,9 @@ public class ShowWatchActivity extends BaseActivity  {
                     new Handler(getMainLooper()).postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            startActivity(HomeActivity.class);
+                            Intent intent  = new Intent(ShowWatchActivity.this ,HomeActivity.class);
+                            intent.putExtra("logOut",false);
+                            startActivity(intent);
                             finish();
                         }
                     },10000);

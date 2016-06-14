@@ -64,7 +64,7 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
             setTranslucentStatus(true);
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
             tintManager.setStatusBarTintEnabled(true);
-            tintManager.setStatusBarTintResource(R.color.user_info_sex_bg);//通知栏所需颜色
+            tintManager.setStatusBarTintResource(R.color.user_info_sex_bg);
         }
 
         ButterKnife.bind(this);
@@ -145,14 +145,18 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
     @OnClick(R.id.activity_add_watch_forget_watch)
     public void forgetNotification(){
         getModel().getSyncController().forgetDevice();
-        startActivity(HomeActivity.class);
+        Intent intent  = new Intent(this ,HomeActivity.class);
+        intent.putExtra("logOut",false);
+        startActivity(intent);
         finish();
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(keyCode == KeyEvent.KEYCODE_BACK){
-            startActivity(HomeActivity.class);
+            Intent intent  = new Intent(this ,HomeActivity.class);
+            intent.putExtra("logOut",false);
+            startActivity(intent);
             finish();
          return true;
         }
