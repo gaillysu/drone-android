@@ -24,8 +24,13 @@ import com.dayton.drone.database.entry.UserDatabaseHelper;
 import com.dayton.drone.event.ProfileChangedEvent;
 import com.dayton.drone.event.StepsGoalChangedEvent;
 import com.dayton.drone.model.User;
+import com.dayton.drone.network.request.UpdateUserRequest;
+import com.dayton.drone.network.request.model.UpdateUser;
+import com.dayton.drone.network.response.model.UpdateUserModel;
 import com.dayton.drone.utils.CacheConstants;
 import com.dayton.drone.utils.SpUtils;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import org.greenrobot.eventbus.EventBus;
@@ -358,10 +363,34 @@ public class ProfileActivity extends BaseActivity {
             userStepGoal = currentGoalStep;
             EventBus.getDefault().post(new StepsGoalChangedEvent(userStepGoal));
         }
-        Intent intent = getIntent();
-        intent.putExtra("logOut", false);
-        setResult(resultCode, intent);
-        finish();
+
+        UpdateUser updateUser = new UpdateUser();
+        updateUser.setId(Integer.parseInt(mUser.getUserID()));
+        updateUser.setFirst_name(mUser.getFirstName());
+        updateUser.setLast_name(mUser.getLastName());
+        updateUser.setEmail(mUser.getUserEmail());
+        updateUser.setLength(mUser.getHeight());
+        updateUser.setBirthday(mUser.getBirthday());
+        updateUser.setSex(mUser.getGender());
+        getModel().getRetrofitManager().execute(new UpdateUserRequest(updateUser , getModel()
+                .getRetrofitManager().getAccessToken()), new RequestListener<UpdateUserModel>() {
+
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                spiceException.printStackTrace();
+            }
+
+            @Override
+            public void onRequestSuccess(UpdateUserModel updateUserModel) {
+                if(updateUserModel.getStatus()==1) {
+                    Intent intent = getIntent();
+                    intent.putExtra("logOut", false);
+                    setResult(resultCode, intent);
+                    finish();
+                }
+            }
+        });
+
     }
 
     private void showDiaLogMethod(int id) {

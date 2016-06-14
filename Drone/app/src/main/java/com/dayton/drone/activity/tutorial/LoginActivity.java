@@ -89,9 +89,12 @@ public class LoginActivity extends BaseActivity {
                      getModel().getUser().setUserID(loginUserModel.getUser().getId()+"");
                      getModel().getUser().setUserEmail(loginUserModel.getUser().getEmail());
                      getModel().getUser().setUserPassword(ed_password.getText().toString());
+                     getModel().getUser().setFirstName(loginUserModel.getUser().getFirst_name());
+                     getModel().getUser().setLastName(loginUserModel.getUser().getLast_name());
                      getModel().getUser().setUserIsLogin(true);
                      getModel().getUserDatabaseHelper().update(getModel().getUser());
                      getModel().getSyncActivityManager().launchSyncAll();
+
                      onLoginSuccess();
                  }
                  else{

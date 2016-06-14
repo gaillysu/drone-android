@@ -172,7 +172,8 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         boolean mIsFirst = SpUtils.getBoolean(this, CacheConstants.IS_FIRST, true);
         mProgressBar.setStartColor(R.color.progress_start_color);
         mProgressBar.setEndColor(R.color.progress_end_color);
-        mProgressBar.setSmoothPercent(1.0f * SpUtils.getIntMethod(this, CacheConstants.TODAY_STEP, 0) / SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000));
+        mProgressBar.setSmoothPercent(1.0f * SpUtils.getIntMethod(this, CacheConstants.TODAY_STEP, 0)
+                / SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000)+0.5f);
         homeMiddleTv.setText(SpUtils.getIntMethod(this, CacheConstants.TODAY_STEP, 0) + "");
         userStepGoalTextView.setText(getResources().getString(R.string.user_step_goal)
                 + SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000));
@@ -196,6 +197,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     }
 
     private void findCalories(Date date) {
+
         Long timeActive = 0l;
         int accountSteps=0;
         List<Optional<Steps>> list = stepsDatabaseHelper.get(getModel().getUser().getUserID(),date);
@@ -290,6 +292,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         leftAxis.setLabelCount(3, true);
         leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
         leftAxis.setAxisMinValue(0.0f);
+
         leftAxis.setValueFormatter(new YAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, YAxis yAxis) {
@@ -297,6 +300,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
                 return resValue + "";
             }
         });
+
         YAxis rightAxis = barChart.getAxisRight();
         rightAxis.setEnabled(false);
         rightAxis.setAxisLineColor(R.color.grey);
@@ -398,7 +402,9 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         backMonth.setVisibility(View.VISIBLE);
         calendarGroup.setVisibility(View.VISIBLE);
         isShowCalendar = true;
+
         calendar.setOnItemClickListener(new CalendarView.OnItemClickListener() {
+
             @Override
             public void OnItemClick(Date selectedStartDate, Date selectedEndDate, Date downDate) {
                 selectedDate = downDate;
