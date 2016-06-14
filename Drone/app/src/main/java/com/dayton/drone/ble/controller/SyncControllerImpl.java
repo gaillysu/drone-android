@@ -114,7 +114,7 @@ public class SyncControllerImpl implements  SyncController{
         EventBus.getDefault().register(this);
         application.getApplicationContext().bindService(new Intent(application, LocalService.class), serviceConnection, Activity.BIND_AUTO_CREATE);
         application.getApplicationContext().bindService(new Intent(application, DroneNotificationListenerService.class), notificationServiceConnection, Activity.BIND_AUTO_CREATE);
-        //application.bindService(new Intent(application, GattServerService.class), gattServiceConnection, Activity.BIND_AUTO_CREATE);
+        application.bindService(new Intent(application, GattServerService.class), gattServiceConnection, Activity.BIND_AUTO_CREATE);
         startAutoSyncTimer();
     }
 
@@ -228,7 +228,7 @@ public class SyncControllerImpl implements  SyncController{
                 {
                     SystemStatusPacket systemStatusPacket = packet.newSystemStatusPacket();
                     Log.i(TAG,"GetSystemStatus return status value: " + systemStatusPacket.getStatus());
-                    if(systemStatusPacket.getStatus()== Constants.SystemStatus.SystemReset.rawValue())
+                    if((systemStatusPacket.getStatus() & Constants.SystemStatus.SystemReset.rawValue())== Constants.SystemStatus.SystemReset.rawValue())
                     {
                         sendRequest(new SetSystemConfig(application,1,0, 0, 0, Constants.SystemConfigID.ClockFormat));
                         sendRequest(new SetSystemConfig(application,1,0, 0, 0, Constants.SystemConfigID.Enabled));
@@ -238,20 +238,19 @@ public class SyncControllerImpl implements  SyncController{
                         sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.ActivityTracking));
                         sendRequest(new SetUserProfileRequest(application,application.getUser()));
                     }
-
-                    if(systemStatusPacket.getStatus()==Constants.SystemStatus.InvalidTime.rawValue())
+                    else if((systemStatusPacket.getStatus() & Constants.SystemStatus.InvalidTime.rawValue())==Constants.SystemStatus.InvalidTime.rawValue())
                     {
                         sendRequest(new SetRTCRequest(application));
                         sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.WorldClock));
                         sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.ActivityTracking));
                         sendRequest(new SetUserProfileRequest(application,application.getUser()));
                     }
-                    else if(systemStatusPacket.getStatus()==Constants.SystemStatus.GoalCompleted.rawValue())
+                    if((systemStatusPacket.getStatus() & Constants.SystemStatus.GoalCompleted.rawValue())==Constants.SystemStatus.GoalCompleted.rawValue())
                     {
                         EventBus.getDefault().post(new GoalCompletedEvent());
                         sendRequest(new SetGoalRequest(application,SetGoalRequest.DEFAULTSTEPSGOAL));
                     }
-                    else if(systemStatusPacket.getStatus()==Constants.SystemStatus.ActivityDataAvailable.rawValue())
+                    if((systemStatusPacket.getStatus() & Constants.SystemStatus.ActivityDataAvailable.rawValue())==Constants.SystemStatus.ActivityDataAvailable.rawValue())
                     {
                         theBigSyncStartDate = new Optional<>(new Date());
                         EventBus.getDefault().post(new BigSyncEvent(theBigSyncStartDate.get(), BigSyncEvent.BIG_SYNC_EVENT.STARTED));
@@ -385,24 +384,44 @@ public class SyncControllerImpl implements  SyncController{
     }
 
     @Subscribe
-    public void onEvent(BLEServerServiceAddedEvent event) {
+    public void onEvent(final BLEServerServiceAddedEvent event) {
         Log.i(TAG,"BLE server got service added: "+event.getServiceUUID()+",status: "+event.getStatus());
-        Toast.makeText(gattServerService,"BLE server got service added: "+event.getServiceUUID()+",status: "+event.getStatus(),Toast.LENGTH_LONG).show();
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(application,"BLE server got service added: "+event.getServiceUUID()+",status: "+event.getStatus(),Toast.LENGTH_LONG).show();
+            }
+        });
     }
     @Subscribe
-    public void onEvent(BLEServerConnectionStateChangedEvent event) {
+    public void onEvent(final BLEServerConnectionStateChangedEvent event) {
         Log.i(TAG,"BLE server connection status: "+event.isStatus());
-        Toast.makeText(gattServerService,"Ble server connection got "+ event.isStatus(),Toast.LENGTH_LONG).show();
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(application,"Ble server connection got "+ event.isStatus(),Toast.LENGTH_LONG).show();
+            }
+        });
     }
     @Subscribe
-    public void onEvent(BLEServerReadRequestEvent event) {
+    public void onEvent(final BLEServerReadRequestEvent event) {
         Log.i(TAG,"BLE server got read request");
-        Toast.makeText(gattServerService,"BLE server got read request",Toast.LENGTH_LONG).show();
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(application,"BLE server got read request",Toast.LENGTH_LONG).show();
+            }
+        });
     }
     @Subscribe
-    public void onEvent(BLEServerNotificationSentEvent event) {
+    public void onEvent(final BLEServerNotificationSentEvent event) {
         Log.i(TAG,"BLE server notification got sent");
-        Toast.makeText(gattServerService,"BLE server notification got sent",Toast.LENGTH_LONG).show();
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(application,"BLE server notification got sent",Toast.LENGTH_LONG).show();
+            }
+        });
     }
     //local service
     static public class LocalService extends Service

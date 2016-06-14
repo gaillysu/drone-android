@@ -13,6 +13,8 @@ import android.util.Log;
 import net.medcorp.library.ble.service.BLEServiceProvider;
 import net.medcorp.library.ble.util.HexUtils;
 
+import org.apache.commons.codec.binary.Hex;
+
 /**
  * Created by med on 16/6/6.
  */
@@ -56,22 +58,24 @@ public class GattServerService extends Service {
     }
 
     public void sendNotificationAlert(byte[] data){
+        if(bleServiceProvider==null) {
+            Log.e(TAG,"sendNotificationAlert failed, bleServiceProvider is null");
+            return;
+        }
         int nid = HexUtils.bytesToInt(new byte[]{data[1],data[2],data[3],data[4]});
         notificationID = nid;
-        Log.i(TAG,"BLE server send alert notification,notificationID: " + nid + "value: " + data);
+        Log.i(TAG,"BLE server send alert notification,notificationID: " + nid + ",value: " + new String(Hex.encodeHex(data)));
         bleServiceProvider.sendNotificationAlert(data);
     }
 
     public void sendNotificationData(byte[] data){
+        if(bleServiceProvider==null) {
+            Log.e(TAG,"sendNotificationData failed, bleServiceProvider is null");
+            return;
+        }
         int nid = HexUtils.bytesToInt(new byte[]{data[1],data[2],data[3],data[4]});
-        Log.i(TAG,"BLE server send data notification,notificationID: " + nid + "value: " + data);
+        Log.i(TAG,"BLE server send data notification,notificationID: " + nid + ",value: " + new String(Hex.encodeHex(data)));
         bleServiceProvider.sendNotificationData(data);
-    }
-
-    public void sendNotificationCommand(byte[] data){
-        int nid = HexUtils.bytesToInt(new byte[]{data[1],data[2],data[3],data[4]});
-        Log.i(TAG,"BLE server send command notification,notificationID: " + nid + "value: " + data);
-        bleServiceProvider.sendNotificationCommand(data);
     }
 
     public int getNotificationID() {

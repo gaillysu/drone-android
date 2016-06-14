@@ -8,12 +8,12 @@ public class Constants {
     public final static int MTU = 20;
 
     public enum SystemStatus {
-        LowMemory(0),
-        InvalidTime(3),
-        GoalCompleted(4),
-        ActivityDataAvailable(5),
-        SubscribedToNotifications(7),
-        SystemReset(8);
+        LowMemory(1<<0),
+        InvalidTime(1<<3),
+        GoalCompleted(1<<4),
+        ActivityDataAvailable(1<<5),
+        SubscribedToNotifications(1<<7),
+        SystemReset(1<<8);
         private int status;
         private SystemStatus(int status) {this.status = status;}
         public  int rawValue() {return status;}
