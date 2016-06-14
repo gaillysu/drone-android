@@ -134,6 +134,7 @@
             android:id="@+id/choose_activity_search_list_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:divider="@null"
             android:background="@color/add_watch_activity_prompt_text_color"
             android:visibility="gone"/>
     </FrameLayout>

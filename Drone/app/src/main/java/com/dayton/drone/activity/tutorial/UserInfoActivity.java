@@ -101,7 +101,7 @@ public class UserInfoActivity extends BaseActivity {
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
-                        tv_userBirth.setText(new SimpleDateFormat("MMM", Locale.US).format(date)+"-"+day + "-"+year);
+                        tv_userBirth.setText(new SimpleDateFormat("MMM", Locale.US).format(date) + "-" + day + "-" + year);
                     }
                 }).viewStyle(viewType)
                 .viewTextSize(25) // pick view text size
@@ -176,7 +176,11 @@ public class UserInfoActivity extends BaseActivity {
             createUser.setLength(h);
             createUser.setBirthday(birthday);
             createUser.setFirst_name(firstName);
-            createUser.setLast_name(lastName);
+            if (lastName != null) {
+                createUser.setLast_name(lastName);
+            } else {
+                createUser.setLast_name("");
+            }
             createUser.setWeight((float) w);
             createUser.setSex(gender);
             getModel().getRetrofitManager().execute(new CreateUserRequest(createUser, getModel().getRetrofitManager().getAccessToken()), new RequestListener<CreateUserModel>() {
@@ -206,25 +210,25 @@ public class UserInfoActivity extends BaseActivity {
             startActivity(SelectDeviceActivity.class);
             finish();
         } else {
-            if(firstName.isEmpty()){
+            if (firstName.isEmpty()) {
                 editFirstName.setError(getString(R.string.user_info_first_name_error));
-            }else{
+            } else {
                 editFirstName.setError(null);
             }
-            if(birthday.isEmpty()){
+            if (birthday.isEmpty()) {
                 tv_userBirth.setError(getString(R.string.user_info_birthday_error));
-            }else{
+            } else {
                 tv_userBirth.setError(null);
             }
-            if(height.isEmpty()){
+            if (height.isEmpty()) {
                 tv_userHeight.setError(getString(R.string.user_info_height_error));
-            }else{
+            } else {
                 tv_userHeight.setError(null);
             }
 
-            if(weight.isEmpty()){
+            if (weight.isEmpty()) {
                 tv_userWeight.setError(getString(R.string.user_info_weight_error));
-            }else{
+            } else {
                 tv_userWeight.setError(null);
             }
         }
