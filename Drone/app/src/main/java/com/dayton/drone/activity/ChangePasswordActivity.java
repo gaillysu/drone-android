@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -103,4 +104,14 @@ public class ChangePasswordActivity extends BaseActivity {
             Toast.makeText(ChangePasswordActivity.this, R.string.password_password_changed, Toast.LENGTH_SHORT).show();
         }
     };
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            startActivity(ForgetPasswordActivity.class);
+            finish();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 }

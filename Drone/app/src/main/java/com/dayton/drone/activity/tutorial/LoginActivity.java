@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -52,18 +53,18 @@ public class LoginActivity extends BaseActivity {
     }
 
     @OnClick(R.id.register_back_iv)
-    public void back(){
+    public void back() {
         startActivity(WelcomeActivity.class);
         getModel().getUser().setUserIsLogin(false);
         finish();
     }
 
     @OnClick(R.id.login_activity_login_bt)
-    public void loginClick(){
-         if(!validate()){
-//             onLoginFailed("invalid email or password");
-             return;
-         }
+    public void loginClick() {
+        if (!validate()) {
+            //             onLoginFailed("invalid email or password");
+            return;
+        }
         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
         progressDialog.setIndeterminate(true);
         progressDialog.setCancelable(false);
@@ -71,45 +72,44 @@ public class LoginActivity extends BaseActivity {
         progressDialog.show();
 
         LoginUser userLogin = new LoginUser();
-         userLogin.setEmail(ed_account.getText().toString());
-         userLogin.setPassword(ed_password.getText().toString());
-         getModel().getRetrofitManager().execute(new LoginUserRequest(userLogin,
-                 getModel().getRetrofitManager().getAccessToken()),new RequestListener<LoginUserModel>(){
+        userLogin.setEmail(ed_account.getText().toString());
+        userLogin.setPassword(ed_password.getText().toString());
+        getModel().getRetrofitManager().execute(new LoginUserRequest(userLogin,
+                getModel().getRetrofitManager().getAccessToken()), new RequestListener<LoginUserModel>() {
 
-             @Override
-             public void onRequestFailure(SpiceException spiceException) {
-                 progressDialog.dismiss();
-                 onLoginFailed();
-             }
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                progressDialog.dismiss();
+                onLoginFailed();
+            }
 
-             @Override
-             public void onRequestSuccess(LoginUserModel loginUserModel) {
-                 progressDialog.dismiss();
-                 if(loginUserModel.getStatus()==1) {
-                     getModel().getUser().setUserID(loginUserModel.getUser().getId()+"");
-                     getModel().getUser().setUserEmail(loginUserModel.getUser().getEmail());
-                     getModel().getUser().setUserPassword(ed_password.getText().toString());
-                     getModel().getUser().setFirstName(loginUserModel.getUser().getFirst_name());
-                     getModel().getUser().setLastName(loginUserModel.getUser().getLast_name());
-                     getModel().getUser().setUserIsLogin(true);
-                     getModel().getUserDatabaseHelper().update(getModel().getUser());
-                     getModel().getSyncActivityManager().launchSyncAll();
+            @Override
+            public void onRequestSuccess(LoginUserModel loginUserModel) {
+                progressDialog.dismiss();
+                if (loginUserModel.getStatus() == 1) {
+                    getModel().getUser().setUserID(loginUserModel.getUser().getId() + "");
+                    getModel().getUser().setUserEmail(loginUserModel.getUser().getEmail());
+                    getModel().getUser().setUserPassword(ed_password.getText().toString());
+                    getModel().getUser().setFirstName(loginUserModel.getUser().getFirst_name());
+                    getModel().getUser().setLastName(loginUserModel.getUser().getLast_name());
+                    getModel().getUser().setUserIsLogin(true);
+                    getModel().getUserDatabaseHelper().update(getModel().getUser());
+                    getModel().getSyncActivityManager().launchSyncAll();
 
-                     onLoginSuccess();
-                 }
-                 else{
-                     Log.e("LoginActivity",loginUserModel.getMessage() + ",state:" + loginUserModel.getStatus());
-                     onLoginFailed();
-                 }
-             }
-         });
+                    onLoginSuccess();
+                } else {
+                    Log.e("LoginActivity", loginUserModel.getMessage() + ",state:" + loginUserModel.getStatus());
+                    onLoginFailed();
+                }
+            }
+        });
     }
 
     private void onLoginSuccess() {
-        Toast.makeText(getBaseContext(), "log in success", Toast.LENGTH_LONG).show();
-        Intent loginIntent = new Intent(this,SelectDeviceActivity.class);
-        int type = 2>>4;
-        loginIntent.putExtra("type",type);
+        Toast.makeText(getBaseContext(), getString(R.string.login_success_toast_text), Toast.LENGTH_LONG).show();
+        Intent loginIntent = new Intent(this, SelectDeviceActivity.class);
+        int type = 4;
+        loginIntent.putExtra("type", type);
         startActivity(loginIntent);
         finish();
     }
@@ -137,4 +137,14 @@ public class LoginActivity extends BaseActivity {
         return valid;
     }
 
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            startActivity(WelcomeActivity.class);
+            finish();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 }

@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -80,6 +81,7 @@ public class ForgetPasswordActivity extends BaseActivity {
                             intent.putExtra("token", token);
                             intent.putExtra("id", id);
                             startActivity(intent);
+                            finish();
                         } else {
                             emailAddressEdit.setError(getString(R.string.forget_password_request_null));
                         }
@@ -92,6 +94,16 @@ public class ForgetPasswordActivity extends BaseActivity {
         }
 
 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            startActivity(WelcomeActivity.class);
+            finish();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @OnClick(R.id.register_back_iv)

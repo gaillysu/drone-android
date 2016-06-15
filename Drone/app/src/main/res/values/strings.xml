@@ -21,10 +21,13 @@
     <string name="change_password_forget_password_error">Change password failed</string>
     <string name="register_email"> Register with your email</string>
     <string name="third_party_login">Or register with your social media</string>
+    <string name="login_success_toast_text">Logged in!</string>
     <string name="login_failed_toast_text">Failed to login</string>
     <string name="tips_user_account_password">Email must not be empty</string>
     <string name="tips_user_password">Password must not be empty</string>
-
+    <string name="register_account_email_error">Email already exist</string>
+    <string name="register_email_format_error">Invalid Email format</string>
+    <string name="network_error_register_email_account">Cannot connect to the server.Try again later.</string>
     <string name="user_account_error">Account of password is incorrect.</string>
     <string name="user_info_clue">Tell us little bit about your self.</string>
     <string name="user_info_share">We promise, we will never share this information</string>

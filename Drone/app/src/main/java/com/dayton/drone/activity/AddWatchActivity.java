@@ -167,7 +167,7 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
     public void addWatch()
     {
         Intent intent  = new Intent(this ,SelectDeviceActivity.class);
-        int type = 5<<3;
+        int type = 5;
         intent.putExtra("type",type);
         startActivity(intent);
         finish();

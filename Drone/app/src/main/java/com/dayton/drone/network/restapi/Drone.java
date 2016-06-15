@@ -1,6 +1,8 @@
 package com.dayton.drone.network.restapi;
 
 import com.dayton.drone.network.request.model.ChangePasswordObject;
+import com.dayton.drone.network.request.model.CheckEmailResponse;
+import com.dayton.drone.network.request.model.CheckUserEmailObject;
 import com.dayton.drone.network.request.model.CreateStepsObject;
 import com.dayton.drone.network.request.model.CreateUserObject;
 import com.dayton.drone.network.request.model.LoginUserObject;
@@ -53,5 +55,8 @@ public interface Drone {
 
     @POST("/user/forget_password")
     RequestChangePasswordResponse requestChangePasswor(@Body ChangePasswordObject body, @Header("Authorization") String auth, @Header("Content-Type") String type);
+
+    @POST("/user/check_email")
+    CheckEmailResponse requestCheckEmailResponse(@Body CheckUserEmailObject body, @Header("Authorization") String auth, @Header("Content-Type") String type);
 
 }

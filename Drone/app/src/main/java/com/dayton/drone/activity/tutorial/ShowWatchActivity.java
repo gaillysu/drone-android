@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -172,5 +173,17 @@ public class ShowWatchActivity extends BaseActivity  {
     private String formatFirmwareVersion(String bleVersion,String mcuVersion)
     {
         return "version: "+bleVersion+"/"+mcuVersion;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            Intent intent = new Intent(this, SelectDeviceActivity.class);
+            int type = getIntent().getIntExtra("type",-1);
+            intent.putExtra("type",type);
+            startActivity(intent);
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

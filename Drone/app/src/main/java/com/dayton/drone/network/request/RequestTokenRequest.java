@@ -8,7 +8,8 @@ import com.dayton.drone.network.restapi.Drone;
 /**
  * Created by Administrator on 2016/6/8.
  */
-public class RequestTokenRequest extends BaseRequest<RequestTokenResponse,Drone> implements BaseRequest.BaseRetroRequestBody<RequestTokenBody> {
+public class RequestTokenRequest extends BaseRequest<RequestTokenResponse,Drone>
+        implements BaseRequest.BaseRetroRequestBody<RequestTokenBody> {
 
     private String token;
     private String email;

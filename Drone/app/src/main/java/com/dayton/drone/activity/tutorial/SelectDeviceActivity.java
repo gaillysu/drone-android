@@ -31,8 +31,8 @@ public class SelectDeviceActivity extends BaseActivity {
     @Bind(R.id.select_user_device)
     GridView showWatchGridView;
     private int type;
-    private int loginType = 2 >> 4;
-    private int addWatchType = 5<<3;
+    private int loginType = 4;
+    private int addWatchType = 5;
 
     private String[] watchNameArray;
     private int[] droneImagesIdArray = new int[]{R.mipmap.welcome_logo_1, R.mipmap.welcome_logo_2,
@@ -70,6 +70,7 @@ public class SelectDeviceActivity extends BaseActivity {
                 Intent intent = new Intent(SelectDeviceActivity.this, ShowWatchActivity.class);
                 intent.putExtra("watchIconId", iconId);
                 intent.putExtra("selectWatchName", watchName);
+                intent.putExtra("type",type);
                 startActivity(intent);
                 finish();
             }
