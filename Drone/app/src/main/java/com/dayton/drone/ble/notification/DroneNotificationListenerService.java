@@ -36,6 +36,7 @@ import net.medcorp.library.ble.event.BLEServerWriteRequestEvent;
 import net.medcorp.library.ble.util.HexUtils;
 import net.medcorp.library.ble.util.Optional;
 
+import org.apache.commons.codec.binary.Hex;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -58,11 +59,11 @@ public class DroneNotificationListenerService extends NotificationListenerServic
     private TelephonyManager telephonyManager;
     private CallStateListener callStateListener;
 
-    private String title;
-    private String subTitle;
-    private String message;
-    private String applicationName;
-    private int notificationID;
+    private String title=new String("");
+    private String subTitle=new String("");
+    private String message=new String("");
+    private String applicationName=new String("");
+    private int notificationID=0;
 
     private SmsObserver smsObserver;
     private Uri SMS_INBOX = Uri.parse("content://sms/inbox");
@@ -108,8 +109,7 @@ public class DroneNotificationListenerService extends NotificationListenerServic
     @Subscribe
     public void onEvent(BLEServerWriteRequestEvent event) {
         int notificationID = HexUtils.bytesToInt(new byte[]{event.getValue()[1],event.getValue()[2],event.getValue()[3],event.getValue()[4]});
-        Log.i(TAG,"BLE server got write request notificationID: "+notificationID + ",value: "+event.getValue());
-        Toast.makeText(application.getSyncController().getGattServerService(),"BLE server got write request notificationID: "+notificationID + ",value: "+event.getValue(),Toast.LENGTH_LONG).show();
+        Log.i(TAG,"BLE server got write request notificationID: "+notificationID + ",value: "+ new String(Hex.encodeHex(event.getValue())));
         //read attributes command
         if(event.getValue()[0] == Constants.NotificationCommand.ReadAttributes.rawValue())
         {
@@ -121,11 +121,16 @@ public class DroneNotificationListenerService extends NotificationListenerServic
                 boolean usedAttribute = false;
                 if(event.getValue()[6] == Constants.AttributeCode.Title.rawValue())
                 {
+                    if(title.length()==0)
+                    {
+                        title = "unknown number";
+                    }
                     responsePayload = new byte[9+title.length()];
                     System.arraycopy(event.getValue(),0,responsePayload,0,7);
-                    responsePayload[7] = (byte)title.length();
-                    responsePayload[8] = (byte)0;
-                    System.arraycopy(title.getBytes(),0,responsePayload,9,title.length());
+                    responsePayload[7] = (byte) title.length();
+                    responsePayload[8] = (byte) 0;
+                    System.arraycopy(title.getBytes(), 0, responsePayload, 9, title.length());
+                    title = "";
                     usedAttribute = true;
                 }
                 else if(event.getValue()[6] == Constants.AttributeCode.Text.rawValue())

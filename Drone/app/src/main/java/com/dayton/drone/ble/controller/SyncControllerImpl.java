@@ -414,6 +414,16 @@ public class SyncControllerImpl implements  SyncController{
         });
     }
     @Subscribe
+    public void onEvent(final BLEServerWriteRequestEvent event) {
+        Log.i(TAG,"BLE server got write request: " + event.getAddress());
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(application,"BLE server got write request: " + event.getAddress(),Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+    @Subscribe
     public void onEvent(final BLEServerNotificationSentEvent event) {
         Log.i(TAG,"BLE server notification got sent");
         new Handler(Looper.getMainLooper()).post(new Runnable() {
