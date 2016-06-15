@@ -58,9 +58,7 @@ public class HomeActivity extends BaseActivity {
                         startActivity(ActivitiesActivity.class);
                         break;
                     case clock:
-                        //startActivity(WorldClockActivity.class);
-                        DroneNotificationTrigger droneNotificationTrigger = new DroneNotificationTrigger(getModel().getSyncController().getGattServerService(),new Call(true,1));
-                        droneNotificationTrigger.doNotificationAlert();
+                        startActivity(WorldClockActivity.class);
                         break;
                 }
             }
