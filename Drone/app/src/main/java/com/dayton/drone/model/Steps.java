@@ -34,9 +34,15 @@ public class Steps extends StepsBean implements Comparable<Steps>{
         int dailySteps = 0;
         try {
             JSONArray hourlySteps = new JSONArray(getHourlySteps());
+            //24 hours
             for(int hour =0;hour<hourlySteps.length();hour++)
             {
-                dailySteps += hourlySteps.optInt(hour);
+                JSONArray minutesInHour = hourlySteps.optJSONArray(hour);
+                //12 * 5 minutes
+                for(int fiveMinutes=0;fiveMinutes<minutesInHour.length();fiveMinutes++)
+                {
+                    dailySteps += minutesInHour.optInt(fiveMinutes);
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();

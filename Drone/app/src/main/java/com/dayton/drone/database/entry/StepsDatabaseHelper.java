@@ -146,9 +146,19 @@ public class StepsDatabaseHelper {
         String dstDAOHourlySteps = srcDAOHourlySteps;
         Date date = new Date(steps.getTimeFrame());
         int indexHour = date.getHours();
+        int indexMinute = date.getMinutes()/5;  //range: 0~11
         try {
             JSONArray hourlySteps = new JSONArray(srcDAOHourlySteps);
-            hourlySteps.put(indexHour,hourlySteps.optInt(indexHour)+steps.getTimeFrameSteps());
+            JSONArray minutesInHour = hourlySteps.optJSONArray(indexHour);
+            minutesInHour.put(indexMinute,steps.getTimeFrameSteps());
+            //fix null Object to 0 value for saving string length
+            for(int k=0;k<indexMinute;k++)
+            {
+                if(minutesInHour.opt(k)==null)
+                {
+                    minutesInHour.put(k,0);
+                }
+            }
             dstDAOHourlySteps = hourlySteps.toString();
         } catch (JSONException e) {
             e.printStackTrace();
