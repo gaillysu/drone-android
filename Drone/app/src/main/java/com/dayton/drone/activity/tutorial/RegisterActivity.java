@@ -83,7 +83,6 @@ public class RegisterActivity extends BaseActivity {
                 progressialog.setMessage(getString(R.string.forget_password_dialog_text));
                 progressialog.show();
 
-
                 getModel().getRetrofitManager().execute(new RequestCheckUserEmailAccount(getModel().getRetrofitManager().
                         getAccessToken(), new CheckEmailUserBody(email)), new RequestListener<CheckEmailResponse>() {
 
