@@ -32,11 +32,11 @@ public class StepsBean {
 
 
     /**
-     * this is accumulation steps for every hour a day, like this [100,200,300,....,2400]
+     * this is accumulation steps for every hour a day, like this [[1,2,...12],,....,[24,2,3,...12]]
      */
     public static final String fHourlySteps = "hourlySteps";
     @DatabaseField
-    private String hourlySteps = "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]";
+    private String hourlySteps = "[[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]]";
 
     /**
      * one day's total distance ,unit is meter.

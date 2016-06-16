@@ -48,7 +48,7 @@ public interface Drone {
     UpdateStepsModel stepsUpdate(@Body UpdateStepsObject object,@Header("Authorization") String auth,@Header("Content-Type") String type);
 
     @GET("/steps/user/{USER_ID}")
-    GetStepsModel stepsGet(@Path("USER_ID") String userID, @Query("token") String token,@Query("start_date") String start_date,@Query("end_date") String end_date,@Header("Authorization") String auth, @Header("Content-Type") String type);
+    GetStepsModel stepsGet(@Path("USER_ID") String userID, @Query("token") String token,@Query("start_date") long start_date,@Query("end_date") long end_date,@Header("Authorization") String auth, @Header("Content-Type") String type);
 
     @POST("/user/request_password_token")
     RequestTokenResponse requestToken(@Body RequestTokenBody body, @Header("Authorization") String auth,@Header("Content-Type") String type);

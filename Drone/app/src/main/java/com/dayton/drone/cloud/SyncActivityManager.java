@@ -81,7 +81,11 @@ public class SyncActivityManager {
                         JSONArray jsonArray = new JSONArray(createStepsModel.getSteps().getSteps());
                         for(int i=0;i<jsonArray.length();i++)
                         {
-                            totalServerDailySteps += jsonArray.optInt(i);
+                            JSONArray stepsInHour = jsonArray.optJSONArray(i);
+                            for(int j=0;j<stepsInHour.length();j++)
+                            {
+                                totalServerDailySteps += stepsInHour.optInt(j);
+                            }
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -168,8 +172,8 @@ public class SyncActivityManager {
     private void downloadSteps(final Date startDate, final Date endDate)
     {
         //TODO API should add a filter to query: ?startdate=...& enddate=...
-        String start_date = new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(startDate);
-        String end_date = new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(endDate);
+        long start_date = Common.removeTimeFromDate(startDate).getTime()/1000;
+        long end_date = Common.removeTimeFromDate(endDate).getTime()/1000;
         getModel().getRetrofitManager().execute(new GetStepsRequest(getModel().getUser().getUserID(),getModel().getRetrofitManager().getAccessToken(),start_date,end_date),new RequestListener<GetStepsModel>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
@@ -182,10 +186,10 @@ public class SyncActivityManager {
                     Log.i(TAG,getStepsModel.getMessage());
                     for(StepsDetail stepsDetail:getStepsModel.getSteps())
                     {
-                        //TODO getSteps() return format should be "[1,2,3,4,5,6,7,8,...,22,23,24]"
+                        //TODO getSteps() return format should be "[[1,2,...12],[2,2,3,...12],...,[22...],[23...],[24...]]"
                         if(stepsDetail.getSteps()!=null
-                                && stepsDetail.getSteps().startsWith("[")
-                                && stepsDetail.getSteps().endsWith("]"))
+                                && stepsDetail.getSteps().startsWith("[[")
+                                && stepsDetail.getSteps().endsWith("]]"))
                         {
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.000000", Locale.US);
                             try {
