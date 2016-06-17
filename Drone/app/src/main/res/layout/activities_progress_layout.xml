@@ -48,7 +48,7 @@
                     android:id="@+id/activities_progress_middle_dec"
                     style="@style/home_content_activity_progress_middle_text_style"
                     android:text="@string/activities_steps"
-                    android:textSize="24sp"
+                    android:textSize="28sp"
                     android:textColor="@color/home_content_text_color"
                     />
 
@@ -57,7 +57,7 @@
                     style="@style/home_content_activity_progress_middle_text_style"
                     android:text="@string/activities__0"
                     android:textColor="@color/user_info_sex_bg"
-                    android:textSize="28sp"
+                    android:textSize="40sp"
                     />
 
                 <TextView

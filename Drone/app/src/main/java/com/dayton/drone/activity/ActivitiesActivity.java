@@ -173,7 +173,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         mProgressBar.setStartColor(R.color.progress_start_color);
         mProgressBar.setEndColor(R.color.progress_end_color);
         mProgressBar.setSmoothPercent(1.0f * SpUtils.getIntMethod(this, CacheConstants.TODAY_STEP, 0)
-                /SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000));
+                / SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000));
         homeMiddleTv.setText(SpUtils.getIntMethod(this, CacheConstants.TODAY_STEP, 0) + "");
         userStepGoalTextView.setText(getResources().getString(R.string.user_step_goal)
                 + SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000));
@@ -198,19 +198,31 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
 
     private void findCalories(Date date) {
 
-        Long timeActive = 0l;
-        int accountSteps=0;
-        List<Optional<Steps>> list = stepsDatabaseHelper.get(getModel().getUser().getUserID(),date);
-        for(int i = 0; i <list.size();i++){
+        int timeActive = 0;
+        int accountSteps = 0;
+        List<Optional<Steps>> list = stepsDatabaseHelper.get(getModel().getUser().getUserID(), date);
+        for (int i = 0; i < list.size(); i++) {
             Steps steps = list.get(i).get();
-            timeActive =  steps.getTimeFrame()/(60*1000);
+            timeActive += 5;
             accountSteps = steps.getDailySteps();
         }
-        double calories = (2.0*3.5*getModel().getUser().getWeight())/200*timeActive;
-        caloriesTextView.setText(calories+"");
-        kmTextView.setText((getModel().getUser().getHeight()*0.45)/100*accountSteps/1000+"");
-        activeTimeTextView.setText(timeActive+"");
+        double calories = (2.0 * 3.5 * getModel().getUser().getWeight()) / 200 * timeActive;
+        caloriesTextView.setText(calories + "");
+        kmTextView.setText((getModel().getUser().getHeight() * 0.45) / 100 * accountSteps / 1000 + "");
+        activeTimeTextView.setText(formatTimeActivity(timeActive));
 
+    }
+
+    private String formatTimeActivity(int timeActive) {
+
+        StringBuffer buffer = new StringBuffer();
+        if (timeActive % 60 != 0) {
+            buffer.append(timeActive % 60 + "h");
+            buffer.append(timeActive - (timeActive % 60) * 60 + "m");
+        } else {
+            buffer.append(timeActive + "m");
+        }
+        return buffer.toString();
     }
 
     private void drawGraph() {
@@ -373,7 +385,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
             case 4:
                 barGuide.setVisibility(View.GONE);
                 hourlyBarChart.setBackgroundResource(R.drawable.user_guide_bg);
-                guideBar.setBackground(new BitmapDrawable ());
+                guideBar.setBackground(new BitmapDrawable());
                 chartGuideDec.setVisibility(View.VISIBLE);
                 break;
             case 5:
@@ -387,13 +399,13 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     @OnClick(R.id.activities_activity_calendar_back_month)
     public void mIvBackMonthClick() {
         Date leftMouth = calendar.clickLeftMonth();
-//        mTitleCalendarTextView.setText(new SimpleDateFormat("MMM").format(leftMouth));
+        //        mTitleCalendarTextView.setText(new SimpleDateFormat("MMM").format(leftMouth));
     }
 
     @OnClick(R.id.activities_activity_title_next_month)
     public void mIvNextMonthClick() {
         Date rightMouth = calendar.clickRightMonth();
-//        mTitleCalendarTextView.setText(new SimpleDateFormat("MMM").format(rightMouth));
+        //        mTitleCalendarTextView.setText(new SimpleDateFormat("MMM").format(rightMouth));
     }
 
     @OnClick(R.id.activities_activity_title_date)
