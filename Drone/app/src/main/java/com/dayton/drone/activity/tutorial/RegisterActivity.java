@@ -74,7 +74,7 @@ public class RegisterActivity extends BaseActivity {
             }
 
         } else {
-            
+
             if (!CheckEmailFormat.checkEmail(email)) {
 
                 final ProgressDialog progressialog = new ProgressDialog(this);

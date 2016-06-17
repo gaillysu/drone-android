@@ -16,6 +16,7 @@ import com.dayton.drone.activity.ForgetPasswordActivity;
 import com.dayton.drone.activity.HomeActivity;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.adapter.WelcomeViewpagerAdapter;
+import com.dayton.drone.utils.CheckEmailFormat;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import net.medcorp.library.ble.service.BLEServiceProvider;
@@ -85,7 +86,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams
                     (ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             if (x != 0) {
-                lp.leftMargin = dip2px(8f);
+                lp.leftMargin = CheckEmailFormat.dip2px(8f,this);
             } else {
                 pointImageView.setImageResource(R.drawable.select_point);
             }
@@ -120,12 +121,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             }
         });
     }
-
-    public int dip2px(float dpValue) {
-        final float scale = getResources().getDisplayMetrics().density;
-        return (int) (dpValue * scale + 0.5f);
-    }
-
 
     @OnClick(R.id.login_bt)
     public void openLoginActivity() {

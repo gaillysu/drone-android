@@ -66,7 +66,7 @@ public class LoginActivity extends BaseActivity {
             //             onLoginFailed("invalid email or password");
             return;
         }
-        if (CheckEmailFormat.checkEmail(ed_account.getText().toString())) {
+        if (!CheckEmailFormat.checkEmail(ed_account.getText().toString())) {
             final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
             progressDialog.setIndeterminate(true);
             progressDialog.setCancelable(false);

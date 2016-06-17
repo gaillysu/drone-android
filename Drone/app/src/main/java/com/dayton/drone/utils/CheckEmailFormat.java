@@ -1,5 +1,7 @@
 package com.dayton.drone.utils;
 
+import android.content.Context;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,5 +21,10 @@ public class CheckEmailFormat {
             flag = false;
         }
         return flag;
+    }
+
+    public static int dip2px(float dpValue, Context context) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
     }
 }
