@@ -10,7 +10,9 @@
         layout="@layout/register_control_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="20dp"/>
 
     <include
         layout="@layout/registe_table_layout"

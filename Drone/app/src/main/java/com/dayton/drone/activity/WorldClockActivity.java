@@ -43,7 +43,7 @@ public class WorldClockActivity extends BaseActivity {
     TextView localCity;
     @Bind(R.id.world_clock_item_city_time)
     TextView localTime;
-   private ListViewCompat worldClockListView;
+    private ListViewCompat worldClockListView;
     public static String FORMAT_LONG = "yyyy-MM-dd HH:mm:ss";
 
     private List<WorldClock> listData;
@@ -72,11 +72,11 @@ public class WorldClockActivity extends BaseActivity {
         String timeName = timeZone.getID().split("/")[1];
         localCity.setText(timeName);
         String[] localTimeStr = format.format(calendar.getTime()).split(" ");
-        if(new Integer(localTimeStr[1].split(":")[0]).intValue()<=12) {
+        if (new Integer(localTimeStr[1].split(":")[0]).intValue() <= 12) {
 
-            localTime.setText(localTimeStr[1].split(":")[0] + ":" + localTimeStr[1].split(":")[1]+" AM");
-        }else{
-            localTime.setText(localTimeStr[1].split(":")[0] + ":" + localTimeStr[1].split(":")[1]+" PM");
+            localTime.setText(localTimeStr[1].split(":")[0] + ":" + localTimeStr[1].split(":")[1] + " AM");
+        } else {
+            localTime.setText(localTimeStr[1].split(":")[0] + ":" + localTimeStr[1].split(":")[1] + " PM");
         }
         worldClockDatabase = getModel().getWorldClockDatabaseHelper();
         initData();
@@ -110,16 +110,16 @@ public class WorldClockActivity extends BaseActivity {
         String currentTime = format.format(date);
         String[] currentTimeArray = currentTime.split("-");
 
-        dateTv.setText(currentTimeArray[2]+" "+new SimpleDateFormat("MMM", Locale.US).format(date) + " " + currentTimeArray[0]);
+        dateTv.setText(currentTimeArray[2] + " " + new SimpleDateFormat("MMM", Locale.US).format(date) + " " + currentTimeArray[0]);
 
         listData = worldClockDatabase.getSelected();
         worldClockAdapter = new WorldClockAdapter(listData, this);
         worldClockListView.setAdapter(worldClockAdapter);
-                worldClockAdapter.onDeleteItemListener(new WorldClockAdapter.DeleteItemInterface() {
-                    @Override
-                    public void deleteItem(int position) {
-                if(worldClockDatabase.update(listData.get(position),false))
-                {
+
+        worldClockAdapter.onDeleteItemListener(new WorldClockAdapter.DeleteItemInterface() {
+            @Override
+            public void deleteItem(int position) {
+                if (worldClockDatabase.update(listData.get(position), false)) {
                     listData.remove(position);
                     worldClockAdapter.notifyDataSetChanged();
                     EventBus.getDefault().post(new WorldClockChangedEvent(worldClockDatabase.getSelected()));
@@ -152,25 +152,22 @@ public class WorldClockActivity extends BaseActivity {
         if (requestCode == this.requestCode) {
             boolean flag = data.getBooleanExtra("isChooseFlag", true);
             if (flag) {
-               String timeZoneName =data.getStringExtra("worldClock");
-                if(worldClockDatabase.getSelected().size()==5)
-                {
-                    Toast.makeText(WorldClockActivity.this,getResources().getString(R.string.add_city_toast_text)
+                String timeZoneName = data.getStringExtra("worldClock");
+                if (worldClockDatabase.getSelected().size() == 5) {
+                    Toast.makeText(WorldClockActivity.this, getResources().getString(R.string.add_city_toast_text)
                             , Toast.LENGTH_LONG).show();
                     return;
                 }
-                WorldClock worldClock=  new WorldClock();
+                WorldClock worldClock = new WorldClock();
                 worldClock.setTimeZoneName(timeZoneName);
 
-                if(worldClockDatabase.update(worldClock,true))
-                {
+                if (worldClockDatabase.update(worldClock, true)) {
                     listData.add(worldClock);
+                    worldClockDatabase.update(worldClock,true);
                     worldClockAdapter.notifyDataSetChanged();
                     EventBus.getDefault().post(new WorldClockChangedEvent(worldClockDatabase.getSelected()));
-                }
-                else
-                {
-                    Toast.makeText(WorldClockActivity.this,getString(R.string.world_clock_add_city_error)
+                } else {
+                    Toast.makeText(WorldClockActivity.this, getString(R.string.world_clock_add_city_error)
                             , Toast.LENGTH_LONG).show();
                 }
             }

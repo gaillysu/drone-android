@@ -16,6 +16,7 @@ import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.network.request.LoginUserRequest;
 import com.dayton.drone.network.request.model.LoginUser;
 import com.dayton.drone.network.response.model.LoginUserModel;
+import com.dayton.drone.utils.CheckEmailFormat;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
@@ -65,44 +66,48 @@ public class LoginActivity extends BaseActivity {
             //             onLoginFailed("invalid email or password");
             return;
         }
-        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setCancelable(false);
-        progressDialog.setMessage(getString(R.string.user_login_dialog_text));
-        progressDialog.show();
+        if (CheckEmailFormat.checkEmail(ed_account.getText().toString())) {
+            final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setCancelable(false);
+            progressDialog.setMessage(getString(R.string.user_login_dialog_text));
+            progressDialog.show();
 
-        LoginUser userLogin = new LoginUser();
-        userLogin.setEmail(ed_account.getText().toString());
-        userLogin.setPassword(ed_password.getText().toString());
-        getModel().getRetrofitManager().execute(new LoginUserRequest(userLogin,
-                getModel().getRetrofitManager().getAccessToken()), new RequestListener<LoginUserModel>() {
+            LoginUser userLogin = new LoginUser();
+            userLogin.setEmail(ed_account.getText().toString());
+            userLogin.setPassword(ed_password.getText().toString());
+            getModel().getRetrofitManager().execute(new LoginUserRequest(userLogin,
+                    getModel().getRetrofitManager().getAccessToken()), new RequestListener<LoginUserModel>() {
 
-            @Override
-            public void onRequestFailure(SpiceException spiceException) {
-                progressDialog.dismiss();
-                onLoginFailed();
-            }
-
-            @Override
-            public void onRequestSuccess(LoginUserModel loginUserModel) {
-                progressDialog.dismiss();
-                if (loginUserModel.getStatus() == 1) {
-                    getModel().getUser().setUserID(loginUserModel.getUser().getId() + "");
-                    getModel().getUser().setUserEmail(loginUserModel.getUser().getEmail());
-                    getModel().getUser().setUserPassword(ed_password.getText().toString());
-                    getModel().getUser().setFirstName(loginUserModel.getUser().getFirst_name());
-                    getModel().getUser().setLastName(loginUserModel.getUser().getLast_name());
-                    getModel().getUser().setUserIsLogin(true);
-                    getModel().getUserDatabaseHelper().update(getModel().getUser());
-                    getModel().getSyncActivityManager().launchSyncAll();
-
-                    onLoginSuccess();
-                } else {
-                    Log.e("LoginActivity", loginUserModel.getMessage() + ",state:" + loginUserModel.getStatus());
+                @Override
+                public void onRequestFailure(SpiceException spiceException) {
+                    progressDialog.dismiss();
                     onLoginFailed();
                 }
-            }
-        });
+
+                @Override
+                public void onRequestSuccess(LoginUserModel loginUserModel) {
+                    progressDialog.dismiss();
+                    if (loginUserModel.getStatus() == 1) {
+                        getModel().getUser().setUserID(loginUserModel.getUser().getId() + "");
+                        getModel().getUser().setUserEmail(loginUserModel.getUser().getEmail());
+                        getModel().getUser().setUserPassword(ed_password.getText().toString());
+                        getModel().getUser().setFirstName(loginUserModel.getUser().getFirst_name());
+                        getModel().getUser().setLastName(loginUserModel.getUser().getLast_name());
+                        getModel().getUser().setUserIsLogin(true);
+                        getModel().getUserDatabaseHelper().update(getModel().getUser());
+                        getModel().getSyncActivityManager().launchSyncAll();
+
+                        onLoginSuccess();
+                    } else {
+                        Log.e("LoginActivity", loginUserModel.getMessage() + ",state:" + loginUserModel.getStatus());
+                        onLoginFailed();
+                    }
+                }
+            });
+        } else {
+            ed_account.setError(getString(R.string.register_email_format_error));
+        }
     }
 
     private void onLoginSuccess() {

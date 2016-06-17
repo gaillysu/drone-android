@@ -14,12 +14,10 @@ import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.network.request.RequestCheckUserEmailAccount;
 import com.dayton.drone.network.request.model.CheckEmailResponse;
 import com.dayton.drone.network.request.model.CheckEmailUserBody;
+import com.dayton.drone.utils.CheckEmailFormat;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -76,7 +74,9 @@ public class RegisterActivity extends BaseActivity {
             }
 
         } else {
-            if (checkEmail(email)) {
+            
+            if (!CheckEmailFormat.checkEmail(email)) {
+
                 final ProgressDialog progressialog = new ProgressDialog(this);
                 progressialog.setIndeterminate(false);
                 progressialog.setCancelable(false);
@@ -111,24 +111,11 @@ public class RegisterActivity extends BaseActivity {
                     }
                 });
             } else {
+                ed_email.requestFocus();
                 ed_email.setError(getString(R.string.register_email_format_error));
             }
 
         }
-    }
-
-    public boolean checkEmail(String email) {
-        boolean flag = false;
-        try {
-            String check = "^([a-z0-9A-Z]+[-|\\\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\\\.)+[a-zA-Z]{2,}$";
-
-            Pattern regex = Pattern.compile(check);
-            Matcher matcher = regex.matcher(email);
-            flag = matcher.matches();
-        } catch (Exception e) {
-            flag = false;
-        }
-        return flag;
     }
 
     @Override
