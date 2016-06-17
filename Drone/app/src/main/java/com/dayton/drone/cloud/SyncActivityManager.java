@@ -64,6 +64,7 @@ public class SyncActivityManager {
         createSteps.setUid(Integer.parseInt(stepsList.get(0).getUserID()));
         createSteps.setDate(new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(new Date(stepsList.get(0).getTimeFrame())));
         createSteps.setSteps(stepsList.get(0).getHourlySteps());
+        createSteps.setActive_time(stepsList.get(0).getDailyActiveTime());
         getModel().getRetrofitManager().execute(new CreateStepsRequest(createSteps, getModel().getRetrofitManager().getAccessToken()), new RequestListener<CreateStepsModel>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {

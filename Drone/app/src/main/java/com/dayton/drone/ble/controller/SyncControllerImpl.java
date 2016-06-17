@@ -32,6 +32,7 @@ import com.dayton.drone.ble.model.request.init.SetAppConfigRequest;
 import com.dayton.drone.ble.model.request.init.SetRTCRequest;
 import com.dayton.drone.ble.model.request.init.SetSystemConfig;
 import com.dayton.drone.ble.model.request.setting.SetGoalRequest;
+import com.dayton.drone.ble.model.request.setting.SetStepsToWatchReuqest;
 import com.dayton.drone.ble.model.request.setting.SetUserProfileRequest;
 import com.dayton.drone.ble.model.request.sync.GetActivityRequest;
 import com.dayton.drone.ble.model.request.sync.GetStepsGoalRequest;
@@ -49,7 +50,9 @@ import com.dayton.drone.event.TimerEvent;
 import com.dayton.drone.event.WorldClockChangedEvent;
 import com.dayton.drone.model.Steps;
 import com.dayton.drone.model.WorldClock;
+import com.dayton.drone.utils.CacheConstants;
 import com.dayton.drone.utils.Common;
+import com.dayton.drone.utils.SpUtils;
 
 import net.medcorp.library.ble.controller.ConnectionController;
 import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
@@ -190,6 +193,21 @@ public class SyncControllerImpl implements  SyncController{
         });
     }
 
+    private void setWorldClock(List<WorldClock> worldClockList)
+    {
+        List<TimeZoneModel> timeZoneModelList = new ArrayList<>();
+        for(WorldClock worldClock:worldClockList)
+        {
+            TimeZone timeZone = TimeZone.getTimeZone(worldClock.getTimeZoneName());
+            Calendar LATime = new GregorianCalendar(timeZone);
+            LATime.setTimeInMillis(new Date().getTime());
+            float utc_offset = timeZone.getOffset(LATime.getTimeInMillis())/1000f/3600f;
+            String utc_name = worldClock.getTimeZoneTitle().split(",")[0];
+            Log.i("gailly",utc_name + ", " + utc_offset+ ", DaylightTime: " + timeZone.useDaylightTime());
+            timeZoneModelList.add(new TimeZoneModel(utc_offset,utc_name));
+        }
+        sendRequest(new SetWorldClockRequest(application,timeZoneModelList));
+    }
     @Subscribe
     public void onEvent(BLEResponseDataEvent eventData)
     {
@@ -230,6 +248,16 @@ public class SyncControllerImpl implements  SyncController{
                         sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.WorldClock));
                         sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.ActivityTracking));
                         sendRequest(new SetUserProfileRequest(application,application.getUser()));
+                        //set goal to watch
+                        sendRequest(new SetGoalRequest(application, SpUtils.getIntMethod(application, CacheConstants.GOAL_STEP, 10000)));
+                        List<Steps> stepsList = application.getStepsDatabaseHelper().convertToNormalList(application.getStepsDatabaseHelper().get(application.getUser().getUserID(),Common.removeTimeFromDate(new Date())));
+                        if(!stepsList.isEmpty())
+                        {
+                            //set steps to watch
+                            sendRequest(new SetStepsToWatchReuqest(application,stepsList.get(0).getDailySteps()));
+                        }
+                        //set world colock to watch
+                        setWorldClock(application.getWorldClockDatabaseHelper().getSelected());
                     }
 
                     if(systemStatusPacket.getStatus()==Constants.SystemStatus.InvalidTime.rawValue())
@@ -353,18 +381,7 @@ public class SyncControllerImpl implements  SyncController{
 
     @Subscribe
     public void onEvent(WorldClockChangedEvent worldClockChangedEvent) {
-        List<TimeZoneModel> timeZoneModelList = new ArrayList<>();
-        for(WorldClock worldClock:worldClockChangedEvent.getWorldClockList())
-        {
-            TimeZone timeZone = TimeZone.getTimeZone(worldClock.getTimeZoneName());
-            Calendar LATime = new GregorianCalendar(timeZone);
-            LATime.setTimeInMillis(new Date().getTime());
-            float utc_offset = timeZone.getOffset(LATime.getTimeInMillis())/1000f/3600f;
-            String utc_name = worldClock.getTimeZoneTitle().split(",")[0];
-            Log.i("gailly",utc_name + ", " + utc_offset+ ", DaylightTime: " + timeZone.useDaylightTime());
-            timeZoneModelList.add(new TimeZoneModel(utc_offset,utc_name));
-        }
-        sendRequest(new SetWorldClockRequest(application,timeZoneModelList));
+        setWorldClock(worldClockChangedEvent.getWorldClockList());
     }
     @Subscribe
     public void onEvent(StepsGoalChangedEvent stepsGoalChangedEvent) {

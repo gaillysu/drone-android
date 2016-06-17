@@ -50,6 +50,35 @@ public class Steps extends StepsBean implements Comparable<Steps>{
         return dailySteps;
     }
 
+    /**
+     *
+     * @return daily active time,unit in "minute"
+     */
+
+    public int getDailyActiveTime()
+    {
+        int active_time = 0;
+        try {
+            JSONArray hourlySteps = new JSONArray(getHourlySteps());
+            //24 hours
+            for(int hour =0;hour<hourlySteps.length();hour++)
+            {
+                JSONArray minutesInHour = hourlySteps.optJSONArray(hour);
+                //12 * 5 minutes
+                for(int fiveMinutes=0;fiveMinutes<minutesInHour.length();fiveMinutes++)
+                {
+                    if(minutesInHour.optInt(fiveMinutes)>0)
+                    {
+                        active_time = active_time + 5;
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return active_time;
+    }
+
     public int getTimeFrameSteps() {
         return timeFrameSteps;
     }

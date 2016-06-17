@@ -7,6 +7,7 @@ public class CreateSteps {
     private int uid;
     private String steps;
     private String date;
+    private int active_time;
 
     public int getUid() {
         return uid;
@@ -30,5 +31,13 @@ public class CreateSteps {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public int getActive_time() {
+        return active_time;
+    }
+
+    public void setActive_time(int active_time) {
+        this.active_time = active_time;
     }
 }
