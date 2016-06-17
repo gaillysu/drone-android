@@ -12,6 +12,8 @@ public class DailySteps {
      */
     final private long date;
 
+    final private int stepsGoal;
+
     /**
      * hourly steps for 24 hours
      */
@@ -19,9 +21,10 @@ public class DailySteps {
 
     private int dailySteps;
 
-    public DailySteps(long date, @NonNull int[] hourlySteps) {
+    public DailySteps(long date, @NonNull int[] hourlySteps,int stepsGoal) {
         this.date = date;
         this.hourlySteps = hourlySteps;
+        this.stepsGoal = stepsGoal;
         for(int i=0;i<hourlySteps.length;i++)
         {
             this.dailySteps += hourlySteps[i];
@@ -38,5 +41,9 @@ public class DailySteps {
 
     public int getDailySteps() {
         return dailySteps;
+    }
+
+    public int getDailyStepsGoal() {
+        return stepsGoal;
     }
 }

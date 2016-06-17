@@ -128,6 +128,7 @@ public class StepsDatabaseHelper {
         stepsDao.setHourlySteps(steps.getHourlySteps());
         stepsDao.setDistance(steps.getDistance());
         stepsDao.setCloudID(steps.getCloudID());
+        stepsDao.setStepsGoal(steps.getStepsGoal());
         return stepsDao;
     }
 
@@ -138,6 +139,7 @@ public class StepsDatabaseHelper {
         steps.setHourlySteps(stepsDAO.getHourlySteps());
         steps.setDistance(stepsDAO.getDistance());
         steps.setCloudID(stepsDAO.getCloudID());
+        steps.setStepsGoal(stepsDAO.getStepsGoal());
         return steps;
     }
 
