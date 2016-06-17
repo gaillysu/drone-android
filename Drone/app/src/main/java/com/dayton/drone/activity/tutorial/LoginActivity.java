@@ -66,7 +66,9 @@ public class LoginActivity extends BaseActivity {
             //             onLoginFailed("invalid email or password");
             return;
         }
-        if (!CheckEmailFormat.checkEmail(ed_account.getText().toString())) {
+        String  email = ed_account.getText().toString();
+        if (CheckEmailFormat.checkEmail(ed_account.getText().toString())) {
+            ed_account.setError(null);
             final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
             progressDialog.setIndeterminate(true);
             progressDialog.setCancelable(false);
@@ -127,7 +129,7 @@ public class LoginActivity extends BaseActivity {
         boolean valid = true;
         String email = ed_account.getText().toString();
         String password = ed_password.getText().toString();
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if (email.isEmpty() ) {
             ed_account.setError(getString(R.string.tips_user_account_password));
             valid = false;
         } else {

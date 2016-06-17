@@ -10,17 +10,10 @@ import java.util.regex.Pattern;
  */
 public class CheckEmailFormat {
     public static boolean checkEmail(String email) {
-        boolean flag = false;
-        try {
-            String check = "^([a-z0-9A-Z]+[-|\\\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\\\.)+[a-zA-Z]{2,}$";
-
-            Pattern regex = Pattern.compile(check);
-            Matcher matcher = regex.matcher(email);
-            flag = matcher.matches();
-        } catch (Exception e) {
-            flag = false;
-        }
-        return flag;
+        String strPattern = "\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*";
+        Pattern p = Pattern.compile(strPattern);
+        Matcher m = p.matcher(email);
+        return m.matches();
     }
 
     public static int dip2px(float dpValue, Context context) {
