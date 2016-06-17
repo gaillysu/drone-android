@@ -49,7 +49,7 @@ public class StepsHandler {
                 e.printStackTrace();
             }
         }
-        return new DailySteps(middleNight.getTime(),hours,stepsList.get(0).get().getStepsGoal());
+        return new DailySteps(middleNight.getTime(),hours,stepsList.size()>0?stepsList.get(0).get().getStepsGoal():10000);
     }
 
     public List<DailySteps> getThisWeekSteps(Date date)
