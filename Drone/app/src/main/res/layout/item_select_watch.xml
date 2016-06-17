@@ -7,8 +7,8 @@
               android:layout_height="wrap_content">
     <ImageView
         android:id="@+id/select_watch_icon"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
         android:scaleType="fitXY"
         android:src="@mipmap/welcome_logo_1"
         android:background="@android:color/transparent"

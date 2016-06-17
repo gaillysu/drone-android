@@ -123,7 +123,7 @@ public class WorldClockAdapter extends BaseAdapter implements SlideView.OnSlideL
             Date currentDate = new Date();
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
             int currentTime = Integer.valueOf(format.format(currentDate).split(" ")[1].split(":")[0]);
-            int currentDay = Integer.valueOf(format.format(currentDate).split(" ")[0].split(" -")[2]);
+            int currentDay = Integer.valueOf(format.format(currentDate).split(" ")[0].split("-")[2]);
 
             if (currentDay > date) {
                 holder.cityDay.setText(context.getResources().getString(R.string.world_clock_Yesterday_tv));

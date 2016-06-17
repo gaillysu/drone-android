@@ -114,7 +114,6 @@ public class RegisterActivity extends BaseActivity {
                 ed_email.requestFocus();
                 ed_email.setError(getString(R.string.register_email_format_error));
             }
-
         }
     }
 
