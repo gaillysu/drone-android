@@ -53,6 +53,13 @@ public class StepsBean {
     @DatabaseField
     private int cloudID = -1;
 
+    /**
+     * every day perhaps has different goal,default is 10000 steps per day
+     */
+    public static final String fStepsGoal = "stepsGoal";
+    @DatabaseField
+    private int stepsGoal = 10000;
+
 
     public int getId() {
         return id;
@@ -100,5 +107,13 @@ public class StepsBean {
 
     public void setCloudID(int cloudID) {
         this.cloudID = cloudID;
+    }
+
+    public int getStepsGoal() {
+        return stepsGoal;
+    }
+
+    public void setStepsGoal(int stepsGoal) {
+        this.stepsGoal = stepsGoal;
     }
 }

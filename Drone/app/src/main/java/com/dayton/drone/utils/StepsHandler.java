@@ -39,13 +39,17 @@ public class StepsHandler {
                 JSONArray jsonArray = new JSONArray(stepsList.get(0).get().getHourlySteps());
 
                 for (int i = 0; i < jsonArray.length() && i < hours.length; i++) {
-                    hours[i] = jsonArray.optInt(i);
+                    JSONArray stepsInHour = jsonArray.optJSONArray(i);
+                    for(int j=0;j<stepsInHour.length();j++)
+                    {
+                        hours[i] += stepsInHour.optInt(j);
+                    }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        return new DailySteps(middleNight.getTime(),hours);
+        return new DailySteps(middleNight.getTime(),hours,stepsList.get(0).get().getStepsGoal());
     }
 
     public List<DailySteps> getThisWeekSteps(Date date)

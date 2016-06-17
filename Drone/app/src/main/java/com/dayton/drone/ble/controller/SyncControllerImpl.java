@@ -286,6 +286,7 @@ public class SyncControllerImpl implements  SyncController{
                     Steps steps = new Steps(activityPacket.getSteps(), activityPacket.getDate().getTime());
                     steps.setDate((Common.removeTimeFromDate(new Date(activityPacket.getDate().getTime()))).getTime());
                     steps.setUserID(application.getUser().getUserID());
+                    steps.setStepsGoal(SpUtils.getIntMethod(application, CacheConstants.GOAL_STEP, 10000));
                     application.getStepsDatabaseHelper().update(steps);
                     //save the oldest activity date as colud sync starting date
                     if(theBigSyncStartDate.isEmpty() || (theBigSyncStartDate.notEmpty() && theBigSyncStartDate.get().getTime()>steps.getDate()))

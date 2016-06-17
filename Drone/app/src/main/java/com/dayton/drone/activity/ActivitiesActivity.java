@@ -28,6 +28,7 @@ import com.dayton.drone.event.LittleSyncEvent;
 import com.dayton.drone.model.DailySteps;
 import com.dayton.drone.model.Steps;
 import com.dayton.drone.utils.CacheConstants;
+import com.dayton.drone.utils.Common;
 import com.dayton.drone.utils.SpUtils;
 import com.dayton.drone.utils.StepsHandler;
 import com.dayton.drone.view.CalendarView;
@@ -172,11 +173,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         boolean mIsFirst = SpUtils.getBoolean(this, CacheConstants.IS_FIRST, true);
         mProgressBar.setStartColor(R.color.progress_start_color);
         mProgressBar.setEndColor(R.color.progress_end_color);
-        mProgressBar.setSmoothPercent(1.0f * SpUtils.getIntMethod(this, CacheConstants.TODAY_STEP, 0)
-                /SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000));
-        homeMiddleTv.setText(SpUtils.getIntMethod(this, CacheConstants.TODAY_STEP, 0) + "");
-        userStepGoalTextView.setText(getResources().getString(R.string.user_step_goal)
-                + SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000));
         calendar.setSelectMore(false);
         nextMonth.setVisibility(View.GONE);
         backMonth.setVisibility(View.GONE);
@@ -215,12 +211,27 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
 
     private void drawGraph() {
         StepsHandler stepsHandler = new StepsHandler(getModel().getStepsDatabaseHelper(), getModel().getUser());
+        setDataInProgressBar(stepsHandler.getDailySteps(selectedDate));
         setDataInChart(hourlyBarChart, stepsHandler.getDailySteps(selectedDate));
         setDataInChart(thisWeekLineChart, stepsHandler.getThisWeekSteps(selectedDate));
         setDataInChart(lastWeekLineChart, stepsHandler.getLastWeekSteps(selectedDate));
         setDataInChart(lastMonthLineChart, stepsHandler.getLastMonthSteps(selectedDate));
     }
 
+    private void setDataInProgressBar(DailySteps dailySteps)
+    {
+        int steps = SpUtils.getIntMethod(this, CacheConstants.TODAY_STEP, 0);
+        int goal = SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000);
+        //when user select a history date, show its data with that day
+        if(Common.removeTimeFromDate(selectedDate).getTime() != Common.removeTimeFromDate(new Date()).getTime())
+        {
+            steps = dailySteps.getDailySteps();
+            goal = dailySteps.getDailyStepsGoal();
+        }
+        mProgressBar.setSmoothPercent(1.0f * steps / goal);
+        homeMiddleTv.setText(steps + "");
+        userStepGoalTextView.setText(getResources().getString(R.string.user_step_goal) + goal);
+    }
     private void setDataInChart(BarChart barChart, DailySteps dailySteps) {
         List<String> xVals = new ArrayList<String>();
         List<BarEntry> yValue = new ArrayList<BarEntry>();
@@ -470,21 +481,26 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         client.disconnect();
     }
 
+    /**
+     *
+     * @param event every 10s, do little sync
+     */
     @Subscribe
     public void onEvent(final LittleSyncEvent event) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                homeMiddleTv.setText(event.getSteps() + "");
-                userStepGoalTextView.setText(getResources().getString(R.string.user_step_goal)
-                        + event.getGoal());
-                mProgressBar.setSmoothPercent(1.0f * event.getSteps() / event.getGoal());
                 SpUtils.putIntMethod(getApplicationContext(), CacheConstants.GOAL_STEP, event.getGoal());
                 SpUtils.putIntMethod(getApplicationContext(), CacheConstants.TODAY_STEP, event.getSteps());
+                drawGraph();
             }
         });
     }
 
+    /**
+     *
+     * @param event every 5minutes, do big sync
+     */
     @Subscribe
     public void onEvent(final BigSyncEvent event) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
