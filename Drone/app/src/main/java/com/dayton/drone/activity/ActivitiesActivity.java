@@ -170,8 +170,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
 
         calendarGroup.setVisibility(View.GONE);
         boolean mIsFirst = SpUtils.getBoolean(this, CacheConstants.IS_FIRST, true);
-        mProgressBar.setStartColor(R.color.progress_start_color);
-        mProgressBar.setEndColor(R.color.progress_end_color);
         mProgressBar.setSmoothPercent(1.0f * SpUtils.getIntMethod(this, CacheConstants.TODAY_STEP, 0)
                 / SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000));
         homeMiddleTv.setText(SpUtils.getIntMethod(this, CacheConstants.TODAY_STEP, 0) + "");
