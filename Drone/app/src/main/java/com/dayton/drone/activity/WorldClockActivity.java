@@ -163,7 +163,6 @@ public class WorldClockActivity extends BaseActivity {
 
                 if (worldClockDatabase.update(worldClock, true)) {
                     listData.add(worldClock);
-                    worldClockDatabase.update(worldClock,true);
                     worldClockAdapter.notifyDataSetChanged();
                     EventBus.getDefault().post(new WorldClockChangedEvent(worldClockDatabase.getSelected()));
                 } else {

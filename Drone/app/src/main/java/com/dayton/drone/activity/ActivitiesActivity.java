@@ -201,8 +201,8 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
             accountSteps = steps.getDailySteps();
         }
         double calories = (2.0 * 3.5 * getModel().getUser().getWeight()) / 200 * timeActive;
-        caloriesTextView.setText(calories + "");
-        kmTextView.setText((getModel().getUser().getHeight() * 0.45) / 100 * accountSteps / 1000 + "");
+        caloriesTextView.setText(calories + "k");
+        kmTextView.setText(((float)(getModel().getUser().getHeight() * 0.45) / 100 * accountSteps / 1000) + "km");
         activeTimeTextView.setText(formatTimeActivity(timeActive));
 
     }
@@ -210,9 +210,11 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     private String formatTimeActivity(int timeActive) {
 
         StringBuffer buffer = new StringBuffer();
-        if (timeActive % 60 != 0) {
-            buffer.append(timeActive % 60 + "h");
-            buffer.append(timeActive - (timeActive % 60) * 60 + "m");
+        if (timeActive / 60 > 1) {
+
+            int hour = new Double(timeActive/60).intValue();
+            buffer.append(hour+ "h");
+            buffer.append(timeActive - hour * 60 + "m");
         } else {
             buffer.append(timeActive + "m");
         }
@@ -228,13 +230,11 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         setDataInChart(lastMonthLineChart, stepsHandler.getLastMonthSteps(selectedDate));
     }
 
-    private void setDataInProgressBar(DailySteps dailySteps)
-    {
+    private void setDataInProgressBar(DailySteps dailySteps) {
         int steps = SpUtils.getIntMethod(this, CacheConstants.TODAY_STEP, 0);
         int goal = SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000);
         //when user select a history date, show its data with that day
-        if(Common.removeTimeFromDate(selectedDate).getTime() != Common.removeTimeFromDate(new Date()).getTime())
-        {
+        if (Common.removeTimeFromDate(selectedDate).getTime() != Common.removeTimeFromDate(new Date()).getTime()) {
             steps = dailySteps.getDailySteps();
             goal = dailySteps.getDailyStepsGoal();
         }
@@ -242,6 +242,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         homeMiddleTv.setText(steps + "");
         userStepGoalTextView.setText(getResources().getString(R.string.user_step_goal) + goal);
     }
+
     private void setDataInChart(BarChart barChart, DailySteps dailySteps) {
         List<String> xVals = new ArrayList<String>();
         List<BarEntry> yValue = new ArrayList<BarEntry>();
@@ -492,7 +493,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     }
 
     /**
-     *
      * @param event every 10s, do little sync
      */
     @Subscribe
@@ -508,7 +508,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     }
 
     /**
-     *
      * @param event every 5minutes, do big sync
      */
     @Subscribe
