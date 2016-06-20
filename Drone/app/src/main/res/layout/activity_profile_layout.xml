@@ -222,7 +222,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@color/user_info_sex_bg"
-            android:text="@string/profile_activity_log_out_text"
+            android:text="@string/profile_dialog_log_out_prompt"
             android:textColor="@android:color/white"
             android:textSize="24sp"/>
     </LinearLayout>

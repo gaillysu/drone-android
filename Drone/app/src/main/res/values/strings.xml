@@ -13,7 +13,7 @@
     <string name="change_password_fail">Change password failed</string>
     <string name="password_password_changed">Password changed</string>
 
-    <string name="email_is_error">Your e-mail does not exist</string>
+    <string name="email_is_error">Your email does not exist</string>
     <string name="forget_password_dec">Please fill in your e-mail to set a \n new password</string>
     <string name="forget_new_password">New password</string>
     <string name="forget_repeat_password">Confirm new password</string>
@@ -101,7 +101,6 @@
     <string name="profile_prompt_user_edit">Enter the space, the success of the editorial department</string>
     <string name="profile_email_format_error_prompt">Mailbox format is not correct</string>
     <string name="profile_user_height_error">illegal input</string>
-    <string name="profile_activity_log_out_text">Log Out</string>
     <string name="profile_dialog_log_out_prompt">Log Out</string>
     <string name="profile_dialog_log_out_message">Are you sure you want to log out?</string>
     <string name="profile_dialog_positive_button_text">Sure</string>
@@ -135,9 +134,6 @@
 
     <string name="show_watch_failed_searching">Failed searching for devices.</string>
     <string name="show_watch_connected">Connected</string>
-
-    <string name="login_password">Password</string>
-    <string name="activity_email">Email</string>
 
     <string name="register_table_email">Email</string>
     <string name="register_table_password">Password</string>

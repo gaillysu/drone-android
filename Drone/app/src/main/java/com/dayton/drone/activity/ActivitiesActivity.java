@@ -201,7 +201,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
             accountSteps = steps.getDailySteps();
         }
         double calories = (2.0 * 3.5 * getModel().getUser().getWeight()) / 200 * timeActive;
-        caloriesTextView.setText(calories + "k");
+        caloriesTextView.setText((float)calories + "k");
         kmTextView.setText(((float)(getModel().getUser().getHeight() * 0.45) / 100 * accountSteps / 1000) + "km");
         activeTimeTextView.setText(formatTimeActivity(timeActive));
 

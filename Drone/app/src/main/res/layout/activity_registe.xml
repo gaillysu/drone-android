@@ -15,7 +15,7 @@
         android:layout_marginTop="20dp"/>
 
     <include
-        layout="@layout/registe_table_layout"
+        layout="@layout/register_table_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="30dp"/>
