@@ -55,6 +55,8 @@ import com.dayton.drone.model.Steps;
 import com.dayton.drone.model.WorldClock;
 import com.dayton.drone.utils.Common;
 
+import net.medcorp.library.android.notification.activity.Utils;
+import net.medcorp.library.android.notificationsdk.gatt.GattServer;
 import net.medcorp.library.ble.controller.ConnectionController;
 import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
 import net.medcorp.library.ble.event.BLEResponseDataEvent;
@@ -66,7 +68,6 @@ import net.medcorp.library.ble.event.BLEServerWriteRequestEvent;
 import net.medcorp.library.ble.model.request.BLERequestData;
 import net.medcorp.library.ble.model.response.BLEResponseData;
 import net.medcorp.library.ble.model.response.MEDRawData;
-import net.medcorp.library.ble.util.HexUtils;
 import net.medcorp.library.ble.util.Optional;
 import net.medcorp.library.ble.util.QueuedMainThreadHandler;
 
@@ -75,19 +76,19 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Date;
 
 /**
  * Created by med on 16/4/12.
  */
 public class SyncControllerImpl implements  SyncController{
 
-    final static String TAG = SyncControllerImpl.class.getName();
+    final static String TAG = "Karl";
     final ApplicationModel application;
     private ConnectionController connectionController;
     private List<MEDRawData> packetsBuffer = new ArrayList<MEDRawData>();
@@ -114,7 +115,6 @@ public class SyncControllerImpl implements  SyncController{
         EventBus.getDefault().register(this);
         application.getApplicationContext().bindService(new Intent(application, LocalService.class), serviceConnection, Activity.BIND_AUTO_CREATE);
         application.getApplicationContext().bindService(new Intent(application, DroneNotificationListenerService.class), notificationServiceConnection, Activity.BIND_AUTO_CREATE);
-        application.bindService(new Intent(application, GattServerService.class), gattServiceConnection, Activity.BIND_AUTO_CREATE);
         startAutoSyncTimer();
     }
 
@@ -516,6 +516,11 @@ public class SyncControllerImpl implements  SyncController{
                 EventBus.getDefault().post(new BLENoSupportPeripheryModeEvent());
             }
             else{
+                for (BluetoothDevice device: connectionController.getDevice()) {
+                    Log.w("Karl","Hello?!" + device.getAddress() + " status = " +  GattServer.connect(device));
+
+                }
+                Utils.notify(application);
                 Toast.makeText(gattServerService,"ANCS Advertise starting...",Toast.LENGTH_LONG).show();
             }
         }

@@ -10,6 +10,8 @@ import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 
+import net.medcorp.library.android.notificationsdk.gatt.GattServer;
+
 import net.medcorp.library.ble.service.BLEServiceProvider;
 import net.medcorp.library.ble.util.HexUtils;
 
@@ -19,7 +21,7 @@ import org.apache.commons.codec.binary.Hex;
  * Created by med on 16/6/6.
  */
 public class GattServerService extends Service {
-    private final static String TAG = GattServerService.class.getSimpleName();
+    private final static String TAG = "Karl";
     private BLEServiceProvider bleServiceProvider;
     private int notificationID;
 
@@ -50,8 +52,8 @@ public class GattServerService extends Service {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
             && ((BluetoothManager)getSystemService(Context.BLUETOOTH_SERVICE)).getAdapter().isMultipleAdvertisementSupported())
         {
-            bleServiceProvider = new BLEServiceProvider(this);
-            bleServiceProvider.startAdvertising();
+            GattServer.initialize(this);
+            Log.w("Karl","Initialize here!");
             return true;
         }
         return false;
