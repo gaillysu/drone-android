@@ -152,27 +152,26 @@ public class SyncActivityManager {
      * when user login, invoke it
      */
     public void launchSyncAll(){
-        uploadSteps(new Date());
-        downloadSteps(Common.getLast30Days(new Date()), new Date());
+        uploadSteps();
+        Date today = new Date();
+        downloadSteps(Common.getLast30Days(today), new Date(today.getTime()+Common.ONE_DAY));
 //        uploadSleep(new Date());
 //        downloadSleep(new Date(), new Date());
     }
 
-    private void uploadSteps( Date theDay)
+    private void uploadSteps()
     {
-        Date start = Common.getLast7Days(theDay);
-        for(long startDay = start.getTime();startDay<=theDay.getTime();startDay+=Common.ONE_DAY)
+        List<Steps> stepsList = getModel().getStepsDatabaseHelper().convertToNormalList(getModel().getStepsDatabaseHelper().getAll(getModel().getUser().getUserID()));
+        for(Steps steps:stepsList)
         {
-            List<Steps> stepsList = getModel().getStepsDatabaseHelper().convertToNormalList(getModel().getStepsDatabaseHelper().get(getModel().getUser().getUserID(),Common.removeTimeFromDate(new Date(startDay))));
-            if(!stepsList.isEmpty() && (stepsList.get(0).getCloudID())<0)
+            if(steps.getCloudID()<0)
             {
-                launchSyncDailyHourlySteps(new Date(startDay));
+                launchSyncDailyHourlySteps(new Date(steps.getDate()));
             }
         }
     }
     private void downloadSteps(final Date startDate, final Date endDate)
     {
-        //TODO API should add a filter to query: ?startdate=...& enddate=...
         long start_date = Common.removeTimeFromDate(startDate).getTime()/1000;
         long end_date = Common.removeTimeFromDate(endDate).getTime()/1000;
         getModel().getRetrofitManager().execute(new GetStepsRequest(getModel().getUser().getUserID(),getModel().getRetrofitManager().getAccessToken(),start_date,end_date),new RequestListener<GetStepsModel>() {
@@ -187,7 +186,6 @@ public class SyncActivityManager {
                     Log.i(TAG,getStepsModel.getMessage());
                     for(StepsDetail stepsDetail:getStepsModel.getSteps())
                     {
-                        //TODO getSteps() return format should be "[[1,2,...12],[2,2,3,...12],...,[22...],[23...],[24...]]"
                         if(stepsDetail.getSteps()!=null
                                 && stepsDetail.getSteps().startsWith("[[")
                                 && stepsDetail.getSteps().endsWith("]]"))
