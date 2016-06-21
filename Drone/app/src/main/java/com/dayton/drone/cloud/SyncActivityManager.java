@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.dayton.drone.application.ApplicationModel;
 import com.dayton.drone.event.BigSyncEvent;
+import com.dayton.drone.event.DownloadStepsEvent;
 import com.dayton.drone.event.ProfileChangedEvent;
 import com.dayton.drone.model.Steps;
 import com.dayton.drone.network.Constants;
@@ -159,6 +160,13 @@ public class SyncActivityManager {
 //        downloadSleep(new Date(), new Date());
     }
 
+    /**
+     * when user select one day, download the data if not exist local steps
+     * @param date
+     */
+    public void downloadSteps(Date date){
+        downloadSteps(date, new Date(date.getTime()+Common.ONE_DAY));
+    }
     private void uploadSteps()
     {
         List<Steps> stepsList = getModel().getStepsDatabaseHelper().convertToNormalList(getModel().getStepsDatabaseHelper().getAll(getModel().getUser().getUserID()));
@@ -203,6 +211,10 @@ public class SyncActivityManager {
                                 e.printStackTrace();
                             }
                         }
+                    }
+                    if(getStepsModel.getSteps()!=null && getStepsModel.getSteps().length>0)
+                    {
+                        EventBus.getDefault().post(new DownloadStepsEvent(DownloadStepsEvent.DOWNLOAD_STEPS_EVENT.STOPPED));
                     }
                 }
             }

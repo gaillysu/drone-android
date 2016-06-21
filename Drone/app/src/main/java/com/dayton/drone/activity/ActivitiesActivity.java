@@ -24,6 +24,7 @@ import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.database.entry.StepsDatabaseHelper;
 import com.dayton.drone.event.BigSyncEvent;
+import com.dayton.drone.event.DownloadStepsEvent;
 import com.dayton.drone.event.LittleSyncEvent;
 import com.dayton.drone.model.DailySteps;
 import com.dayton.drone.model.Steps;
@@ -437,6 +438,11 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
                         new SimpleDateFormat("MMM", Locale.US).format(downDate));
                 drawGraph();
                 findCalories(downDate);
+                List<Optional<Steps>> stepsList = getModel().getStepsDatabaseHelper().get(getModel().getUser().getUserID(),selectedDate);
+                if(stepsList.isEmpty())
+                {
+                    getModel().getSyncActivityManager().downloadSteps(selectedDate);
+                }
             }
         });
     }
@@ -522,6 +528,21 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         });
     }
 
+    /**
+     * when user select one day, if no any steps record in the local, download it from cloud server and refresh graph
+     * @param event
+     */
+    @Subscribe
+    public void onEvent(final DownloadStepsEvent event) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                if (event.getStatus() == DownloadStepsEvent.DOWNLOAD_STEPS_EVENT.STOPPED) {
+                    drawGraph();
+                }
+            }
+        });
+    }
     @Subscribe
     public void onEvent(BLEBluetoothOffEvent event) {
         showStateString(R.string.in_app_notification_bluetooth_disabled);
