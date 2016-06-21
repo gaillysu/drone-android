@@ -37,7 +37,6 @@ import com.dayton.drone.ble.model.request.setting.SetUserProfileRequest;
 import com.dayton.drone.ble.model.request.sync.GetActivityRequest;
 import com.dayton.drone.ble.model.request.sync.GetStepsGoalRequest;
 import com.dayton.drone.ble.model.request.worldclock.SetWorldClockRequest;
-import com.dayton.drone.ble.notification.DroneNotificationListenerService;
 import com.dayton.drone.ble.server.GattServerService;
 import com.dayton.drone.ble.util.Constants;
 import com.dayton.drone.event.BLENoSupportPeripheryModeEvent;
@@ -57,6 +56,7 @@ import com.dayton.drone.utils.Common;
 
 import net.medcorp.library.android.notification.activity.Utils;
 import net.medcorp.library.android.notificationsdk.gatt.GattServer;
+import net.medcorp.library.android.notificationsdk.listener.ListenerService;
 import net.medcorp.library.ble.controller.ConnectionController;
 import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
 import net.medcorp.library.ble.event.BLEResponseDataEvent;
@@ -88,7 +88,7 @@ import java.util.TimerTask;
  */
 public class SyncControllerImpl implements  SyncController{
 
-    final static String TAG = "Karl";
+    final static String TAG = SyncController.class.getSimpleName();
     final ApplicationModel application;
     private ConnectionController connectionController;
     private List<MEDRawData> packetsBuffer = new ArrayList<MEDRawData>();
@@ -114,7 +114,7 @@ public class SyncControllerImpl implements  SyncController{
         connectionController = ConnectionController.Singleton.getInstance(application,new GattAttributesDataSourceImpl(application));
         EventBus.getDefault().register(this);
         application.getApplicationContext().bindService(new Intent(application, LocalService.class), serviceConnection, Activity.BIND_AUTO_CREATE);
-        application.getApplicationContext().bindService(new Intent(application, DroneNotificationListenerService.class), notificationServiceConnection, Activity.BIND_AUTO_CREATE);
+        application.getApplicationContext().bindService(new Intent(application, ListenerService.class), notificationServiceConnection, Activity.BIND_AUTO_CREATE);
         startAutoSyncTimer();
     }
 
@@ -123,6 +123,7 @@ public class SyncControllerImpl implements  SyncController{
         if(forceScan){
             connectionController.forgetSavedAddress();
         }
+
         connectionController.scan();
     }
 

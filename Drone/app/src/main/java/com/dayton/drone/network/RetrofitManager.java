@@ -16,6 +16,7 @@ public class RetrofitManager {
     public  RetrofitManager(Context context){
         this.context = context;
         spiceManager = new SpiceManager(RetrofitService.class);
+        
         startSpiceManager();
     }
 

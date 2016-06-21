@@ -111,53 +111,7 @@ public class DroneNotificationListenerService extends NotificationListenerServic
         int notificationID = HexUtils.bytesToInt(new byte[]{event.getValue()[1],event.getValue()[2],event.getValue()[3],event.getValue()[4]});
         Log.i(TAG,"BLE server got write request notificationID: "+notificationID + ",value: "+ new String(Hex.encodeHex(event.getValue())));
         //read attributes command
-        if(event.getValue()[0] == Constants.NotificationCommand.ReadAttributes.rawValue())
-        {
-            //byte[] valueResponse = new byte[100];
-            if(application.getSyncController().getGattServerService().getNotificationID() == notificationID)
-            {
-                //now ,only one attribute is asked at once time, which saved at offset "6" in the payload
-                byte[] responsePayload = new byte[0];
-                boolean usedAttribute = false;
-                if(event.getValue()[6] == Constants.AttributeCode.Title.rawValue())
-                {
-                    if(title.length()==0)
-                    {
-                        title = "unknown number";
-                    }
-                    responsePayload = new byte[9+title.length()];
-                    System.arraycopy(event.getValue(),0,responsePayload,0,7);
-                    responsePayload[7] = (byte) title.length();
-                    responsePayload[8] = (byte) 0;
-                    System.arraycopy(title.getBytes(), 0, responsePayload, 9, title.length());
-                    title = "";
-                    usedAttribute = true;
-                }
-                else if(event.getValue()[6] == Constants.AttributeCode.Text.rawValue())
-                {
-                    responsePayload = new byte[9+message.length()];
-                    System.arraycopy(event.getValue(),0,responsePayload,0,7);
-                    responsePayload[7] = (byte)message.length();
-                    responsePayload[8] = (byte)0;
-                    System.arraycopy(title.getBytes(),0,responsePayload,9,message.length());
-                    usedAttribute = true;
-                }
-                else if(event.getValue()[6] == Constants.AttributeCode.ApplicationName.rawValue())
-                {
-                    responsePayload = new byte[9+applicationName.length()];
-                    System.arraycopy(event.getValue(),0,responsePayload,0,7);
-                    responsePayload[7] = (byte)applicationName.length();
-                    responsePayload[8] = (byte)0;
-                    System.arraycopy(applicationName.getBytes(),0,responsePayload,9,applicationName.length());
-                    usedAttribute = true;
-                }
-                if(usedAttribute) {
-                    application.getSyncController().getGattServerService().sendNotificationData(responsePayload);
-                }
-            }
-        }
-        //trigger action,such as drop call
-        else if(event.getValue()[0] == Constants.NotificationCommand.TriggerAction.rawValue())
+        if(event.getValue()[0] == Constants.NotificationCommand.TriggerAction.rawValue())
         {
 
         }

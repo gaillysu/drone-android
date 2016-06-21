@@ -24,6 +24,5 @@ public class DroneNotificationTrigger {
             Log.e("NotificationTrigger","gattServerService is null, disable trigger alert notification");
             return;
         }
-        gattServerService.sendNotificationAlert(dataSource.getPayLoad());
     }
 }
