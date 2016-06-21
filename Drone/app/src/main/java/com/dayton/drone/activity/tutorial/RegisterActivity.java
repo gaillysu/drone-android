@@ -77,24 +77,24 @@ public class RegisterActivity extends BaseActivity {
 
             if (CheckEmailFormat.checkEmail(email)) {
 
-                final ProgressDialog progressialog = new ProgressDialog(this);
-                progressialog.setIndeterminate(false);
-                progressialog.setCancelable(false);
-                progressialog.setMessage(getString(R.string.forget_password_dialog_text));
-                progressialog.show();
+                final ProgressDialog progressDialog = new ProgressDialog(this);
+                progressDialog.setIndeterminate(false);
+                progressDialog.setCancelable(false);
+                progressDialog.setMessage(getString(R.string.forget_password_dialog_text));
+                progressDialog.show();
 
                 getModel().getRetrofitManager().execute(new RequestCheckUserEmailAccount(getModel().getRetrofitManager().
                         getAccessToken(), new CheckEmailUserBody(email)), new RequestListener<CheckEmailResponse>() {
 
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
-                        progressialog.dismiss();
+                        progressDialog.dismiss();
                         Toast.makeText(RegisterActivity.this, getString(R.string.user_info_weight_error), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onRequestSuccess(CheckEmailResponse checkEmailResponse) {
-                        progressialog.dismiss();
+                        progressDialog.dismiss();
                         if (checkEmailResponse.getStatus() == -1) {
                             Intent intent = new Intent(RegisterActivity.this, UserInfoActivity.class);
                             intent.putExtra("account", email);

@@ -201,8 +201,8 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
             accountSteps = steps.getDailySteps();
         }
         double calories = (2.0 * 3.5 * getModel().getUser().getWeight()) / 200 * timeActive;
-        caloriesTextView.setText((float)calories + "k");
-        kmTextView.setText(((float)(getModel().getUser().getHeight() * 0.45) / 100 * accountSteps / 1000) + "km");
+        caloriesTextView.setText((float)calories+"");
+        kmTextView.setText(((float)(getModel().getUser().getHeight() * 0.45) / 100 * accountSteps / 1000) + " KM");
         activeTimeTextView.setText(formatTimeActivity(timeActive));
 
     }
@@ -296,7 +296,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         calendar.setCalendarData(new Date());
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         String day = dateFormat.format(new Date());
-        mTitleCalendarTextView.setText(new SimpleDateFormat("MMM", Locale.US).format(selectedDate) + day.split("-")[2]);
+        mTitleCalendarTextView.setText(day.split("-")[2]+new SimpleDateFormat("MMM", Locale.US).format(selectedDate) );
         barChart.setDescription("");
         barChart.getLegend().setEnabled(false);
         barChart.setOnChartValueSelectedListener(this);
@@ -433,8 +433,8 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
                 nextMonth.setVisibility(View.GONE);
                 backMonth.setVisibility(View.GONE);
                 calendarGroup.setVisibility(View.GONE);
-                mTitleCalendarTextView.setText(new SimpleDateFormat("MMM", Locale.US)
-                        .format(downDate) + new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(downDate).split("-")[2]);
+                mTitleCalendarTextView.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(downDate).split("-")[2]+
+                        new SimpleDateFormat("MMM", Locale.US).format(downDate));
                 drawGraph();
                 findCalories(downDate);
             }

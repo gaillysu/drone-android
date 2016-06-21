@@ -128,7 +128,7 @@ public class WorldClockAdapter extends BaseAdapter implements SlideView.OnSlideL
             if (currentDay > date) {
                 holder.cityDay.setText(context.getResources().getString(R.string.world_clock_Yesterday_tv));
                 int cityTimeDifference = 24 - hour + currentTime;
-                holder.timeDifference.setText(", -" + cityTimeDifference +
+                holder.timeDifference.setText(", -" + cityTimeDifference +" "+
                         context.getResources().getString(R.string.world_clock_city_time_difference_behind));
 
             } else if (currentDay == date) {
@@ -141,7 +141,7 @@ public class WorldClockAdapter extends BaseAdapter implements SlideView.OnSlideL
                             context.getResources().getString(R.string.world_clock_city_time_difference_ahead));
                 } else if (hour < currentTime) {
                     int cityTimeDifference = currentTime - hour;
-                    holder.timeDifference.setText(", " + cityTimeDifference +" "+
+                    holder.timeDifference.setText(", -" + cityTimeDifference +" "+
                             context.getResources().getString(R.string.world_clock_city_time_difference_behind));
                 } else {
                     holder.timeDifference.setText("");
