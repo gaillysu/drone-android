@@ -58,7 +58,10 @@ public class HomeActivity extends BaseActivity {
                         startActivity(ActivitiesActivity.class);
                         break;
                     case clock:
-                        startActivity(WorldClockActivity.class);
+                        Intent intent=new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+                        startActivity(intent);
+
+//                        startActivity(WorldClockActivity.class);
                         break;
                 }
             }

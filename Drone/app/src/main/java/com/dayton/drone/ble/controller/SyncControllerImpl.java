@@ -114,7 +114,6 @@ public class SyncControllerImpl implements  SyncController{
         connectionController = ConnectionController.Singleton.getInstance(application,new GattAttributesDataSourceImpl(application));
         EventBus.getDefault().register(this);
         application.getApplicationContext().bindService(new Intent(application, LocalService.class), serviceConnection, Activity.BIND_AUTO_CREATE);
-        application.getApplicationContext().bindService(new Intent(application, ListenerService.class), notificationServiceConnection, Activity.BIND_AUTO_CREATE);
         startAutoSyncTimer();
     }
 
@@ -258,7 +257,8 @@ public class SyncControllerImpl implements  SyncController{
                         sendRequest(new GetActivityRequest(application));
                     }
                     //here start ANCS service
-                    application.bindService(new Intent(application, GattServerService.class), gattServiceConnection, Activity.BIND_AUTO_CREATE);
+                    application.getApplicationContext().bindService(new Intent(application, ListenerService.class), notificationServiceConnection, Activity.BIND_AUTO_CREATE);
+
                 }
                 else if((byte) GetActivityRequest.HEADER == packet.getHeader())
                 {
@@ -518,11 +518,13 @@ public class SyncControllerImpl implements  SyncController{
             }
             else{
                 for (BluetoothDevice device: connectionController.getDevice()) {
-                    Log.w("Karl","Hello?!" + device.getAddress() + " status = " +  GattServer.connect(device));
+                    if(connectionController.getSaveAddress().equals(device.getAddress())){
+                        Log.w("Karl","Connecting to the device with id +  " + device.getAddress() + " status = " + GattServer.connect(device));
+                                break;
+                    }
 
                 }
                 Utils.notify(application);
-                Toast.makeText(gattServerService,"ANCS Advertise starting...",Toast.LENGTH_LONG).show();
             }
         }
     };
