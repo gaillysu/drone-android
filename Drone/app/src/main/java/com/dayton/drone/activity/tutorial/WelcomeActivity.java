@@ -67,8 +67,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         ButterKnife.bind(this);
         handler = new Handler();
         initDate();
-        BLEServiceProvider provider = new BLEServiceProvider(this);
-        provider.startAdvertising();
     }
 
     private void initDate() {

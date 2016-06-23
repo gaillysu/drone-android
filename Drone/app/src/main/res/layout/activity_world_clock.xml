@@ -3,12 +3,12 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@color/notification_bg_color"
-              android:paddingTop="25dp"
               android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:paddingTop="20dp"
+        android:layout_height="70dp"
         android:background="@color/user_info_sex_bg"
         >
 

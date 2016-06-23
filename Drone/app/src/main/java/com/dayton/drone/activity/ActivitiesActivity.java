@@ -296,7 +296,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         calendar.setCalendarData(new Date());
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         String day = dateFormat.format(new Date());
-        mTitleCalendarTextView.setText(day.split("-")[2]+new SimpleDateFormat("MMM", Locale.US).format(selectedDate) );
+        mTitleCalendarTextView.setText(day.split("-")[2]+" "+new SimpleDateFormat("MMM", Locale.US).format(selectedDate) );
         barChart.setDescription("");
         barChart.getLegend().setEnabled(false);
         barChart.setOnChartValueSelectedListener(this);
@@ -433,7 +433,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
                 nextMonth.setVisibility(View.GONE);
                 backMonth.setVisibility(View.GONE);
                 calendarGroup.setVisibility(View.GONE);
-                mTitleCalendarTextView.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(downDate).split("-")[2]+
+                mTitleCalendarTextView.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(downDate).split("-")[2]+" "+
                         new SimpleDateFormat("MMM", Locale.US).format(downDate));
                 drawGraph();
                 findCalories(downDate);

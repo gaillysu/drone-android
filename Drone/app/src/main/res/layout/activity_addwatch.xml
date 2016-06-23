@@ -2,13 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:paddingTop="25dp"
               android:orientation="vertical">
     <!-- header-->
     <RelativeLayout
         android:id="@+id/activity_add_watch_header_layout"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="68dp"
+        android:paddingTop="20dp"
         android:background="@color/colorPrimaryDark"
         android:orientation="vertical">
 
