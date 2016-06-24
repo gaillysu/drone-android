@@ -9,7 +9,6 @@
         android:layout_height="wrap_content"
         android:background="@mipmap/background_steps"
         android:orientation="vertical">
-        <include layout="@layout/hourly_header_layout"/>
 
         <TextView
             android:id="@+id/activities_guide_dec_actvies"
@@ -98,4 +97,5 @@
             />
     </LinearLayout>
 
+    <include layout="@layout/hourly_header_layout"/>
 </LinearLayout>
