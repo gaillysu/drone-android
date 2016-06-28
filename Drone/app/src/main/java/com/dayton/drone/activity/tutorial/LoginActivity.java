@@ -66,7 +66,8 @@ public class LoginActivity extends BaseActivity {
             //             onLoginFailed("invalid email or password");
             return;
         }
-        String  email = ed_account.getText().toString();
+        String email = ed_account.getText().toString();
+        String password = ed_password.getText().toString();
         if (CheckEmailFormat.checkEmail(ed_account.getText().toString())) {
             ed_account.setError(null);
             final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
@@ -75,38 +76,57 @@ public class LoginActivity extends BaseActivity {
             progressDialog.setMessage(getString(R.string.user_login_dialog_text));
             progressDialog.show();
 
-            LoginUser userLogin = new LoginUser();
-            userLogin.setEmail(ed_account.getText().toString());
-            userLogin.setPassword(ed_password.getText().toString());
-            getModel().getRetrofitManager().execute(new LoginUserRequest(userLogin,
-                    getModel().getRetrofitManager().getAccessToken()), new RequestListener<LoginUserModel>() {
+                        LoginUser userLogin = new LoginUser();
+                        userLogin.setEmail(email);
+                        userLogin.setPassword(password);
+                        getModel().getRetrofitManager().execute(new LoginUserRequest(userLogin,
+                                getModel().getRetrofitManager().getAccessToken()), new RequestListener<LoginUserModel>() {
 
-                @Override
-                public void onRequestFailure(SpiceException spiceException) {
-                    progressDialog.dismiss();
-                    onLoginFailed();
-                }
+                            @Override
+                            public void onRequestFailure(SpiceException spiceException) {
+                                progressDialog.dismiss();
+                                onLoginFailed();
+                            }
 
-                @Override
-                public void onRequestSuccess(LoginUserModel loginUserModel) {
-                    progressDialog.dismiss();
-                    if (loginUserModel.getStatus() == 1) {
-                        getModel().getUser().setUserID(loginUserModel.getUser().getId() + "");
-                        getModel().getUser().setUserEmail(loginUserModel.getUser().getEmail());
-                        getModel().getUser().setUserPassword(ed_password.getText().toString());
-                        getModel().getUser().setFirstName(loginUserModel.getUser().getFirst_name());
-                        getModel().getUser().setLastName(loginUserModel.getUser().getLast_name());
-                        getModel().getUser().setUserIsLogin(true);
-                        getModel().getUserDatabaseHelper().update(getModel().getUser());
-                        getModel().getSyncActivityManager().launchSyncAll();
+                            @Override
+                            public void onRequestSuccess(LoginUserModel loginUserModel) {
+                                progressDialog.dismiss();
+                                if (loginUserModel.getStatus() == 1) {
+                                    getModel().getUser().setUserID(loginUserModel.getUser().getId() + "");
+                                    getModel().getUser().setUserEmail(loginUserModel.getUser().getEmail());
+                                    getModel().getUser().setUserPassword(ed_password.getText().toString());
+                                    getModel().getUser().setFirstName(loginUserModel.getUser().getFirst_name());
+                                    getModel().getUser().setLastName(loginUserModel.getUser().getLast_name());
+                                    getModel().getUser().setUserIsLogin(true);
+                                    getModel().getUserDatabaseHelper().update(getModel().getUser());
+                                    getModel().getSyncActivityManager().launchSyncAll();
 
-                        onLoginSuccess();
-                    } else {
-                        Log.e("LoginActivity", loginUserModel.getMessage() + ",state:" + loginUserModel.getStatus());
-                        onLoginFailed();
-                    }
-                }
-            });
+                                    onLoginSuccess();
+                                } else {
+                                    Log.e("LoginActivity", loginUserModel.getMessage() + ",state:" + loginUserModel.getStatus());
+                                    onLoginFailed();
+                                }
+                            }
+                        });
+//            String path = "drone.karljohnchow.com/user/login";
+//            String token = getModel().getRetrofitManager().getAccessToken();
+//            new RequestLoginRequest(path, token, email, password).getUserLoginResponse(new RequestLoginRequest.UserLoginResponseListener() {
+//                @Override
+//                public void requestSuccess(String json) {
+//                    progressDialog.dismiss();
+//                    Gson mgson = new Gson();
+//                    UserWithLocation loginUserModel = mgson.fromJson(json, UserWithLocation.class);
+//                    onLoginFailed();
+//
+//                }
+//
+//                @Override
+//                public void requestFail(String failMessage) {
+//                    progressDialog.dismiss();
+//                    onLoginFailed();
+//                }
+//            });
+//
         } else {
             ed_account.setError(getString(R.string.register_email_format_error));
         }
@@ -129,7 +149,7 @@ public class LoginActivity extends BaseActivity {
         boolean valid = true;
         String email = ed_account.getText().toString();
         String password = ed_password.getText().toString();
-        if (email.isEmpty() ) {
+        if (email.isEmpty()) {
             ed_account.setError(getString(R.string.tips_user_account_password));
             valid = false;
         } else {

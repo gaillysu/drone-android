@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:paddingTop="25dp"
               android:orientation="vertical">
 
     <LinearLayout
@@ -11,31 +10,38 @@
         android:background="@color/user_info_sex_bg"
         android:orientation="vertical">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@color/user_info_sex_bg"
-            android:gravity="center_vertical"
-            >
+            android:orientation="vertical"
+            android:layout_height="80dp">
 
-            <ImageButton
-                android:id="@+id/choose_activity_cancel_bt"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="10dp"
-                android:background="@android:color/transparent"
-                android:scaleType="fitXY"
-                android:src="@mipmap/choose_city_back_icon"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@color/user_info_sex_bg"
+                android:gravity="center_vertical"
+                android:layout_marginTop="25dp"
+                >
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="@string/choose_activity_title_choose_city_tv"
-                android:textColor="@color/choose_adapter_text_color"
-                android:textSize="22sp"/>
-        </RelativeLayout>
+                <ImageButton
+                    android:id="@+id/choose_activity_cancel_bt"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:background="@android:color/transparent"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/choose_city_back_icon"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/choose_activity_title_choose_city_tv"
+                    android:textColor="@color/choose_adapter_text_color"
+                    android:textSize="22sp"/>
+            </RelativeLayout>
+        </LinearLayout>
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -54,8 +60,8 @@
                     android:layout_width="0dp"
                     android:layout_height="30dp"
                     android:layout_marginBottom="5dp"
-                    android:layout_marginStart="15dp"
                     android:layout_marginEnd="5dp"
+                    android:layout_marginStart="15dp"
                     android:layout_marginTop="8dp"
                     android:layout_weight="1"
                     android:background="@drawable/world_clock_search_bg"
@@ -80,8 +86,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_marginBottom="10dp"
-                android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
+                android:layout_marginStart="15dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/world_clock_search_bg"
                 android:gravity="center"
@@ -134,8 +140,8 @@
             android:id="@+id/choose_activity_search_list_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:divider="@null"
             android:background="@color/add_watch_activity_prompt_text_color"
+            android:divider="@null"
             android:visibility="gone"/>
     </FrameLayout>
 </LinearLayout>

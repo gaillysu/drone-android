@@ -3,7 +3,6 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              android:background="@android:color/white"
-             android:paddingTop="25dp"
     >
 
     <RelativeLayout
@@ -111,9 +110,19 @@
                                 android:background="@android:color/white"
                                 >
                             </com.github.mikephil.charting.charts.LineChart>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:paddingLeft="10dp"
+                                android:text="@string/activities_prompt_use_data_updated_time"
+                                android:textColor="@android:color/darker_gray"
+                                android:textSize="14sp"/>
                         </LinearLayout>
                     </LinearLayout>
                 </FrameLayout>
+
             </ScrollView>
 
             <LinearLayout
@@ -144,6 +153,7 @@
             android:text="@string/fragment_home_guide_see_history_dec"
             android:visibility="gone"
             />
+
     </RelativeLayout>
 
     <RelativeLayout

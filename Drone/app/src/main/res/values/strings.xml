@@ -140,6 +140,7 @@
     <string name="add_watch_watches">Watches</string>
     <string name="activities_last_week">LAST WEEK</string>
     <string name="activities_this_week">THIS WEEK</string>
+    <string name="activities_prompt_use_data_updated_time">Historical data including calories,active time and KM will be updated every 5 minutes.</string>
     <string name="activities_last_30_days">LAST 30 DAYS</string>
     <string name="activities_steps">STEPS</string>
     <string name="activities__0">0</string>

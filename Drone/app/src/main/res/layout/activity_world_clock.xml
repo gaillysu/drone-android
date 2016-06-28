@@ -3,42 +3,47 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@color/notification_bg_color"
-              android:paddingTop="25dp"
               android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/user_info_sex_bg"
-        >
+        android:layout_height="70dp"
+        android:background="@color/user_info_sex_bg">
 
-        <ImageButton
-            android:id="@+id/world_clock_back_icon_ib"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="10dp"
-            android:background="@android:color/transparent"
-            android:src="@mipmap/world_clock_back_icon"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            >
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/world_clock_title_text"
-            android:textColor="@android:color/white"
-            android:textSize="22sp"/>
+            <ImageButton
+                android:id="@+id/world_clock_back_icon_ib"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                android:background="@android:color/transparent"
+                android:src="@mipmap/world_clock_back_icon"/>
 
-        <ImageButton
-            android:id="@+id/world_clock_add_city_iv"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="10dp"
-            android:background="@android:color/transparent"
-            android:src="@mipmap/world_clock_add_city_icon"
-            />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/world_clock_title_text"
+                android:textColor="@android:color/white"
+                android:textSize="22sp"/>
+
+            <ImageButton
+                android:id="@+id/world_clock_add_city_iv"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="10dp"
+                android:background="@android:color/transparent"
+                android:src="@mipmap/world_clock_add_city_icon"
+                />
+        </RelativeLayout>
     </RelativeLayout>
 
     <ImageView
@@ -69,8 +74,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -95,6 +100,7 @@
                         android:layout_alignParentRight="true"
                         android:textSize="20sp"/>
                 </RelativeLayout>
+
                 <TextView
                     android:id="@+id/world_clock_item_current_day"
                     style="@style/world_clock_adapter_tv_style"
@@ -108,8 +114,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:divider="@android:color/white"
-            android:paddingStart="10dp"
             android:paddingEnd="10dp"
+            android:paddingStart="10dp"
             android:scrollbars="none"/>
     </LinearLayout>
 </LinearLayout>

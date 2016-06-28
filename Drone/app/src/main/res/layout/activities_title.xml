@@ -1,64 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="70dp"
                 android:background="@color/user_info_sex_bg"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                >
 
-    <Button
-        android:id="@+id/activities_title_back"
-        android:background="@android:color/transparent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:text="@string/home_title_back_text"
-        android:textColor="@android:color/white"/>
-    <LinearLayout
-
-        android:id="@+id/home_fragment_title_middle_ll"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
         android:gravity="center_vertical"
-        >
+        android:orientation="horizontal"
+        android:paddingLeft="20dp">
 
-        <ImageButton
-            android:id="@+id/activities_activity_calendar_back_month"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginEnd="18dp"
-            android:background="@mipmap/left_arrpw_1"
-            />
-
-        <LinearLayout
-            android:id="@+id/activities_activity_title_date"
+        <Button
+            android:id="@+id/activities_title_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:background="@android:color/transparent"
+            android:text="@string/home_title_back_text"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"/>
 
-            <ImageView
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:src="@mipmap/calendar_title_icon"
+        <LinearLayout
+
+            android:id="@+id/home_fragment_title_middle_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center_vertical"
+            >
+
+            <ImageButton
+                android:id="@+id/activities_activity_calendar_back_month"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="18dp"
+                android:background="@mipmap/left_arrpw_1"
                 />
 
-            <TextView
-                android:id="@+id/activities_calendar_title_date_tv"
+            <LinearLayout
+                android:id="@+id/activities_activity_title_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="5dp"
-                android:textColor="@android:color/white"
-                android:textSize="20sp"/>
-        </LinearLayout>
+                android:orientation="horizontal">
 
-        <ImageButton
-            android:id="@+id/activities_activity_title_next_month"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="20dp"
-            android:background="@mipmap/right_arrow_1"
-            />
-    </LinearLayout>
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@mipmap/calendar_title_icon"
+                    />
+
+                <TextView
+                    android:id="@+id/activities_calendar_title_date_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="5dp"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"/>
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/activities_activity_title_next_month"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="20dp"
+                android:background="@mipmap/right_arrow_1"
+                />
+        </LinearLayout>
+    </RelativeLayout>
 </RelativeLayout>
