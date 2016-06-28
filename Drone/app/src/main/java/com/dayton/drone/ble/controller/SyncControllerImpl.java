@@ -15,6 +15,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.dayton.drone.application.ApplicationModel;
 import com.dayton.drone.ble.datasource.GattAttributesDataSourceImpl;
@@ -38,6 +39,7 @@ import com.dayton.drone.ble.model.request.sync.GetActivityRequest;
 import com.dayton.drone.ble.model.request.sync.GetStepsGoalRequest;
 import com.dayton.drone.ble.model.request.worldclock.SetWorldClockRequest;
 import com.dayton.drone.ble.util.Constants;
+import com.dayton.drone.event.BLENoSupportPeripheryModeEvent;
 import com.dayton.drone.event.BLEPairStatusChangedEvent;
 import com.dayton.drone.event.BatteryStatusChangedEvent;
 import com.dayton.drone.event.BigSyncEvent;
@@ -54,9 +56,17 @@ import com.dayton.drone.utils.CacheConstants;
 import com.dayton.drone.utils.Common;
 import com.dayton.drone.utils.SpUtils;
 
+import net.medcorp.library.android.notification.activity.Utils;
+import net.medcorp.library.android.notificationsdk.gatt.GattServer;
+import net.medcorp.library.android.notificationsdk.listener.ListenerService;
 import net.medcorp.library.ble.controller.ConnectionController;
 import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
 import net.medcorp.library.ble.event.BLEResponseDataEvent;
+import net.medcorp.library.ble.event.BLEServerConnectionStateChangedEvent;
+import net.medcorp.library.ble.event.BLEServerNotificationSentEvent;
+import net.medcorp.library.ble.event.BLEServerReadRequestEvent;
+import net.medcorp.library.ble.event.BLEServerServiceAddedEvent;
+import net.medcorp.library.ble.event.BLEServerWriteRequestEvent;
 import net.medcorp.library.ble.model.request.BLERequestData;
 import net.medcorp.library.ble.model.response.BLEResponseData;
 import net.medcorp.library.ble.model.response.MEDRawData;
@@ -68,19 +78,19 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Date;
 
 /**
  * Created by med on 16/4/12.
  */
 public class SyncControllerImpl implements  SyncController{
 
-    final static String TAG = SyncControllerImpl.class.getName();
+    final static String TAG = SyncController.class.getSimpleName();
     final ApplicationModel application;
     private ConnectionController connectionController;
     private List<MEDRawData> packetsBuffer = new ArrayList<MEDRawData>();
@@ -128,6 +138,7 @@ public class SyncControllerImpl implements  SyncController{
         if(forceScan){
             connectionController.forgetSavedAddress();
         }
+
         connectionController.scan();
     }
 
@@ -177,6 +188,10 @@ public class SyncControllerImpl implements  SyncController{
         sendRequest(new GetBatteryRequest(application));
     }
 
+    /**
+     * send request  package to watch by using a queue
+     * @param request
+     */
     private void sendRequest(final BLERequestData request) {
         if(connectionController.inOTAMode()) {
             return;
@@ -239,7 +254,7 @@ public class SyncControllerImpl implements  SyncController{
                 {
                     SystemStatusPacket systemStatusPacket = packet.newSystemStatusPacket();
                     Log.i(TAG,"GetSystemStatus return status value: " + systemStatusPacket.getStatus());
-                    if(systemStatusPacket.getStatus()== Constants.SystemStatus.SystemReset.rawValue())
+                    if((systemStatusPacket.getStatus() & Constants.SystemStatus.SystemReset.rawValue())== Constants.SystemStatus.SystemReset.rawValue())
                     {
                         sendRequest(new SetSystemConfig(application,1,0, 0, 0, Constants.SystemConfigID.ClockFormat));
                         sendRequest(new SetSystemConfig(application,1,0, 0, 0, Constants.SystemConfigID.Enabled));
@@ -259,25 +274,27 @@ public class SyncControllerImpl implements  SyncController{
                         //set world colock to watch
                         setWorldClock(application.getWorldClockDatabaseHelper().getSelected());
                     }
-
-                    if(systemStatusPacket.getStatus()==Constants.SystemStatus.InvalidTime.rawValue())
+                    else if((systemStatusPacket.getStatus() & Constants.SystemStatus.InvalidTime.rawValue())==Constants.SystemStatus.InvalidTime.rawValue())
                     {
                         sendRequest(new SetRTCRequest(application));
                         sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.WorldClock));
                         sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.ActivityTracking));
                         sendRequest(new SetUserProfileRequest(application,application.getUser()));
                     }
-                    else if(systemStatusPacket.getStatus()==Constants.SystemStatus.GoalCompleted.rawValue())
+                    if((systemStatusPacket.getStatus() & Constants.SystemStatus.GoalCompleted.rawValue())==Constants.SystemStatus.GoalCompleted.rawValue())
                     {
                         EventBus.getDefault().post(new GoalCompletedEvent());
                         sendRequest(new SetGoalRequest(application,SetGoalRequest.DEFAULTSTEPSGOAL));
                     }
-                    else if(systemStatusPacket.getStatus()==Constants.SystemStatus.ActivityDataAvailable.rawValue())
+                    if((systemStatusPacket.getStatus() & Constants.SystemStatus.ActivityDataAvailable.rawValue())==Constants.SystemStatus.ActivityDataAvailable.rawValue())
                     {
                         theBigSyncStartDate = new Optional<>(new Date());
                         EventBus.getDefault().post(new BigSyncEvent(theBigSyncStartDate.get(), BigSyncEvent.BIG_SYNC_EVENT.STARTED));
                         sendRequest(new GetActivityRequest(application));
                     }
+                    //here start ANCS service
+                    application.getApplicationContext().bindService(new Intent(application, ListenerService.class), notificationServiceConnection, Activity.BIND_AUTO_CREATE);
+
                 }
                 else if(GetActivityRequest.HEADER == packet.getHeader())
                 {
@@ -393,6 +410,56 @@ public class SyncControllerImpl implements  SyncController{
         sendRequest(new SetUserProfileRequest(application,profileChangedEvent.getUser()));
     }
 
+    @Subscribe
+    public void onEvent(final BLEServerServiceAddedEvent event) {
+        Log.i(TAG,"BLE server got service added: "+event.getServiceUUID()+",status: "+event.getStatus());
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(application,"BLE server got service added: "+event.getServiceUUID()+",status: "+event.getStatus(),Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+    @Subscribe
+    public void onEvent(final BLEServerConnectionStateChangedEvent event) {
+        Log.i(TAG,"BLE server connection status: "+event.isStatus());
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(application,"Ble server connection got "+ event.isStatus(),Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+    @Subscribe
+    public void onEvent(final BLEServerReadRequestEvent event) {
+        Log.i(TAG,"BLE server got read request");
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(application,"BLE server got read request",Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+    @Subscribe
+    public void onEvent(final BLEServerWriteRequestEvent event) {
+        Log.i(TAG,"BLE server got write request: " + event.getAddress());
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(application,"BLE server got write request: " + event.getAddress(),Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+    @Subscribe
+    public void onEvent(final BLEServerNotificationSentEvent event) {
+        Log.i(TAG,"BLE server notification got sent");
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(application,"BLE server notification got sent",Toast.LENGTH_LONG).show();
+            }
+        });
+    }
     //local service
     static public class LocalService extends Service
     {
@@ -446,4 +513,15 @@ public class SyncControllerImpl implements  SyncController{
     }
     private LocalService.LocalBinder localBinder = null;
 
+    private ServiceConnection notificationServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            Log.v(TAG, name+" Service disconnected");
+        }
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            Log.v(TAG, name+" Service connected");
+        }
+    };
 }

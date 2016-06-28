@@ -1,6 +1,5 @@
 package com.dayton.drone.ble.controller;
 
-import net.medcorp.library.ble.model.request.BLERequestData;
 
 /**
  * Created by med on 16/4/11.

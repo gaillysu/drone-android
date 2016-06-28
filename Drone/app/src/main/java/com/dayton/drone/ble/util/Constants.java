@@ -8,12 +8,12 @@ public class Constants {
     public final static int MTU = 20;
 
     public enum SystemStatus {
-        LowMemory(0),
-        InvalidTime(3),
-        GoalCompleted(4),
-        ActivityDataAvailable(5),
-        SubscribedToNotifications(7),
-        SystemReset(8);
+        LowMemory(1<<0),
+        InvalidTime(1<<3),
+        GoalCompleted(1<<4),
+        ActivityDataAvailable(1<<5),
+        SubscribedToNotifications(1<<7),
+        SystemReset(1<<8);
         private int status;
         SystemStatus(int status) {this.status = status;}
         public  int rawValue() {return status;}
@@ -69,6 +69,26 @@ public class Constants {
             this.status = status;
         }
         public  int rawValue() {return status;}
+    }
+
+    //below used by android notification server
+    public enum NotificationCommand {
+        ReadAttributes(0x01),TriggerAction(0x03),ReadExtendAttributes(0x05);
+        final int command;
+        private NotificationCommand(int command) {
+            this.command = command;
+        }
+        public  byte rawValue() {return (byte) command;}
+    }
+
+    public enum AttributeCode {
+        Category(0x01),ApplicationPackage(0x02),Number(0x03),Priority(0x04)
+        ,Visibility(0x05),Title(0x06),Subtitle(0x07),Text(0x08),When(0x09),ApplicationName(0x0A);
+        final int value;
+        private AttributeCode(int value) {
+            this.value = value;
+        }
+        public  byte rawValue() {return (byte)value;}
     }
 
 }
