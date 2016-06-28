@@ -37,7 +37,6 @@ import com.dayton.drone.ble.model.request.setting.SetUserProfileRequest;
 import com.dayton.drone.ble.model.request.sync.GetActivityRequest;
 import com.dayton.drone.ble.model.request.sync.GetStepsGoalRequest;
 import com.dayton.drone.ble.model.request.worldclock.SetWorldClockRequest;
-import com.dayton.drone.ble.server.GattServerService;
 import com.dayton.drone.ble.util.Constants;
 import com.dayton.drone.event.BLENoSupportPeripheryModeEvent;
 import com.dayton.drone.event.BLEPairStatusChangedEvent;
@@ -172,10 +171,6 @@ public class SyncControllerImpl implements  SyncController{
         sendRequest(new GetBatteryRequest(application));
     }
 
-    @Override
-    public GattServerService getGattServerService() {
-        return gattServerService;
-    }
 
     /**
      * send request  package to watch by using a queue
@@ -499,33 +494,6 @@ public class SyncControllerImpl implements  SyncController{
         public void onServiceConnected(ComponentName name, IBinder service) {
             Log.v(TAG, name+" Service connected");
             localBinder = (LocalService.LocalBinder)service;
-        }
-    };
-
-    private GattServerService gattServerService = null;
-    private ServiceConnection gattServiceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-
-        }
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            GattServerService.LocalBinder gattServerBinder = (GattServerService.LocalBinder)service;
-            gattServerService = gattServerBinder.getService();
-            if(!gattServerService.initialize())
-            {
-                EventBus.getDefault().post(new BLENoSupportPeripheryModeEvent());
-            }
-            else{
-                for (BluetoothDevice device: connectionController.getDevice()) {
-                    if(connectionController.getSaveAddress().equals(device.getAddress())){
-                        Log.w("Karl","Connecting to the device with id +  " + device.getAddress() + " status = " + GattServer.connect(device));
-                                break;
-                    }
-
-                }
-                Utils.notify(application);
-            }
         }
     };
 

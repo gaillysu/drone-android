@@ -11,8 +11,6 @@ import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.activity.tutorial.WelcomeActivity;
 import com.dayton.drone.adapter.MyHomeMenuAdapter;
 import com.dayton.drone.bean.MenuBean;
-import com.dayton.drone.ble.model.ancs.Call;
-import com.dayton.drone.ble.model.request.notification.DroneNotificationTrigger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,10 +56,7 @@ public class HomeActivity extends BaseActivity {
                         startActivity(ActivitiesActivity.class);
                         break;
                     case clock:
-                        Intent intent=new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
-                        startActivity(intent);
-
-//                        startActivity(WorldClockActivity.class);
+                        startActivity(WorldClockActivity.class);
                         break;
                 }
             }

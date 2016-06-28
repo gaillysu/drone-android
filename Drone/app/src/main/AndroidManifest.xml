@@ -95,9 +95,6 @@
             android:name="net.medcorp.library.ble.ble.MEDBTService"
             android:enabled="true" />
         <service
-            android:name="com.dayton.drone.ble.server.GattServerService"
-            android:enabled="true" />
-        <service
             android:name=".ble.controller.SyncControllerImpl$LocalService"
             android:enabled="true" />
         <service

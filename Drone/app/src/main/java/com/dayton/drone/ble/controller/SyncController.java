@@ -1,7 +1,5 @@
 package com.dayton.drone.ble.controller;
 
-import net.medcorp.library.ble.model.request.BLERequestData;
-import com.dayton.drone.ble.server.GattServerService;
 
 /**
  * Created by med on 16/4/11.
@@ -39,7 +37,5 @@ public interface SyncController {
      * read the battery status and level,the result will be delivered by event bus
      */
     void getBattery();
-
-    GattServerService getGattServerService();
 
 }
