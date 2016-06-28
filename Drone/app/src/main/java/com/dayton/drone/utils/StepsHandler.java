@@ -84,4 +84,14 @@ public class StepsHandler {
         }
         return dailyStepsList;
     }
+    public List<DailySteps> getLast30DaysSteps(Date date)
+    {
+        List<DailySteps> dailyStepsList = new ArrayList<>();
+        Date startDate = Common.getLast30Days(date);
+        for(long start = startDate.getTime();start<=date.getTime();start+=Common.ONE_DAY)
+        {
+            dailyStepsList.add(getDailySteps(new Date(start)));
+        }
+        return dailyStepsList;
+    }
 }

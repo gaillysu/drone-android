@@ -186,7 +186,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         modifyChart(lastWeekLineChart);
         modifyChart(thisWeekLineChart);
 
-        drawGraph();
+        drawGraph(true);
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
@@ -229,13 +229,16 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         return buffer.toString();
     }
 
-    private void drawGraph() {
+    private void drawGraph(boolean all) {
         StepsHandler stepsHandler = new StepsHandler(getModel().getStepsDatabaseHelper(), getModel().getUser());
         setDataInProgressBar(stepsHandler.getDailySteps(selectedDate));
         setDataInChart(hourlyBarChart, stepsHandler.getDailySteps(selectedDate));
         setDataInChart(thisWeekLineChart, stepsHandler.getThisWeekSteps(selectedDate));
-        setDataInChart(lastWeekLineChart, stepsHandler.getLastWeekSteps(selectedDate));
-        setDataInChart(lastMonthLineChart, stepsHandler.getLastMonthSteps(selectedDate));
+        if(all)
+        {
+            setDataInChart(lastWeekLineChart, stepsHandler.getLastWeekSteps(selectedDate));
+            setDataInChart(lastMonthLineChart, stepsHandler.getLast30DaysSteps(selectedDate));
+        }
     }
 
     private void setDataInProgressBar(DailySteps dailySteps) {
@@ -443,7 +446,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
                 calendarGroup.setVisibility(View.GONE);
                 mTitleCalendarTextView.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(downDate).split("-")[2] + " " +
                         new SimpleDateFormat("MMM", Locale.US).format(downDate));
-                drawGraph();
+                drawGraph(true);
                 findCalories(downDate);
                 List<Optional<Steps>> stepsList = getModel().getStepsDatabaseHelper().get(getModel().getUser().getUserID(),selectedDate);
                 if(stepsList.isEmpty())
@@ -515,7 +518,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
             public void run() {
                 SpUtils.putIntMethod(getApplicationContext(), CacheConstants.GOAL_STEP, event.getGoal());
                 SpUtils.putIntMethod(getApplicationContext(), CacheConstants.TODAY_STEP, event.getSteps());
-                drawGraph();
+                drawGraph(false);
             }
         });
     }
@@ -529,7 +532,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
             @Override
             public void run() {
                 if (event.getStatus() == BigSyncEvent.BIG_SYNC_EVENT.STOPPED) {
-                    drawGraph();
+                    drawGraph(true);
                 }
             }
         });
@@ -545,7 +548,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
             @Override
             public void run() {
                 if (event.getStatus() == DownloadStepsEvent.DOWNLOAD_STEPS_EVENT.STOPPED) {
-                    drawGraph();
+                    drawGraph(true);
                 }
             }
         });
