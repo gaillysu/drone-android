@@ -49,15 +49,6 @@
                             </com.github.mikephil.charting.charts.BarChart>
 
                             <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:paddingLeft="10dp"
-                                android:textSize="10sp"
-                                android:textColor="@android:color/darker_gray"
-                                android:maxLines="1"
-                                android:text="@string/activities_prompt_use_data_updated_time"/>
-
-                            <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_horizontal"
@@ -119,9 +110,19 @@
                                 android:background="@android:color/white"
                                 >
                             </com.github.mikephil.charting.charts.LineChart>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:paddingLeft="10dp"
+                                android:text="@string/activities_prompt_use_data_updated_time"
+                                android:textColor="@android:color/darker_gray"
+                                android:textSize="14sp"/>
                         </LinearLayout>
                     </LinearLayout>
                 </FrameLayout>
+
             </ScrollView>
 
             <LinearLayout
