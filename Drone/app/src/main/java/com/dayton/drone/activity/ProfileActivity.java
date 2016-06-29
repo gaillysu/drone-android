@@ -297,6 +297,8 @@ public class ProfileActivity extends BaseActivity {
                 }
             });
             noWatchConnect.startAnimation(alpha);
+        }else{
+            saveUserCurrentEdit();
         }
 
     }
