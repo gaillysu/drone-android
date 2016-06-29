@@ -265,11 +265,12 @@ public class SyncControllerImpl implements  SyncController{
                         sendRequest(new SetUserProfileRequest(application,application.getUser()));
                         //set goal to watch
                         sendRequest(new SetGoalRequest(application, SpUtils.getIntMethod(application, CacheConstants.GOAL_STEP, 10000)));
-                        List<Steps> stepsList = application.getStepsDatabaseHelper().convertToNormalList(application.getStepsDatabaseHelper().get(application.getUser().getUserID(),Common.removeTimeFromDate(new Date())));
-                        if(!stepsList.isEmpty())
+                        Date date = new Date(SpUtils.getLongMethod(application, CacheConstants.TODAY_DATE, new Date().getTime()));
+                        //if the cached date is today,use the cached steps to set watch
+                        if (Common.removeTimeFromDate(date).getTime() == Common.removeTimeFromDate(new Date()).getTime())
                         {
                             //set steps to watch
-                            sendRequest(new SetStepsToWatchReuqest(application,stepsList.get(0).getDailySteps()));
+                            sendRequest(new SetStepsToWatchReuqest(application,SpUtils.getIntMethod(application, CacheConstants.TODAY_STEP, 0)));
                         }
                         //set world colock to watch
                         setWorldClock(application.getWorldClockDatabaseHelper().getSelected());
