@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -78,6 +79,7 @@ public class ProfileActivity extends BaseActivity {
     private int viewType = -1;
     private int resultCode = 2 >> 5;
     private ProgressDialog progressDialog;
+    private long currentTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -201,7 +203,7 @@ public class ProfileActivity extends BaseActivity {
                     }
                 }).viewStyle(viewType)
                 .viewTextSize(25)
-                .dateChose(mUser.getHeight()+"")
+                .dateChose(mUser.getHeight() + "")
                 .build();
         pickerPopWin2.showPopWin(ProfileActivity.this);
         pickerPopWin2.setOnDismissListener(new PopupWindow.OnDismissListener() {
@@ -228,7 +230,7 @@ public class ProfileActivity extends BaseActivity {
                     }
                 }).viewStyle(viewType)
                 .viewTextSize(25)
-                .dateChose(new Double(mUser.getWeight()).intValue()+"")
+                .dateChose(new Double(mUser.getWeight()).intValue() + "")
                 .build();
         pickerPopWin3.showPopWin(ProfileActivity.this);
         pickerPopWin3.setOnDismissListener(new PopupWindow.OnDismissListener() {
@@ -299,7 +301,9 @@ public class ProfileActivity extends BaseActivity {
                 }
             });
             noWatchConnect.startAnimation(alpha);
-        }else{
+        } else {
+
+            currentTime = System.currentTimeMillis();
             progressDialog = new ProgressDialog(this);
             progressDialog.setIndeterminate(true);
             progressDialog.setCancelable(false);
@@ -312,7 +316,7 @@ public class ProfileActivity extends BaseActivity {
 
 
     @OnClick(R.id.profile_activity_edit_user_birthday)
-    public void editUserBirthday(){
+    public void editUserBirthday() {
         userBirthdayTextView.setText("");
         viewType = 1;
         final Date date = new Date(System.currentTimeMillis());
@@ -323,27 +327,27 @@ public class ProfileActivity extends BaseActivity {
                     @Override
                     public void onDatePickCompleted(int year, int month,
                                                     int day, String dateDesc) {
-                        SimpleDateFormat dateFormat  = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
                         try {
                             Date date = dateFormat.parse(dateDesc);
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
                         userBirthdayTextView.setText(new SimpleDateFormat("MMM", Locale.US)
-                                .format(date)+"-"+day+"-"+year);
+                                .format(date) + "-" + day + "-" + year);
                     }
                 }).viewStyle(viewType)
                 .viewTextSize(25) // pick view text size
-                .minYear(Integer.valueOf(formatDate.split("-")[0]) -100) //min year in loop
+                .minYear(Integer.valueOf(formatDate.split("-")[0]) - 100) //min year in loop
                 .maxYear(Integer.valueOf(formatDate.split("-")[0])) // max year in loop
-                .dateChose((Integer.valueOf(formatDate.split("-")[0])-30)
-                        +"-"+formatDate.split("-")[1]+"-"+formatDate.split("-")[2]) // date chose when init popwindow
+                .dateChose((Integer.valueOf(formatDate.split("-")[0]) - 30)
+                        + "-" + formatDate.split("-")[1] + "-" + formatDate.split("-")[2]) // date chose when init popwindow
                 .build();
         pickerPopWin.showPopWin(ProfileActivity.this);
     }
 
     public void saveUserCurrentEdit() {
-        int currentGoalStep = Integer.valueOf(stepGoal.getText().toString());
+        final int currentGoalStep = Integer.valueOf(stepGoal.getText().toString());
         SpUtils.putIntMethod(ProfileActivity.this, CacheConstants.GOAL_STEP, currentGoalStep);
         mUser.setLastName(accountName.getText().toString());
         mUser.setFirstName(userFirstName.getText().toString());
@@ -381,25 +385,39 @@ public class ProfileActivity extends BaseActivity {
         updateUser.setLength(mUser.getHeight());
         updateUser.setBirthday(mUser.getBirthday());
         updateUser.setSex(mUser.getGender());
-        getModel().getRetrofitManager().execute(new UpdateUserRequest(updateUser , getModel()
+        getModel().getRetrofitManager().execute(new UpdateUserRequest(updateUser, getModel()
                 .getRetrofitManager().getAccessToken()), new RequestListener<UpdateUserModel>() {
 
             @Override
             public void onRequestFailure(SpiceException spiceException) {
-                progressDialog.dismiss();
-                Toast.makeText(ProfileActivity.this,getString(R.string.save_failed_prompt),Toast.LENGTH_SHORT).show();
+                if (System.currentTimeMillis() - currentTime < 2000) {
+                    SystemClock.sleep(2000 - (System.currentTimeMillis() - currentTime));
+                }
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+                Toast.makeText(ProfileActivity.this, getString(R.string.save_failed_prompt), Toast.LENGTH_SHORT).show();
                 spiceException.printStackTrace();
             }
 
             @Override
             public void onRequestSuccess(UpdateUserModel updateUserModel) {
-                progressDialog.dismiss();
-                if(updateUserModel.getStatus()==1) {
+                if (System.currentTimeMillis() - currentTime < 2000) {
+                    SystemClock.sleep(2000 - (System.currentTimeMillis() - currentTime));
+
+                }
+
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+
+                if (updateUserModel.getStatus() == 1) {
                     Intent intent = getIntent();
                     intent.putExtra("logOut", false);
                     setResult(resultCode, intent);
                     finish();
                 }
+
             }
         });
 
