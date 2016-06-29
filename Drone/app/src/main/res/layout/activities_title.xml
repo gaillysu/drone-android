@@ -10,8 +10,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="20dp"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingLeft="20dp">
+        >
 
         <Button
             android:id="@+id/activities_title_back"

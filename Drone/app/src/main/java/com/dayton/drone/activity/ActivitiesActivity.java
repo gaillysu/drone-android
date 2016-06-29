@@ -3,7 +3,6 @@ package com.dayton.drone.activity;
 
 import android.Manifest;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -17,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dayton.drone.R;
@@ -96,12 +94,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     @Bind(R.id.fragment_home_title_active_time)
     TextView activeTimeTextView;
 
-    @Bind(R.id.home_content_bar)
-    RelativeLayout guideBar;
-
-    @Bind(R.id.hourly_header_layout_guide_layout)
-    LinearLayout titleDec;
-
     @Bind(R.id.activity_activities_hourly_bar)
     BarChart hourlyBarChart;
 
@@ -113,18 +105,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
 
     @Bind(R.id.activity_activities_monthly_line)
     LineChart lastMonthLineChart;
-
-    @Bind(R.id.activities_activity_shadow_home_guide_view)
-    RelativeLayout guideView;
-
-    @Bind(R.id.activities_guide_title_dec)
-    TextView titleGuide;
-
-    @Bind(R.id.activities_guide_dec_actvies)
-    TextView activitiesGuide;
-
-    @Bind(R.id.activities_guide_dec_bar)
-    TextView barGuide;
 
     @Bind(R.id.activities_calendar_title_date_tv)
     TextView mTitleCalendarTextView;
@@ -141,11 +121,13 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     @Bind(R.id.activities_activity_title_next_month)
     ImageButton nextMonth;
 
-    @Bind(R.id.activities_guide_dec_chart)
-    TextView chartGuideDec;
+    @Bind(R.id.weekly_header_layout_calories_textview)
+    TextView textViewCalories;
+    @Bind(R.id.weekly_header_layout_active_time_textview)
+    TextView textViewActivityTime;
+    @Bind(R.id.weekly_header_layout_km_textview)
+    TextView textViewDistance;
 
-    @Bind(R.id.activities_activity_title_date)
-    LinearLayout showCalendar;
 
     private Date selectedDate = new Date(); //the selected date comes from calendar.
     private int guidePage = 1;
@@ -156,6 +138,8 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
+    private ActivityTimeSlot dataType;
+    private Date date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,6 +153,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
             tintManager.setStatusBarTintResource(R.color.user_info_sex_bg);
         }
 
+
         ButterKnife.bind(this);
 
         calendarGroup.setVisibility(View.GONE);
@@ -177,19 +162,24 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         nextMonth.setVisibility(View.GONE);
         backMonth.setVisibility(View.GONE);
         stepsDatabaseHelper = getModel().getStepsDatabaseHelper();
-        Date date = new Date(System.currentTimeMillis());
+        date = new Date(System.currentTimeMillis());
         findCalories(date);
 
 
-        modifyChart(hourlyBarChart);
-        modifyChart(lastMonthLineChart);
-        modifyChart(lastWeekLineChart);
-        modifyChart(thisWeekLineChart);
+        modifyChart(hourlyBarChart, dataType = ActivityTimeSlot.DAFAULT);
+        modifyChart(lastMonthLineChart, dataType = ActivityTimeSlot.LASTMONTH);
+        modifyChart(lastWeekLineChart, dataType = ActivityTimeSlot.LASTWEEK);
+        modifyChart(thisWeekLineChart, dataType = ActivityTimeSlot.THISWEEK);
 
         drawGraph(true);
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
+
+
+    private enum ActivityTimeSlot {
+        DAFAULT, THISWEEK, LASTWEEK, LASTMONTH;
     }
 
     private void findCalories(Date date) {
@@ -199,18 +189,17 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         List<Optional<Steps>> list = stepsDatabaseHelper.get(getModel().getUser().getUserID(), date);
         for (int i = 0; i < list.size(); i++) {
             Steps steps = list.get(i).get();
-            timeActive += 5;
+            timeActive = steps.getDailyActiveTime();
             accountSteps = steps.getDailySteps();
         }
 
-        DecimalFormat df   = new DecimalFormat("######0.00");
+        DecimalFormat df = new DecimalFormat("######0.00");
         String calories = (2.0 * 3.5 * getModel().getUser().getWeight()) / 200 * timeActive + "";
         caloriesTextView.setText(df.format(Double.parseDouble(calories)));
 
 
         String stepsKm = (getModel().getUser().getHeight() * 0.45) / 100 * accountSteps / 1000 + "";
-        kmTextView.setText(df.format(Double.parseDouble(stepsKm))+ " KM");
-
+        kmTextView.setText(df.format(Double.parseDouble(stepsKm)));
         activeTimeTextView.setText(formatTimeActivity(timeActive));
 
     }
@@ -218,11 +207,20 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     private String formatTimeActivity(int timeActive) {
 
         StringBuffer buffer = new StringBuffer();
-        if (timeActive / 60 > 1) {
+        if (timeActive == 0) {
+            return buffer.append("0").toString();
+        }
+        if (timeActive % 60 > 1) {
 
-            int hour = new Double(timeActive / 60).intValue();
+            int hour = timeActive / 60;
             buffer.append(hour + "h");
-            buffer.append(timeActive - hour * 60 + "m");
+
+            String mis = timeActive - hour * 60 + "";
+
+            if (new Integer(mis).intValue() < 10) {
+                mis = "0" + mis;
+            }
+            buffer.append(mis + "m");
         } else {
             buffer.append(timeActive + "m");
         }
@@ -234,8 +232,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         setDataInProgressBar(stepsHandler.getDailySteps(selectedDate));
         setDataInChart(hourlyBarChart, stepsHandler.getDailySteps(selectedDate));
         setDataInChart(thisWeekLineChart, stepsHandler.getThisWeekSteps(selectedDate));
-        if(all)
-        {
+        if (all) {
             setDataInChart(lastWeekLineChart, stepsHandler.getLastWeekSteps(selectedDate));
             setDataInChart(lastMonthLineChart, stepsHandler.getLast30DaysSteps(selectedDate));
         }
@@ -303,7 +300,9 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         lineChart.invalidate();
     }
 
-    private void modifyChart(BarChart barChart) {
+
+    private void modifyChart(BarChart barChart, ActivityTimeSlot timeSlot) {
+        setChartTileText(timeSlot);
         calendar.setCalendarData(new Date());
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         String day = dateFormat.format(new Date());
@@ -348,7 +347,9 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         xAxis.setTextColor(Color.BLACK);
     }
 
-    private void modifyChart(LineChart lineChart) {
+    private void modifyChart(LineChart lineChart, ActivityTimeSlot timeSlot) {
+        setChartTileText(timeSlot);
+
         lineChart.setContentDescription("");
         lineChart.setDescription("");
         lineChart.setNoDataTextDescription("");
@@ -385,48 +386,81 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         xAxis.setDrawLimitLinesBehindData(false);
         xAxis.setDrawLabels(true);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+
+
     }
 
-    @OnClick(R.id.activities_activity_shadow_home_guide_view)
-    public void guideViewClick() {
-        ++guidePage;
-        switch (guidePage) {
-            case 2:
-                titleDec.setBackgroundResource(R.drawable.user_guide_bg);
-                showCalendar.setBackground(new BitmapDrawable());
-                activitiesGuide.setVisibility(View.VISIBLE);
-                titleGuide.setVisibility(View.GONE);
+    //set data
+    private void setChartTileText(ActivityTimeSlot timeSlot) {
+        //TODO
+        switch (timeSlot) {
+            case DAFAULT:
                 break;
-            case 3:
-                titleDec.setBackground(new BitmapDrawable());
-                guideBar.setBackgroundResource(R.drawable.user_guide_bg);
-                activitiesGuide.setVisibility(View.GONE);
-                barGuide.setVisibility(View.VISIBLE);
+            case THISWEEK:
+                getLastMonthData(ActivityTimeSlot.THISWEEK);
                 break;
-            case 4:
-                barGuide.setVisibility(View.GONE);
-                hourlyBarChart.setBackgroundResource(R.drawable.user_guide_bg);
-                guideBar.setBackground(new BitmapDrawable());
-                chartGuideDec.setVisibility(View.VISIBLE);
+            case LASTWEEK:
+                getLastMonthData(ActivityTimeSlot.LASTWEEK);
                 break;
-            case 5:
-                chartGuideDec.setVisibility(View.GONE);
-                guideView.setVisibility(View.GONE);
-                SpUtils.putBoolean(getModel(), CacheConstants.IS_FIRST, false);
+            case LASTMONTH:
+                getLastMonthData(ActivityTimeSlot.LASTMONTH);
                 break;
         }
     }
 
+    private void getLastMonthData(ActivityTimeSlot thisweek) {
+        StepsDatabaseHelper databaseHelper = getModel().getStepsDatabaseHelper();
+
+        switch (thisweek) {
+            case THISWEEK:
+                List<Steps> list = databaseHelper.getThisWeekSteps(getModel().getUser().getUserID(), date);
+
+                setTitileData(list);
+
+                break;
+            case LASTWEEK:
+                List<Steps> lastWeekList = databaseHelper.getLastWeekSteps(getModel().getUser().getUserID(), date);
+                setTitileData(lastWeekList);
+                break;
+            case LASTMONTH:
+                List<Steps> lastMonthList = databaseHelper.getLastMonthSteps(getModel().getUser().getUserID(), date);
+                setTitileData(lastMonthList);
+                break;
+        }
+
+    }
+
+    public void setTitileData(List<Steps> list) {
+        int stepsAccount = 0;
+        int activityTime = 0;
+        for (int x = 0; x < list.size(); x++) {
+            Steps steps = list.get(x);
+            stepsAccount += steps.getDailySteps();
+            activityTime += steps.getDailyActiveTime();
+        }
+        DecimalFormat df = new DecimalFormat("######0.00");
+        Double stepsLenth = (getModel().getUser().getHeight() * 0.45) / 100;
+        Double distance = stepsLenth * stepsAccount / 100;
+        textViewActivityTime.setText(formatTimeActivity(activityTime));
+        textViewDistance.setText(df.format(distance) + "");
+        textViewCalories.setText(df.format((2.0 * getModel().getUser().getWeight() * 3.5) / 200 * activityTime) + "");
+    }
+
+
     @OnClick(R.id.activities_activity_calendar_back_month)
     public void mIvBackMonthClick() {
         Date leftMouth = calendar.clickLeftMonth();
-        //        mTitleCalendarTextView.setText(new SimpleDateFormat("MMM").format(leftMouth));
+        SimpleDateFormat simple = new SimpleDateFormat("yyyy-mm-dd");
+        String laftdate = simple.format(leftMouth);
+        mTitleCalendarTextView.setText(laftdate.split("-")[2] + " " + new SimpleDateFormat("MMM", Locale.US).format(leftMouth));
     }
 
     @OnClick(R.id.activities_activity_title_next_month)
     public void mIvNextMonthClick() {
         Date rightMouth = calendar.clickRightMonth();
-        //        mTitleCalendarTextView.setText(new SimpleDateFormat("MMM").format(rightMouth));
+        SimpleDateFormat simple = new SimpleDateFormat("yyyy-mm-dd");
+        String rightdate = simple.format(rightMouth);
+        mTitleCalendarTextView.setText(rightdate.split("-")[2] + " " + new SimpleDateFormat("MMM", Locale.US).format(rightMouth));
     }
 
     @OnClick(R.id.activities_activity_title_date)
@@ -440,6 +474,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
 
             @Override
             public void OnItemClick(Date selectedStartDate, Date selectedEndDate, Date downDate) {
+                date = downDate;
                 selectedDate = downDate;
                 nextMonth.setVisibility(View.GONE);
                 backMonth.setVisibility(View.GONE);
@@ -448,9 +483,8 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
                         new SimpleDateFormat("MMM", Locale.US).format(downDate));
                 drawGraph(true);
                 findCalories(downDate);
-                List<Optional<Steps>> stepsList = getModel().getStepsDatabaseHelper().get(getModel().getUser().getUserID(),selectedDate);
-                if(stepsList.isEmpty())
-                {
+                List<Optional<Steps>> stepsList = getModel().getStepsDatabaseHelper().get(getModel().getUser().getUserID(), selectedDate);
+                if (stepsList.isEmpty()) {
                     getModel().getSyncActivityManager().downloadSteps(selectedDate);
                 }
             }
@@ -540,6 +574,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
 
     /**
      * when user select one day, if no any steps record in the local, download it from cloud server and refresh graph
+     *
      * @param event
      */
     @Subscribe
@@ -553,6 +588,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
             }
         });
     }
+
     @Subscribe
     public void onEvent(BLEBluetoothOffEvent event) {
         showStateString(R.string.in_app_notification_bluetooth_disabled);

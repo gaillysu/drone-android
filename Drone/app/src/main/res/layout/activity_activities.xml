@@ -100,8 +100,8 @@
                                 android:textColor="@android:color/black"
                                 android:textSize="20sp"/>
 
-                            <include layout="@layout/monthly_header_layout"/>
-
+                            <!--<include layout="@layout/monthly_header_layout"/>-->
+                            <include layout="@layout/weekly_header_layout"/>
                             <com.github.mikephil.charting.charts.LineChart
                                 android:id="@+id/activity_activities_monthly_line"
                                 android:layout_width="fill_parent"
@@ -114,8 +114,7 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:paddingLeft="10dp"
+                                android:padding="10dp"
                                 android:text="@string/activities_prompt_use_data_updated_time"
                                 android:textColor="@android:color/darker_gray"
                                 android:textSize="14sp"/>
@@ -141,28 +140,6 @@
                     />
             </LinearLayout>
         </FrameLayout>
-
-        <TextView
-            android:id="@+id/activities_guide_title_dec"
-            style="@style/home_content_activity_guide_text_style"
-            android:layout_alignParentEnd="true"
-            android:layout_below="@id/activities_include_title"
-            android:background="@drawable/tip_up_icon"
-            android:gravity="center"
-            android:padding="5dp"
-            android:text="@string/fragment_home_guide_see_history_dec"
-            android:visibility="gone"
-            />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/activities_activity_shadow_home_guide_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/home_content_activity_guide_bg"
-        android:visibility="gone"
-        >
     </RelativeLayout>
 
 </FrameLayout>

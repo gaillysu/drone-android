@@ -20,7 +20,7 @@
         <TextView
             android:id="@+id/weekly_header_layout_calories_textview"
             style="@style/home_content_activity_last_title_content_style"
-            android:text="0"/>
+            android:text="0.00"/>
     </LinearLayout>
 
     <LinearLayout
