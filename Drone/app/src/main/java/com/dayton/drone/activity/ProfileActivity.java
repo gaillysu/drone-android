@@ -1,6 +1,7 @@
 package com.dayton.drone.activity;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -76,6 +77,7 @@ public class ProfileActivity extends BaseActivity {
     private int userStepGoal;
     private int viewType = -1;
     private int resultCode = 2 >> 5;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -298,6 +300,11 @@ public class ProfileActivity extends BaseActivity {
             });
             noWatchConnect.startAnimation(alpha);
         }else{
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setCancelable(false);
+            progressDialog.setMessage(getString(R.string.forget_password_dialog_text));
+            progressDialog.show();
             saveUserCurrentEdit();
         }
 
@@ -379,11 +386,14 @@ public class ProfileActivity extends BaseActivity {
 
             @Override
             public void onRequestFailure(SpiceException spiceException) {
+                progressDialog.dismiss();
+                Toast.makeText(ProfileActivity.this,getString(R.string.save_failed_prompt),Toast.LENGTH_SHORT).show();
                 spiceException.printStackTrace();
             }
 
             @Override
             public void onRequestSuccess(UpdateUserModel updateUserModel) {
+                progressDialog.dismiss();
                 if(updateUserModel.getStatus()==1) {
                     Intent intent = getIntent();
                     intent.putExtra("logOut", false);

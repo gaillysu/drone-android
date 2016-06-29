@@ -9,6 +9,7 @@
     <string name="forget_password_change">Change Password</string>
     <string name="forget_password_edit_hint">Your Email</string>
     <string name="forget_password_dialog_text">Please wait…</string>
+    <string name="save_failed_prompt">Save failed...</string>
     <string name="forget_password_request_null">Couldn\'t change password</string>
     <string name="change_password_fail">Change password failed</string>
     <string name="password_password_changed">Password changed</string>
