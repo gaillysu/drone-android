@@ -7,10 +7,9 @@
                 android:paddingTop="25dp"
                 >
     <ImageView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:scaleType="fitXY"
-        android:layout_marginLeft="50dp"
         android:layout_centerInParent="true"
-        android:src="@mipmap/drone_logo_splash"/>
+        android:src="@mipmap/drone_logo_splash"
+        />
 </RelativeLayout>
