@@ -292,6 +292,10 @@ public class SyncControllerImpl implements  SyncController{
                         EventBus.getDefault().post(new BigSyncEvent(theBigSyncStartDate.get(), BigSyncEvent.BIG_SYNC_EVENT.STARTED));
                         sendRequest(new GetActivityRequest(application));
                     }
+                    if((systemStatusPacket.getStatus() & Constants.SystemStatus.SubscribedToNotifications.rawValue())==Constants.SystemStatus.SubscribedToNotifications.rawValue())
+                    {
+                        Log.d(TAG,"Subscribed to notifications success.");
+                    }
                     //here start ANCS service
                     application.getApplicationContext().bindService(new Intent(application, ListenerService.class), notificationServiceConnection, Activity.BIND_AUTO_CREATE);
 

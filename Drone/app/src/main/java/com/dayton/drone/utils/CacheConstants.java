@@ -8,4 +8,5 @@ public class CacheConstants {
     public static String IS_FIRST="is_first";
     public static String GOAL_STEP = "goal_step";
     public static String TODAY_STEP = "today_step";
+    public static String TODAY_DATE = "today_date";
 }
