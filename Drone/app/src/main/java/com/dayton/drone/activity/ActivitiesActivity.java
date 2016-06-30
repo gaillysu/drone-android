@@ -241,9 +241,9 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     private void setDataInProgressBar(DailySteps dailySteps) {
         int steps = SpUtils.getIntMethod(this, CacheConstants.TODAY_STEP, 0);
         int goal = SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000);
-        Date date = new Date(SpUtils.getLongMethod(this, CacheConstants.TODAY_DATE, new Date().getTime()));
         //when user select a history date, show its data with that day
-        if (Common.removeTimeFromDate(date).getTime() != Common.removeTimeFromDate(new Date()).getTime()) {
+        if (Common.removeTimeFromDate(selectedDate).getTime() != Common.removeTimeFromDate(new Date()).getTime()
+                || !getModel().getSyncController().isConnected()) {
             steps = dailySteps.getDailySteps();
             goal = dailySteps.getDailyStepsGoal();
         }
@@ -551,9 +551,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                SpUtils.putIntMethod(getApplicationContext(), CacheConstants.GOAL_STEP, event.getGoal());
-                SpUtils.putIntMethod(getApplicationContext(), CacheConstants.TODAY_STEP, event.getSteps());
-                SpUtils.putLongMethod(getApplicationContext(), CacheConstants.TODAY_DATE, new Date().getTime());
                 drawGraph(false);
             }
         });

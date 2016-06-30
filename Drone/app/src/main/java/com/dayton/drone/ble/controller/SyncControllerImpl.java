@@ -43,6 +43,7 @@ import com.dayton.drone.event.BLENoSupportPeripheryModeEvent;
 import com.dayton.drone.event.BLEPairStatusChangedEvent;
 import com.dayton.drone.event.BatteryStatusChangedEvent;
 import com.dayton.drone.event.BigSyncEvent;
+import com.dayton.drone.event.DownloadStepsEvent;
 import com.dayton.drone.event.GoalCompletedEvent;
 import com.dayton.drone.event.LittleSyncEvent;
 import com.dayton.drone.event.LowMemoryEvent;
@@ -50,11 +51,13 @@ import com.dayton.drone.event.ProfileChangedEvent;
 import com.dayton.drone.event.StepsGoalChangedEvent;
 import com.dayton.drone.event.TimerEvent;
 import com.dayton.drone.event.WorldClockChangedEvent;
+import com.dayton.drone.model.DailySteps;
 import com.dayton.drone.model.Steps;
 import com.dayton.drone.model.WorldClock;
 import com.dayton.drone.utils.CacheConstants;
 import com.dayton.drone.utils.Common;
 import com.dayton.drone.utils.SpUtils;
+import com.dayton.drone.utils.StepsHandler;
 
 import net.medcorp.library.android.notification.activity.Utils;
 import net.medcorp.library.android.notificationsdk.gatt.GattServer;
@@ -97,6 +100,7 @@ public class SyncControllerImpl implements  SyncController{
 
     private Timer autoSyncTimer = null;
     private Optional<Date> theBigSyncStartDate = new Optional<>();
+    private int baseSteps = 0;
 
     private void startAutoSyncTimer() {
         if(autoSyncTimer!=null)autoSyncTimer.cancel();
@@ -130,7 +134,6 @@ public class SyncControllerImpl implements  SyncController{
             }
         };
         application.getApplicationContext().bindService(new Intent(application, LocalService.class), serviceConnection, Activity.BIND_AUTO_CREATE);
-        startAutoSyncTimer();
     }
 
     @Override
@@ -254,8 +257,17 @@ public class SyncControllerImpl implements  SyncController{
                 {
                     SystemStatusPacket systemStatusPacket = packet.newSystemStatusPacket();
                     Log.i(TAG,"GetSystemStatus return status value: " + systemStatusPacket.getStatus());
+                    Date date = new Date(SpUtils.getLongMethod(application, CacheConstants.TODAY_DATE, 0));
+                    if(SpUtils.getBoolean(application,CacheConstants.TODAY_RESET,false) && Common.removeTimeFromDate(date).getTime() == Common.removeTimeFromDate(new Date()).getTime())
+                    {
+                        baseSteps = SpUtils.getIntMethod(application, CacheConstants.TODAY_BASESTEP, 0);
+                    }
+                    else {
+                        baseSteps = 0;
+                    }
                     if((systemStatusPacket.getStatus() & Constants.SystemStatus.SystemReset.rawValue())== Constants.SystemStatus.SystemReset.rawValue())
                     {
+                        SpUtils.putBoolean(application,CacheConstants.TODAY_RESET,true);
                         sendRequest(new SetSystemConfig(application,1,0, 0, 0, Constants.SystemConfigID.ClockFormat));
                         sendRequest(new SetSystemConfig(application,1,0, 0, 0, Constants.SystemConfigID.Enabled));
                         sendRequest(new SetSystemConfig(application,1,0, 0, 0, Constants.SystemConfigID.SleepConfig));
@@ -265,12 +277,13 @@ public class SyncControllerImpl implements  SyncController{
                         sendRequest(new SetUserProfileRequest(application,application.getUser()));
                         //set goal to watch
                         sendRequest(new SetGoalRequest(application, SpUtils.getIntMethod(application, CacheConstants.GOAL_STEP, 10000)));
-                        Date date = new Date(SpUtils.getLongMethod(application, CacheConstants.TODAY_DATE, new Date().getTime()));
                         //if the cached date is today,use the cached steps to set watch
                         if (Common.removeTimeFromDate(date).getTime() == Common.removeTimeFromDate(new Date()).getTime())
                         {
                             //set steps to watch
-                            sendRequest(new SetStepsToWatchReuqest(application,SpUtils.getIntMethod(application, CacheConstants.TODAY_STEP, 0)));
+                            baseSteps = SpUtils.getIntMethod(application, CacheConstants.TODAY_STEP, 0);
+                            SpUtils.putIntMethod(application, CacheConstants.TODAY_BASESTEP, baseSteps);
+                            sendRequest(new SetStepsToWatchReuqest(application,baseSteps));
                         }
                         //set world colock to watch
                         setWorldClock(application.getWorldClockDatabaseHelper().getSelected());
@@ -299,7 +312,8 @@ public class SyncControllerImpl implements  SyncController{
                     }
                     //here start ANCS service
                     application.getApplicationContext().bindService(new Intent(application, ListenerService.class), notificationServiceConnection, Activity.BIND_AUTO_CREATE);
-
+                    //here start little sync timer
+                    startAutoSyncTimer();
                 }
                 else if(GetActivityRequest.HEADER == packet.getHeader())
                 {
@@ -329,7 +343,11 @@ public class SyncControllerImpl implements  SyncController{
                     GetStepsGoalPacket getStepsGoalPacket = packet.newGetStepsGoalPacket();
                     int steps = getStepsGoalPacket.getSteps();
                     int goal  = getStepsGoalPacket.getGoal();
-                    Log.i(TAG,"steps: " + steps + ",goal: " + goal);
+                    Log.i(TAG,"steps: " + steps + ",goal: " + goal + ",baseSteps: " + baseSteps);
+                    //IMPORTANT NOTICE: above "steps" is a accumulated value that comes from the last reset, it is not a total steps for a day.
+                    SpUtils.putIntMethod(application, CacheConstants.GOAL_STEP, goal);
+                    SpUtils.putIntMethod(application, CacheConstants.TODAY_STEP,baseSteps + steps);
+                    SpUtils.putLongMethod(application, CacheConstants.TODAY_DATE, new Date().getTime());
                     EventBus.getDefault().post(new LittleSyncEvent(steps, goal));
                 }
                 else if(GetBatteryRequest.HEADER == packet.getHeader())
@@ -462,6 +480,26 @@ public class SyncControllerImpl implements  SyncController{
             @Override
             public void run() {
                 Toast.makeText(application,"BLE server notification got sent",Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+    @Subscribe
+    public void onEvent(final DownloadStepsEvent event) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                if (event.getStatus() == DownloadStepsEvent.DOWNLOAD_STEPS_EVENT.STOPPED) {
+                    StepsHandler stepsHandler = new StepsHandler(application.getStepsDatabaseHelper(), application.getUser());
+                    DailySteps dailySteps= stepsHandler.getDailySteps(new Date());
+                    if(dailySteps.getDailySteps()>SpUtils.getIntMethod(application, CacheConstants.TODAY_STEP, 0))
+                    {
+                        baseSteps = dailySteps.getDailySteps();
+                        SpUtils.putLongMethod(application, CacheConstants.TODAY_DATE, new Date().getTime());
+                        SpUtils.putIntMethod(application, CacheConstants.TODAY_BASESTEP, baseSteps);
+                        SpUtils.putIntMethod(application,CacheConstants.TODAY_STEP,baseSteps);
+                        sendRequest(new SetStepsToWatchReuqest(application,baseSteps));
+                    }
+                }
             }
         });
     }
