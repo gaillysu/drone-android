@@ -182,50 +182,9 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         DAFAULT, THISWEEK, LASTWEEK, LASTMONTH;
     }
 
-    private void findCalories(Date date) {
-
-        int timeActive = 0;
-        int accountSteps = 0;
-        List<Optional<Steps>> list = stepsDatabaseHelper.get(getModel().getUser().getUserID(), date);
-        for (int i = 0; i < list.size(); i++) {
-            Steps steps = list.get(i).get();
-            timeActive = steps.getDailyActiveTime();
-            accountSteps = steps.getDailySteps();
-        }
-
-        DecimalFormat df = new DecimalFormat("######0.00");
-        String calories = (2.0 * 3.5 * getModel().getUser().getWeight()) / 200 * timeActive + "";
-        caloriesTextView.setText(df.format(Double.parseDouble(calories)));
 
 
-        String stepsKm = (getModel().getUser().getHeight() * 0.45) / 100 * accountSteps / 1000 + "";
-        kmTextView.setText(df.format(Double.parseDouble(stepsKm)));
-        activeTimeTextView.setText(formatTimeActivity(timeActive));
 
-    }
-
-    private String formatTimeActivity(int timeActive) {
-
-        StringBuffer buffer = new StringBuffer();
-        if (timeActive == 0) {
-            return buffer.append("0").toString();
-        }
-        if (timeActive % 60 > 1) {
-
-            int hour = timeActive / 60;
-            buffer.append(hour + "h");
-
-            String mis = timeActive - hour * 60 + "";
-
-            if (new Integer(mis).intValue() < 10) {
-                mis = "0" + mis;
-            }
-            buffer.append(mis + "m");
-        } else {
-            buffer.append(timeActive + "m");
-        }
-        return buffer.toString();
-    }
 
     private void drawGraph(boolean all) {
         StepsHandler stepsHandler = new StepsHandler(getModel().getStepsDatabaseHelper(), getModel().getUser());
@@ -445,6 +404,51 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         textViewActivityTime.setText(formatTimeActivity(activityTime));
         textViewDistance.setText(df.format(distance) + "");
         textViewCalories.setText(df.format((2.0 * getModel().getUser().getWeight() * 3.5) / 200 * activityTime) + "");
+    }
+
+    private void findCalories(Date date) {
+
+        int timeActive = 0;
+        int accountSteps = 0;
+        List<Optional<Steps>> list = stepsDatabaseHelper.get(getModel().getUser().getUserID(), date);
+        for (int i = 0; i < list.size(); i++) {
+            Steps steps = list.get(i).get();
+            timeActive = steps.getDailyActiveTime();
+            accountSteps = steps.getDailySteps();
+        }
+
+        DecimalFormat df = new DecimalFormat("######0.00");
+        String calories = (2.0 * 3.5 * getModel().getUser().getWeight()) / 200 * timeActive + "";
+        caloriesTextView.setText(df.format(Double.parseDouble(calories)));
+
+
+        String stepsKm = (getModel().getUser().getHeight() * 0.45) / 100 * accountSteps / 1000 + "";
+        kmTextView.setText(df.format(Double.parseDouble(stepsKm)));
+        activeTimeTextView.setText(formatTimeActivity(timeActive));
+
+    }
+
+    private String formatTimeActivity(int timeActive) {
+
+        StringBuffer buffer = new StringBuffer();
+        if (timeActive == 0) {
+            return buffer.append("0").toString();
+        }
+        if (timeActive % 60 > 1) {
+
+            int hour = timeActive / 60;
+            buffer.append(hour + "h");
+
+            String mis = timeActive - hour * 60 + "";
+
+            if (new Integer(mis).intValue() < 10) {
+                mis = "0" + mis;
+            }
+            buffer.append(mis + "m");
+        } else {
+            buffer.append(timeActive + "m");
+        }
+        return buffer.toString();
     }
 
 
