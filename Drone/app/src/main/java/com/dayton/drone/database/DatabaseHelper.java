@@ -34,8 +34,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
      * v7: modify 'user' table, remove 'age' field and add 'birthday' field
      * v8: modify 'steps'table, change 'hourlySteps' default value
      * v9: modify 'steps'table, add "stepsGoal"
+     * v10:modify 'steps'table, fix 'hourlySteps' field default value.
      */
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
 
     private Dao<UserBean, Integer> userBean = null;
     private Dao<StepsBean,Integer> stepsBean = null;

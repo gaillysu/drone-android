@@ -36,7 +36,7 @@ public class StepsBean {
      */
     public static final String fHourlySteps = "hourlySteps";
     @DatabaseField
-    private String hourlySteps = "[[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]]";
+    private String hourlySteps = "[[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0]]";
 
     /**
      * one day's total distance ,unit is meter.
