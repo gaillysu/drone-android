@@ -223,7 +223,11 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
             }
         }
         //For better user experience, I set the Y value is multiple of 10
-        barChart.getAxisLeft().setAxisMaxValue(maxHourlySteps%10==0?maxHourlySteps:((maxHourlySteps+9)/10)*10);
+        if(maxHourlySteps==0){
+            barChart.getAxisLeft().setAxisMaxValue(100);
+        }else {
+            barChart.getAxisLeft().setAxisMaxValue(maxHourlySteps % 10 == 0 ? maxHourlySteps : ((maxHourlySteps + 9) / 10) * 10);
+        }
         barChart.setScaleMinima((.14f), 1f);
         BarDataSet dataSet = new BarDataSet(yValue, "");
         dataSet.setDrawValues(false);
