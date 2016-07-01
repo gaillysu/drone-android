@@ -21,11 +21,16 @@ import java.util.List;
 public class WorldClockDatabaseHelper {
     private DatabaseHelper databaseHelper;
 
-    public WorldClockDatabaseHelper(Context context) {
+    public WorldClockDatabaseHelper(final Context context) {
         if (databaseHelper == null) {
             databaseHelper = DatabaseHelper.getHelperInstance(context);
         }
-        initDatabase(context);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                initDatabase(context);
+            }
+        }).start();
     }
 
     private void initDatabase(Context context) {

@@ -31,6 +31,7 @@ import com.dayton.drone.utils.Common;
 import com.dayton.drone.utils.SpUtils;
 import com.dayton.drone.utils.StepsHandler;
 import com.dayton.drone.view.CalendarView;
+import com.dayton.drone.view.TipsView;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
@@ -178,12 +179,10 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         date = new Date(System.currentTimeMillis());
         findCalories(date);
 
-
         modifyChart(hourlyBarChart, dataType = ActivityTimeSlot.DAFAULT);
-        modifyChart(lastMonthLineChart, dataType = ActivityTimeSlot.LASTMONTH);
-        modifyChart(lastWeekLineChart, dataType = ActivityTimeSlot.LASTWEEK);
         modifyChart(thisWeekLineChart, dataType = ActivityTimeSlot.THISWEEK);
-
+        modifyChart(lastWeekLineChart, dataType = ActivityTimeSlot.LASTWEEK);
+        modifyChart(lastMonthLineChart, dataType = ActivityTimeSlot.LASTMONTH);
         drawGraph(true);
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -224,9 +223,20 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     private void setDataInChart(BarChart barChart, DailySteps dailySteps) {
         List<String> xVals = new ArrayList<String>();
         List<BarEntry> yValue = new ArrayList<BarEntry>();
+        int maxHourlySteps = 0;
         for (int i = 0; i < dailySteps.getHourlySteps().length; i++) {
             yValue.add(new BarEntry(dailySteps.getHourlySteps()[i], i));
             xVals.add(i + ":00");
+            if(dailySteps.getHourlySteps()[i]>maxHourlySteps)
+            {
+                maxHourlySteps = dailySteps.getHourlySteps()[i];
+            }
+        }
+        //For better user experience, I set the Y value is multiple of 10
+        if(maxHourlySteps==0){
+            barChart.getAxisLeft().setAxisMaxValue(100);
+        }else {
+            barChart.getAxisLeft().setAxisMaxValue(maxHourlySteps % 10 == 0 ? maxHourlySteps : ((maxHourlySteps + 9) / 10) * 10);
         }
         barChart.setScaleMinima((.14f), 1f);
         BarDataSet dataSet = new BarDataSet(yValue, "");
@@ -332,8 +342,10 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         lineChart.setScaleEnabled(false);
         lineChart.setPinchZoom(false);
         lineChart.getLegend().setEnabled(false);
+        TipsView tipsView = new TipsView(this,R.layout.custom_marker_view);
+        lineChart.setMarkerView(tipsView);
 
-        LimitLine limitLine = new LimitLine(7000f, "Goal");
+        LimitLine limitLine = new LimitLine(SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000), "Goal");
         limitLine.setLineWidth(1.5f);
         limitLine.setLineColor(R.color.grey);
         limitLine.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);
@@ -346,6 +358,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         leftAxis.setDrawLabels(false);
         leftAxis.addLimitLine(limitLine);
         leftAxis.setAxisMinValue(0.0f);
+        leftAxis.setAxisMaxValue(SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000)*1.2f);
 
         YAxis rightAxis = lineChart.getAxisRight();
         rightAxis.setEnabled(false);
