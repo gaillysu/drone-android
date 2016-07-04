@@ -57,7 +57,7 @@
                                 android:textColor="@android:color/black"
                                 android:textSize="20sp"/>
 
-                            <include layout="@layout/weekly_header_layout"/>
+                            <include layout="@layout/weekly_header_this_week_layout"/>
 
 
                             <com.github.mikephil.charting.charts.LineChart
@@ -102,6 +102,7 @@
 
                             <!--<include layout="@layout/monthly_header_layout"/>-->
                             <include layout="@layout/weekly_last_month_layout"/>
+
                             <com.github.mikephil.charting.charts.LineChart
                                 android:id="@+id/activity_activities_monthly_line"
                                 android:layout_width="fill_parent"

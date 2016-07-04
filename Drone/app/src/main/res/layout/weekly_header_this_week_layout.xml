@@ -18,7 +18,7 @@
             />
 
         <TextView
-            android:id="@+id/weekly_header_layout_calories_textview"
+            android:id="@+id/weekly_header_layout_calories_textview_this_week"
             style="@style/home_content_activity_last_title_content_style"
             android:text="0.00"/>
     </LinearLayout>
@@ -32,7 +32,7 @@
             />
 
         <TextView
-            android:id="@+id/weekly_header_layout_active_time_textview"
+            android:id="@+id/weekly_header_layout_active_time_textview_this_week"
             style="@style/home_content_activity_last_title_content_style"
             android:text="0"
             />
@@ -48,7 +48,7 @@
             />
 
         <TextView
-            android:id="@+id/weekly_header_layout_km_textview"
+            android:id="@+id/weekly_header_layout_km_textview_this_week"
             style="@style/home_content_activity_last_title_content_style"
             android:text="0"
             />
