@@ -86,56 +86,52 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     @Bind(R.id.activities_progress_middle_user_step_goal)
     TextView userStepGoalTextView;
 
-    @Bind(R.id.fragment_home_title_calories)
-    TextView caloriesTextView;
 
-    @Bind(R.id.fragment_home_title_km)
-    TextView kmTextView;
-
-    @Bind(R.id.fragment_home_title_active_time)
-    TextView activeTimeTextView;
 
     @Bind(R.id.activity_activities_hourly_bar)
     BarChart hourlyBarChart;
 
     @Bind(R.id.activity_activities_weekly_line)
     LineChart thisWeekLineChart;
-
     @Bind(R.id.activity_activities_last_weekly_line)
     LineChart lastWeekLineChart;
-
     @Bind(R.id.activity_activities_monthly_line)
     LineChart lastMonthLineChart;
-
     @Bind(R.id.activities_calendar_title_date_tv)
     TextView mTitleCalendarTextView;
 
     @Bind(R.id.activities_calendar_group)
     LinearLayout calendarGroup;
-
     @Bind(R.id.calendar_date_view)
     CalendarView calendar;
-
     @Bind(R.id.activities_activity_calendar_back_month)
     ImageButton backMonth;
-
     @Bind(R.id.activities_activity_title_next_month)
     ImageButton nextMonth;
 
-    @Bind(R.id.weekly_header_layout_calories_textview)
-    TextView textViewCalories;
-    @Bind(R.id.weekly_header_layout_active_time_textview)
-    TextView textViewActivityTime;
-    @Bind(R.id.weekly_header_layout_km_textview)
-    TextView textViewDistance;
 
+    //day
+    @Bind(R.id.fragment_home_title_calories)
+    TextView caloriesTextView;
+    @Bind(R.id.fragment_home_title_km)
+    TextView kmTextView;
+    @Bind(R.id.fragment_home_title_active_time)
+    TextView activeTimeTextView;
+    //this week
+    @Bind(R.id.weekly_header_layout_calories_textview_this_week)
+    TextView textViewCalories;
+    @Bind(R.id.weekly_header_layout_active_time_textview_this_week)
+    TextView textViewActivityTime;
+    @Bind(R.id.weekly_header_layout_km_textview_this_week)
+    TextView textViewDistance;
+    //last week
     @Bind(R.id.weekly_header_layout_calories_textview_last)
     TextView textViewCaloriesLast;
     @Bind(R.id.weekly_header_layout_active_time_textview_last)
     TextView textViewActivityTimeLast;
     @Bind(R.id.weekly_header_layout_km_textview_last)
     TextView textViewDistanceLast;
-
+    //last month
     @Bind(R.id.weekly_header_layout_calories_textview_last_month)
     TextView textViewCaloriesLastMonth;
     @Bind(R.id.weekly_header_layout_active_time_textview_last_month)
@@ -227,15 +223,14 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         for (int i = 0; i < dailySteps.getHourlySteps().length; i++) {
             yValue.add(new BarEntry(dailySteps.getHourlySteps()[i], i));
             xVals.add(i + ":00");
-            if(dailySteps.getHourlySteps()[i]>maxHourlySteps)
-            {
+            if (dailySteps.getHourlySteps()[i] > maxHourlySteps) {
                 maxHourlySteps = dailySteps.getHourlySteps()[i];
             }
         }
         //For better user experience, I set the Y value is multiple of 10
-        if(maxHourlySteps==0){
+        if (maxHourlySteps == 0) {
             barChart.getAxisLeft().setAxisMaxValue(100);
-        }else {
+        } else {
             barChart.getAxisLeft().setAxisMaxValue(maxHourlySteps % 10 == 0 ? maxHourlySteps : ((maxHourlySteps + 9) / 10) * 10);
         }
         barChart.setScaleMinima((.14f), 1f);
@@ -342,7 +337,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         lineChart.setScaleEnabled(false);
         lineChart.setPinchZoom(false);
         lineChart.getLegend().setEnabled(false);
-        TipsView tipsView = new TipsView(this,R.layout.custom_marker_view);
+        TipsView tipsView = new TipsView(this, R.layout.custom_marker_view);
         lineChart.setMarkerView(tipsView);
 
         LimitLine limitLine = new LimitLine(SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000), "Goal");
@@ -358,7 +353,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         leftAxis.setDrawLabels(false);
         leftAxis.addLimitLine(limitLine);
         leftAxis.setAxisMinValue(0.0f);
-        leftAxis.setAxisMaxValue(SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000)*1.2f);
+        leftAxis.setAxisMaxValue(SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000) * 1.2f);
 
         YAxis rightAxis = lineChart.getAxisRight();
         rightAxis.setEnabled(false);
@@ -396,21 +391,19 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         }
     }
 
-    private void getLastMonthData(ActivityTimeSlot thisweek) {
-        StepsDatabaseHelper databaseHelper = getModel().getStepsDatabaseHelper();
-
-        switch (thisweek) {
+    private void getLastMonthData(ActivityTimeSlot thisWeek) {
+        switch (thisWeek) {
             case THISWEEK:
-                List<Steps> list = databaseHelper.getThisWeekSteps(getModel().getUser().getUserID(), date);
-                setTitleData(list,ActivityTimeSlot.THISWEEK);
+                List<Steps> thisWeekSteps = stepsDatabaseHelper.getThisWeekSteps(getModel().getUser().getUserID(), date);
+                setTitleData(thisWeekSteps, ActivityTimeSlot.THISWEEK);
                 break;
             case LASTWEEK:
-                List<Steps> lastWeekList = databaseHelper.getLastWeekSteps(getModel().getUser().getUserID(), date);
-                setTitleData(lastWeekList,ActivityTimeSlot.LASTWEEK);
+                List<Steps> lastWeekList = stepsDatabaseHelper.getLastWeekSteps(getModel().getUser().getUserID(), date);
+                setTitleData(lastWeekList, ActivityTimeSlot.LASTWEEK);
                 break;
             case LASTMONTH:
-                List<Steps> lastMonthList = databaseHelper.getLastMonthSteps(getModel().getUser().getUserID(), date);
-                setTitleData(lastMonthList,ActivityTimeSlot.LASTMONTH);
+                List<Steps> lastMonthList = stepsDatabaseHelper.getLastMonthSteps(getModel().getUser().getUserID(), date);
+                setTitleData(lastMonthList, ActivityTimeSlot.LASTMONTH);
                 break;
             case DAFAULT:
                 findCalories(date);
@@ -420,7 +413,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     }
 
 
-    public void setTitleData(List<Steps> list,ActivityTimeSlot thisweek) {
+    public void setTitleData(List<Steps> list, ActivityTimeSlot thisweek) {
         int stepsAccount = 0;
         int activityTime = 0;
         for (int x = 0; x < list.size(); x++) {
@@ -434,24 +427,23 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         Double distance = stepsLength * stepsAccount / 1000;
         switch (thisweek) {
             case THISWEEK:
-            textViewActivityTime.setText(formatTimeActivity(activityTime));
-            textViewDistance.setText(df.format(distance) + "");
-            textViewCalories.setText(df.format((2.0 * getModel().getUser().getWeight() * 3.5) / 200 * activityTime) + "");
-            break;
+                textViewActivityTime.setText(formatTimeActivity(activityTime));
+                textViewDistance.setText(df.format(distance) + "");
+                textViewCalories.setText(df.format((2.0 * getModel().getUser().getWeight() * 3.5) / 200 * activityTime) + "");
+                break;
             case LASTWEEK:
                 textViewActivityTimeLast.setText(formatTimeActivity(activityTime));
                 textViewDistanceLast.setText(df.format(distance) + "");
                 textViewCaloriesLast.setText(df.format((2.0 * getModel().getUser().getWeight() * 3.5) / 200 * activityTime) + "");
-            break;
+                break;
             case LASTMONTH:
                 textViewActivityTimeLastMonth.setText(formatTimeActivity(activityTime));
                 textViewDistanceLastMonth.setText(df.format(distance) + "");
                 textViewCaloriesLastMonth.setText(df.format((2.0 * getModel().getUser().getWeight() * 3.5) / 200 * activityTime) + "");
-            break;
+                break;
 
         }
     }
-
 
 
     private void findCalories(Date date) {
@@ -459,26 +451,28 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         int timeActive = 0;
         int accountSteps = 0;
         Steps steps = null;
+        DecimalFormat df = new DecimalFormat("######0.00");
         List<Optional<Steps>> list = stepsDatabaseHelper.get(getModel().getUser().getUserID(), date);
         for (int i = 0; i < list.size(); i++) {
             steps = list.get(i).get();
+            if(steps != null) {
+                caloriesTextView.setText(df.format(calculationCalories(steps)));
+                kmTextView.setText(df.format(calculationdistance(steps)));
+                activeTimeTextView.setText(formatTimeActivity(steps.getDailyActiveTime()));
+            }
         }
 
-        DecimalFormat df = new DecimalFormat("######0.00");
-        caloriesTextView.setText(df.format(calculationCalories(steps)));
-        kmTextView.setText(df.format(calculationdistance(steps)));
-        activeTimeTextView.setText(formatTimeActivity(steps.getDailyActiveTime()));
     }
 
 
-    public double calculationCalories(Steps steps){
-      int activityTime =  steps.getDailyActiveTime();
-        return 2.0*getModel().getUser().getWeight()*3.5/200*activityTime;
+    public double calculationCalories(Steps steps) {
+        int activityTime = steps.getDailyActiveTime();
+        return 2.0 * getModel().getUser().getWeight() * 3.5 / 200 * activityTime;
     }
 
-    public double calculationdistance(Steps steps){
-         double stepsLength = getModel().getUser().getHeight()*0.45/100;
-        return stepsLength*steps.getDailySteps()/1000;
+    public double calculationdistance(Steps steps) {
+        double stepsLength = getModel().getUser().getHeight() * 0.45 / 100;
+        return stepsLength * steps.getDailySteps() / 1000;
     }
 
     private String formatTimeActivity(int timeActive) {
