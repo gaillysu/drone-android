@@ -95,21 +95,23 @@ public class SyncControllerImpl implements  SyncController{
     private final long BIG_SYNC_INTERVAL = 5*60*1000l; //5minutes
     private final long LITTLE_SYNC_INTERVAL = 10000l;   //10s
 
-    private void startAutoSyncTimer() {
+    private void startTimer(final boolean autoSync) {
         if(autoSyncTimer!=null)autoSyncTimer.cancel();
         autoSyncTimer = new Timer();
         autoSyncTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                //send little sync request
-                sendRequest(new GetStepsGoalRequest(application));
-                //send big sync request
-                if((new Date().getTime() - SpUtils.getLongMethod(application,CacheConstants.LAST_BIG_SYNC_TIMESTAMP,new Date().getTime()))>BIG_SYNC_INTERVAL)
+                if(autoSync)
                 {
-                    sendRequest(new GetActivityRequest(application));
+                    //send little sync request
+                    sendRequest(new GetStepsGoalRequest(application));
+                    //send big sync request
+                    if ((new Date().getTime() - SpUtils.getLongMethod(application, CacheConstants.LAST_BIG_SYNC_TIMESTAMP, new Date().getTime())) > BIG_SYNC_INTERVAL) {
+                        sendRequest(new GetActivityRequest(application));
+                    }
                 }
                 EventBus.getDefault().post(new Timer10sEvent());
-                startAutoSyncTimer();
+                startTimer(autoSync);
             }
         },LITTLE_SYNC_INTERVAL);
     }
@@ -133,6 +135,7 @@ public class SyncControllerImpl implements  SyncController{
             }
         };
         application.getApplicationContext().bindService(new Intent(application, LocalService.class), serviceConnection, Activity.BIND_AUTO_CREATE);
+        startTimer(false);
     }
 
     @Override
@@ -312,7 +315,7 @@ public class SyncControllerImpl implements  SyncController{
                     //here start ANCS service
                     application.getApplicationContext().bindService(new Intent(application, ListenerService.class), notificationServiceConnection, Activity.BIND_AUTO_CREATE);
                     //here start little sync timer
-                    startAutoSyncTimer();
+                    startTimer(true);
                 }
                 else if(GetActivityRequest.HEADER == packet.getHeader())
                 {

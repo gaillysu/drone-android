@@ -43,7 +43,9 @@ public class WorldClockActivity extends BaseActivity {
     TextView localCity;
     @Bind(R.id.world_clock_item_city_time)
     TextView localTime;
-    private ListViewCompat worldClockListView;
+    @Bind(R.id.world_clock_select_city_list)
+    ListViewCompat worldClockListView;
+
     public static String FORMAT_LONG = "yyyy-MM-dd HH:mm:ss";
 
     private List<WorldClock> listData;
@@ -64,9 +66,32 @@ public class WorldClockActivity extends BaseActivity {
             tintManager.setStatusBarTintResource(R.color.user_info_sex_bg);
         }
 
-        worldClockListView = (ListViewCompat) findViewById(R.id.world_clock_select_city_list);
         ButterKnife.bind(this);
-        SimpleDateFormat format = new SimpleDateFormat(FORMAT_LONG);
+        initLocalDateTime();
+        initData();
+    }
+
+    @Subscribe
+    public void onEvent(final Timer10sEvent event) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                //refresh local city time
+                initLocalDateTime();
+                worldClockAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    private void initLocalDateTime()
+    {
+        Date date = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        String currentTime = format.format(date);
+        String[] currentTimeArray = currentTime.split("-");
+        dateTv.setText(currentTimeArray[2] + " " + new SimpleDateFormat("MMM", Locale.US).format(date) + " " + currentTimeArray[0]);
+
+        format = new SimpleDateFormat(FORMAT_LONG);
         Calendar calendar = Calendar.getInstance();
         TimeZone timeZone = calendar.getTimeZone();
         String timeName = timeZone.getID().split("/")[1];
@@ -78,28 +103,9 @@ public class WorldClockActivity extends BaseActivity {
         } else {
             localTime.setText(localTimeStr[1].split(":")[0] + ":" + localTimeStr[1].split(":")[1] + " PM");
         }
-        worldClockDatabase = getModel().getWorldClockDatabaseHelper();
-        initData();
     }
-
-    @Subscribe
-    public void onEvent(final Timer10sEvent event) {
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                worldClockAdapter.notifyDataSetChanged();
-            }
-        });
-    }
-
     public void initData() {
-        Date date = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-        String currentTime = format.format(date);
-        String[] currentTimeArray = currentTime.split("-");
-
-        dateTv.setText(currentTimeArray[2] + " " + new SimpleDateFormat("MMM", Locale.US).format(date) + " " + currentTimeArray[0]);
-
+        worldClockDatabase = getModel().getWorldClockDatabaseHelper();
         listData = worldClockDatabase.getSelected();
         worldClockAdapter = new WorldClockAdapter(listData, this);
         worldClockListView.setAdapter(worldClockAdapter);
