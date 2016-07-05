@@ -1,7 +1,6 @@
 package com.dayton.drone.activity;
 
 
-import android.Manifest;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -9,11 +8,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -56,13 +53,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.liulishuo.magicprogresswidget.MagicProgressCircle;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
-import net.medcorp.library.ble.event.BLEBluetoothOffEvent;
-import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
-import net.medcorp.library.ble.event.BLESearchEvent;
 import net.medcorp.library.ble.util.Optional;
-import net.medcorp.library.permission.PermissionRequestDialogBuilder;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.text.DecimalFormat;
@@ -172,16 +164,12 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         backMonth.setVisibility(View.GONE);
         stepsDatabaseHelper = getModel().getStepsDatabaseHelper();
         date = new Date(System.currentTimeMillis());
-        findCalories(date);
-        setThisWeekData(date);
-        setLastWeekData(date);
-        setLastWeekData(date);
-        setLastMonthData(date);
 
         modifyChart(hourlyBarChart);
         modifyChart(thisWeekLineChart);
         modifyChart(lastWeekLineChart);
         modifyChart(lastMonthLineChart);
+        drawCalculateData(true);
         drawGraph(true);
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -194,6 +182,14 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         DAFAULT, THISWEEK, LASTWEEK, LASTMONTH;
     }
 
+    private void drawCalculateData(boolean all) {
+        setCurrentDayData(selectedDate);
+        setThisWeekData(selectedDate);
+        if(all) {
+            setLastWeekData(selectedDate);
+            setLastMonthData(selectedDate);
+        }
+    }
     private void drawGraph(boolean all) {
         StepsHandler stepsHandler = new StepsHandler(getModel().getStepsDatabaseHelper(), getModel().getUser());
         setDataInProgressBar(stepsHandler.getDailySteps(selectedDate));
@@ -386,7 +382,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     }
 
     private void setLastMonthData(Date date) {
-
         List<Steps> lastMonthList = stepsDatabaseHelper.getLastMonthSteps(getModel().getUser().getUserID(), date);
         setTitleData(lastMonthList, ActivityTimeSlot.LASTMONTH);
     }
@@ -431,22 +426,21 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     }
 
 
-    private void findCalories(Date date) {
-
-        int timeActive = 0;
-        int accountSteps = 0;
+    private void setCurrentDayData(Date date) {
         Steps steps = null;
         DecimalFormat df = new DecimalFormat("######0.00");
         List<Optional<Steps>> list = stepsDatabaseHelper.get(getModel().getUser().getUserID(), date);
-        for (int i = 0; i < list.size(); i++) {
-            steps = list.get(i).get();
-            if (steps != null) {
-                caloriesTextView.setText(df.format(calculationCalories(steps)));
-                kmTextView.setText(df.format(calculationdistance(steps)));
-                activeTimeTextView.setText(formatTimeActivity(steps.getDailyActiveTime()));
-            }
+        if(list.isEmpty())
+        {
+            steps = new Steps(0,date.getTime());
         }
-
+        else
+        {
+            steps = list.get(0).get();
+        }
+        caloriesTextView.setText(df.format(calculationCalories(steps)));
+        kmTextView.setText(df.format(calculationdistance(steps)));
+        activeTimeTextView.setText(formatTimeActivity(steps.getDailyActiveTime()));
     }
 
 
@@ -516,18 +510,12 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
                 calendarGroup.setVisibility(View.GONE);
                 mTitleCalendarTextView.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(downDate).split("-")[2] + " " +
                         new SimpleDateFormat("MMM", Locale.US).format(downDate));
+                drawCalculateData(true);
                 drawGraph(true);
-                findCalories(downDate);
                 List<Optional<Steps>> stepsList = getModel().getStepsDatabaseHelper().get(getModel().getUser().getUserID(), selectedDate);
                 if (stepsList.isEmpty()) {
                     getModel().getSyncActivityManager().downloadSteps(selectedDate);
                 }
-
-                findCalories(date);
-                setThisWeekData(date);
-                setLastWeekData(date);
-                setLastWeekData(date);
-                setLastMonthData(date);
             }
         });
     }
@@ -588,6 +576,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
+                drawCalculateData(false);
                 drawGraph(false);
             }
         });
@@ -602,6 +591,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
             @Override
             public void run() {
                 if (event.getStatus() == BigSyncEvent.BIG_SYNC_EVENT.STOPPED) {
+                    drawCalculateData(true);
                     drawGraph(true);
                 }
             }
@@ -619,6 +609,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
             @Override
             public void run() {
                 if (event.getStatus() == DownloadStepsEvent.DOWNLOAD_STEPS_EVENT.STOPPED) {
+                    drawCalculateData(true);
                     drawGraph(true);
                 }
             }
