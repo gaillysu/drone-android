@@ -564,7 +564,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.connect();
-        EventBus.getDefault().register(this);
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         AppIndex.AppIndexApi.start(client, getIndexApiAction());
@@ -572,7 +571,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
 
     @Override
     public void onStop() {
-        EventBus.getDefault().unregister(this);
         super.onStop();
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -627,34 +625,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         });
     }
 
-    @Subscribe
-    public void onEvent(BLEBluetoothOffEvent event) {
-        showStateString(R.string.in_app_notification_bluetooth_disabled);
-    }
-
-    @Subscribe
-    public void onEvent(BLEConnectionStateChangedEvent event) {
-        if (event.isConnected()) {
-            showStateString(R.string.in_app_notification_found_watch);
-        } else {
-            showStateString(R.string.in_app_notification_watch_disconnected);
-        }
-    }
-
-    @Subscribe
-    public void onEvent(final BLESearchEvent event) {
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                if (event.getSearchEvent() == BLESearchEvent.SEARCH_EVENT.ON_SEARCHING) {
-                    PermissionRequestDialogBuilder builder = new PermissionRequestDialogBuilder(ActivitiesActivity.this);
-                    builder.addPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
-                    builder.askForPermission(ActivitiesActivity.this, 1);
-                    showStateString(R.string.in_app_notification_searching);
-                }
-            }
-        });
-    }
 
     @Override
     public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
@@ -663,14 +633,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
 
     @Override
     public void onNothingSelected() {
-    }
-
-    private void showStateString(int resId) {
-        Snackbar snackbar = Snackbar.make(((ViewGroup) findViewById(android.R.id.content)).getChildAt(0), "", Snackbar.LENGTH_LONG);
-        TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-        tv.setTextColor(Color.WHITE);
-        tv.setText(getString(resId));
-        snackbar.show();
     }
 
     /**

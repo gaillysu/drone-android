@@ -65,7 +65,6 @@ public class ShowWatchActivity extends BaseActivity  {
             tintManager.setStatusBarTintResource(R.color.user_info_gender_select_text_color);
         }
         ButterKnife.bind(this);
-        EventBus.getDefault().register(this);
         Intent intent = getIntent();
         int watchIconId = intent.getIntExtra("watchIconId", -1);
         icon.setImageResource(watchIconId);
@@ -79,13 +78,6 @@ public class ShowWatchActivity extends BaseActivity  {
             finish();
         }
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
-    }
-
     @OnClick(R.id.retry_connecting)
     public void reConnect(){
         searchCount = 0;

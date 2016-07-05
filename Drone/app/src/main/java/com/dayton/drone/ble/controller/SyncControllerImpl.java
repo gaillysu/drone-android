@@ -15,7 +15,6 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.dayton.drone.application.ApplicationModel;
 import com.dayton.drone.ble.datasource.GattAttributesDataSourceImpl;
@@ -39,7 +38,6 @@ import com.dayton.drone.ble.model.request.sync.GetActivityRequest;
 import com.dayton.drone.ble.model.request.sync.GetStepsGoalRequest;
 import com.dayton.drone.ble.model.request.worldclock.SetWorldClockRequest;
 import com.dayton.drone.ble.util.Constants;
-import com.dayton.drone.event.BLENoSupportPeripheryModeEvent;
 import com.dayton.drone.event.BLEPairStatusChangedEvent;
 import com.dayton.drone.event.BatteryStatusChangedEvent;
 import com.dayton.drone.event.BigSyncEvent;
@@ -49,7 +47,7 @@ import com.dayton.drone.event.LittleSyncEvent;
 import com.dayton.drone.event.LowMemoryEvent;
 import com.dayton.drone.event.ProfileChangedEvent;
 import com.dayton.drone.event.StepsGoalChangedEvent;
-import com.dayton.drone.event.TimerEvent;
+import com.dayton.drone.event.Timer10sEvent;
 import com.dayton.drone.event.WorldClockChangedEvent;
 import com.dayton.drone.model.DailySteps;
 import com.dayton.drone.model.Steps;
@@ -59,17 +57,10 @@ import com.dayton.drone.utils.Common;
 import com.dayton.drone.utils.SpUtils;
 import com.dayton.drone.utils.StepsHandler;
 
-import net.medcorp.library.android.notification.activity.Utils;
-import net.medcorp.library.android.notificationsdk.gatt.GattServer;
 import net.medcorp.library.android.notificationsdk.listener.ListenerService;
 import net.medcorp.library.ble.controller.ConnectionController;
 import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
 import net.medcorp.library.ble.event.BLEResponseDataEvent;
-import net.medcorp.library.ble.event.BLEServerConnectionStateChangedEvent;
-import net.medcorp.library.ble.event.BLEServerNotificationSentEvent;
-import net.medcorp.library.ble.event.BLEServerReadRequestEvent;
-import net.medcorp.library.ble.event.BLEServerServiceAddedEvent;
-import net.medcorp.library.ble.event.BLEServerWriteRequestEvent;
 import net.medcorp.library.ble.model.request.BLERequestData;
 import net.medcorp.library.ble.model.response.BLEResponseData;
 import net.medcorp.library.ble.model.response.MEDRawData;
@@ -101,6 +92,8 @@ public class SyncControllerImpl implements  SyncController{
     private Timer autoSyncTimer = null;
     private Optional<Date> theBigSyncStartDate = new Optional<>();
     private int baseSteps = 0;
+    private final long BIG_SYNC_INTERVAL = 5*60*1000l; //5minutes
+    private final long LITTLE_SYNC_INTERVAL = 10000l;   //10s
 
     private void startAutoSyncTimer() {
         if(autoSyncTimer!=null)autoSyncTimer.cancel();
@@ -108,11 +101,17 @@ public class SyncControllerImpl implements  SyncController{
         autoSyncTimer.schedule(new TimerTask() {
             @Override
             public void run() {
+                //send little sync request
                 sendRequest(new GetStepsGoalRequest(application));
-                EventBus.getDefault().post(new TimerEvent());
+                //send big sync request
+                if((new Date().getTime() - SpUtils.getLongMethod(application,CacheConstants.LAST_BIG_SYNC_TIMESTAMP,new Date().getTime()))>BIG_SYNC_INTERVAL)
+                {
+                    sendRequest(new GetActivityRequest(application));
+                }
+                EventBus.getDefault().post(new Timer10sEvent());
                 startAutoSyncTimer();
             }
-        },10000);
+        },LITTLE_SYNC_INTERVAL);
     }
 
     public  SyncControllerImpl(ApplicationModel application){
@@ -336,6 +335,7 @@ public class SyncControllerImpl implements  SyncController{
                     else
                     {
                         EventBus.getDefault().post(new BigSyncEvent(theBigSyncStartDate.get(), BigSyncEvent.BIG_SYNC_EVENT.STOPPED));
+                        SpUtils.putLongMethod(application, CacheConstants.LAST_BIG_SYNC_TIMESTAMP, new Date().getTime());
                     }
                 }
                 else if(GetStepsGoalRequest.HEADER == packet.getHeader())
@@ -391,6 +391,8 @@ public class SyncControllerImpl implements  SyncController{
                 @Override
                 public void run() {
                     packetsBuffer.clear();
+                    //reset last big sync timestamp every got connected.
+                    SpUtils.putLongMethod(application, CacheConstants.LAST_BIG_SYNC_TIMESTAMP, new Date().getTime());
                     sendRequest(new GetSystemStatus(application));
                 }
             }, 2000);
@@ -433,56 +435,6 @@ public class SyncControllerImpl implements  SyncController{
         sendRequest(new SetUserProfileRequest(application,profileChangedEvent.getUser()));
     }
 
-    @Subscribe
-    public void onEvent(final BLEServerServiceAddedEvent event) {
-        Log.i(TAG,"BLE server got service added: "+event.getServiceUUID()+",status: "+event.getStatus());
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(application,"BLE server got service added: "+event.getServiceUUID()+",status: "+event.getStatus(),Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-    @Subscribe
-    public void onEvent(final BLEServerConnectionStateChangedEvent event) {
-        Log.i(TAG,"BLE server connection status: "+event.isStatus());
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(application,"Ble server connection got "+ event.isStatus(),Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-    @Subscribe
-    public void onEvent(final BLEServerReadRequestEvent event) {
-        Log.i(TAG,"BLE server got read request");
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(application,"BLE server got read request",Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-    @Subscribe
-    public void onEvent(final BLEServerWriteRequestEvent event) {
-        Log.i(TAG,"BLE server got write request: " + event.getAddress());
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(application,"BLE server got write request: " + event.getAddress(),Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-    @Subscribe
-    public void onEvent(final BLEServerNotificationSentEvent event) {
-        Log.i(TAG,"BLE server notification got sent");
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(application,"BLE server notification got sent",Toast.LENGTH_LONG).show();
-            }
-        });
-    }
     @Subscribe
     public void onEvent(final DownloadStepsEvent event) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {

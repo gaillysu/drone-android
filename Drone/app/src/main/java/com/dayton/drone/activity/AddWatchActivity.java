@@ -194,17 +194,6 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
     public void onPageScrollStateChanged(int state) {
 
     }
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        EventBus.getDefault().unregister(this);
-        super.onStop();
-    }
     private String formatFirmwareVersion(String bleVersion,String mcuVersion)
     {
         return bleVersion+"/"+mcuVersion;
