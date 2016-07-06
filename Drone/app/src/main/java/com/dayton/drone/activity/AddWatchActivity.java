@@ -26,7 +26,6 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
 import net.medcorp.library.ble.event.BLEFirmwareVersionReceivedEvent;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
@@ -49,6 +48,8 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
 
     @Bind(R.id.activity_addwatch_nowatch_layout)
     LinearLayout noWatchLayout;
+    @Bind(R.id.add_watch_activity_page)
+    LinearLayout addWarchPage;
 
     private TextView batteryStateTextView;
     private TextView versionTextView;
@@ -87,7 +88,7 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
 
         List<View> viewList = new ArrayList<>();
         List<Watches>  watchesList = getModel().getWatchesDatabaseHelper().getAll(getModel().getUser().getUserID());
-            if (watchesList.isEmpty()) {
+            if (!watchesList.isEmpty()) {
                 watchesList.add(new Watches());
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -95,8 +96,6 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
                         noWatchLayout.setVisibility(View.GONE);
                     }
                 }, 1500);
-            } else {
-                noWatchLayout.setVisibility(View.GONE);
             }
 
         for(int i=0;i<watchesList.size();i++) {

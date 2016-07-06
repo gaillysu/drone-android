@@ -116,5 +116,4 @@ public class ForgetPasswordActivity extends BaseActivity {
         startActivity(WelcomeActivity.class);
         finish();
     }
-
 }

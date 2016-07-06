@@ -138,7 +138,7 @@
 
     <string name="register_table_email">Email</string>
     <string name="register_table_password">Password</string>
-    <string name="add_watch_watches">Watches</string>
+    <string name="add_watch_watches">Watch</string>
     <string name="activities_last_week">LAST WEEK</string>
     <string name="activities_this_week">THIS WEEK</string>
     <string name="activities_prompt_use_data_updated_time">Historical data including calories,active time and KM will be updated every 5 minutes.</string>
