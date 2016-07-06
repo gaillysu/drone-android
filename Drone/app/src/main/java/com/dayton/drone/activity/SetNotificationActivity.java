@@ -3,6 +3,7 @@ package com.dayton.drone.activity;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -11,7 +12,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.ContactsContract;
+import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
@@ -248,6 +251,10 @@ public class SetNotificationActivity extends BaseActivity {
         }
         notification.setContactsList(jsonObject.toString());
         getModel().getNotificationDatabaseHelper().update(notification);
+        //notify med-library ListenerService the white list has got changed.
+        Intent intent = new Intent("net.medcorp.library.android.notificationserver.config.ACTION_CONTACTS_CHANGED");
+        intent.putExtra("net.medcorp.library.android.notificationserver.listener.EXTRA_NOTIFICATION_CONTACTS_LIST",(Parcelable)jsonObject);
+        LocalBroadcastManager.getInstance(getModel()).sendBroadcast(intent);
         return true;
     }
 }

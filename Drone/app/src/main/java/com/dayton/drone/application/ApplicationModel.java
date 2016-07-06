@@ -122,8 +122,8 @@ public class ApplicationModel extends Application {
         configEditor.setOverrideFallback(OverrideType.CATEGORY, Integer.toString(255));
         final HashSet<String> set = new HashSet<String>();
         set.addAll(ConfigHelper.getCallPackages((Context)this));
-        configEditor.setFilterSet(FilterType.PACKAGE, set);
-        configEditor.setFilterMode(FilterType.PACKAGE, FilterMode.BLACKLIST);
+        configEditor.setFilterSet(FilterType.CONTACT, set);
+        configEditor.setFilterMode(FilterType.CONTACT, FilterMode.WHITELIST);
         configEditor.apply();
     }
 }
