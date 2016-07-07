@@ -38,7 +38,7 @@ import butterknife.OnClick;
 /**
  * Created by med on 16/5/17.
  */
-public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageChangeListener{
+public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
 
     @Bind(R.id.activity_add_watch_viewpager)
     ViewPager addwatchViewPager;
@@ -58,7 +58,7 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
     private List<String> firmwareVersion = new ArrayList<>();
 
     @Override
-    protected void onCreate( Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addwatch);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -69,105 +69,109 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
         }
 
         ButterKnife.bind(this);
-//        List<String> listMenu = new ArrayList<String>();
-//        listMenu.add("Contacts Notifications");
-//        listMenu.add("Forget this watch");
-//        addwatchMenuListview.setAdapter(new AddWatchMenuAdapter(listMenu,this));
-//        addwatchMenuListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                if(position==0) {
-//                    startActivity(SetNotificationActivity.class);
-//                }
-//                else if(position==1) {
-//                    getModel().getSyncController().forgetDevice();
-//                }
-//            }
-//        });
+        //        List<String> listMenu = new ArrayList<String>();
+        //        listMenu.add("Contacts Notifications");
+        //        listMenu.add("Forget this watch");
+        //        addwatchMenuListview.setAdapter(new AddWatchMenuAdapter(listMenu,this));
+        //        addwatchMenuListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        //            @Override
+        //            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        //                if(position==0) {
+        //                    startActivity(SetNotificationActivity.class);
+        //                }
+        //                else if(position==1) {
+        //                    getModel().getSyncController().forgetDevice();
+        //                }
+        //            }
+        //        });
 
 
         List<View> viewList = new ArrayList<>();
-        List<Watches>  watchesList = getModel().getWatchesDatabaseHelper().getAll(getModel().getUser().getUserID());
-            if (!watchesList.isEmpty()) {
-                watchesList.add(new Watches());
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        noWatchLayout.setVisibility(View.GONE);
-                    }
-                }, 1500);
-            }
+        List<Watches> watchesList = getModel().getWatchesDatabaseHelper().getAll(getModel().getUser().getUserID());
 
-        for(int i=0;i<watchesList.size();i++) {
+        //            if (!watchesList.isEmpty()) {
+        if (!getModel().getSyncController().isConnected()) {
+
+            noWatchLayout.setVisibility(View.VISIBLE);
+
+        } else {
+            watchesList.add(new Watches());
+            noWatchLayout.setVisibility(View.VISIBLE);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    noWatchLayout.setVisibility(View.GONE);
+                }
+            }, 1500);
+        }
+
+        for (int i = 0; i < watchesList.size(); i++) {
             LinearLayout linearLayout = (LinearLayout) View.inflate(this, R.layout.activity_addwatch_watchinfo_layout, null);
             viewList.add(linearLayout);
-            batteryStateTextView = (TextView)linearLayout.findViewById(R.id.activity_addwatch_watchinfo_layout_batterystate_textview);
-            versionTextView = (TextView)linearLayout.findViewById(R.id.activity_addwatch_watchinfo_layout_version_textview);
-            connectionStateTextView = (TextView)linearLayout.findViewById(R.id.activity_addwatch_watchinfo_layout_connectionstate_textview);
-            if(getModel().getSyncController().isConnected())
-            {
+            batteryStateTextView = (TextView) linearLayout.findViewById(R.id.activity_addwatch_watchinfo_layout_batterystate_textview);
+            versionTextView = (TextView) linearLayout.findViewById(R.id.activity_addwatch_watchinfo_layout_version_textview);
+            connectionStateTextView = (TextView) linearLayout.findViewById(R.id.activity_addwatch_watchinfo_layout_connectionstate_textview);
+            if (getModel().getSyncController().isConnected()) {
                 connectionStateTextView.setText(R.string.add_watch_connected);
-                versionTextView.setText(formatFirmwareVersion(getModel().getSyncController().getFirmwareVersion(),getModel().getSyncController().getSoftwareVersion()));
+                versionTextView.setText(formatFirmwareVersion(getModel().getSyncController().getFirmwareVersion(), getModel().getSyncController().getSoftwareVersion()));
                 getModel().getSyncController().getBattery();
             }
             ImageView imageView = new ImageView(this);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams
                     (ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            if(i==0) {
+            if (i == 0) {
                 imageView.setBackgroundResource(R.drawable.select_point);
-            }
-            else {
+            } else {
                 imageView.setBackgroundResource(R.drawable.uncheck_point_shape);
                 lp.leftMargin = 15;
             }
-            if(watchesList.size()>1) {
+            if (watchesList.size() > 1) {
                 viewPagerGroupLayout.addView(imageView, lp);
             }
 
         }
         addwatchViewPager.setAdapter(new AddWatchViewPagerAdapter(viewList));
         addwatchViewPager.addOnPageChangeListener(this);
+
     }
 
     @OnClick(R.id.activity_add_watch_back_imagebutton)
-    public void back()
-    {
+    public void back() {
         startActivity(HomeActivity.class);
         finish();
     }
 
     @OnClick(R.id.activity_add_watch_contacts_notifications)
-    public void ContactsNotifications(){
+    public void ContactsNotifications() {
         startActivity(SetNotificationActivity.class);
     }
 
     @OnClick(R.id.activity_add_watch_forget_watch)
-    public void forgetNotification(){
+    public void forgetNotification() {
         getModel().getSyncController().forgetDevice();
-        Intent intent  = new Intent(this ,HomeActivity.class);
-        intent.putExtra("logOut",false);
+        Intent intent = new Intent(this, HomeActivity.class);
+        intent.putExtra("logOut", false);
         startActivity(intent);
         finish();
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK){
-            Intent intent  = new Intent(this ,HomeActivity.class);
-            intent.putExtra("logOut",false);
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent intent = new Intent(this, HomeActivity.class);
+            intent.putExtra("logOut", false);
             startActivity(intent);
             finish();
-         return true;
+            return true;
         }
         return super.onKeyDown(keyCode, event);
     }
 
     @OnClick(R.id.activity_addwatch_add_imagebutton)
-    public void addWatch()
-    {
-        Intent intent  = new Intent(this ,SelectDeviceActivity.class);
+    public void addWatch() {
+        Intent intent = new Intent(this, SelectDeviceActivity.class);
         int type = 5;
-        intent.putExtra("type",type);
+        intent.putExtra("type", type);
         startActivity(intent);
         finish();
     }
@@ -179,11 +183,10 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
 
     @Override
     public void onPageSelected(int position) {
-        for(int i=0;i<viewPagerGroupLayout.getChildCount();i++) {
-            if(i==position) {
+        for (int i = 0; i < viewPagerGroupLayout.getChildCount(); i++) {
+            if (i == position) {
                 viewPagerGroupLayout.getChildAt(i).setBackgroundResource(R.drawable.select_point);
-            }
-            else {
+            } else {
                 viewPagerGroupLayout.getChildAt(i).setBackgroundResource(R.drawable.uncheck_point_shape);
             }
         }
@@ -193,22 +196,21 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
     public void onPageScrollStateChanged(int state) {
 
     }
-    private String formatFirmwareVersion(String bleVersion,String mcuVersion)
-    {
-        return bleVersion+"/"+mcuVersion;
+
+    private String formatFirmwareVersion(String bleVersion, String mcuVersion) {
+        return bleVersion + "/" + mcuVersion;
     }
+
     @Subscribe
     public void onEvent(final BLEConnectionStateChangedEvent stateChangedEvent) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                if(stateChangedEvent.isConnected()) {
+                if (stateChangedEvent.isConnected()) {
 
                     connectionStateTextView.setText(R.string.add_watch_connected);
                     getModel().getSyncController().getBattery();
-                }
-                else
-                {
+                } else {
                     connectionStateTextView.setText(R.string.add_watch_disconnected);
                 }
             }
@@ -220,17 +222,14 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                if(bleFirmwareVersionReceivedEvent.getFirmwareTypes() == net.medcorp.library.ble.util.Constants.DfuFirmwareTypes.BLUETOOTH)
-                {
-                    firmwareVersion.add(0,bleFirmwareVersionReceivedEvent.getVersion());
+                if (bleFirmwareVersionReceivedEvent.getFirmwareTypes() == net.medcorp.library.ble.util.Constants.DfuFirmwareTypes.BLUETOOTH) {
+                    firmwareVersion.add(0, bleFirmwareVersionReceivedEvent.getVersion());
                 }
-                if(bleFirmwareVersionReceivedEvent.getFirmwareTypes() == net.medcorp.library.ble.util.Constants.DfuFirmwareTypes.MCU)
-                {
+                if (bleFirmwareVersionReceivedEvent.getFirmwareTypes() == net.medcorp.library.ble.util.Constants.DfuFirmwareTypes.MCU) {
                     firmwareVersion.add(bleFirmwareVersionReceivedEvent.getVersion());
                 }
-                if(firmwareVersion.size()==2)
-                {
-                    versionTextView.setText(formatFirmwareVersion(firmwareVersion.get(0),firmwareVersion.get(1)));
+                if (firmwareVersion.size() == 2) {
+                    versionTextView.setText(formatFirmwareVersion(firmwareVersion.get(0), firmwareVersion.get(1)));
                     firmwareVersion.clear();
                 }
             }
@@ -242,16 +241,13 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                if(batteryStatusChangedEvent.getState()== Constants.BatteryStatus.InUse.rawValue()) {
+                if (batteryStatusChangedEvent.getState() == Constants.BatteryStatus.InUse.rawValue()) {
                     batteryStateTextView.setText(batteryStatusChangedEvent.getLevel() + "%");
-                }
-                else if(batteryStatusChangedEvent.getState()==Constants.BatteryStatus.Charging.rawValue()){
+                } else if (batteryStatusChangedEvent.getState() == Constants.BatteryStatus.Charging.rawValue()) {
                     batteryStateTextView.setText(getString(R.string.add_watch_charging) + "," + batteryStatusChangedEvent.getLevel() + "%");
-                }
-                else if(batteryStatusChangedEvent.getState()==Constants.BatteryStatus.Damaged.rawValue()){
+                } else if (batteryStatusChangedEvent.getState() == Constants.BatteryStatus.Damaged.rawValue()) {
                     batteryStateTextView.setText(R.string.add_watch_damaged);
-                }
-                else if(batteryStatusChangedEvent.getState()==Constants.BatteryStatus.Calculating.rawValue()){
+                } else if (batteryStatusChangedEvent.getState() == Constants.BatteryStatus.Calculating.rawValue()) {
                     batteryStateTextView.setText(R.string.add_watch_calculating);
                 }
             }
@@ -259,7 +255,7 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
     }
 
     @OnClick(R.id.activity_add_watch_open_shop)
-    public void openShop(){
+    public void openShop() {
         Intent intent = new Intent();
         intent.setAction("android.intent.action.VIEW");
         String path = getResources().getString(R.string.add_watch_activity_shop_address_path);
