@@ -183,7 +183,7 @@ public class SetNotificationActivity extends BaseActivity {
             {
                 Contact contact = new Contact();
                 contact.setName(contactName);
-                contact.setNumber(contactNumber);
+                contact.setNumber(contactNumber.trim());
                 if(!updateNotification(APPLICATION,contactsList,contact,true))
                 {
                     Toast.makeText(SetNotificationActivity.this,"Name has got existed",Toast.LENGTH_LONG).show();
@@ -251,10 +251,8 @@ public class SetNotificationActivity extends BaseActivity {
         }
         notification.setContactsList(jsonObject.toString());
         getModel().getNotificationDatabaseHelper().update(notification);
-        //notify med-library ListenerService the white list has got changed.
-        Intent intent = new Intent("net.medcorp.library.android.notificationserver.config.ACTION_CONTACTS_CHANGED");
-        intent.putExtra("net.medcorp.library.android.notificationserver.listener.EXTRA_NOTIFICATION_CONTACTS_LIST",(Parcelable)jsonObject);
-        LocalBroadcastManager.getInstance(getModel()).sendBroadcast(intent);
+        //use local database to save the contact whitelist, and refresh med-library contact filter
+        getModel().initializeNotifications();
         return true;
     }
 }

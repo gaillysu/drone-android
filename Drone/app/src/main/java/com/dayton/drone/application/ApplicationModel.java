@@ -11,8 +11,12 @@ import com.dayton.drone.database.entry.StepsDatabaseHelper;
 import com.dayton.drone.database.entry.UserDatabaseHelper;
 import com.dayton.drone.database.entry.WatchesDatabaseHelper;
 import com.dayton.drone.database.entry.WorldClockDatabaseHelper;
+import com.dayton.drone.model.Contact;
+import com.dayton.drone.model.Notification;
 import com.dayton.drone.model.User;
 import com.dayton.drone.network.RetrofitManager;
+import com.google.gson.Gson;
+
 import net.medcorp.library.android.notificationsdk.config.ConfigEditor;
 import net.medcorp.library.android.notificationsdk.config.ConfigHelper;
 import net.medcorp.library.android.notificationsdk.config.mode.FilterMode;
@@ -20,9 +24,18 @@ import net.medcorp.library.android.notificationsdk.config.mode.OverrideMode;
 import net.medcorp.library.android.notificationsdk.config.type.FilterType;
 import net.medcorp.library.android.notificationsdk.config.type.OverrideType;
 import net.medcorp.library.ble.util.Optional;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+
 /**
  * Created by karl-john on 18/3/16.
  */
@@ -91,7 +104,7 @@ public class ApplicationModel extends Application {
     }
 
 
-    private void initializeNotifications(){
+    public void initializeNotifications(){
         final ConfigEditor configEditor = new ConfigEditor((Context)this);
         final HashMap<String, String> hashMap = new HashMap<String, String>();
         final Iterator<String> iterator = ConfigHelper.getCallPackages((Context)this).iterator();
@@ -121,7 +134,22 @@ public class ApplicationModel extends Application {
         configEditor.setOverrideMap(OverrideType.CATEGORY, hashMap);
         configEditor.setOverrideFallback(OverrideType.CATEGORY, Integer.toString(255));
         final HashSet<String> set = new HashSet<String>();
-        set.addAll(ConfigHelper.getCallPackages((Context)this));
+        List<Notification> notifications = getNotificationDatabaseHelper().get("unknown");
+        List<String> contactsList = new ArrayList<>();
+        if(!notifications.isEmpty()) {
+            try {
+                JSONArray jsonArray = new JSONObject(notifications.get(0).getContactsList()).getJSONArray("contacts");
+                for(int i=0;i<jsonArray.length();i++)
+                {
+                    Contact contact = new Gson().fromJson(jsonArray.getJSONObject(i).toString(),Contact.class);
+                    contactsList.add(contact.getName());
+                    contactsList.addAll(Arrays.asList(contact.getNumber().split(";")));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        set.addAll(contactsList);
         configEditor.setFilterSet(FilterType.CONTACT, set);
         configEditor.setFilterMode(FilterType.CONTACT, FilterMode.WHITELIST);
         configEditor.apply();
