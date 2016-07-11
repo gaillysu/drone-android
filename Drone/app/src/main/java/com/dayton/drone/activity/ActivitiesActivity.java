@@ -139,7 +139,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
-    private ActivityTimeSlot dataType;
     private Date date;
 
     @Override
