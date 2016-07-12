@@ -25,8 +25,9 @@
 
                 <ImageButton
                     android:id="@+id/choose_activity_cancel_bt"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="10dp"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="10dp"
                     android:background="@android:color/transparent"
@@ -52,6 +53,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:focusableInTouchMode="true"
+                android:focusable="true"
                 android:visibility="gone"
                 >
 

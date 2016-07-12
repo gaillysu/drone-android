@@ -83,8 +83,7 @@ public class WorldClockActivity extends BaseActivity {
         });
     }
 
-    private void initLocalDateTime()
-    {
+    private void initLocalDateTime() {
         Date date = new Date();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         String currentTime = format.format(date);
@@ -104,6 +103,7 @@ public class WorldClockActivity extends BaseActivity {
             localTime.setText(localTimeStr[1].split(":")[0] + ":" + localTimeStr[1].split(":")[1] + " PM");
         }
     }
+
     public void initData() {
         worldClockDatabase = getModel().getWorldClockDatabaseHelper();
         listData = worldClockDatabase.getSelected();
@@ -130,9 +130,8 @@ public class WorldClockActivity extends BaseActivity {
 
     @OnClick(R.id.world_clock_add_city_iv)
     public void addCityClick() {
-        Intent intent = new Intent(this, ChooseCityActivity.class);
+        Intent intent = new Intent(WorldClockActivity.this, ChooseCityActivity.class);
         startActivityForResult(intent, requestCode);
-
     }
 
     public void setListAdapter() {

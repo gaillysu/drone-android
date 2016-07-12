@@ -1,5 +1,6 @@
 package com.dayton.drone.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -59,7 +61,7 @@ public class ChooseCityActivity extends BaseActivity {
     private PinyinComparator pinyinComparator;
     private List<SortModel> searchResult;
     private MySearchResultAdapter searchAdapter;
-
+    private  InputMethodManager imm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,6 +117,9 @@ public class ChooseCityActivity extends BaseActivity {
 
 
     private void back(boolean flag) {
+        if(imm != null){
+            imm.hideSoftInputFromWindow(userSearchCityEdit.getWindowToken(),0);
+        }
         Intent intent = getIntent();
         intent.putExtra("isChooseFlag", flag);
         setResult(0, intent);
@@ -181,7 +186,11 @@ public class ChooseCityActivity extends BaseActivity {
         editSearchContent.setVisibility(View.VISIBLE);
         showSearchResultListView.setVisibility(View.VISIBLE);
         searchResult = new ArrayList<>();
+        userSearchCityEdit.requestFocus();
+        //打开软键盘
 
+              imm  = (InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
         userSearchCityEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
             @Override
