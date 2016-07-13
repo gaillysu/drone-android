@@ -30,6 +30,7 @@ import com.dayton.drone.network.request.UpdateUserRequest;
 import com.dayton.drone.network.request.model.UpdateUser;
 import com.dayton.drone.network.response.model.UpdateUserModel;
 import com.dayton.drone.utils.CacheConstants;
+import com.dayton.drone.utils.CheckEmailFormat;
 import com.dayton.drone.utils.SpUtils;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -58,7 +59,7 @@ public class ProfileActivity extends BaseActivity {
     @Bind(R.id.profile_activity_user_fist_name)
     EditText userFirstName;
     @Bind(R.id.profile_activity_user_email_account)
-    TextView emailAccount;
+    EditText emailAccount;
     @Bind(R.id.profile_activity_user_height)
     TextView userHeight;
     @Bind(R.id.profile_activity_user_weight)
@@ -134,10 +135,13 @@ public class ProfileActivity extends BaseActivity {
     public void editUserLastNameOnClick() {
         accountName.requestFocus();
         accountName.setText("");
+        CheckEmailFormat.openInputMethod(ProfileActivity.this);
         accountName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (!b) {
+                    accountName.clearFocus();
+                    CheckEmailFormat.closeInputMethod(accountName);
                     String lastName = accountName.getText().toString();
                     if (!TextUtils.isEmpty(lastName)) {
 
@@ -158,14 +162,45 @@ public class ProfileActivity extends BaseActivity {
         });
     }
 
+    @OnClick(R.id.profile_activity_edit_email_ib)
+    public void editUserEmailClick(){
+        emailAccount.requestFocus();
+        emailAccount.setText("");
+        CheckEmailFormat.openInputMethod(ProfileActivity.this);
+        emailAccount.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus){
+                    emailAccount.clearFocus();
+                    CheckEmailFormat.closeInputMethod(emailAccount);
+                    String userEmail = emailAccount.getText().toString();
+                    if(!TextUtils.isEmpty(userEmail)){
+                        if(CheckEmailFormat.checkEmail(userEmail)) {
+                            mUser.setUserEmail(userEmail);
+                            emailAccount.setText(userEmail);
+                        }else{
+                            emailAccount.setError(getString(R.string.register_email_format_error));
+                        }
+                    }else{
+                        emailAccount.setText(mUser.getUserEmail());
+                    }
+                }
+            }
+        });
+    }
+
+
     @OnClick(R.id.profile_activity_edit_fist_name_ib)
     public void editUserFirstName() {
         userFirstName.requestFocus();
         userFirstName.setText("");
+        CheckEmailFormat.openInputMethod(ProfileActivity.this);
         userFirstName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean isFocus) {
                 if (!isFocus) {
+                    userFirstName.clearFocus();
+                    CheckEmailFormat.closeInputMethod(userFirstName);
                     String firstName = userFirstName.getText().toString();
                     if (!TextUtils.isEmpty(firstName)) {
                         mUser.setFirstName(firstName);
@@ -184,16 +219,14 @@ public class ProfileActivity extends BaseActivity {
         });
     }
 
-    @OnClick(R.id.profile_activity_edit_email_ib)
-    public void editUserEmailClick() {
-        Toast.makeText(this, getString(R.string.profile_edit_email_prompt), Toast.LENGTH_SHORT).show();
-    }
-
     @OnClick(R.id.profile_activity_edit_user_height)
     public void editUserHeight() {
         userHeight.setText("");
         viewType = 2;
-
+        stepGoal.clearFocus();
+        emailAccount.clearFocus();
+        userFirstName.clearFocus();
+        accountName.clearFocus();
         DatePickerPopWin pickerPopWin2 = new DatePickerPopWin.Builder(ProfileActivity.this,
                 new DatePickerPopWin.OnDatePickedListener() {
                     @Override
@@ -221,6 +254,11 @@ public class ProfileActivity extends BaseActivity {
     public void editUserWeight() {
         userWeight.setText("");
         viewType = 3;
+        stepGoal.clearFocus();
+        emailAccount.clearFocus();
+        userFirstName.clearFocus();
+        accountName.clearFocus();
+
         DatePickerPopWin pickerPopWin3 = new DatePickerPopWin.Builder(ProfileActivity.this,
                 new DatePickerPopWin.OnDatePickedListener() {
                     @Override
@@ -248,10 +286,13 @@ public class ProfileActivity extends BaseActivity {
     public void editGoalClick() {
         stepGoal.requestFocus();
         stepGoal.setText("");
+        CheckEmailFormat.openInputMethod(ProfileActivity.this);
         stepGoal.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (!b) {
+
+                    CheckEmailFormat.closeInputMethod(stepGoal);
                     String goal = stepGoal.getText().toString();
                     if (!TextUtils.isEmpty(goal)) {
                         int goalStep = Integer.valueOf(goal);
