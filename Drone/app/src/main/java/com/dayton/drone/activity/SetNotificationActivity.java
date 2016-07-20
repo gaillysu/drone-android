@@ -114,7 +114,6 @@ public class SetNotificationActivity extends BaseActivity {
         contactsListView.setSwipeDirection(SwipeMenuListView.DIRECTION_LEFT);
         setNotificationContactsAdapter = new SetNotificationContactsAdapter(this,R.layout.set_notification_contacts_list_item, contactsList);
         contactsListView.setAdapter(setNotificationContactsAdapter);
-        NotificationPermission.getNotificationAccessPermission(this);
     }
 
     @OnClick(R.id.activity_set_notification_back_imagebutton)

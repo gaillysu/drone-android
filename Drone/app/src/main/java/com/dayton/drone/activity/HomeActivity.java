@@ -42,7 +42,6 @@ public class HomeActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             setTranslucentStatus(true);
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
@@ -119,5 +118,11 @@ public class HomeActivity extends BaseActivity {
             }
             getModel().getUserDatabaseHelper().update(getModel().getUser());
         }
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 }

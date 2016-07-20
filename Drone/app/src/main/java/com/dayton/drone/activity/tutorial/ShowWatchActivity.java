@@ -106,9 +106,7 @@ public class ShowWatchActivity extends BaseActivity  {
                             selectConnectingStatus.setText(R.string.bluetooth_connecting);
                         }
                         selectConnectingStatus.setText(selectConnectingStatus.getText() + ".");
-                        PermissionRequestDialogBuilder builder =new PermissionRequestDialogBuilder(ShowWatchActivity.this);
-                        builder.addPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
-                        builder.askForPermission(ShowWatchActivity.this,1);
+
                     }
                 });
                 break;

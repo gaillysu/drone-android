@@ -134,10 +134,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     private int guidePage = 1;
     private boolean isShowCalendar = false;
     private StepsDatabaseHelper stepsDatabaseHelper;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
+
     private GoogleApiClient client;
     private Date date;
 
@@ -152,7 +149,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
             tintManager.setStatusBarTintEnabled(true);
             tintManager.setStatusBarTintResource(R.color.user_info_sex_bg);
         }
-
 
         ButterKnife.bind(this);
 
@@ -438,17 +434,17 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
             steps = list.get(0).get();
         }
         caloriesTextView.setText(df.format(calculationCalories(steps)));
-        kmTextView.setText(df.format(calculationdistance(steps)));
+        kmTextView.setText(df.format(calculateDistance(steps)));
         activeTimeTextView.setText(formatTimeActivity(steps.getDailyActiveTime()));
     }
 
 
-    public double calculationCalories(Steps steps) {
+    private double calculationCalories(Steps steps) {
         int activityTime = steps.getDailyActiveTime();
         return 2.0 * getModel().getUser().getWeight() * 3.5 / 200 * activityTime;
     }
 
-    public double calculationdistance(Steps steps) {
+    private double calculateDistance(Steps steps) {
         double stepsLength = getModel().getUser().getHeight() * 0.45 / 100;
         return stepsLength * steps.getDailySteps() / 1000;
     }
@@ -548,22 +544,14 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     @Override
     public void onStart() {
         super.onStart();
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.connect();
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
         AppIndex.AppIndexApi.start(client, getIndexApiAction());
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
         AppIndex.AppIndexApi.end(client, getIndexApiAction());
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.disconnect();
     }
 
@@ -625,10 +613,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     public void onNothingSelected() {
     }
 
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
     private Action getIndexApiAction() {
         Thing object = new Thing.Builder()
                 .setName("Activities Page") // TODO: Define a title for the content shown.
