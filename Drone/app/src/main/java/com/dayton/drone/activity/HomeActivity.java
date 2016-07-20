@@ -12,6 +12,7 @@ import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.activity.tutorial.WelcomeActivity;
 import com.dayton.drone.adapter.MyHomeMenuAdapter;
 import com.dayton.drone.bean.MenuBean;
+import com.dayton.drone.ble.util.NotificationPermission;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.util.ArrayList;
@@ -69,6 +70,7 @@ public class HomeActivity extends BaseActivity {
             }
 
         });
+        NotificationPermission.getNotificationAccessPermission(HomeActivity.this);
     }
 
     private void initData() {

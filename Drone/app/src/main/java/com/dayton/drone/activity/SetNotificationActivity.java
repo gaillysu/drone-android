@@ -1,9 +1,7 @@
 package com.dayton.drone.activity;
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -12,9 +10,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.provider.ContactsContract;
-import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
@@ -24,7 +20,6 @@ import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.adapter.SetNotificationContactsAdapter;
-import com.dayton.drone.ble.util.NotificationPermission;
 import com.dayton.drone.model.Contact;
 import com.dayton.drone.model.Notification;
 import com.google.gson.Gson;

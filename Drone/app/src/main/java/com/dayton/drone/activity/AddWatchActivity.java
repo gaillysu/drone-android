@@ -26,6 +26,7 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
 import net.medcorp.library.ble.event.BLEFirmwareVersionReceivedEvent;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
@@ -201,13 +202,18 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
         return bleVersion + "/" + mcuVersion;
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
+    }
+
     @Subscribe
     public void onEvent(final BLEConnectionStateChangedEvent stateChangedEvent) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
                 if (stateChangedEvent.isConnected()) {
-
                     connectionStateTextView.setText(R.string.add_watch_connected);
                     getModel().getSyncController().getBattery();
                 } else {
