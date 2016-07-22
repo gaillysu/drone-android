@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageButton;
@@ -78,7 +79,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     @Bind(R.id.activities_progress_middle_user_step_goal)
     TextView userStepGoalTextView;
 
-
     @Bind(R.id.activity_activities_hourly_bar)
     BarChart hourlyBarChart;
 
@@ -141,17 +141,17 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.w("Karl","!");
         setContentView(R.layout.activity_activities);
-
+        Log.w("Karl","1");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             setTranslucentStatus(true);
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
             tintManager.setStatusBarTintEnabled(true);
             tintManager.setStatusBarTintResource(R.color.user_info_sex_bg);
         }
-
+        Log.w("Karl","2");
         ButterKnife.bind(this);
-
         calendarGroup.setVisibility(View.GONE);
         boolean mIsFirst = SpUtils.getBoolean(this, CacheConstants.IS_FIRST, true);
         calendar.setSelectMore(false);
@@ -159,17 +159,18 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         backMonth.setVisibility(View.GONE);
         stepsDatabaseHelper = getModel().getStepsDatabaseHelper();
         date = new Date(System.currentTimeMillis());
-
+        Log.w("Karl","3");
         modifyChart(hourlyBarChart);
         modifyChart(thisWeekLineChart);
         modifyChart(lastWeekLineChart);
         modifyChart(lastMonthLineChart);
+        Log.w("Karl","4");
         drawCalculateData(true);
         drawGraph(true);
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
-
+        Log.w("Karl","5");
     }
 
 
@@ -187,6 +188,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     }
     private void drawGraph(boolean all) {
         StepsHandler stepsHandler = new StepsHandler(getModel().getStepsDatabaseHelper(), getModel().getUser());
+        Log.w("Karl","Drawing graph");
         setDataInProgressBar(stepsHandler.getDailySteps(selectedDate));
         setDataInChart(hourlyBarChart, stepsHandler.getDailySteps(selectedDate));
         if (all) {
@@ -198,6 +200,9 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
 
     private void setDataInProgressBar(DailySteps dailySteps) {
         int steps = SpUtils.getIntMethod(this, CacheConstants.TODAY_STEP, 0);
+        if (SpUtils.getBoolean(this,CacheConstants.TODAY_RESET,false)){
+            steps += SpUtils.getIntMethod(this,CacheConstants.TODAY_BASESTEP,0);
+        }
         int goal = SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000);
         //when user select a history date, show its data with that day
         if (Common.removeTimeFromDate(selectedDate).getTime() != Common.removeTimeFromDate(new Date()).getTime()
@@ -205,6 +210,8 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
             steps = dailySteps.getDailySteps();
             goal = dailySteps.getDailyStepsGoal();
         }
+        SpUtils.printAllConstants(this);
+
         mProgressBar.setSmoothPercent(1.0f * steps / goal);
         homeMiddleTv.setText(steps + "");
         userStepGoalTextView.setText(getResources().getString(R.string.user_step_goal) + goal);
@@ -273,10 +280,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         lineChart.invalidate();
     }
 
-
     private void modifyChart(BarChart barChart) {
-
-
         calendar.setCalendarData(new Date());
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         String day = dateFormat.format(new Date());
@@ -322,7 +326,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     }
 
     private void modifyChart(LineChart lineChart) {
-
         lineChart.setContentDescription("");
         lineChart.setDescription("");
         lineChart.setNoDataTextDescription("");
@@ -381,8 +384,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         setTitleData(lastMonthList, ActivityTimeSlot.LASTMONTH);
     }
 
-
-    public void setTitleData(List<Steps> list, ActivityTimeSlot thisWeek) {
+    private void setTitleData(List<Steps> list, ActivityTimeSlot thisWeek) {
         int stepsAccount = 0;
         int activityTime = 0;
         for (int x = 0; x < list.size(); x++) {
@@ -420,7 +422,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         }
     }
 
-
     private void setCurrentDayData(Date date) {
         Steps steps = null;
         DecimalFormat df = new DecimalFormat("######0.00");
@@ -432,12 +433,13 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         else
         {
             steps = list.get(0).get();
+            Log.w("Karl","Setting daily steps:" + steps.getDailySteps());
         }
+
         caloriesTextView.setText(df.format(calculationCalories(steps)));
         kmTextView.setText(df.format(calculateDistance(steps)));
         activeTimeTextView.setText(formatTimeActivity(steps.getDailyActiveTime()));
     }
-
 
     private double calculationCalories(Steps steps) {
         int activityTime = steps.getDailyActiveTime();
@@ -469,13 +471,12 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         return buffer.toString();
     }
 
-
     @OnClick(R.id.activities_activity_calendar_back_month)
     public void mIvBackMonthClick() {
         Date leftMouth = calendar.clickLeftMonth();
         SimpleDateFormat simple = new SimpleDateFormat("yyyy-mm-dd");
-        String laftdate = simple.format(leftMouth);
-        mTitleCalendarTextView.setText(laftdate.split("-")[2] + " " + new SimpleDateFormat("MMM", Locale.US).format(leftMouth));
+        String leftdate = simple.format(leftMouth);
+        mTitleCalendarTextView.setText(leftdate.split("-")[2] + " " + new SimpleDateFormat("MMM", Locale.US).format(leftMouth));
     }
 
     @OnClick(R.id.activities_activity_title_next_month)
@@ -498,7 +499,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
             @Override
             public void OnItemClick(Date selectedStartDate, Date selectedEndDate, Date downDate) {
                 date = downDate;
-
                 selectedDate = downDate;
                 nextMonth.setVisibility(View.GONE);
                 backMonth.setVisibility(View.GONE);
@@ -509,6 +509,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
                 drawGraph(true);
                 List<Optional<Steps>> stepsList = getModel().getStepsDatabaseHelper().get(getModel().getUser().getUserID(), selectedDate);
                 if (stepsList.isEmpty()) {
+                    Log.w("Karl","Downloading steps");
                     getModel().getSyncActivityManager().downloadSteps(selectedDate);
                 }
             }
@@ -560,6 +561,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
      */
     @Subscribe
     public void onEvent(final LittleSyncEvent event) {
+        Log.w("Karl","Little sync triggered?");
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
@@ -602,7 +604,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
             }
         });
     }
-
 
     @Override
     public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {

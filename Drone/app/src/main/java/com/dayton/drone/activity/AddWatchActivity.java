@@ -21,6 +21,8 @@ import com.dayton.drone.adapter.AddWatchViewPagerAdapter;
 import com.dayton.drone.ble.util.Constants;
 import com.dayton.drone.event.BatteryStatusChangedEvent;
 import com.dayton.drone.model.Watches;
+import com.dayton.drone.utils.CacheConstants;
+import com.dayton.drone.utils.SpUtils;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
@@ -68,33 +70,11 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
             tintManager.setStatusBarTintEnabled(true);
             tintManager.setStatusBarTintResource(R.color.user_info_sex_bg);
         }
-
         ButterKnife.bind(this);
-        //        List<String> listMenu = new ArrayList<String>();
-        //        listMenu.add("Contacts Notifications");
-        //        listMenu.add("Forget this watch");
-        //        addwatchMenuListview.setAdapter(new AddWatchMenuAdapter(listMenu,this));
-        //        addwatchMenuListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-        //            @Override
-        //            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //                if(position==0) {
-        //                    startActivity(SetNotificationActivity.class);
-        //                }
-        //                else if(position==1) {
-        //                    getModel().getSyncController().forgetDevice();
-        //                }
-        //            }
-        //        });
-
-
         List<View> viewList = new ArrayList<>();
         List<Watches> watchesList = getModel().getWatchesDatabaseHelper().getAll(getModel().getUser().getUserID());
-
-        //            if (!watchesList.isEmpty()) {
         if (!getModel().getSyncController().isConnected()) {
-
             noWatchLayout.setVisibility(View.VISIBLE);
-
         } else {
             watchesList.add(new Watches());
             noWatchLayout.setVisibility(View.VISIBLE);
@@ -150,6 +130,7 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
     @OnClick(R.id.activity_add_watch_forget_watch)
     public void forgetNotification() {
         getModel().getSyncController().forgetDevice();
+        SpUtils.putBoolean(this, CacheConstants.MUST_SYNC_STEPS,true);
         Intent intent = new Intent(this, HomeActivity.class);
         intent.putExtra("logOut", false);
         startActivity(intent);

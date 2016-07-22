@@ -26,7 +26,7 @@ public class RetrofitService extends RetrofitGsonSpiceService {
     @Override
     protected RestAdapter.Builder createRestAdapterBuilder() {
         return new RestAdapter.Builder()
-                .setLogLevel(RestAdapter.LogLevel.HEADERS)
+                .setLogLevel(RestAdapter.LogLevel.NONE)
                 .setConverter(getConverter())
                 .setEndpoint(getServerUrl());
     }

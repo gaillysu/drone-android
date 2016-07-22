@@ -2,6 +2,7 @@ package com.dayton.drone.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 /**
  * Created by boy on 2016/4/20.
@@ -44,5 +45,13 @@ public class SpUtils {
     public static long getLongMethod(Context context,String name, long defaultValues){
         SharedPreferences sharedPreferences = context.getSharedPreferences(CacheConstants.SP_Name,Context.MODE_PRIVATE);
         return sharedPreferences.getLong(name,defaultValues);
+    }
+
+    public static void printAllConstants(Context context){
+        Log.w("Karl","Base steps = " + getIntMethod(context,CacheConstants.TODAY_BASESTEP,-1));
+        Log.w("Karl","     steps = " + getIntMethod(context,CacheConstants.TODAY_STEP,-1));
+        Log.w("Karl","     reset = " + getBoolean(context,CacheConstants.TODAY_RESET,false));
+        Log.w("Karl","     Date  = " + getLongMethod(context,CacheConstants.TODAY_DATE,0));
+        Log.w("Karl","Must Sync  = " + getBoolean(context,CacheConstants.MUST_SYNC_STEPS,false));
     }
 }

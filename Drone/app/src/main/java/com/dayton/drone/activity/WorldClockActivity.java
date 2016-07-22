@@ -93,7 +93,7 @@ public class WorldClockActivity extends BaseActivity {
         format = new SimpleDateFormat(FORMAT_LONG);
         Calendar calendar = Calendar.getInstance();
         TimeZone timeZone = calendar.getTimeZone();
-        String timeName = timeZone.getID().split("/")[1];
+        String timeName = timeZone.getID().split("/")[1].replace("_"," ");
         localCity.setText(timeName);
         String[] localTimeStr = format.format(calendar.getTime()).split(" ");
         if (new Integer(localTimeStr[1].split(":")[0]).intValue() <= 12) {
@@ -120,7 +120,6 @@ public class WorldClockActivity extends BaseActivity {
                 }
             }
         });
-
     }
 
     @OnClick(R.id.world_clock_back_icon_ib)
