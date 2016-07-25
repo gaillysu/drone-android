@@ -376,22 +376,14 @@ public class SyncControllerImpl implements  SyncController{
                     int steps = getStepsGoalPacket.getSteps();
                     int goal  = getStepsGoalPacket.getGoal();
                     Log.i(TAG,"steps: " + steps + ",goal: " + goal + ",baseSteps: " + baseSteps);
-
                     SpUtils.putIntMethod(application, CacheConstants.GOAL_STEP, goal);
-                    if (isToday(SpUtils.getLongMethod(application,CacheConstants.TODAY_DATE,0))){
-                        if (SpUtils.getBoolean(application,CacheConstants.TODAY_RESET,false)) {
-                            steps = getStepsGoalPacket.getSteps();
-                            Log.w("Karl", "Set today steps =" + (steps));
-                            SpUtils.putIntMethod(application, CacheConstants.TODAY_STEP, steps);
-                        }
-                    }else{
-
-                        Log.w("Karl","Set today steps =" + steps);
-                        SpUtils.putIntMethod(application, CacheConstants.TODAY_STEP,steps);
+                    if (!isToday(SpUtils.getLongMethod(application,CacheConstants.TODAY_DATE,0))) {
                         baseSteps = 0;
                     }
+                    Log.w("Karl", "Set today steps =" + (steps));
                     Log.w("Karl","Set Today date=" + new Date().getTime());
                     SpUtils.putLongMethod(application, CacheConstants.TODAY_DATE, new Date().getTime());
+                    SpUtils.putIntMethod(application, CacheConstants.TODAY_STEP, steps);
 
                     EventBus.getDefault().post(new LittleSyncEvent(steps, goal));
                 }

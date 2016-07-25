@@ -192,6 +192,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         setDataInProgressBar(stepsHandler.getDailySteps(selectedDate));
         setDataInChart(hourlyBarChart, stepsHandler.getDailySteps(selectedDate));
         if (all) {
+            Log.w("KARL","All");
             setDataInChart(thisWeekLineChart, stepsHandler.getThisWeekSteps(selectedDate));
             setDataInChart(lastWeekLineChart, stepsHandler.getLastWeekSteps(selectedDate));
             setDataInChart(lastMonthLineChart, stepsHandler.getLast30DaysSteps(selectedDate));
@@ -200,18 +201,21 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
 
     private void setDataInProgressBar(DailySteps dailySteps) {
         int steps = SpUtils.getIntMethod(this, CacheConstants.TODAY_STEP, 0);
+        Log.w("Karl","Steps At first get " + steps);
         if (SpUtils.getBoolean(this,CacheConstants.TODAY_RESET,false)){
             steps += SpUtils.getIntMethod(this,CacheConstants.TODAY_BASESTEP,0);
+            Log.w("Karl","Steps At second ++ = " + steps);
         }
         int goal = SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000);
         //when user select a history date, show its data with that day
         if (Common.removeTimeFromDate(selectedDate).getTime() != Common.removeTimeFromDate(new Date()).getTime()
                 || !getModel().getSyncController().isConnected()) {
+            Log.w("Karl","Steps At selected user history" + steps);
             steps = dailySteps.getDailySteps();
             goal = dailySteps.getDailyStepsGoal();
         }
         SpUtils.printAllConstants(this);
-
+        Log.w("Karl","Showing steps = " + steps);
         mProgressBar.setSmoothPercent(1.0f * steps / goal);
         homeMiddleTv.setText(steps + "");
         userStepGoalTextView.setText(getResources().getString(R.string.user_step_goal) + goal);
