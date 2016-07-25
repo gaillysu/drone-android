@@ -69,6 +69,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static java.lang.Math.abs;
+
 public class ActivitiesActivity extends BaseActivity implements OnChartValueSelectedListener {
 
     @Bind(R.id.home_fragment_progress_bar)
@@ -224,20 +226,26 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     private void setDataInChart(BarChart barChart, DailySteps dailySteps) {
         List<String> xVals = new ArrayList<String>();
         List<BarEntry> yValue = new ArrayList<BarEntry>();
-        int maxHourlySteps = 0;
+        int maxValue = 0;
+        final int stepsModulo = 200;
         for (int i = 0; i < dailySteps.getHourlySteps().length; i++) {
             yValue.add(new BarEntry(dailySteps.getHourlySteps()[i], i));
             xVals.add(i + ":00");
-            if (dailySteps.getHourlySteps()[i] > maxHourlySteps) {
-                maxHourlySteps = dailySteps.getHourlySteps()[i];
+            if (dailySteps.getHourlySteps()[i] > maxValue) {
+                maxValue = dailySteps.getHourlySteps()[i];
             }
         }
         //For better user experience, I set the Y value is multiple of 10
-        if (maxHourlySteps == 0) {
-            barChart.getAxisLeft().setAxisMaxValue(100);
-        } else {
-            barChart.getAxisLeft().setAxisMaxValue(maxHourlySteps % 10 == 0 ? maxHourlySteps : ((maxHourlySteps + 9) / 10) * 10);
+        int labelCount = 6;
+        if (maxValue == 0) {
+            maxValue = 500;
+        } else{
+            maxValue = maxValue + abs(stepsModulo - (maxValue % stepsModulo));
+            labelCount = (maxValue/stepsModulo) +1;
         }
+        barChart.getAxisLeft().setAxisMaxValue(maxValue);
+        barChart.getAxisLeft().setLabelCount(labelCount,true);
+
         barChart.setScaleMinima((.14f), 1f);
         BarDataSet dataSet = new BarDataSet(yValue, "");
         dataSet.setDrawValues(false);
@@ -253,13 +261,24 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         SimpleDateFormat sdf = new SimpleDateFormat("d'/'M", Locale.US);
         List<String> xVals = new ArrayList<String>();
         List<Entry> yValue = new ArrayList<Entry>();
-
+        int maxValue = 0;
+        final int stepsModulo = 500;
         for (int i = 0; i < stepsList.size(); i++) {
             DailySteps dailySteps = stepsList.get(i);
-            yValue.add(new Entry(dailySteps.getDailySteps(), i));
+            int steps = dailySteps.getDailySteps();
+            if (dailySteps.getDailySteps() > maxValue){
+                maxValue = steps;
+            }
+            yValue.add(new Entry(steps, i));
             xVals.add(sdf.format(new Date(dailySteps.getDate())));
-
         }
+        Log.w("Karl","Max vlaue = " + maxValue);
+        if (maxValue == 0){
+            maxValue = SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000);
+        }else{
+            maxValue = maxValue + abs(stepsModulo - (maxValue % stepsModulo));
+        }
+
 
         LineDataSet set = new LineDataSet(yValue, "");
         set.setColor(R.color.grey);
@@ -277,6 +296,8 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
         dataSets.add(set);
 
+        YAxis leftAxis = lineChart.getAxisLeft();
+        leftAxis.setAxisMaxValue(maxValue * 1.0f);
         LineData data = new LineData(xVals, dataSets);
         lineChart.setData(data);
 
@@ -303,10 +324,9 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         YAxis leftAxis = barChart.getAxisLeft();
         leftAxis.setDrawGridLines(true);
         leftAxis.setEnabled(true);
-        leftAxis.setLabelCount(3, true);
+
         leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
         leftAxis.setAxisMinValue(0.0f);
-
         leftAxis.setValueFormatter(new YAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, YAxis yAxis) {
@@ -354,7 +374,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         leftAxis.setDrawLabels(false);
         leftAxis.addLimitLine(limitLine);
         leftAxis.setAxisMinValue(0.0f);
-        leftAxis.setAxisMaxValue(SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000) * 1.2f);
 
         YAxis rightAxis = lineChart.getAxisRight();
         rightAxis.setEnabled(false);
@@ -363,14 +382,13 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         rightAxis.setDrawLimitLinesBehindData(false);
         rightAxis.setDrawLabels(false);
 
+
         XAxis xAxis = lineChart.getXAxis();
         xAxis.setAxisLineColor(R.color.grey);
         xAxis.setTextColor(R.color.grey);
         xAxis.setDrawLimitLinesBehindData(false);
         xAxis.setDrawLabels(true);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-
-
     }
 
     private void setThisWeekData(Date date) {
