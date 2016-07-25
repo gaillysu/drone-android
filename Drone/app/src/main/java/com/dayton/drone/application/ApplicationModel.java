@@ -55,9 +55,9 @@ public class ApplicationModel extends Application {
     private WatchesDatabaseHelper watchesDatabaseHelper;
 
     @Override
-    public void onCreate()
-    {
+    public void onCreate(){
         super.onCreate();
+        EventBus.builder().sendNoSubscriberEvent(false).sendNoSubscriberEvent(false).logNoSubscriberMessages(false).installDefaultEventBus();
         syncController = new SyncControllerImpl(this);
         retrofitManager = new RetrofitManager(this);
         syncActivityManager = new SyncActivityManager(this);
@@ -69,8 +69,7 @@ public class ApplicationModel extends Application {
         Optional<User> loginUser = userDatabaseHelper.getLoginUser();
         if(loginUser.notEmpty()) {
             user = loginUser.get();
-        }
-        else {
+        } else {
             user = new User();
             user.setUserID("0");//"0" means anyone user
         }
@@ -108,7 +107,6 @@ public class ApplicationModel extends Application {
     public WatchesDatabaseHelper getWatchesDatabaseHelper(){
         return watchesDatabaseHelper;
     }
-
 
     public void initializeNotifications(){
         final ConfigEditor configEditor = new ConfigEditor((Context)this);
@@ -160,7 +158,6 @@ public class ApplicationModel extends Application {
         configEditor.setFilterMode(FilterType.CONTACT, FilterMode.WHITELIST);
         configEditor.apply();
     }
-
 
     @Subscribe
     public void onConnectionStateChanged(BLEConnectionStateChangedEvent event){

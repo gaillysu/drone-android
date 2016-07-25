@@ -19,7 +19,6 @@ import com.dayton.drone.adapter.WelcomeViewpagerAdapter;
 import com.dayton.drone.utils.CheckEmailFormat;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
-import net.medcorp.library.ble.service.BLEServiceProvider;
 
 import java.util.ArrayList;
 import java.util.List;
