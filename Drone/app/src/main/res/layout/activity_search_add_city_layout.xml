@@ -8,20 +8,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/user_info_sex_bg"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginTop="24dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="vertical"
-            android:layout_height="70dp">
+            android:layout_height="56dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@color/user_info_sex_bg"
-                android:gravity="center_vertical"
-                android:layout_marginTop="25dp"
-                >
+                android:gravity="center_vertical">
 
                 <ImageButton
                     android:id="@+id/choose_activity_cancel_bt"
@@ -55,8 +54,7 @@
                 android:orientation="horizontal"
                 android:focusableInTouchMode="true"
                 android:focusable="true"
-                android:visibility="gone"
-                >
+                android:visibility="gone">
 
                 <EditText
                     android:id="@+id/world_clock_user_search_city"
@@ -118,8 +116,6 @@
         </FrameLayout>
 
     </LinearLayout>
-
-
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">

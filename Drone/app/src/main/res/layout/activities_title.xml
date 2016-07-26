@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="70dp"
+                android:layout_height="wrap_content"
                 android:background="@color/user_info_sex_bg"
+                android:layout_marginTop="24dp"
                 >
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="20dp"
-        android:gravity="center_vertical"
-        >
+        android:layout_height="56dp"
+        android:gravity="center_vertical">
 
-        <Button
+        <ImageButton
             android:id="@+id/activities_title_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="12dp"
+            android:layout_centerVertical="true"
+            android:scaleType="fitCenter"
             android:background="@android:color/transparent"
-            android:text="@string/home_title_back_text"
-            android:textColor="@android:color/white"
-            android:textSize="20sp"/>
+            android:src="@mipmap/world_clock_back_icon"/>
+
 
         <LinearLayout
 
@@ -27,8 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:gravity="center_vertical"
-            >
+            android:gravity="center_vertical">
 
             <ImageButton
                 android:id="@+id/activities_activity_calendar_back_month"

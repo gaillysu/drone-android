@@ -7,23 +7,21 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="80dp"
+        android:paddingTop="24dp"
         android:background="@color/user_info_sex_bg">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="20dp"
-            >
+            android:layout_height="56dp">
 
             <ImageButton
                 android:id="@+id/world_clock_back_icon_ib"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="12dp"
                 android:layout_centerVertical="true"
                 android:scaleType="fitCenter"
-                android:padding="8dp"
-                android:layout_marginStart="10dp"
                 android:background="@android:color/transparent"
                 android:src="@mipmap/world_clock_back_icon"/>
 
@@ -37,9 +35,9 @@
 
             <ImageButton
                 android:id="@+id/world_clock_add_city_iv"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:padding="8dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="12dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:scaleType="fitCenter"
@@ -62,48 +60,34 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="6"
-        android:orientation="vertical"
-
-        >
+        android:orientation="vertical">
 
         <TextView
+            android:layout_gravity="center_horizontal"
             android:id="@+id/world_clock_date_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:textColor="@color/choose_adapter_text_color"
             android:textSize="24sp"
             />
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal">
+            android:layout_height="64dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_width="wrap_content"
+                android:layout_centerVertical="true"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="20dp"
                 android:orientation="vertical">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
+                <TextView
                         android:id="@+id/world_clock_localhost_city"
                         style="@style/world_clock_adapter_tv_style"
                         android:textSize="20sp"/>
-
-                    <TextView
-                        android:id="@+id/world_clock_item_city_time"
-                        style="@style/world_clock_adapter_tv_style"
-                        android:layout_alignParentRight="true"
-                        android:textSize="20sp"/>
-                </RelativeLayout>
 
                 <TextView
                     android:id="@+id/world_clock_item_current_day"
@@ -111,15 +95,21 @@
                     android:text="@string/world_clock_today_tv"
                     android:textSize="18sp"/>
             </LinearLayout>
-        </LinearLayout>
+
+            <TextView
+                android:layout_centerVertical="true"
+                android:id="@+id/world_clock_item_city_time"
+                style="@style/world_clock_adapter_tv_style"
+                android:layout_alignParentEnd="true"
+                android:textSize="20sp"/>
+
+        </RelativeLayout>
 
         <com.dayton.drone.view.ListViewCompat
             android:id="@+id/world_clock_select_city_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:divider="@android:color/white"
-            android:paddingEnd="10dp"
-            android:paddingStart="10dp"
             android:scrollbars="none"/>
     </LinearLayout>
 </LinearLayout>

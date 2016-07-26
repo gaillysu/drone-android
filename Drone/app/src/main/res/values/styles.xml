@@ -76,7 +76,6 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/choose_adapter_text_color</item>
-        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="profile_activity_text_style">
@@ -92,8 +91,9 @@
     </style>
 
     <style name="profile_activity_image_button_style">
-        <item name="android:layout_width">24dp</item>
-        <item name="android:layout_height">24dp</item>
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:padding">10dp</item>
         <item name="android:layout_marginRight">30dp</item>
         <item name="android:src">@mipmap/pencil</item>
         <item name="android:scaleType">fitXY</item>

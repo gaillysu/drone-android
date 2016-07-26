@@ -143,36 +143,27 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.w("Karl","!");
         setContentView(R.layout.activity_activities);
-        Log.w("Karl","1");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             setTranslucentStatus(true);
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
             tintManager.setStatusBarTintEnabled(true);
             tintManager.setStatusBarTintResource(R.color.user_info_sex_bg);
         }
-        Log.w("Karl","2");
         ButterKnife.bind(this);
         calendarGroup.setVisibility(View.GONE);
-        boolean mIsFirst = SpUtils.getBoolean(this, CacheConstants.IS_FIRST, true);
         calendar.setSelectMore(false);
         nextMonth.setVisibility(View.GONE);
         backMonth.setVisibility(View.GONE);
         stepsDatabaseHelper = getModel().getStepsDatabaseHelper();
         date = new Date(System.currentTimeMillis());
-        Log.w("Karl","3");
         modifyChart(hourlyBarChart);
         modifyChart(thisWeekLineChart);
         modifyChart(lastWeekLineChart);
         modifyChart(lastMonthLineChart);
-        Log.w("Karl","4");
         drawCalculateData(true);
         drawGraph(true);
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
-        Log.w("Karl","5");
     }
 
 
@@ -190,11 +181,9 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     }
     private void drawGraph(boolean all) {
         StepsHandler stepsHandler = new StepsHandler(getModel().getStepsDatabaseHelper(), getModel().getUser());
-        Log.w("Karl","Drawing graph");
         setDataInProgressBar(stepsHandler.getDailySteps(selectedDate));
         setDataInChart(hourlyBarChart, stepsHandler.getDailySteps(selectedDate));
         if (all) {
-            Log.w("KARL","All");
             setDataInChart(thisWeekLineChart, stepsHandler.getThisWeekSteps(selectedDate));
             setDataInChart(lastWeekLineChart, stepsHandler.getLastWeekSteps(selectedDate));
             setDataInChart(lastMonthLineChart, stepsHandler.getLast30DaysSteps(selectedDate));
@@ -203,21 +192,17 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
 
     private void setDataInProgressBar(DailySteps dailySteps) {
         int steps = SpUtils.getIntMethod(this, CacheConstants.TODAY_STEP, 0);
-        Log.w("Karl","Steps At first get " + steps);
         if (SpUtils.getBoolean(this,CacheConstants.TODAY_RESET,false)){
             steps += SpUtils.getIntMethod(this,CacheConstants.TODAY_BASESTEP,0);
-            Log.w("Karl","Steps At second ++ = " + steps);
         }
         int goal = SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000);
         //when user select a history date, show its data with that day
         if (Common.removeTimeFromDate(selectedDate).getTime() != Common.removeTimeFromDate(new Date()).getTime()
                 || !getModel().getSyncController().isConnected()) {
-            Log.w("Karl","Steps At selected user history" + steps);
             steps = dailySteps.getDailySteps();
             goal = dailySteps.getDailyStepsGoal();
         }
         SpUtils.printAllConstants(this);
-        Log.w("Karl","Showing steps = " + steps);
         mProgressBar.setSmoothPercent(1.0f * steps / goal);
         homeMiddleTv.setText(steps + "");
         userStepGoalTextView.setText(getResources().getString(R.string.user_step_goal) + goal);
@@ -451,17 +436,14 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     }
 
     private void setCurrentDayData(Date date) {
-        Steps steps = null;
+        Steps steps;
         DecimalFormat df = new DecimalFormat("######0.00");
         List<Optional<Steps>> list = stepsDatabaseHelper.get(getModel().getUser().getUserID(), date);
         if(list.isEmpty())
         {
             steps = new Steps(0,date.getTime());
-        }
-        else
-        {
+        } else {
             steps = list.get(0).get();
-            Log.w("Karl","Setting daily steps:" + steps.getDailySteps());
         }
 
         caloriesTextView.setText(df.format(calculationCalories(steps)));

@@ -14,6 +14,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -67,9 +68,8 @@ public class ProfileActivity extends BaseActivity {
     @Bind(R.id.profile_activity_step_goal_et)
     EditText stepGoal;
     @Bind(R.id.home_title_right_save_bt)
-    Button saveButton;
-    @Bind(R.id.content_title_back_bt)
-    Button cancel;
+    ImageButton saveButton;
+
     @Bind(R.id.profile_activity_log_out_bt)
     Button logOut;
     @Bind(R.id.profile_save_no_watch_connected_show)
@@ -97,8 +97,6 @@ public class ProfileActivity extends BaseActivity {
         ButterKnife.bind(this);
         saveButton.setVisibility(View.VISIBLE);
         userStepGoal = SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000);
-        cancel.setText(getString(R.string.profile_title_back_text));
-
         stepGoal.setText(userStepGoal + "");
         titleText.setText(getString(R.string.home_guide_profile));
         mUser = getModel().getUser();
