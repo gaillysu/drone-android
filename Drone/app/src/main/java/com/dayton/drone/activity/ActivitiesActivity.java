@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageButton;
@@ -68,6 +69,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static java.lang.Math.abs;
+
 public class ActivitiesActivity extends BaseActivity implements OnChartValueSelectedListener {
 
     @Bind(R.id.home_fragment_progress_bar)
@@ -77,7 +80,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     TextView homeMiddleTv;
     @Bind(R.id.activities_progress_middle_user_step_goal)
     TextView userStepGoalTextView;
-
 
     @Bind(R.id.activity_activities_hourly_bar)
     BarChart hourlyBarChart;
@@ -134,29 +136,24 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     private int guidePage = 1;
     private boolean isShowCalendar = false;
     private StepsDatabaseHelper stepsDatabaseHelper;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
+
     private GoogleApiClient client;
-    private ActivityTimeSlot dataType;
     private Date date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.w("Karl","!");
         setContentView(R.layout.activity_activities);
-
+        Log.w("Karl","1");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             setTranslucentStatus(true);
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
             tintManager.setStatusBarTintEnabled(true);
             tintManager.setStatusBarTintResource(R.color.user_info_sex_bg);
         }
-
-
+        Log.w("Karl","2");
         ButterKnife.bind(this);
-
         calendarGroup.setVisibility(View.GONE);
         boolean mIsFirst = SpUtils.getBoolean(this, CacheConstants.IS_FIRST, true);
         calendar.setSelectMore(false);
@@ -164,17 +161,18 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         backMonth.setVisibility(View.GONE);
         stepsDatabaseHelper = getModel().getStepsDatabaseHelper();
         date = new Date(System.currentTimeMillis());
-
+        Log.w("Karl","3");
         modifyChart(hourlyBarChart);
         modifyChart(thisWeekLineChart);
         modifyChart(lastWeekLineChart);
         modifyChart(lastMonthLineChart);
+        Log.w("Karl","4");
         drawCalculateData(true);
         drawGraph(true);
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
-
+        Log.w("Karl","5");
     }
 
 
@@ -192,9 +190,11 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     }
     private void drawGraph(boolean all) {
         StepsHandler stepsHandler = new StepsHandler(getModel().getStepsDatabaseHelper(), getModel().getUser());
+        Log.w("Karl","Drawing graph");
         setDataInProgressBar(stepsHandler.getDailySteps(selectedDate));
         setDataInChart(hourlyBarChart, stepsHandler.getDailySteps(selectedDate));
         if (all) {
+            Log.w("KARL","All");
             setDataInChart(thisWeekLineChart, stepsHandler.getThisWeekSteps(selectedDate));
             setDataInChart(lastWeekLineChart, stepsHandler.getLastWeekSteps(selectedDate));
             setDataInChart(lastMonthLineChart, stepsHandler.getLast30DaysSteps(selectedDate));
@@ -203,13 +203,21 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
 
     private void setDataInProgressBar(DailySteps dailySteps) {
         int steps = SpUtils.getIntMethod(this, CacheConstants.TODAY_STEP, 0);
+        Log.w("Karl","Steps At first get " + steps);
+        if (SpUtils.getBoolean(this,CacheConstants.TODAY_RESET,false)){
+            steps += SpUtils.getIntMethod(this,CacheConstants.TODAY_BASESTEP,0);
+            Log.w("Karl","Steps At second ++ = " + steps);
+        }
         int goal = SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000);
         //when user select a history date, show its data with that day
         if (Common.removeTimeFromDate(selectedDate).getTime() != Common.removeTimeFromDate(new Date()).getTime()
                 || !getModel().getSyncController().isConnected()) {
+            Log.w("Karl","Steps At selected user history" + steps);
             steps = dailySteps.getDailySteps();
             goal = dailySteps.getDailyStepsGoal();
         }
+        SpUtils.printAllConstants(this);
+        Log.w("Karl","Showing steps = " + steps);
         mProgressBar.setSmoothPercent(1.0f * steps / goal);
         homeMiddleTv.setText(steps + "");
         userStepGoalTextView.setText(getResources().getString(R.string.user_step_goal) + goal);
@@ -218,20 +226,26 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     private void setDataInChart(BarChart barChart, DailySteps dailySteps) {
         List<String> xVals = new ArrayList<String>();
         List<BarEntry> yValue = new ArrayList<BarEntry>();
-        int maxHourlySteps = 0;
+        int maxValue = 0;
+        final int stepsModulo = 200;
         for (int i = 0; i < dailySteps.getHourlySteps().length; i++) {
             yValue.add(new BarEntry(dailySteps.getHourlySteps()[i], i));
             xVals.add(i + ":00");
-            if (dailySteps.getHourlySteps()[i] > maxHourlySteps) {
-                maxHourlySteps = dailySteps.getHourlySteps()[i];
+            if (dailySteps.getHourlySteps()[i] > maxValue) {
+                maxValue = dailySteps.getHourlySteps()[i];
             }
         }
         //For better user experience, I set the Y value is multiple of 10
-        if (maxHourlySteps == 0) {
-            barChart.getAxisLeft().setAxisMaxValue(100);
-        } else {
-            barChart.getAxisLeft().setAxisMaxValue(maxHourlySteps % 10 == 0 ? maxHourlySteps : ((maxHourlySteps + 9) / 10) * 10);
+        int labelCount = 6;
+        if (maxValue == 0) {
+            maxValue = 500;
+        } else{
+            maxValue = maxValue + abs(stepsModulo - (maxValue % stepsModulo));
+            labelCount = (maxValue/stepsModulo) +1;
         }
+        barChart.getAxisLeft().setAxisMaxValue(maxValue);
+        barChart.getAxisLeft().setLabelCount(labelCount,true);
+
         barChart.setScaleMinima((.14f), 1f);
         BarDataSet dataSet = new BarDataSet(yValue, "");
         dataSet.setDrawValues(false);
@@ -247,13 +261,24 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         SimpleDateFormat sdf = new SimpleDateFormat("d'/'M", Locale.US);
         List<String> xVals = new ArrayList<String>();
         List<Entry> yValue = new ArrayList<Entry>();
-
+        int maxValue = 0;
+        final int stepsModulo = 500;
         for (int i = 0; i < stepsList.size(); i++) {
             DailySteps dailySteps = stepsList.get(i);
-            yValue.add(new Entry(dailySteps.getDailySteps(), i));
+            int steps = dailySteps.getDailySteps();
+            if (dailySteps.getDailySteps() > maxValue){
+                maxValue = steps;
+            }
+            yValue.add(new Entry(steps, i));
             xVals.add(sdf.format(new Date(dailySteps.getDate())));
-
         }
+        Log.w("Karl","Max vlaue = " + maxValue);
+        if (maxValue == 0){
+            maxValue = SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000);
+        }else{
+            maxValue = maxValue + abs(stepsModulo - (maxValue % stepsModulo));
+        }
+
 
         LineDataSet set = new LineDataSet(yValue, "");
         set.setColor(R.color.grey);
@@ -271,6 +296,8 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
         dataSets.add(set);
 
+        YAxis leftAxis = lineChart.getAxisLeft();
+        leftAxis.setAxisMaxValue(maxValue * 1.0f);
         LineData data = new LineData(xVals, dataSets);
         lineChart.setData(data);
 
@@ -278,10 +305,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         lineChart.invalidate();
     }
 
-
     private void modifyChart(BarChart barChart) {
-
-
         calendar.setCalendarData(new Date());
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         String day = dateFormat.format(new Date());
@@ -300,10 +324,9 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         YAxis leftAxis = barChart.getAxisLeft();
         leftAxis.setDrawGridLines(true);
         leftAxis.setEnabled(true);
-        leftAxis.setLabelCount(3, true);
+
         leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
         leftAxis.setAxisMinValue(0.0f);
-
         leftAxis.setValueFormatter(new YAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, YAxis yAxis) {
@@ -327,7 +350,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     }
 
     private void modifyChart(LineChart lineChart) {
-
         lineChart.setContentDescription("");
         lineChart.setDescription("");
         lineChart.setNoDataTextDescription("");
@@ -352,7 +374,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         leftAxis.setDrawLabels(false);
         leftAxis.addLimitLine(limitLine);
         leftAxis.setAxisMinValue(0.0f);
-        leftAxis.setAxisMaxValue(SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000) * 1.2f);
 
         YAxis rightAxis = lineChart.getAxisRight();
         rightAxis.setEnabled(false);
@@ -361,14 +382,13 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         rightAxis.setDrawLimitLinesBehindData(false);
         rightAxis.setDrawLabels(false);
 
+
         XAxis xAxis = lineChart.getXAxis();
         xAxis.setAxisLineColor(R.color.grey);
         xAxis.setTextColor(R.color.grey);
         xAxis.setDrawLimitLinesBehindData(false);
         xAxis.setDrawLabels(true);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-
-
     }
 
     private void setThisWeekData(Date date) {
@@ -386,8 +406,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         setTitleData(lastMonthList, ActivityTimeSlot.LASTMONTH);
     }
 
-
-    public void setTitleData(List<Steps> list, ActivityTimeSlot thisWeek) {
+    private void setTitleData(List<Steps> list, ActivityTimeSlot thisWeek) {
         int stepsAccount = 0;
         int activityTime = 0;
         for (int x = 0; x < list.size(); x++) {
@@ -425,7 +444,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         }
     }
 
-
     private void setCurrentDayData(Date date) {
         Steps steps = null;
         DecimalFormat df = new DecimalFormat("######0.00");
@@ -437,19 +455,20 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         else
         {
             steps = list.get(0).get();
+            Log.w("Karl","Setting daily steps:" + steps.getDailySteps());
         }
+
         caloriesTextView.setText(df.format(calculationCalories(steps)));
-        kmTextView.setText(df.format(calculationdistance(steps)));
+        kmTextView.setText(df.format(calculateDistance(steps)));
         activeTimeTextView.setText(formatTimeActivity(steps.getDailyActiveTime()));
     }
 
-
-    public double calculationCalories(Steps steps) {
+    private double calculationCalories(Steps steps) {
         int activityTime = steps.getDailyActiveTime();
         return 2.0 * getModel().getUser().getWeight() * 3.5 / 200 * activityTime;
     }
 
-    public double calculationdistance(Steps steps) {
+    private double calculateDistance(Steps steps) {
         double stepsLength = getModel().getUser().getHeight() * 0.45 / 100;
         return stepsLength * steps.getDailySteps() / 1000;
     }
@@ -474,13 +493,12 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         return buffer.toString();
     }
 
-
     @OnClick(R.id.activities_activity_calendar_back_month)
     public void mIvBackMonthClick() {
         Date leftMouth = calendar.clickLeftMonth();
         SimpleDateFormat simple = new SimpleDateFormat("yyyy-mm-dd");
-        String laftdate = simple.format(leftMouth);
-        mTitleCalendarTextView.setText(laftdate.split("-")[2] + " " + new SimpleDateFormat("MMM", Locale.US).format(leftMouth));
+        String leftdate = simple.format(leftMouth);
+        mTitleCalendarTextView.setText(leftdate.split("-")[2] + " " + new SimpleDateFormat("MMM", Locale.US).format(leftMouth));
     }
 
     @OnClick(R.id.activities_activity_title_next_month)
@@ -503,7 +521,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
             @Override
             public void OnItemClick(Date selectedStartDate, Date selectedEndDate, Date downDate) {
                 date = downDate;
-
                 selectedDate = downDate;
                 nextMonth.setVisibility(View.GONE);
                 backMonth.setVisibility(View.GONE);
@@ -514,6 +531,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
                 drawGraph(true);
                 List<Optional<Steps>> stepsList = getModel().getStepsDatabaseHelper().get(getModel().getUser().getUserID(), selectedDate);
                 if (stepsList.isEmpty()) {
+                    Log.w("Karl","Downloading steps");
                     getModel().getSyncActivityManager().downloadSteps(selectedDate);
                 }
             }
@@ -549,22 +567,14 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     @Override
     public void onStart() {
         super.onStart();
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.connect();
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
         AppIndex.AppIndexApi.start(client, getIndexApiAction());
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
         AppIndex.AppIndexApi.end(client, getIndexApiAction());
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.disconnect();
     }
 
@@ -573,6 +583,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
      */
     @Subscribe
     public void onEvent(final LittleSyncEvent event) {
+        Log.w("Karl","Little sync triggered?");
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
@@ -616,7 +627,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         });
     }
 
-
     @Override
     public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
         hourlyBarChart.highlightValue(e.getXIndex(), dataSetIndex);
@@ -626,10 +636,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     public void onNothingSelected() {
     }
 
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
     private Action getIndexApiAction() {
         Thing object = new Thing.Builder()
                 .setName("Activities Page") // TODO: Define a title for the content shown.

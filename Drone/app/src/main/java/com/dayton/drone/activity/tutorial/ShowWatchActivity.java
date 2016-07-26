@@ -1,6 +1,5 @@
 package com.dayton.drone.activity.tutorial;
 
-import android.Manifest;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,14 +14,14 @@ import android.widget.TextView;
 import com.dayton.drone.R;
 import com.dayton.drone.activity.HomeActivity;
 import com.dayton.drone.activity.base.BaseActivity;
+import com.dayton.drone.utils.CacheConstants;
+import com.dayton.drone.utils.SpUtils;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
 import net.medcorp.library.ble.event.BLEFirmwareVersionReceivedEvent;
 import net.medcorp.library.ble.event.BLESearchEvent;
-import net.medcorp.library.permission.PermissionRequestDialogBuilder;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
@@ -106,9 +105,7 @@ public class ShowWatchActivity extends BaseActivity  {
                             selectConnectingStatus.setText(R.string.bluetooth_connecting);
                         }
                         selectConnectingStatus.setText(selectConnectingStatus.getText() + ".");
-                        PermissionRequestDialogBuilder builder =new PermissionRequestDialogBuilder(ShowWatchActivity.this);
-                        builder.addPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
-                        builder.askForPermission(ShowWatchActivity.this,1);
+
                     }
                 });
                 break;
@@ -135,6 +132,8 @@ public class ShowWatchActivity extends BaseActivity  {
                             finish();
                         }
                     },10000);
+                    SpUtils.putBoolean(ShowWatchActivity.this, CacheConstants.MUST_SYNC_STEPS, true);
+
                 }
             });
         }

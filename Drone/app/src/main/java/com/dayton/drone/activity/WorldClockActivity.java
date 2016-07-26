@@ -83,8 +83,7 @@ public class WorldClockActivity extends BaseActivity {
         });
     }
 
-    private void initLocalDateTime()
-    {
+    private void initLocalDateTime() {
         Date date = new Date();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         String currentTime = format.format(date);
@@ -94,7 +93,7 @@ public class WorldClockActivity extends BaseActivity {
         format = new SimpleDateFormat(FORMAT_LONG);
         Calendar calendar = Calendar.getInstance();
         TimeZone timeZone = calendar.getTimeZone();
-        String timeName = timeZone.getID().split("/")[1];
+        String timeName = timeZone.getID().split("/")[1].replace("_"," ");
         localCity.setText(timeName);
         String[] localTimeStr = format.format(calendar.getTime()).split(" ");
         if (new Integer(localTimeStr[1].split(":")[0]).intValue() <= 12) {
@@ -104,6 +103,7 @@ public class WorldClockActivity extends BaseActivity {
             localTime.setText(localTimeStr[1].split(":")[0] + ":" + localTimeStr[1].split(":")[1] + " PM");
         }
     }
+
     public void initData() {
         worldClockDatabase = getModel().getWorldClockDatabaseHelper();
         listData = worldClockDatabase.getSelected();
@@ -120,7 +120,6 @@ public class WorldClockActivity extends BaseActivity {
                 }
             }
         });
-
     }
 
     @OnClick(R.id.world_clock_back_icon_ib)
@@ -130,9 +129,8 @@ public class WorldClockActivity extends BaseActivity {
 
     @OnClick(R.id.world_clock_add_city_iv)
     public void addCityClick() {
-        Intent intent = new Intent(this, ChooseCityActivity.class);
+        Intent intent = new Intent(WorldClockActivity.this, ChooseCityActivity.class);
         startActivityForResult(intent, requestCode);
-
     }
 
     public void setListAdapter() {

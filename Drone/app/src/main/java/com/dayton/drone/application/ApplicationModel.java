@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.dayton.drone.ble.controller.SyncController;
 import com.dayton.drone.ble.controller.SyncControllerImpl;
+import com.dayton.drone.ble.util.NotificationPermission;
 import com.dayton.drone.cloud.SyncActivityManager;
 import com.dayton.drone.database.entry.NotificationDatabaseHelper;
 import com.dayton.drone.database.entry.StepsDatabaseHelper;
@@ -23,8 +24,11 @@ import net.medcorp.library.android.notificationsdk.config.mode.FilterMode;
 import net.medcorp.library.android.notificationsdk.config.mode.OverrideMode;
 import net.medcorp.library.android.notificationsdk.config.type.FilterType;
 import net.medcorp.library.android.notificationsdk.config.type.OverrideType;
+import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
 import net.medcorp.library.ble.util.Optional;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,7 +47,7 @@ public class ApplicationModel extends Application {
     private SyncController syncController;
     private RetrofitManager retrofitManager;
     private SyncActivityManager syncActivityManager;
-    private User   user;
+    private User user;
     private UserDatabaseHelper userDatabaseHelper;
     private WorldClockDatabaseHelper worldClockDatabaseHelper;
     private StepsDatabaseHelper stepsDatabaseHelper;
@@ -51,9 +55,9 @@ public class ApplicationModel extends Application {
     private WatchesDatabaseHelper watchesDatabaseHelper;
 
     @Override
-    public void onCreate()
-    {
+    public void onCreate(){
         super.onCreate();
+        EventBus.builder().sendNoSubscriberEvent(false).sendNoSubscriberEvent(false).logNoSubscriberMessages(false).installDefaultEventBus();
         syncController = new SyncControllerImpl(this);
         retrofitManager = new RetrofitManager(this);
         syncActivityManager = new SyncActivityManager(this);
@@ -65,12 +69,12 @@ public class ApplicationModel extends Application {
         Optional<User> loginUser = userDatabaseHelper.getLoginUser();
         if(loginUser.notEmpty()) {
             user = loginUser.get();
-        }
-        else {
+        } else {
             user = new User();
             user.setUserID("0");//"0" means anyone user
         }
         initializeNotifications();
+        EventBus.getDefault().register(this);
     }
 
     public SyncController getSyncController() {
@@ -99,10 +103,10 @@ public class ApplicationModel extends Application {
     public NotificationDatabaseHelper getNotificationDatabaseHelper(){
         return notificationDatabaseHelper;
     }
+
     public WatchesDatabaseHelper getWatchesDatabaseHelper(){
         return watchesDatabaseHelper;
     }
-
 
     public void initializeNotifications(){
         final ConfigEditor configEditor = new ConfigEditor((Context)this);
@@ -153,5 +157,12 @@ public class ApplicationModel extends Application {
         configEditor.setFilterSet(FilterType.CONTACT, set);
         configEditor.setFilterMode(FilterType.CONTACT, FilterMode.WHITELIST);
         configEditor.apply();
+    }
+
+    @Subscribe
+    public void onConnectionStateChanged(BLEConnectionStateChangedEvent event){
+        if(event.isConnected()){
+            NotificationPermission.getNotificationAccessPermission(this);
+        }
     }
 }

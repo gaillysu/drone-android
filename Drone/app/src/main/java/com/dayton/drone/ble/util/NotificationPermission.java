@@ -25,6 +25,7 @@ public class NotificationPermission {
         if (enabledNotificationListeners == null || !enabledNotificationListeners.contains(packageName))
         {
             // Let's ask the user to enable notifications
+            
             new AlertDialog.Builder(ctx).setTitle("Notification Access").setMessage("Do you want to enable notifications for Drone?")
                     .setNegativeButton(android.R.string.no, null).setPositiveButton(android.R.string.yes, new AlertDialog.OnClickListener(){
 

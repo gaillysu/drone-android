@@ -97,8 +97,6 @@ public class ForgetPasswordActivity extends BaseActivity {
         } else {
             emailAddressEdit.setError(getString(R.string.tips_user_account_password));
         }
-
-
     }
 
     @Override

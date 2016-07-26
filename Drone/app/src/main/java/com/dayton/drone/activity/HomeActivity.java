@@ -12,6 +12,7 @@ import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.activity.tutorial.WelcomeActivity;
 import com.dayton.drone.adapter.MyHomeMenuAdapter;
 import com.dayton.drone.bean.MenuBean;
+import com.dayton.drone.ble.util.NotificationPermission;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.util.ArrayList;
@@ -42,7 +43,6 @@ public class HomeActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             setTranslucentStatus(true);
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
@@ -70,6 +70,7 @@ public class HomeActivity extends BaseActivity {
             }
 
         });
+        NotificationPermission.getNotificationAccessPermission(HomeActivity.this);
     }
 
     private void initData() {
@@ -119,5 +120,11 @@ public class HomeActivity extends BaseActivity {
             }
             getModel().getUserDatabaseHelper().update(getModel().getUser());
         }
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 }

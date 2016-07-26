@@ -21,6 +21,7 @@ import com.dayton.drone.adapter.SortAdapter;
 import com.dayton.drone.database.entry.WorldClockDatabaseHelper;
 import com.dayton.drone.model.SortModel;
 import com.dayton.drone.model.WorldClock;
+import com.dayton.drone.utils.CheckEmailFormat;
 import com.dayton.drone.view.PinyinComparator;
 import com.dayton.drone.view.SideBar;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
@@ -181,6 +182,8 @@ public class ChooseCityActivity extends BaseActivity {
         editSearchContent.setVisibility(View.VISIBLE);
         showSearchResultListView.setVisibility(View.VISIBLE);
         searchResult = new ArrayList<>();
+        userSearchCityEdit.requestFocus();
+        CheckEmailFormat.openInputMethod(ChooseCityActivity.this);
 
         userSearchCityEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 

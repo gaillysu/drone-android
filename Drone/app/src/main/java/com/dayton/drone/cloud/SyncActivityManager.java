@@ -73,54 +73,51 @@ public class SyncActivityManager {
             }
             @Override
             public void onRequestSuccess(CreateStepsModel createStepsModel) {
-                Log.i(TAG,"add steps result: "+createStepsModel.getMessage());
-                if(createStepsModel.getMessage().contains("already exist")
-                        && createStepsModel.getSteps()!=null )
-                {
-                    boolean needUpdate = false;
-                    int totalServerDailySteps = 0;
-                    try {
-                        JSONArray jsonArray = new JSONArray(createStepsModel.getSteps().getSteps());
-                        for(int i=0;i<jsonArray.length();i++)
-                        {
-                            JSONArray stepsInHour = jsonArray.optJSONArray(i);
-                            for(int j=0;j<stepsInHour.length();j++)
-                            {
-                                totalServerDailySteps += stepsInHour.optInt(j);
+                if (createStepsModel != null) {
+                    Log.i(TAG, "add steps result: " + createStepsModel.getMessage());
+                    if (createStepsModel.getMessage().contains("already exist")
+                            && createStepsModel.getSteps() != null) {
+                        boolean needUpdate = false;
+                        int totalServerDailySteps = 0;
+                        try {
+                            JSONArray jsonArray = new JSONArray(createStepsModel.getSteps().getSteps());
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONArray stepsInHour = jsonArray.optJSONArray(i);
+                                for (int j = 0; j < stepsInHour.length(); j++) {
+                                    totalServerDailySteps += stepsInHour.optInt(j);
+                                }
                             }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
 
-                    if(stepsList.get(0).getCloudID()!=createStepsModel.getSteps().getId()
-                            || totalServerDailySteps!= stepsList.get(0).getDailySteps())
-                    {
-                        needUpdate = true;
+                        if (stepsList.get(0).getCloudID() != createStepsModel.getSteps().getId()
+                                || totalServerDailySteps != stepsList.get(0).getDailySteps()) {
+                            needUpdate = true;
+                        }
+                        //update if has one record at least
+                        if (needUpdate) {
+                            StepsWithID stepsWithID = new StepsWithID();
+                            stepsWithID.setId(createStepsModel.getSteps().getId());
+                            stepsWithID.setUid(Integer.parseInt(stepsList.get(0).getUserID()));
+                            stepsWithID.setDate(new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(new Date(stepsList.get(0).getTimeFrame())));
+                            stepsWithID.setSteps(stepsList.get(0).getHourlySteps());
+                            updateSteps(stepsWithID, stepsList);
+                        }
+                    } else if (createStepsModel.getMessage().equals("OK")
+                            && createStepsModel.getStatus() == 1
+                            && createStepsModel.getSteps() != null) {
+                        if (stepsList.get(0).getCloudID() != createStepsModel.getSteps().getId()) {
+                            stepsList.get(0).setCloudID(createStepsModel.getSteps().getId());
+                            getModel().getStepsDatabaseHelper().update(stepsList.get(0));
+                        }
                     }
-                    //update if has one record at least
-                    if(needUpdate)
-                    {
-                        StepsWithID stepsWithID = new StepsWithID();
-                        stepsWithID.setId(createStepsModel.getSteps().getId());
-                        stepsWithID.setUid(Integer.parseInt(stepsList.get(0).getUserID()));
-                        stepsWithID.setDate(new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(new Date(stepsList.get(0).getTimeFrame())));
-                        stepsWithID.setSteps(stepsList.get(0).getHourlySteps());
-                        updateSteps(stepsWithID, stepsList);
-                    }
-                }
-                else if(createStepsModel.getMessage().equals("OK")
-                        && createStepsModel.getStatus() == 1
-                        && createStepsModel.getSteps()!=null)
-                {
-                    if(stepsList.get(0).getCloudID()!=createStepsModel.getSteps().getId())
-                    {
-                        stepsList.get(0).setCloudID(createStepsModel.getSteps().getId());
-                        getModel().getStepsDatabaseHelper().update(stepsList.get(0));
-                    }
+                }else{
+                    Log.w("Karl","Hey an Error here?");
                 }
             }
-        });
+            });
+
     }
 
     private void updateSteps(StepsWithID stepsWithID, final List<Steps> stepsList)

@@ -82,13 +82,12 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <TextView
+                <EditText
                     android:id="@+id/profile_activity_user_email_account"
                     style="@style/profile_activity_text_style"/>
 
                 <ImageButton
                     android:id="@+id/profile_activity_edit_email_ib"
-                    android:visibility="gone"
                     style="@style/profile_activity_image_button_style"/>
 
 

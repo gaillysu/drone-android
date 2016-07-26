@@ -1,5 +1,6 @@
 package com.dayton.drone.activity.tutorial;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Build;
@@ -20,6 +21,8 @@ import com.dayton.drone.utils.CheckEmailFormat;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
+
+import net.medcorp.library.permission.PermissionRequestDialogBuilder;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -48,6 +51,9 @@ public class LoginActivity extends BaseActivity {
             tintManager.setStatusBarTintEnabled(true);
             tintManager.setStatusBarTintResource(R.color.user_info_gender_select_text_color);
         }
+        PermissionRequestDialogBuilder builder =new PermissionRequestDialogBuilder(this);
+        builder.addPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
+        builder.askForPermission(this,1);
 
         ButterKnife.bind(this);
         nextImageButton.setVisibility(View.GONE);
