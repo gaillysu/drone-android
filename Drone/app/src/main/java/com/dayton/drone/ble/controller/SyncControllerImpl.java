@@ -126,6 +126,7 @@ public class SyncControllerImpl implements  SyncController{
             SpUtils.putLongMethod(application,CacheConstants.TODAY_DATE,new Date().getTime());
             SpUtils.putIntMethod(application,CacheConstants.TODAY_BASESTEP,0);
             SpUtils.putBoolean(application,CacheConstants.TODAY_RESET,false);
+            SpUtils.putIntMethod(application,CacheConstants.TODAY_STEP,0);
         }
 
         connectionController = ConnectionController.Singleton.getInstance(application,new GattAttributesDataSourceImpl(application));
