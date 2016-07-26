@@ -241,7 +241,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
             maxValue = 500;
         } else{
             maxValue = maxValue + abs(stepsModulo - (maxValue % stepsModulo));
-            labelCount = (maxValue/stepsModulo);
+            labelCount = (maxValue/stepsModulo) +1;
         }
         barChart.getAxisLeft().setAxisMaxValue(maxValue);
         barChart.getAxisLeft().setLabelCount(labelCount,true);
