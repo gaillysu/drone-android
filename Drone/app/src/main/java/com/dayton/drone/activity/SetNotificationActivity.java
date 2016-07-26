@@ -177,7 +177,9 @@ public class SetNotificationActivity extends BaseActivity {
             {
                 Contact contact = new Contact();
                 contact.setName(contactName);
-                contact.setNumber(contactNumber.trim());
+                //here trim all blank in this number, such as:" 139 1234 5678 " ==> "13912345678"
+                //but if user's phonebook save number starts with country code, such as: "+8613923001234", here need remove country code?
+                contact.setNumber(contactNumber.replaceAll(" ",""));
                 if(!updateNotification(APPLICATION,contactsList,contact,true))
                 {
                     Toast.makeText(SetNotificationActivity.this,"Name has got existed",Toast.LENGTH_LONG).show();
