@@ -30,7 +30,7 @@ import org.greenrobot.eventbus.Subscribe;
 public abstract class BaseActivity extends AppCompatActivity {
 
     private ApplicationModel application;
-
+    private Snackbar snackbar;
     protected ApplicationModel getModel(){
         if (application == null) {
             application = (ApplicationModel) getApplication();
@@ -70,7 +70,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     private void showStateString(int resId) {
-        Snackbar snackbar = Snackbar.make(((ViewGroup) findViewById(android.R.id.content)).getChildAt(0), "", Snackbar.LENGTH_LONG);
+        if(snackbar != null){
+            snackbar.dismiss();
+        }
+        snackbar = Snackbar.make(((ViewGroup) findViewById(android.R.id.content)).getChildAt(0), "", Snackbar.LENGTH_LONG);
         TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
         tv.setTextColor(Color.WHITE);
         tv.setText(getString(resId));

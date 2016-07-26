@@ -241,7 +241,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
             maxValue = 500;
         } else{
             maxValue = maxValue + abs(stepsModulo - (maxValue % stepsModulo));
-            labelCount = (maxValue/stepsModulo) +1;
+            labelCount = (maxValue/stepsModulo);
         }
         barChart.getAxisLeft().setAxisMaxValue(maxValue);
         barChart.getAxisLeft().setLabelCount(labelCount,true);
@@ -262,6 +262,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         List<String> xVals = new ArrayList<String>();
         List<Entry> yValue = new ArrayList<Entry>();
         int maxValue = 0;
+        final int goal = SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000);
         final int stepsModulo = 500;
         for (int i = 0; i < stepsList.size(); i++) {
             DailySteps dailySteps = stepsList.get(i);
@@ -273,12 +274,25 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
             xVals.add(sdf.format(new Date(dailySteps.getDate())));
         }
         Log.w("Karl","Max vlaue = " + maxValue);
-        if (maxValue == 0){
-            maxValue = SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000);
+        boolean putTop = false;
+        if (maxValue == 0 ||  maxValue  < goal){
+            maxValue = goal + stepsModulo;
         }else{
+            putTop = true;
             maxValue = maxValue + abs(stepsModulo - (maxValue % stepsModulo));
         }
 
+        LimitLine limitLine = new LimitLine(goal, "Goal: " +  goal);
+        limitLine.setLineWidth(1.5f);
+        limitLine.setLineColor(R.color.grey);
+        limitLine.setTextSize(18f);
+        limitLine.setTextColor(R.color.grey);
+
+        if(putTop) {
+            limitLine.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);
+        }else{
+            limitLine.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_BOTTOM);
+        }
         LineDataSet set = new LineDataSet(yValue, "");
         set.setColor(R.color.grey);
         set.setCircleColor(R.color.grey);
@@ -296,6 +310,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         dataSets.add(set);
 
         YAxis leftAxis = lineChart.getAxisLeft();
+        leftAxis.addLimitLine(limitLine);
         leftAxis.setAxisMaxValue(maxValue * 1.0f);
         LineData data = new LineData(xVals, dataSets);
         lineChart.setData(data);
@@ -360,18 +375,11 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         TipsView tipsView = new TipsView(this, R.layout.custom_marker_view);
         lineChart.setMarkerView(tipsView);
 
-        LimitLine limitLine = new LimitLine(SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000), "Goal");
-        limitLine.setLineWidth(1.5f);
-        limitLine.setLineColor(R.color.grey);
-        limitLine.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);
-        limitLine.setTextSize(18f);
-        limitLine.setTextColor(R.color.grey);
 
         YAxis leftAxis = lineChart.getAxisLeft();
         leftAxis.setAxisLineColor(R.color.grey);
         leftAxis.setDrawGridLines(false);
         leftAxis.setDrawLabels(false);
-        leftAxis.addLimitLine(limitLine);
         leftAxis.setAxisMinValue(0.0f);
 
         YAxis rightAxis = lineChart.getAxisRight();
@@ -414,7 +422,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
             activityTime += steps.getDailyActiveTime();
         }
         DecimalFormat df = new DecimalFormat("######0.00");
-        int height = getModel().getUser().getHeight();
         Double stepsLength = (getModel().getUser().getHeight() * 0.45) / 100;
         Double distance = stepsLength * stepsAccount / 1000;
 
