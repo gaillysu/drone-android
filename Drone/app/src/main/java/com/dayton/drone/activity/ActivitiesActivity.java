@@ -279,7 +279,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
             maxValue = maxValue + abs(stepsModulo - (maxValue % stepsModulo));
         }
 
-
         LineDataSet set = new LineDataSet(yValue, "");
         set.setColor(R.color.grey);
         set.setCircleColor(R.color.grey);
