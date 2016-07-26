@@ -1,2 +1,2 @@
 include ':app',':library', ':wheelpicklib',':progressbarlibrary'
-project(':library').projectDir = new File(settingsDir, '../../MED_library/library')
+project(':library').projectDir = new File(settingsDir, '../../med-library/library')
