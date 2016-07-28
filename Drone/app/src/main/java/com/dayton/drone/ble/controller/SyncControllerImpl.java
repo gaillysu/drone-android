@@ -37,6 +37,7 @@ import com.dayton.drone.ble.model.request.setting.SetUserProfileRequest;
 import com.dayton.drone.ble.model.request.sync.GetActivityRequest;
 import com.dayton.drone.ble.model.request.sync.GetStepsGoalRequest;
 import com.dayton.drone.ble.model.request.worldclock.SetWorldClockRequest;
+import com.dayton.drone.ble.notification.ListenerService;
 import com.dayton.drone.ble.util.Constants;
 import com.dayton.drone.event.BLEPairStatusChangedEvent;
 import com.dayton.drone.event.BatteryStatusChangedEvent;
@@ -57,7 +58,6 @@ import com.dayton.drone.utils.Common;
 import com.dayton.drone.utils.SpUtils;
 import com.dayton.drone.utils.StepsHandler;
 
-import net.medcorp.library.android.notificationsdk.listener.ListenerService;
 import net.medcorp.library.ble.controller.ConnectionController;
 import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
 import net.medcorp.library.ble.event.BLEResponseDataEvent;
@@ -381,8 +381,6 @@ public class SyncControllerImpl implements  SyncController{
                     if (!isToday(SpUtils.getLongMethod(application,CacheConstants.TODAY_DATE,0))) {
                         baseSteps = 0;
                     }
-                    Log.w("Karl", "Set today steps =" + (steps));
-                    Log.w("Karl","Set Today date=" + new Date().getTime());
                     SpUtils.putLongMethod(application, CacheConstants.TODAY_DATE, new Date().getTime());
                     SpUtils.putIntMethod(application, CacheConstants.TODAY_STEP, steps);
 
