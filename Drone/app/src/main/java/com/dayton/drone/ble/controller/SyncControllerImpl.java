@@ -380,8 +380,6 @@ public class SyncControllerImpl implements  SyncController{
                     if (!isToday(SpUtils.getLongMethod(application,CacheConstants.TODAY_DATE,0))) {
                         baseSteps = 0;
                     }
-                    Log.w("Karl", "Set today steps =" + (steps));
-                    Log.w("Karl","Set Today date=" + new Date().getTime());
                     SpUtils.putLongMethod(application, CacheConstants.TODAY_DATE, new Date().getTime());
                     SpUtils.putIntMethod(application, CacheConstants.TODAY_STEP, steps);
 
