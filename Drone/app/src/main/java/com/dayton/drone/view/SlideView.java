@@ -83,7 +83,6 @@ public class SlideView extends LinearLayout {
         int x = (int) event.getX();
         int y = (int) event.getY();
         int scrollX = getScrollX();
-        Log.d(TAG, "x=" + x + "  y=" + y);
 
         switch (event.getAction()) {
         case MotionEvent.ACTION_DOWN: {

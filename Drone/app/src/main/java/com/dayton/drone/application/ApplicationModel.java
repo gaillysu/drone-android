@@ -11,7 +11,6 @@ import com.dayton.drone.database.entry.NotificationDatabaseHelper;
 import com.dayton.drone.database.entry.StepsDatabaseHelper;
 import com.dayton.drone.database.entry.UserDatabaseHelper;
 import com.dayton.drone.database.entry.WatchesDatabaseHelper;
-import com.dayton.drone.database.entry.WorldClockDatabaseHelper;
 import com.dayton.drone.model.Contact;
 import com.dayton.drone.model.Notification;
 import com.dayton.drone.model.User;
@@ -26,6 +25,7 @@ import net.medcorp.library.android.notificationsdk.config.type.FilterType;
 import net.medcorp.library.android.notificationsdk.config.type.OverrideType;
 import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
 import net.medcorp.library.ble.util.Optional;
+import net.medcorp.library.worldclock.WorldClockDatabaseHelper;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -40,6 +40,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+
 /**
  * Created by karl-john on 18/3/16.
  */
@@ -49,7 +52,6 @@ public class ApplicationModel extends Application {
     private SyncActivityManager syncActivityManager;
     private User user;
     private UserDatabaseHelper userDatabaseHelper;
-    private WorldClockDatabaseHelper worldClockDatabaseHelper;
     private StepsDatabaseHelper stepsDatabaseHelper;
     private NotificationDatabaseHelper notificationDatabaseHelper;
     private WatchesDatabaseHelper watchesDatabaseHelper;
@@ -57,12 +59,13 @@ public class ApplicationModel extends Application {
     @Override
     public void onCreate(){
         super.onCreate();
+        RealmConfiguration realmConfig = new RealmConfiguration.Builder(this).deleteRealmIfMigrationNeeded().build();
+        Realm.setDefaultConfiguration(realmConfig);
         EventBus.builder().sendNoSubscriberEvent(false).sendNoSubscriberEvent(false).logNoSubscriberMessages(false).installDefaultEventBus();
         syncController = new SyncControllerImpl(this);
         retrofitManager = new RetrofitManager(this);
         syncActivityManager = new SyncActivityManager(this);
         userDatabaseHelper = new UserDatabaseHelper(this);
-        worldClockDatabaseHelper = new WorldClockDatabaseHelper(this);
         stepsDatabaseHelper = new StepsDatabaseHelper(this);
         notificationDatabaseHelper = new NotificationDatabaseHelper(this);
         watchesDatabaseHelper = new WatchesDatabaseHelper(this);
@@ -75,6 +78,8 @@ public class ApplicationModel extends Application {
         }
         initializeNotifications();
         EventBus.getDefault().register(this);
+        WorldClockDatabaseHelper databaseHelper = new WorldClockDatabaseHelper(this);
+        databaseHelper.setupWorldClock();
     }
 
     public SyncController getSyncController() {
@@ -96,9 +101,6 @@ public class ApplicationModel extends Application {
     }
     public UserDatabaseHelper getUserDatabaseHelper() {
         return userDatabaseHelper;
-    }
-    public WorldClockDatabaseHelper getWorldClockDatabaseHelper() {
-        return worldClockDatabaseHelper;
     }
     public NotificationDatabaseHelper getNotificationDatabaseHelper(){
         return notificationDatabaseHelper;
@@ -158,6 +160,7 @@ public class ApplicationModel extends Application {
         configEditor.setFilterMode(FilterType.CONTACT, FilterMode.WHITELIST);
         configEditor.apply();
     }
+
 
     @Subscribe
     public void onConnectionStateChanged(BLEConnectionStateChangedEvent event){

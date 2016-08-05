@@ -4,7 +4,7 @@ public class SortModel {
 
 	private String name;
 	private String sortLetters;
-
+    private int cityId;
 	public String getTimeZoneName() {
 		return timeZoneName;
 	}
@@ -26,4 +26,12 @@ public class SortModel {
 	public void setSortLetters(String sortLetters) {
 		this.sortLetters = sortLetters;
 	}
+
+    public int getCityId() {
+        return cityId;
+    }
+
+    public void setCityId(int cityId) {
+        this.cityId = cityId;
+    }
 }
