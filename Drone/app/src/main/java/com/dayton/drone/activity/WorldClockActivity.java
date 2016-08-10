@@ -12,12 +12,15 @@ import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.adapter.WorldClockAdapter;
 import com.dayton.drone.event.Timer10sEvent;
+import com.dayton.drone.event.WorldClockChangedEvent;
 import com.dayton.drone.view.ListViewCompat;
 import com.dayton.drone.viewmodel.WorldClockViewModel;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import net.medcorp.library.worldclock.City;
+import net.medcorp.library.worldclock.event.WorldClockInitializeEvent;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.text.SimpleDateFormat;
@@ -133,6 +136,7 @@ public class WorldClockActivity extends BaseActivity {
                 boolean flag = data.getBooleanExtra("isChooseFlag", false);
                 if (flag) {
                     refreshList();
+                    EventBus.getDefault().post(new WorldClockChangedEvent());
                 }
             }
         }
@@ -163,6 +167,13 @@ public class WorldClockActivity extends BaseActivity {
             city.getOffSetFromGMT();
             listData.add(new WorldClockViewModel(city));
             worldClockAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Subscribe
+    public void onEvent(WorldClockInitializeEvent event) {
+        if(event.getStatus() == WorldClockInitializeEvent.STATUS.FINISHED){
+            refreshList();
         }
     }
 }

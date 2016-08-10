@@ -18,6 +18,7 @@ import android.util.Log;
 
 import com.dayton.drone.application.ApplicationModel;
 import com.dayton.drone.ble.datasource.GattAttributesDataSourceImpl;
+import com.dayton.drone.ble.model.TimeZoneModel;
 import com.dayton.drone.ble.model.packet.ActivityPacket;
 import com.dayton.drone.ble.model.packet.GetBatteryPacket;
 import com.dayton.drone.ble.model.packet.GetStepsGoalPacket;
@@ -35,6 +36,7 @@ import com.dayton.drone.ble.model.request.setting.SetStepsToWatchReuqest;
 import com.dayton.drone.ble.model.request.setting.SetUserProfileRequest;
 import com.dayton.drone.ble.model.request.sync.GetActivityRequest;
 import com.dayton.drone.ble.model.request.sync.GetStepsGoalRequest;
+import com.dayton.drone.ble.model.request.worldclock.SetWorldClockRequest;
 import com.dayton.drone.ble.notification.ListenerService;
 import com.dayton.drone.ble.util.Constants;
 import com.dayton.drone.event.BLEPairStatusChangedEvent;
@@ -76,6 +78,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 import static com.dayton.drone.ble.util.Constants.ApplicationID.WorldClock;
 
@@ -227,17 +230,12 @@ public class SyncControllerImpl implements  SyncController{
 
     private void setWorldClock(List<City> worldClockList)
     {
+        List<TimeZoneModel> timeZoneModelList = new ArrayList<>();
         for(City city:worldClockList)
         {
-//            TimeZone timeZone = TimeZone.getTimeZone(worldClock.getTimeZoneName());
-//            Calendar LATime = new GregorianCalendar(timeZone);
-//            LATime.setTimeInMillis(new Date().getTime());
-//            float utc_offset = timeZone.getGmt_offset(LATime.getTimeInMillis())/1000f/3600f;
-//            String utc_name = worldClock.getTimeZoneTitle().split(",")[0];
-//            Log.i("gailly",utc_name + ", " + utc_offset+ ", DaylightTime: " + timeZone.useDaylightTime());
-//            timeZoneModelList.add(new TimeZoneModel(utc_offset,utc_name));
+            timeZoneModelList.add(new TimeZoneModel(city.getOffSetFromGMT()/60,city.getName()));
         }
-//        sendRequest(new SetWorldClockRequest(application,timeZoneModelList));
+        sendRequest(new SetWorldClockRequest(application,timeZoneModelList));
     }
     @Subscribe
     public void onEvent(BLEResponseDataEvent eventData)
@@ -296,7 +294,8 @@ public class SyncControllerImpl implements  SyncController{
                         sendRequest(new SetGoalRequest(application, SpUtils.getIntMethod(application, CacheConstants.GOAL_STEP, 10000)));
                         //if the cached date is today,use the cached steps to set watch
                         //set world clock to watch
-//                        setWorldClock(application.getWorldClockDatabaseHelper().getSelected());
+
+                        setWorldClock(getSelectedCities());
 
 
                         if(SpUtils.getBoolean(application, CacheConstants.TODAY_RESET,false)){
@@ -420,6 +419,8 @@ public class SyncControllerImpl implements  SyncController{
         }
     }
 
+
+
     @Subscribe
     public void onEvent(BLEConnectionStateChangedEvent stateChangedEvent) {
         if(stateChangedEvent.isConnected()) {
@@ -455,7 +456,7 @@ public class SyncControllerImpl implements  SyncController{
 
     @Subscribe
     public void onEvent(WorldClockChangedEvent worldClockChangedEvent) {
-        setWorldClock(worldClockChangedEvent.getWorldClockList());
+        setWorldClock(getSelectedCities());
     }
     @Subscribe
     public void onEvent(StepsGoalChangedEvent stepsGoalChangedEvent) {
@@ -563,5 +564,14 @@ public class SyncControllerImpl implements  SyncController{
             }
         }
         return false;
+    }
+
+    private List<City> getSelectedCities() {
+        RealmResults<City> realmCities = Realm.getDefaultInstance().where(City.class).equalTo("selected",true).findAll();
+        List<City> cities = new ArrayList<>();
+        for (City city: realmCities) {
+            cities.add(city);
+        }
+        return cities;
     }
 }
