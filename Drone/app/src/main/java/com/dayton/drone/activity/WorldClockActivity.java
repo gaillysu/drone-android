@@ -160,13 +160,8 @@ public class WorldClockActivity extends BaseActivity {
         listData.clear();
         RealmResults<City> selectedCities = realm.where(City.class).equalTo("selected", true).findAll();
         for (City city : selectedCities) {
-
-//            if (city.hasDST()){
-                city.getOffSetFromLocalTime();
-//            }
-
-            listData.add(new WorldClockViewModel(city.getName(), city.getTimezoneRef().getOffset(), city.getId()));
-
+            city.getOffSetFromGMT();
+            listData.add(new WorldClockViewModel(city));
             worldClockAdapter.notifyDataSetChanged();
         }
     }

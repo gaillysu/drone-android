@@ -19,8 +19,7 @@ import android.widget.Toast;
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.adapter.MySearchResultAdapter;
-import com.dayton.drone.adapter.SortAdapter;
-import com.dayton.drone.model.SortModel;
+import com.dayton.drone.adapter.ChooseCityAdapter;
 import com.dayton.drone.utils.CheckEmailFormat;
 import com.dayton.drone.view.PinyinComparator;
 import com.dayton.drone.view.SideBar;
@@ -57,11 +56,10 @@ public class ChooseCityActivity extends BaseActivity {
     @Bind(R.id.choose_activity_search_list_view)
     ListView showSearchResultListView;
 
-    private List<ChooseCityViewModel> worldClockDataList;
-    private SortAdapter adapter;
-    private List<SortModel> SourceDateList;
+    private List<ChooseCityViewModel> chooseCityViewModelsList;
+    private ChooseCityAdapter adapter;
     private PinyinComparator pinyinComparator;
-    private List<SortModel> searchResult;
+    private List<ChooseCityViewModel> searchResultViewModelsList;
     private MySearchResultAdapter searchAdapter;
     private Realm realm = Realm.getDefaultInstance();
 
@@ -69,7 +67,7 @@ public class ChooseCityActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_add_city_layout);
-        worldClockDataList = new ArrayList<>();
+        chooseCityViewModelsList = new ArrayList<>();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             setTranslucentStatus(true);
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
@@ -78,16 +76,15 @@ public class ChooseCityActivity extends BaseActivity {
         }
 
         ButterKnife.bind(this);
-
         RealmResults<City> cities = realm.where(City.class).findAll();
         for (City city: cities) {
-            worldClockDataList.add(new ChooseCityViewModel(city.getName(),city.getId()));
+            chooseCityViewModelsList.add(new ChooseCityViewModel(city));
         }
         pinyinComparator = new PinyinComparator();
         cityListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long Id) {
-                    addWorldClock(worldClockDataList.get(position).getCityId());
+                    addWorldClock(chooseCityViewModelsList.get(position).getCityId());
             }
         });
 
@@ -103,9 +100,8 @@ public class ChooseCityActivity extends BaseActivity {
             }
         });
 
-        SourceDateList = filledData(worldClockDataList);
-        Collections.sort(SourceDateList, pinyinComparator);
-        adapter = new SortAdapter(this, SourceDateList);
+        Collections.sort(chooseCityViewModelsList, pinyinComparator);
+        adapter = new ChooseCityAdapter(this, chooseCityViewModelsList);
         cityListView.setAdapter(adapter);
     }
 
@@ -113,32 +109,6 @@ public class ChooseCityActivity extends BaseActivity {
     public void cancelClick() {
         finish();
     }
-
-
-    private List<SortModel> filledData(List<ChooseCityViewModel> worldClockList) {
-        List<SortModel> mSortList = new ArrayList<SortModel>();
-
-        for (int i = 0; i < worldClockList.size(); i++) {
-            SortModel sortModel = new SortModel();
-
-            sortModel.setName(worldClockList.get(i).getDisplayName().split(",")[0]);
-            sortModel.setTimeZoneName(worldClockList.get(i).getDisplayName());
-            sortModel.setCityId(worldClockList.get(i).getCityId());
-            String pinyin = worldClockList.get(i).getDisplayName();
-            String sortString = pinyin.substring(0, 1).toUpperCase();
-
-            if (sortString.matches("[A-Z]")) {
-                sortModel.setSortLetters(sortString.toUpperCase());
-            } else {
-                sortModel.setSortLetters("#");
-            }
-
-            mSortList.add(sortModel);
-        }
-        return mSortList;
-
-    }
-
 
     private TextWatcher myTextWatcher = new TextWatcher() {
 
@@ -149,7 +119,7 @@ public class ChooseCityActivity extends BaseActivity {
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            searchResult.clear();
+            searchResultViewModelsList.clear();
             search();
             searchAdapter.notifyDataSetChanged();
         }
@@ -166,7 +136,7 @@ public class ChooseCityActivity extends BaseActivity {
         searchLinearLayout.setVisibility(View.GONE);
         editSearchContent.setVisibility(View.VISIBLE);
         showSearchResultListView.setVisibility(View.VISIBLE);
-        searchResult = new ArrayList<>();
+        searchResultViewModelsList = new ArrayList<>();
         userSearchCityEdit.requestFocus();
         CheckEmailFormat.openInputMethod(ChooseCityActivity.this);
         userSearchCityEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -175,7 +145,7 @@ public class ChooseCityActivity extends BaseActivity {
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
                 if (actionId == EditorInfo.IME_ACTION_SEND || (keyEvent != null && keyEvent.getKeyCode()
                         == KeyEvent.KEYCODE_ENTER)) {
-                    searchResult.clear();
+                    searchResultViewModelsList.clear();
                     search();
                     return true;
                 }
@@ -189,7 +159,7 @@ public class ChooseCityActivity extends BaseActivity {
         showSearchResultListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                addWorldClock(searchResult.get(position).getCityId());
+                addWorldClock(searchResultViewModelsList.get(position).getCityId());
 
             }
         });
@@ -199,14 +169,14 @@ public class ChooseCityActivity extends BaseActivity {
     private void search() {
         String userInputSearchCityName = userSearchCityEdit.getText().toString();
         if (!userInputSearchCityName.isEmpty()) {
-            for (SortModel bean : SourceDateList) {
-                if (bean.getName().toLowerCase().contains(userInputSearchCityName.toLowerCase() )) {
-                    searchResult.add(bean);
+            for (ChooseCityViewModel chooseCityViewModel: chooseCityViewModelsList) {
+                if (chooseCityViewModel.getDisplayName().toLowerCase().contains(userInputSearchCityName.toLowerCase() )) {
+                    searchResultViewModelsList.add(chooseCityViewModel);
                 }
             }
-            if (searchResult.size() > 0) {
-                Collections.sort(searchResult, pinyinComparator);
-                searchAdapter = new MySearchResultAdapter(ChooseCityActivity.this, searchResult);
+            if (searchResultViewModelsList.size() > 0) {
+                Collections.sort(searchResultViewModelsList, pinyinComparator);
+                searchAdapter = new MySearchResultAdapter(ChooseCityActivity.this, searchResultViewModelsList);
                 showSearchResultListView.setAdapter(searchAdapter);
             }
         }

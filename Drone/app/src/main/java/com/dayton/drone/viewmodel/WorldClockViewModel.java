@@ -2,48 +2,38 @@ package com.dayton.drone.viewmodel;
 
 import com.dayton.drone.view.SlideView;
 
+import net.medcorp.library.worldclock.City;
+
 /**
  * Created by karl-john on 5/8/2016.
  */
 
 public class WorldClockViewModel {
 
-    private String cityName;
+    private final String cityName;
 
-    private int time;
-
-    private int cityId;
+    private final int cityId;
 
     private SlideView slideView;
 
-    public WorldClockViewModel(String cityName, int time, int cityId) {
-        this.cityName = cityName;
-        this.time = time;
-        this.cityId = cityId;
+    private final int timeOffsetFromGmt;
+
+    public WorldClockViewModel(City city) {
+        this.cityName = city.getName();
+        timeOffsetFromGmt = city.getOffSetFromGMT();
+        this.cityId = city.getId();
     }
 
-    public String getCityName() {
+    public String getName(){
         return cityName;
     }
 
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
-    }
-
-    public int getTime() {
-        return time;
-    }
-
-    public void setTime(int time) {
-        this.time = time;
+    public int getOffSetFromGMT(){
+            return timeOffsetFromGmt;
     }
 
     public int getCityId() {
         return cityId;
-    }
-
-    public void setCityId(int cityId) {
-        this.cityId = cityId;
     }
 
     public SlideView getSlideView() {

@@ -10,13 +10,14 @@ import com.dayton.drone.R;
 import com.dayton.drone.view.SlideView;
 import com.dayton.drone.viewmodel.WorldClockViewModel;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
 
 import static com.dayton.drone.R.id.holder;
 
@@ -70,16 +71,17 @@ public class WorldClockAdapter extends BaseAdapter implements SlideView.OnSlideL
         viewModel.setSlideView(slideView);
         viewModel.getSlideView().shrink();
 
-        String name = viewModel.getCityName();
+        String name = viewModel.getName();
 
-        TimeZone timeZone = TimeZone.getTimeZone(name);
-        Calendar calendar = Calendar.getInstance();
-        Calendar LATime = new GregorianCalendar(timeZone);
-        LATime.setTimeInMillis(calendar.getTimeInMillis());
+        DateTime time = DateTime.now();
+        time = time.toDateTime(DateTimeZone.UTC);
+        int offset = viewModel.getOffSetFromGMT();
+        time = time.plusMinutes(offset);
+        Calendar calendar = time.toCalendar(Locale.US);
 
-        int date = LATime.get(Calendar.DATE);
-        int hour = LATime.get(Calendar.HOUR_OF_DAY);
-        int minutes = LATime.get(Calendar.MINUTE);
+        int date = calendar.get(Calendar.DATE);
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minutes = calendar.get(Calendar.MINUTE);
 
         if(name.contains("_")) {
             name = name.replace("_"," ");

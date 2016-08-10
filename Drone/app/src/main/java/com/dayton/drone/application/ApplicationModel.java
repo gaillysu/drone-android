@@ -80,42 +80,6 @@ public class ApplicationModel extends Application {
         EventBus.getDefault().register(this);
         WorldClockDatabaseHelper databaseHelper = new WorldClockDatabaseHelper(this);
         databaseHelper.setupWorldClock();
-//
-//        String[] timezones = TimeZone.getAvailableIDs();
-//        Realm realm = Realm.getDefaultInstance();
-//        RealmResults<net.medcorp.library.worldclock.TimeZone> results = realm.where(net.medcorp.library.worldclock.TimeZone.class).findAll();
-//        List<String> similarTimezones = new ArrayList<String>();
-//        List<String> notSimilarTimezonesAndroid = new ArrayList<String>();
-//        List<String> notSimilarTimezonesLocal = new ArrayList<String>();
-//        for (String tzId : timezones) {
-//            TimeZone tz = TimeZone.getTimeZone(tzId);
-//
-//            boolean gotSimilar = false;
-//            for (net.medcorp.library.worldclock.TimeZone timezone : results) {
-//                if (timezone.getName().equals(tz.getDisplayName())){
-//                    similarTimezones.add(timezone.getName());
-//                    gotSimilar = true;
-//                }
-//            }
-//            if (!gotSimilar){
-//                notSimilarTimezonesAndroid.add(tz.getDisplayName());
-////                notSimilarTimezonesLocal.add(timezone.getName());
-//            }
-//        }
-//        Log.w("Karl","===================================0");
-//        for (String timezone:similarTimezones) {
-//            Log.w("Karl",timezone);
-//        }
-//        Log.w("Karl","===================================1");
-//        for (String timezone:notSimilarTimezonesAndroid) {
-//            Log.w("Karl",timezone);
-//        }
-//        Log.w("Karl","===================================2");
-//        for (String timezone:notSimilarTimezonesLocal) {
-//            Log.w("Karl",timezone);
-//        }
-
-
     }
 
     public SyncController getSyncController() {

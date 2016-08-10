@@ -35,6 +35,7 @@ import com.dayton.drone.ble.model.request.setting.SetStepsToWatchReuqest;
 import com.dayton.drone.ble.model.request.setting.SetUserProfileRequest;
 import com.dayton.drone.ble.model.request.sync.GetActivityRequest;
 import com.dayton.drone.ble.model.request.sync.GetStepsGoalRequest;
+import com.dayton.drone.ble.notification.ListenerService;
 import com.dayton.drone.ble.util.Constants;
 import com.dayton.drone.event.BLEPairStatusChangedEvent;
 import com.dayton.drone.event.BatteryStatusChangedEvent;
@@ -231,7 +232,7 @@ public class SyncControllerImpl implements  SyncController{
 //            TimeZone timeZone = TimeZone.getTimeZone(worldClock.getTimeZoneName());
 //            Calendar LATime = new GregorianCalendar(timeZone);
 //            LATime.setTimeInMillis(new Date().getTime());
-//            float utc_offset = timeZone.getOffset(LATime.getTimeInMillis())/1000f/3600f;
+//            float utc_offset = timeZone.getGmt_offset(LATime.getTimeInMillis())/1000f/3600f;
 //            String utc_name = worldClock.getTimeZoneTitle().split(",")[0];
 //            Log.i("gailly",utc_name + ", " + utc_offset+ ", DaylightTime: " + timeZone.useDaylightTime());
 //            timeZoneModelList.add(new TimeZoneModel(utc_offset,utc_name));
@@ -338,7 +339,7 @@ public class SyncControllerImpl implements  SyncController{
                         Log.d(TAG,"Subscribed to notifications success.");
                     }
                     //here start ANCS service
-//                    application.getApplicationContext().bindService(new Intent(application, ListenerService.class), notificationServiceConnection, Activity.BIND_AUTO_CREATE);
+                    application.getApplicationContext().bindService(new Intent(application, ListenerService.class), notificationServiceConnection, Activity.BIND_AUTO_CREATE);
                      //here start little sync timer
                     startTimer(true);
                 }

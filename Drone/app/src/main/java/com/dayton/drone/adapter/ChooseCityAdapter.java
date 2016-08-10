@@ -9,23 +9,23 @@ import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.dayton.drone.R;
-import com.dayton.drone.model.SortModel;
+import com.dayton.drone.viewmodel.ChooseCityViewModel;
 
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class SortAdapter extends BaseAdapter implements SectionIndexer {
-	private List<SortModel> list = null;
+public class ChooseCityAdapter extends BaseAdapter implements SectionIndexer {
+	private List<ChooseCityViewModel> list = null;
 	private Context mContext;
 	
-	public SortAdapter(Context mContext, List<SortModel> list) {
+	public ChooseCityAdapter(Context mContext, List<ChooseCityViewModel> list) {
 		this.mContext = mContext;
 		this.list = list;
 	}
 
-	public void updateListView(List<SortModel> list){
+	public void updateListView(List<ChooseCityViewModel> list){
         this.list = list;
         notifyDataSetChanged();
     }
@@ -44,7 +44,7 @@ public class SortAdapter extends BaseAdapter implements SectionIndexer {
 
 	public View getView(final int position, View view, ViewGroup arg2) {
 		ViewHolder viewHolder = null;
-		final SortModel mContent = list.get(position);
+		final ChooseCityViewModel mContent = list.get(position);
 		if (view == null) {
 			view = LayoutInflater.from(mContext).inflate(R.layout.choose_city_adapter_item, null);
 			viewHolder = new ViewHolder(view);
@@ -53,7 +53,7 @@ public class SortAdapter extends BaseAdapter implements SectionIndexer {
 			viewHolder = (ViewHolder) view.getTag();
 		}
 
-		viewHolder.tvTitle.setText(this.list.get(position).getName());
+		viewHolder.tvTitle.setText(this.list.get(position).getDisplayName());
 		
 		return view;
 
@@ -70,12 +70,12 @@ public class SortAdapter extends BaseAdapter implements SectionIndexer {
 	}
 
 	public int getSectionForPosition(int position) {
-		return list.get(position).getSortLetters().charAt(0);
+		return list.get(position).getSortLetter().charAt(0);
 	}
 
 	public int getPositionForSection(int section) {
 		for (int i = 0; i < getCount(); i++) {
-			String sortStr = list.get(i).getSortLetters();
+			String sortStr = list.get(i).getSortLetter();
 			char firstChar = sortStr.toUpperCase().charAt(0);
 			if (firstChar == section) {
 				return i;
