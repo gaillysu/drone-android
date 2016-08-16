@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
@@ -202,6 +203,18 @@ public class SyncControllerImpl implements  SyncController{
     @Override
     public void getBattery() {
         sendRequest(new GetBatteryRequest(application));
+    }
+
+    @Override
+    public void startNotificationListener() {
+        //force android NotificationManagerService to rebind user NotificationListenerService
+        // http://www.zhihu.com/question/33540416/answer/113706620
+        PackageManager pm = application.getPackageManager();
+        pm.setComponentEnabledSetting(new ComponentName(application, ListenerService.class),
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+        pm.setComponentEnabledSetting(new ComponentName(application, ListenerService.class),
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+
     }
 
     /**
@@ -549,6 +562,7 @@ public class SyncControllerImpl implements  SyncController{
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             Log.v(TAG, name+" Service connected");
+            startNotificationListener();
         }
     };
 
