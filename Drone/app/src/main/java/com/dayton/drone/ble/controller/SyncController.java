@@ -38,4 +38,6 @@ public interface SyncController {
      */
     void getBattery();
 
+    void startNotificationListener();
+
 }
