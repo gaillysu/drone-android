@@ -5,23 +5,23 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.adapter.WorldClockAdapter;
-import com.dayton.drone.database.entry.WorldClockDatabaseHelper;
 import com.dayton.drone.event.Timer10sEvent;
-import com.dayton.drone.event.WorldClockChangedEvent;
-import com.dayton.drone.model.WorldClock;
 import com.dayton.drone.view.ListViewCompat;
+import com.dayton.drone.viewmodel.WorldClockViewModel;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
-import org.greenrobot.eventbus.EventBus;
+import net.medcorp.library.worldclock.City;
+
 import org.greenrobot.eventbus.Subscribe;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -31,6 +31,8 @@ import java.util.TimeZone;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * Created by boy on 2016/4/24.
@@ -38,7 +40,6 @@ import butterknife.OnClick;
 public class WorldClockActivity extends BaseActivity {
     @Bind(R.id.world_clock_date_tv)
     TextView dateTv;
-
     @Bind(R.id.world_clock_localhost_city)
     TextView localCity;
     @Bind(R.id.world_clock_item_city_time)
@@ -48,24 +49,22 @@ public class WorldClockActivity extends BaseActivity {
 
     public static String FORMAT_LONG = "yyyy-MM-dd HH:mm:ss";
 
-    private List<WorldClock> listData;
+    private List<WorldClockViewModel> listData;
     private WorldClockAdapter worldClockAdapter;
-
+    private Realm realm = Realm.getDefaultInstance();
     private int requestCode = 3 >> 2;
-    private WorldClockDatabaseHelper worldClockDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_world_clock);
-
+        listData = new ArrayList<>();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             setTranslucentStatus(true);
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
             tintManager.setStatusBarTintEnabled(true);
             tintManager.setStatusBarTintResource(R.color.user_info_sex_bg);
         }
-
         ButterKnife.bind(this);
         initLocalDateTime();
         initData();
@@ -76,7 +75,6 @@ public class WorldClockActivity extends BaseActivity {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                //refresh local city time
                 initLocalDateTime();
                 worldClockAdapter.notifyDataSetChanged();
             }
@@ -89,11 +87,10 @@ public class WorldClockActivity extends BaseActivity {
         String currentTime = format.format(date);
         String[] currentTimeArray = currentTime.split("-");
         dateTv.setText(currentTimeArray[2] + " " + new SimpleDateFormat("MMM", Locale.US).format(date) + " " + currentTimeArray[0]);
-
         format = new SimpleDateFormat(FORMAT_LONG);
         Calendar calendar = Calendar.getInstance();
         TimeZone timeZone = calendar.getTimeZone();
-        String timeName = timeZone.getID().split("/")[1].replace("_"," ");
+        String timeName = timeZone.getID().split("/")[1].replace("_", " ");
         localCity.setText(timeName);
         String[] localTimeStr = format.format(calendar.getTime()).split(" ");
         if (new Integer(localTimeStr[1].split(":")[0]).intValue() <= 12) {
@@ -105,21 +102,11 @@ public class WorldClockActivity extends BaseActivity {
     }
 
     public void initData() {
-        worldClockDatabase = getModel().getWorldClockDatabaseHelper();
-        listData = worldClockDatabase.getSelected();
         worldClockAdapter = new WorldClockAdapter(listData, this);
         worldClockListView.setAdapter(worldClockAdapter);
+        worldClockAdapter.onDeleteItemListener(deleteItemInterface);
+        refreshList();
 
-        worldClockAdapter.onDeleteItemListener(new WorldClockAdapter.DeleteItemInterface() {
-            @Override
-            public void deleteItem(int position) {
-                if (worldClockDatabase.update(listData.get(position), false)) {
-                    listData.remove(position);
-                    worldClockAdapter.notifyDataSetChanged();
-                    EventBus.getDefault().post(new WorldClockChangedEvent(worldClockDatabase.getSelected()));
-                }
-            }
-        });
     }
 
     @OnClick(R.id.world_clock_back_icon_ib)
@@ -142,26 +129,40 @@ public class WorldClockActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == this.requestCode) {
-            boolean flag = data.getBooleanExtra("isChooseFlag", true);
-            if (flag) {
-                String timeZoneName = data.getStringExtra("worldClock");
-                if (worldClockDatabase.getSelected().size() == 5) {
-                    Toast.makeText(WorldClockActivity.this, getResources().getString(R.string.add_city_toast_text)
-                            , Toast.LENGTH_LONG).show();
-                    return;
-                }
-                WorldClock worldClock = new WorldClock();
-                worldClock.setTimeZoneName(timeZoneName);
-
-                if (worldClockDatabase.update(worldClock, true)) {
-                    listData.add(worldClock);
-                    worldClockAdapter.notifyDataSetChanged();
-                    EventBus.getDefault().post(new WorldClockChangedEvent(worldClockDatabase.getSelected()));
-                } else {
-                    Toast.makeText(WorldClockActivity.this, getString(R.string.world_clock_add_city_error)
-                            , Toast.LENGTH_LONG).show();
+            if (data != null) {
+                boolean flag = data.getBooleanExtra("isChooseFlag", false);
+                if (flag) {
+                    refreshList();
                 }
             }
+        }
+    }
+
+    private WorldClockAdapter.DeleteItemInterface deleteItemInterface = new WorldClockAdapter.DeleteItemInterface() {
+        @Override
+        public void deleteItem(int position) {
+            int id = listData.get(position).getCityId();
+            RealmResults<City> cities = realm.where(City.class).equalTo("id", id).findAll();
+            if (cities.size() == 1) {
+                listData.remove(position);
+                worldClockAdapter.notifyDataSetChanged();
+                realm.beginTransaction();
+                cities.get(0).setSelected(false);
+                realm.commitTransaction();
+                refreshList();
+            } else {
+                Log.w("Karl", "something really bad is wrong!");
+            }
+        }
+    };
+
+    private void refreshList() {
+        listData.clear();
+        RealmResults<City> selectedCities = realm.where(City.class).equalTo("selected", true).findAll();
+        for (City city : selectedCities) {
+            city.getOffSetFromGMT();
+            listData.add(new WorldClockViewModel(city));
+            worldClockAdapter.notifyDataSetChanged();
         }
     }
 }

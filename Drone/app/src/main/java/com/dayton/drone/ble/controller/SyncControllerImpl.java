@@ -19,7 +19,6 @@ import android.util.Log;
 
 import com.dayton.drone.application.ApplicationModel;
 import com.dayton.drone.ble.datasource.GattAttributesDataSourceImpl;
-import com.dayton.drone.ble.model.TimeZoneModel;
 import com.dayton.drone.ble.model.packet.ActivityPacket;
 import com.dayton.drone.ble.model.packet.GetBatteryPacket;
 import com.dayton.drone.ble.model.packet.GetStepsGoalPacket;
@@ -37,7 +36,6 @@ import com.dayton.drone.ble.model.request.setting.SetStepsToWatchReuqest;
 import com.dayton.drone.ble.model.request.setting.SetUserProfileRequest;
 import com.dayton.drone.ble.model.request.sync.GetActivityRequest;
 import com.dayton.drone.ble.model.request.sync.GetStepsGoalRequest;
-import com.dayton.drone.ble.model.request.worldclock.SetWorldClockRequest;
 import com.dayton.drone.ble.notification.ListenerService;
 import com.dayton.drone.ble.util.Constants;
 import com.dayton.drone.event.BLEPairStatusChangedEvent;
@@ -53,7 +51,6 @@ import com.dayton.drone.event.Timer10sEvent;
 import com.dayton.drone.event.WorldClockChangedEvent;
 import com.dayton.drone.model.DailySteps;
 import com.dayton.drone.model.Steps;
-import com.dayton.drone.model.WorldClock;
 import com.dayton.drone.utils.CacheConstants;
 import com.dayton.drone.utils.Common;
 import com.dayton.drone.utils.SpUtils;
@@ -67,6 +64,7 @@ import net.medcorp.library.ble.model.response.BLEResponseData;
 import net.medcorp.library.ble.model.response.MEDRawData;
 import net.medcorp.library.ble.util.Optional;
 import net.medcorp.library.ble.util.QueuedMainThreadHandler;
+import net.medcorp.library.worldclock.City;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -74,11 +72,13 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import io.realm.Realm;
+
+import static com.dayton.drone.ble.util.Constants.ApplicationID.WorldClock;
 
 /**
  * Created by med on 16/4/12.
@@ -95,7 +95,7 @@ public class SyncControllerImpl implements  SyncController{
     private int baseSteps = 0;
     private final long BIG_SYNC_INTERVAL = 5*60* 1000L; //5minutes
     private boolean bigSyncFirst = true;
-
+    private Realm realm;
 
     private void startTimer(final boolean autoSync) {
         if(autoSyncTimer!=null)autoSyncTimer.cancel();
@@ -121,6 +121,7 @@ public class SyncControllerImpl implements  SyncController{
     }
 
     public  SyncControllerImpl(ApplicationModel application){
+        realm = Realm.getDefaultInstance();
         this.application = application;
         if (!isToday(SpUtils.getLongMethod(application,CacheConstants.TODAY_DATE,0))){
             Log.w("Karl","Resetting today!");
@@ -237,20 +238,19 @@ public class SyncControllerImpl implements  SyncController{
         });
     }
 
-    private void setWorldClock(List<WorldClock> worldClockList)
+    private void setWorldClock(List<City> worldClockList)
     {
-        List<TimeZoneModel> timeZoneModelList = new ArrayList<>();
-        for(WorldClock worldClock:worldClockList)
+        for(City city:worldClockList)
         {
-            TimeZone timeZone = TimeZone.getTimeZone(worldClock.getTimeZoneName());
-            Calendar LATime = new GregorianCalendar(timeZone);
-            LATime.setTimeInMillis(new Date().getTime());
-            float utc_offset = timeZone.getOffset(LATime.getTimeInMillis())/1000f/3600f;
-            String utc_name = worldClock.getTimeZoneTitle().split(",")[0];
-            Log.i("gailly",utc_name + ", " + utc_offset+ ", DaylightTime: " + timeZone.useDaylightTime());
-            timeZoneModelList.add(new TimeZoneModel(utc_offset,utc_name));
+//            TimeZone timeZone = TimeZone.getTimeZone(worldClock.getTimeZoneName());
+//            Calendar LATime = new GregorianCalendar(timeZone);
+//            LATime.setTimeInMillis(new Date().getTime());
+//            float utc_offset = timeZone.getGmt_offset(LATime.getTimeInMillis())/1000f/3600f;
+//            String utc_name = worldClock.getTimeZoneTitle().split(",")[0];
+//            Log.i("gailly",utc_name + ", " + utc_offset+ ", DaylightTime: " + timeZone.useDaylightTime());
+//            timeZoneModelList.add(new TimeZoneModel(utc_offset,utc_name));
         }
-        sendRequest(new SetWorldClockRequest(application,timeZoneModelList));
+//        sendRequest(new SetWorldClockRequest(application,timeZoneModelList));
     }
     @Subscribe
     public void onEvent(BLEResponseDataEvent eventData)
@@ -302,14 +302,14 @@ public class SyncControllerImpl implements  SyncController{
                         sendRequest(new SetSystemConfig(application,1,0, 0, 0, Constants.SystemConfigID.Enabled));
                         sendRequest(new SetSystemConfig(application,1,0, 0, 0, Constants.SystemConfigID.SleepConfig));
                         sendRequest(new SetRTCRequest(application));
-                        sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.WorldClock));
+                        sendRequest(new SetAppConfigRequest(application, WorldClock));
                         sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.ActivityTracking));
                         sendRequest(new SetUserProfileRequest(application,application.getUser()));
                         //set goal to watch
                         sendRequest(new SetGoalRequest(application, SpUtils.getIntMethod(application, CacheConstants.GOAL_STEP, 10000)));
                         //if the cached date is today,use the cached steps to set watch
                         //set world clock to watch
-                        setWorldClock(application.getWorldClockDatabaseHelper().getSelected());
+//                        setWorldClock(application.getWorldClockDatabaseHelper().getSelected());
 
 
                         if(SpUtils.getBoolean(application, CacheConstants.TODAY_RESET,false)){
@@ -332,7 +332,7 @@ public class SyncControllerImpl implements  SyncController{
                     else if((systemStatusPacket.getStatus() & Constants.SystemStatus.InvalidTime.rawValue())==Constants.SystemStatus.InvalidTime.rawValue())
                     {
                         sendRequest(new SetRTCRequest(application));
-                        sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.WorldClock));
+                        sendRequest(new SetAppConfigRequest(application, WorldClock));
                         sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.ActivityTracking));
                         sendRequest(new SetUserProfileRequest(application,application.getUser()));
                     }
@@ -353,7 +353,7 @@ public class SyncControllerImpl implements  SyncController{
                     }
                     //here start ANCS service
                     application.getApplicationContext().bindService(new Intent(application, ListenerService.class), notificationServiceConnection, Activity.BIND_AUTO_CREATE);
-                    //here start little sync timer
+                     //here start little sync timer
                     startTimer(true);
                 }
                 else if(GetActivityRequest.HEADER == packet.getHeader())

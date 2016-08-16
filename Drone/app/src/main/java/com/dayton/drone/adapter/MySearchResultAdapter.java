@@ -7,7 +7,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.dayton.drone.R;
-import com.dayton.drone.model.SortModel;
+import com.dayton.drone.viewmodel.ChooseCityViewModel;
 
 import java.util.List;
 
@@ -16,19 +16,19 @@ import java.util.List;
  */
 public class MySearchResultAdapter extends BaseAdapter {
     private Context context;
-    private List<SortModel> searchResult;
-    public MySearchResultAdapter(Context context , List<SortModel> searchResult){
+    private List<ChooseCityViewModel> chooseCityViewModelList;
+    public MySearchResultAdapter(Context context , List<ChooseCityViewModel> searchResult){
         this.context = context;
-        this.searchResult = searchResult;
+        this.chooseCityViewModelList = searchResult;
     }
     @Override
     public int getCount() {
-        return searchResult.size()!=0?searchResult.size():0;
+        return chooseCityViewModelList.size()!=0? chooseCityViewModelList.size():0;
     }
 
     @Override
     public Object getItem(int i) {
-        return searchResult.get(i) != null? searchResult.get(i):null;
+        return chooseCityViewModelList.get(i) != null? chooseCityViewModelList.get(i):null;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class MySearchResultAdapter extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
         holder.searchCityName = (TextView) view.findViewById(R.id.choose_adapter_item_tv);
-        holder.searchCityName.setText(searchResult.get(i).getName());
+        holder.searchCityName.setText(chooseCityViewModelList.get(i).getDisplayName());
 
         return view;
     }

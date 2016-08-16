@@ -1,6 +1,6 @@
 package com.dayton.drone.event;
 
-import com.dayton.drone.model.WorldClock;
+import net.medcorp.library.worldclock.City;
 
 import java.util.List;
 
@@ -8,12 +8,12 @@ import java.util.List;
  * Created by med on 16/5/23.
  */
 public class WorldClockChangedEvent {
-    final List<WorldClock> worldClockList;
-    public WorldClockChangedEvent(List<WorldClock> worldClockList) {
+    final List<City> worldClockList;
+    public WorldClockChangedEvent(List<City> worldClockList) {
         this.worldClockList = worldClockList;
     }
 
-    public List<WorldClock> getWorldClockList() {
+    public List<City> getWorldClockList() {
         return worldClockList;
     }
 }

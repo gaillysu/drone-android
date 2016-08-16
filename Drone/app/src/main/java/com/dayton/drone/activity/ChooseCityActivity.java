@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -13,18 +14,19 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.adapter.MySearchResultAdapter;
-import com.dayton.drone.adapter.SortAdapter;
-import com.dayton.drone.database.entry.WorldClockDatabaseHelper;
-import com.dayton.drone.model.SortModel;
-import com.dayton.drone.model.WorldClock;
+import com.dayton.drone.adapter.ChooseCityAdapter;
 import com.dayton.drone.utils.CheckEmailFormat;
 import com.dayton.drone.view.PinyinComparator;
 import com.dayton.drone.view.SideBar;
+import com.dayton.drone.viewmodel.ChooseCityViewModel;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
+
+import net.medcorp.library.worldclock.City;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,6 +35,8 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * Created by Administrator on 2016/5/12.
@@ -52,20 +56,18 @@ public class ChooseCityActivity extends BaseActivity {
     @Bind(R.id.choose_activity_search_list_view)
     ListView showSearchResultListView;
 
-    private boolean isChooseCity = false;
-    private List<WorldClock> worldClockDataList;
-    //    private ChooseCityAdapter cityAdapter;
-    private SortAdapter adapter;
-    private List<SortModel> SourceDateList;
+    private List<ChooseCityViewModel> chooseCityViewModelsList;
+    private ChooseCityAdapter adapter;
     private PinyinComparator pinyinComparator;
-    private List<SortModel> searchResult;
+    private List<ChooseCityViewModel> searchResultViewModelsList;
     private MySearchResultAdapter searchAdapter;
+    private Realm realm = Realm.getDefaultInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_add_city_layout);
-
+        chooseCityViewModelsList = new ArrayList<>();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             setTranslucentStatus(true);
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
@@ -74,19 +76,15 @@ public class ChooseCityActivity extends BaseActivity {
         }
 
         ButterKnife.bind(this);
-        WorldClockDatabaseHelper worldClockDatabase = getModel().getWorldClockDatabaseHelper();
-        worldClockDataList = worldClockDatabase.getAll();
+        RealmResults<City> cities = realm.where(City.class).findAll();
+        for (City city: cities) {
+            chooseCityViewModelsList.add(new ChooseCityViewModel(city));
+        }
         pinyinComparator = new PinyinComparator();
         cityListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long Id) {
-                isChooseCity = true;
-                WorldClock worldClock = worldClockDataList.get(position);
-                Intent intent = getIntent();
-                intent.putExtra("isChooseFlag", isChooseCity);
-                intent.putExtra("worldClock", worldClock.getTimeZoneName());
-                setResult(0, intent);
-                finish();
+                    addWorldClock(chooseCityViewModelsList.get(position).getCityId());
             }
         });
 
@@ -102,58 +100,15 @@ public class ChooseCityActivity extends BaseActivity {
             }
         });
 
-        SourceDateList = filledData(worldClockDataList);
-        Collections.sort(SourceDateList, pinyinComparator);
-        adapter = new SortAdapter(this, SourceDateList);
+        Collections.sort(chooseCityViewModelsList, pinyinComparator);
+        adapter = new ChooseCityAdapter(this, chooseCityViewModelsList);
         cityListView.setAdapter(adapter);
     }
 
     @OnClick(R.id.choose_activity_cancel_bt)
     public void cancelClick() {
-        isChooseCity = false;
-        back(false);
-    }
-
-
-    private void back(boolean flag) {
-        Intent intent = getIntent();
-        intent.putExtra("isChooseFlag", flag);
-        setResult(0, intent);
         finish();
     }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            back(false);
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
-    private List<SortModel> filledData(List<WorldClock> worldClockList) {
-        List<SortModel> mSortList = new ArrayList<SortModel>();
-
-        for (int i = 0; i < worldClockList.size(); i++) {
-            SortModel sortModel = new SortModel();
-
-            sortModel.setName(worldClockList.get(i).getTimeZoneTitle().split(",")[0]);
-            sortModel.setTimeZoneName(worldClockList.get(i).getTimeZoneName());
-            String pinyin = worldClockList.get(i).getTimeZoneCategory();
-            String sortString = pinyin.substring(0, 1).toUpperCase();
-
-            if (sortString.matches("[A-Z]")) {
-                sortModel.setSortLetters(sortString.toUpperCase());
-            } else {
-                sortModel.setSortLetters("#");
-            }
-
-            mSortList.add(sortModel);
-        }
-        return mSortList;
-
-    }
-
 
     private TextWatcher myTextWatcher = new TextWatcher() {
 
@@ -164,7 +119,7 @@ public class ChooseCityActivity extends BaseActivity {
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            searchResult.clear();
+            searchResultViewModelsList.clear();
             search();
             searchAdapter.notifyDataSetChanged();
         }
@@ -181,17 +136,16 @@ public class ChooseCityActivity extends BaseActivity {
         searchLinearLayout.setVisibility(View.GONE);
         editSearchContent.setVisibility(View.VISIBLE);
         showSearchResultListView.setVisibility(View.VISIBLE);
-        searchResult = new ArrayList<>();
+        searchResultViewModelsList = new ArrayList<>();
         userSearchCityEdit.requestFocus();
         CheckEmailFormat.openInputMethod(ChooseCityActivity.this);
-
         userSearchCityEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
                 if (actionId == EditorInfo.IME_ACTION_SEND || (keyEvent != null && keyEvent.getKeyCode()
                         == KeyEvent.KEYCODE_ENTER)) {
-                    searchResult.clear();
+                    searchResultViewModelsList.clear();
                     search();
                     return true;
                 }
@@ -201,16 +155,12 @@ public class ChooseCityActivity extends BaseActivity {
 
         userSearchCityEdit.addTextChangedListener(myTextWatcher);
 
+
         showSearchResultListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                isChooseCity = true;
-                SortModel  sortModel = searchResult.get(position);
-                Intent intent = getIntent();
-                intent.putExtra("isChooseFlag", isChooseCity);
-                intent.putExtra("worldClock", sortModel.getTimeZoneName());
-                setResult(0, intent);
-                finish();
+                addWorldClock(searchResultViewModelsList.get(position).getCityId());
+
             }
         });
     }
@@ -219,22 +169,42 @@ public class ChooseCityActivity extends BaseActivity {
     private void search() {
         String userInputSearchCityName = userSearchCityEdit.getText().toString();
         if (!userInputSearchCityName.isEmpty()) {
-            for (SortModel bean : SourceDateList) {
-                if (bean.getName().toLowerCase().contains(userInputSearchCityName.toLowerCase() )) {
-                    searchResult.add(bean);
+            for (ChooseCityViewModel chooseCityViewModel: chooseCityViewModelsList) {
+                if (chooseCityViewModel.getDisplayName().toLowerCase().contains(userInputSearchCityName.toLowerCase() )) {
+                    searchResultViewModelsList.add(chooseCityViewModel);
                 }
             }
-            if (searchResult.size() > 0) {
-                Collections.sort(searchResult, pinyinComparator);
-                searchAdapter = new MySearchResultAdapter(ChooseCityActivity.this, searchResult);
+            if (searchResultViewModelsList.size() > 0) {
+                Collections.sort(searchResultViewModelsList, pinyinComparator);
+                searchAdapter = new MySearchResultAdapter(ChooseCityActivity.this, searchResultViewModelsList);
                 showSearchResultListView.setAdapter(searchAdapter);
             }
         }
     }
 
+    public void addWorldClock(int cityId){
+        if (realm.where(City.class).equalTo("selected",true).count() < 5){
+            RealmResults<City> cities = realm.where(City.class).equalTo("id",cityId).findAll();
+            if (cities.size() ==  1){
+                realm.beginTransaction();
+                cities.get(0).setSelected(true);
+                realm.commitTransaction();
+                Intent intent = getIntent();
+                intent.putExtra("isChooseFlag", true);
+                setResult(0, intent);
+                finish();
+            }else{
+                Log.w("Karl","There is something terribly wrong");
+            }
+        }else {
+            Toast.makeText(ChooseCityActivity.this, getResources().getString(R.string.add_city_toast_text)
+                    , Toast.LENGTH_LONG).show();
+        }
+    }
+
     @OnClick(R.id.world_clock_search_city)
     public void startSearchCityBt() {
-        back(false);
+        finish();
     }
 
 }

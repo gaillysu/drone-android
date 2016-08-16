@@ -9,7 +9,6 @@ import com.dayton.drone.database.bean.SleepBean;
 import com.dayton.drone.database.bean.StepsBean;
 import com.dayton.drone.database.bean.UserBean;
 import com.dayton.drone.database.bean.WatchesBean;
-import com.dayton.drone.database.bean.WorldClockBean;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
@@ -42,7 +41,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private Dao<StepsBean,Integer> stepsBean = null;
     private Dao<SleepBean,Integer> sleepBean = null;
     private Dao<NotificationBean,Integer> notificationBean = null;
-    private Dao<WorldClockBean,Integer> worldClockBean = null;
     private Dao<WatchesBean,Integer> watchesBean = null;
     private static DatabaseHelper instance;
 
@@ -67,7 +65,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource,StepsBean.class);
             TableUtils.createTable(connectionSource,SleepBean.class);
             TableUtils.createTable(connectionSource,NotificationBean.class);
-            TableUtils.createTable(connectionSource,WorldClockBean.class);
             TableUtils.createTable(connectionSource,WatchesBean.class);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -82,7 +79,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.dropTable(connectionSource, StepsBean.class, true);
             TableUtils.dropTable(connectionSource, SleepBean.class, true);
             TableUtils.dropTable(connectionSource, NotificationBean.class, true);
-            TableUtils.dropTable(connectionSource, WorldClockBean.class, true);
             TableUtils.dropTable(connectionSource, WatchesBean.class, true);
             onCreate(sqLiteDatabase, connectionSource);
         } catch (SQLException e) {
@@ -120,13 +116,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         return notificationBean;
     }
 
-    public Dao<WorldClockBean,Integer> getWorldClockBean() throws SQLException {
-        if(worldClockBean== null){
-            worldClockBean = getDao(WorldClockBean.class);
-        }
-        return worldClockBean;
-    }
-
     public Dao<WatchesBean,Integer> getWatchesBean() throws SQLException {
         if(watchesBean == null){
             watchesBean = getDao(WatchesBean.class);
@@ -141,7 +130,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         stepsBean = null;
         sleepBean = null;
         notificationBean = null;
-        worldClockBean = null;
         watchesBean = null;
     }
 }

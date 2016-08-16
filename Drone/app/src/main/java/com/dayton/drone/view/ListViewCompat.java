@@ -8,7 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ListView;
 
-import com.dayton.drone.model.WorldClock;
+import com.dayton.drone.viewmodel.WorldClockViewModel;
 
 public class ListViewCompat extends ListView {
 
@@ -49,8 +49,8 @@ public class ListViewCompat extends ListView {
             int position = pointToPosition(x, y);
             Log.e(TAG, "postion=" + position);
             if (position != INVALID_POSITION) {
-                WorldClock data = (WorldClock) getItemAtPosition(position);
-                mFocusedItemView = data.slideView;
+                WorldClockViewModel model = (WorldClockViewModel) getItemAtPosition(position);
+                mFocusedItemView = model.getSlideView();
                 Log.e(TAG, "FocusedItemView=" + mFocusedItemView);
             }
         }

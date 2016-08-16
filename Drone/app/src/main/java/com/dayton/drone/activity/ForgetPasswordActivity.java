@@ -10,6 +10,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
@@ -73,25 +74,29 @@ public class ForgetPasswordActivity extends BaseActivity {
                     @Override
                     public void onRequestSuccess(RequestTokenResponse requestTokenResponse) {
                         if (requestTokenResponse != null) {
-                            String email = requestTokenResponse.getUser().getEmail();
-                            String token = requestTokenResponse.getUser().getPassword_token();
-                            int id = requestTokenResponse.getUser().getId();
+                            if (requestTokenResponse.getStatus()== 1) {
+                                String email = requestTokenResponse.getUser().getEmail();
+                                String token = requestTokenResponse.getUser().getPassword_token();
+                                int id = requestTokenResponse.getUser().getId();
 
-                            if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(token)) {
-                                Intent intent = new Intent(ForgetPasswordActivity.this, ChangePasswordActivity.class);
-                                intent.putExtra("email", email);
-                                intent.putExtra("token", token);
-                                intent.putExtra("id", id);
-                                startActivity(intent);
-                                finish();
-                            } else {
-                                emailAddressEdit.setError(getString(R.string.forget_password_request_null));
+                                if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(token)) {
+                                    Intent intent = new Intent(ForgetPasswordActivity.this, ChangePasswordActivity.class);
+                                    intent.putExtra("email", email);
+                                    intent.putExtra("token", token);
+                                    intent.putExtra("id", id);
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+                                    emailAddressEdit.setError(getString(R.string.forget_password_request_null));
+                                }
+                            }else{
+                                Toast.makeText(ForgetPasswordActivity.this,requestTokenResponse.getMessage(),Toast.LENGTH_SHORT).show();
                             }
                         }
                         progressDialog.dismiss();
                     }
                 });
-            }else{
+            } else {
                 emailAddressEdit.setError(getString(R.string.register_email_format_error));
             }
         } else {
