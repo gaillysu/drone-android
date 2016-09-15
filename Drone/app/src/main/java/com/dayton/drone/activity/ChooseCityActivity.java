@@ -154,8 +154,6 @@ public class ChooseCityActivity extends BaseActivity {
         });
 
         userSearchCityEdit.addTextChangedListener(myTextWatcher);
-
-
         showSearchResultListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -164,7 +162,6 @@ public class ChooseCityActivity extends BaseActivity {
             }
         });
     }
-
 
     private void search() {
         String userInputSearchCityName = userSearchCityEdit.getText().toString();

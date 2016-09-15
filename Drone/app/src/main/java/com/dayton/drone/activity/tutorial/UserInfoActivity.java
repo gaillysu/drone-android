@@ -96,13 +96,13 @@ public class UserInfoActivity extends BaseActivity {
                     @Override
                     public void onDatePickCompleted(int year, int month,
                                                     int day, String dateDesc) {
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.US);
                         try {
-                            Date date = dateFormat.parse(dateDesc);
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                            Date userSelectDate = dateFormat.parse(dateDesc);
+                            tv_userBirth.setText(new SimpleDateFormat("MMM").format(userSelectDate) + "-" + day + "-" + year);
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
-                        tv_userBirth.setText(new SimpleDateFormat("MMM", Locale.US).format(date) + "-" + day + "-" + year);
                     }
                 }).viewStyle(viewType)
                 .viewTextSize(25) // pick view text size
