@@ -193,7 +193,7 @@ public class SyncControllerImpl implements  SyncController{
             connectionController.disconnect();
         }
         //step2:unpair this watch from system bluetooth setting
-        connectionController.unPairDevice();
+        connectionController.unPairDevice("");
         //step3:reset MAC address and firstly run flag and big sync stamp
         connectionController.forgetSavedAddress();
 

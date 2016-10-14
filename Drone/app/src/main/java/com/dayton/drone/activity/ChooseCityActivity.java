@@ -103,6 +103,8 @@ public class ChooseCityActivity extends BaseActivity {
         Collections.sort(chooseCityViewModelsList, pinyinComparator);
         adapter = new ChooseCityAdapter(this, chooseCityViewModelsList);
         cityListView.setAdapter(adapter);
+        searchResultViewModelsList = new ArrayList<>();
+        searchAdapter = new MySearchResultAdapter(ChooseCityActivity.this, searchResultViewModelsList);
     }
 
     @OnClick(R.id.choose_activity_cancel_bt)
@@ -136,7 +138,6 @@ public class ChooseCityActivity extends BaseActivity {
         searchLinearLayout.setVisibility(View.GONE);
         editSearchContent.setVisibility(View.VISIBLE);
         showSearchResultListView.setVisibility(View.VISIBLE);
-        searchResultViewModelsList = new ArrayList<>();
         userSearchCityEdit.requestFocus();
         CheckEmailFormat.openInputMethod(ChooseCityActivity.this);
         userSearchCityEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -167,13 +168,14 @@ public class ChooseCityActivity extends BaseActivity {
         String userInputSearchCityName = userSearchCityEdit.getText().toString();
         if (!userInputSearchCityName.isEmpty()) {
             for (ChooseCityViewModel chooseCityViewModel: chooseCityViewModelsList) {
+
                 if (chooseCityViewModel.getDisplayName().toLowerCase().contains(userInputSearchCityName.toLowerCase() )) {
                     searchResultViewModelsList.add(chooseCityViewModel);
                 }
             }
             if (searchResultViewModelsList.size() > 0) {
                 Collections.sort(searchResultViewModelsList, pinyinComparator);
-                searchAdapter = new MySearchResultAdapter(ChooseCityActivity.this, searchResultViewModelsList);
+
                 showSearchResultListView.setAdapter(searchAdapter);
             }
         }
