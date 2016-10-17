@@ -161,25 +161,25 @@ public class ProfileActivity extends BaseActivity {
     }
 
     @OnClick(R.id.profile_activity_edit_email_ib)
-    public void editUserEmailClick(){
+    public void editUserEmailClick() {
         emailAccount.requestFocus();
         emailAccount.setText("");
         CheckEmailFormat.openInputMethod(ProfileActivity.this);
         emailAccount.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(!hasFocus){
+                if (!hasFocus) {
                     emailAccount.clearFocus();
                     CheckEmailFormat.closeInputMethod(emailAccount);
                     String userEmail = emailAccount.getText().toString();
-                    if(!TextUtils.isEmpty(userEmail)){
-                        if(CheckEmailFormat.checkEmail(userEmail)) {
+                    if (!TextUtils.isEmpty(userEmail)) {
+                        if (CheckEmailFormat.checkEmail(userEmail)) {
                             mUser.setUserEmail(userEmail);
                             emailAccount.setText(userEmail);
-                        }else{
+                        } else {
                             emailAccount.setError(getString(R.string.register_email_format_error));
                         }
-                    }else{
+                    } else {
                         emailAccount.setText(mUser.getUserEmail());
                     }
                 }
@@ -366,14 +366,14 @@ public class ProfileActivity extends BaseActivity {
                     @Override
                     public void onDatePickCompleted(int year, int month,
                                                     int day, String dateDesc) {
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                         try {
-                            Date date = dateFormat.parse(dateDesc);
+                            Date userSelectDate = dateFormat.parse(dateDesc);
+                            userBirthdayTextView.setText(new SimpleDateFormat("MMM").format(userSelectDate) + "-" + day + "-" + year);
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
-                        userBirthdayTextView.setText(new SimpleDateFormat("MMM", Locale.US)
-                                .format(date) + "-" + day + "-" + year);
                     }
                 }).viewStyle(viewType)
                 .viewTextSize(25) // pick view text size

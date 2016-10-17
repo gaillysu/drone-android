@@ -86,7 +86,7 @@ public class StepsDatabaseHelper {
 
 
     public List<Optional<Steps> >  get(String userId,Date date) {
-        List<Optional<Steps> > stepsList = new ArrayList<Optional<Steps> >();
+        List<Optional<Steps> > stepsList = new ArrayList<>();
         try {
             List<StepsBean> stepsDAOList = databaseHelper.getStepsBean()
                     .queryBuilder().where().eq(StepsBean.fUserID, userId)
