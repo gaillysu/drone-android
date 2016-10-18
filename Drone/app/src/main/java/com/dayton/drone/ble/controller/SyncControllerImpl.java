@@ -118,9 +118,8 @@ public class SyncControllerImpl implements  SyncController{
                     }
                 }
                 EventBus.getDefault().post(new Timer10sEvent());
-                startTimer(autoSync);
             }
-        }, LITTLE_SYNC_INTERVAL);
+        }, LITTLE_SYNC_INTERVAL,LITTLE_SYNC_INTERVAL);
     }
 
     public  SyncControllerImpl(ApplicationModel application){
