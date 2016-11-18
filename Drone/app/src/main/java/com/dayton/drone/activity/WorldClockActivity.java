@@ -89,7 +89,7 @@ public class WorldClockActivity extends BaseActivity {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         String currentTime = format.format(date);
         String[] currentTimeArray = currentTime.split("-");
-        dateTv.setText(currentTimeArray[2] + " " + new SimpleDateFormat("MMM", Locale.US).format(date) + " " + currentTimeArray[0]);
+        dateTv.setText(currentTimeArray[2] + " " + new SimpleDateFormat("MMM").format(date) + " " + currentTimeArray[0]);
         format = new SimpleDateFormat(FORMAT_LONG);
         Calendar calendar = Calendar.getInstance();
         TimeZone timeZone = calendar.getTimeZone();

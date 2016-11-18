@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Drone</string>
+    <string name="app_name">Dayton</string>
     <string name="clue_update_dialog">Clue Update:</string>
     <string name="update">Update</string>
     <string name="cancel_update">Cancel</string>

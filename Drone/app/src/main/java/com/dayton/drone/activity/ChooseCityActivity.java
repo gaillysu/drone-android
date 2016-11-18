@@ -40,6 +40,7 @@ import io.realm.RealmResults;
 
 /**
  * Created by Administrator on 2016/5/12.
+ *
  */
 public class ChooseCityActivity extends BaseActivity {
 
@@ -140,7 +141,7 @@ public class ChooseCityActivity extends BaseActivity {
         showSearchResultListView.setVisibility(View.VISIBLE);
         userSearchCityEdit.requestFocus();
         CheckEmailFormat.openInputMethod(ChooseCityActivity.this);
-        userSearchCityEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            userSearchCityEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {

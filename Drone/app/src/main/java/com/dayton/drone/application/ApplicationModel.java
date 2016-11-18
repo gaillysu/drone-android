@@ -55,7 +55,7 @@ public class ApplicationModel extends Application {
     private StepsDatabaseHelper stepsDatabaseHelper;
     private NotificationDatabaseHelper notificationDatabaseHelper;
     private WatchesDatabaseHelper watchesDatabaseHelper;
-
+    private WorldClockDatabaseHelper databaseHelper;
     @Override
     public void onCreate(){
         super.onCreate();
@@ -69,6 +69,8 @@ public class ApplicationModel extends Application {
         stepsDatabaseHelper = new StepsDatabaseHelper(this);
         notificationDatabaseHelper = new NotificationDatabaseHelper(this);
         watchesDatabaseHelper = new WatchesDatabaseHelper(this);
+        databaseHelper = new WorldClockDatabaseHelper(this);
+        databaseHelper.setupWorldClock();
         Optional<User> loginUser = userDatabaseHelper.getLoginUser();
         if(loginUser.notEmpty()) {
             user = loginUser.get();
@@ -78,8 +80,6 @@ public class ApplicationModel extends Application {
         }
         initializeNotifications();
         EventBus.getDefault().register(this);
-        WorldClockDatabaseHelper databaseHelper = new WorldClockDatabaseHelper(this);
-        databaseHelper.setupWorldClock();
     }
 
     public SyncController getSyncController() {
@@ -101,6 +101,9 @@ public class ApplicationModel extends Application {
     }
     public UserDatabaseHelper getUserDatabaseHelper() {
         return userDatabaseHelper;
+    }
+    public WorldClockDatabaseHelper getWorldClockDatabaseHelp(){
+        return databaseHelper;
     }
     public NotificationDatabaseHelper getNotificationDatabaseHelper(){
         return notificationDatabaseHelper;
