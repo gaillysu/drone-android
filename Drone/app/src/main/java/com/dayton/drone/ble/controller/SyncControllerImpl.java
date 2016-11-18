@@ -79,6 +79,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 
 import static com.dayton.drone.ble.util.Constants.ApplicationID.WorldClock;
@@ -123,6 +124,8 @@ public class SyncControllerImpl implements  SyncController{
     }
 
     public  SyncControllerImpl(ApplicationModel application){
+        RealmConfiguration config = new RealmConfiguration.Builder(application).build();
+        Realm.setDefaultConfiguration(config);
         realm = Realm.getDefaultInstance();
         this.application = application;
         if (!isToday(SpUtils.getLongMethod(application,CacheConstants.TODAY_DATE,0))){

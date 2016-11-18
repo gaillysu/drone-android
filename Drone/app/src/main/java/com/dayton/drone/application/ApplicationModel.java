@@ -40,9 +40,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
-
 /**
  * Created by karl-john on 18/3/16.
  */
@@ -56,11 +53,12 @@ public class ApplicationModel extends Application {
     private NotificationDatabaseHelper notificationDatabaseHelper;
     private WatchesDatabaseHelper watchesDatabaseHelper;
     private WorldClockDatabaseHelper databaseHelper;
+
     @Override
     public void onCreate(){
         super.onCreate();
-        RealmConfiguration realmConfig = new RealmConfiguration.Builder(this).deleteRealmIfMigrationNeeded().build();
-        Realm.setDefaultConfiguration(realmConfig);
+//        RealmConfiguration realmConfig = new RealmConfiguration.Builder(this).deleteRealmIfMigrationNeeded().build();
+//        Realm.setDefaultConfiguration(realmConfig);
         EventBus.builder().sendNoSubscriberEvent(false).sendNoSubscriberEvent(false).logNoSubscriberMessages(false).installDefaultEventBus();
         syncController = new SyncControllerImpl(this);
         retrofitManager = new RetrofitManager(this);
@@ -69,6 +67,7 @@ public class ApplicationModel extends Application {
         stepsDatabaseHelper = new StepsDatabaseHelper(this);
         notificationDatabaseHelper = new NotificationDatabaseHelper(this);
         watchesDatabaseHelper = new WatchesDatabaseHelper(this);
+
         databaseHelper = new WorldClockDatabaseHelper(this);
         databaseHelper.setupWorldClock();
         Optional<User> loginUser = userDatabaseHelper.getLoginUser();
