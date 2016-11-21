@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.dayton.drone.ble.controller.SyncController;
 import com.dayton.drone.ble.controller.SyncControllerImpl;
+import com.dayton.drone.ble.notification.PackageFilterHelper;
 import com.dayton.drone.ble.util.NotificationPermission;
 import com.dayton.drone.cloud.SyncActivityManager;
 import com.dayton.drone.database.entry.NotificationDatabaseHelper;
@@ -160,6 +161,15 @@ public class ApplicationModel extends Application {
         set.addAll(contactsList);
         configEditor.setFilterSet(FilterType.CONTACT, set);
         configEditor.setFilterMode(FilterType.CONTACT, FilterMode.WHITELIST);
+        //start package filter in whitelist mode
+        final HashSet<String> setPackages = new HashSet<String>();
+        setPackages.addAll(PackageFilterHelper.getCallPackages(PackageFilterHelper.getCallFilterEnable(this)));
+        setPackages.addAll(PackageFilterHelper.getSmsPackages(PackageFilterHelper.getSmsFilterEnable(this)));
+        setPackages.addAll(PackageFilterHelper.getEmailPackages(PackageFilterHelper.getEmailFilterEnable(this)));
+        setPackages.addAll(PackageFilterHelper.getCalendarPackages(PackageFilterHelper.getCalendarFilterEnable(this)));
+        setPackages.addAll(PackageFilterHelper.getSocialPackages(PackageFilterHelper.getSocialFilterEnable(this)));
+        configEditor.setFilterSet(FilterType.PACKAGE, setPackages);
+        configEditor.setFilterMode(FilterType.PACKAGE, FilterMode.WHITELIST);
         configEditor.apply();
     }
 
