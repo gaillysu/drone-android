@@ -161,10 +161,12 @@ public class ApplicationModel extends Application {
         set.addAll(contactsList);
         configEditor.setFilterSet(FilterType.CONTACT, set);
         configEditor.setFilterMode(FilterType.CONTACT, FilterMode.WHITELIST);
-        //start package filter in whitelist mode
+        //start package filter in whitelist mode, here set ANSCall & ANSSMS packages
         final HashSet<String> setPackages = new HashSet<String>();
         setPackages.addAll(PackageFilterHelper.getCallPackages(PackageFilterHelper.getCallFilterEnable(this)));
+        setPackages.addAll(ConfigHelper.getANSCallPackages());
         setPackages.addAll(PackageFilterHelper.getSmsPackages(PackageFilterHelper.getSmsFilterEnable(this)));
+        setPackages.addAll(ConfigHelper.getANSSMSPackages());
         setPackages.addAll(PackageFilterHelper.getEmailPackages(PackageFilterHelper.getEmailFilterEnable(this)));
         setPackages.addAll(PackageFilterHelper.getCalendarPackages(PackageFilterHelper.getCalendarFilterEnable(this)));
         setPackages.addAll(PackageFilterHelper.getSocialPackages(PackageFilterHelper.getSocialFilterEnable(this)));
