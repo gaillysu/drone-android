@@ -163,4 +163,5 @@
     <string name="notification_message_title">Message</string>
     <string name="notification_twitter_title">Twitter</string>
     <string name="notification_qq_title">QQ</string>
+    <string name="notification_social_title">Social</string>
 </resources>

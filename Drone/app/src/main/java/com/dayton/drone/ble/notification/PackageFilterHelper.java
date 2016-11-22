@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.dayton.drone.utils.SpUtils;
 
+import net.medcorp.library.android.notificationsdk.config.ConfigHelper;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -62,10 +64,20 @@ public class PackageFilterHelper {
     }
 
     public static Set<String> getCallPackages(Boolean isEnable) {
-        return isEnable?CALL_APPS:new HashSet<String>();
+        HashSet<String> set = new HashSet<String>();
+        if(isEnable){
+            set.addAll(CALL_APPS);
+            set.addAll(ConfigHelper.getANSCallPackages());
+        }
+        return set;
     }
     public static Set<String> getSmsPackages(Boolean isEnable) {
-        return isEnable?SMS_APPS:new HashSet<String>();
+        HashSet<String> set = new HashSet<String>();
+        if(isEnable){
+            set.addAll(SMS_APPS);
+            set.addAll(ConfigHelper.getANSSMSPackages());
+        }
+        return set;
     }
     public static Set<String> getEmailPackages(Boolean isEnable) {
         return isEnable?EMAIL_APPS:new HashSet<String>();

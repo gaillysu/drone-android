@@ -7,11 +7,11 @@ import com.dayton.drone.R;
  */
 
 public class EmailNotification extends NotificationModel {
-    @Override
-    public boolean getSwitchSign() {
-        return false;
-    }
 
+    public EmailNotification(boolean enableNotification)
+    {
+        super(enableNotification);
+    }
     @Override
     public int getNameStringResource() {
         return R.string.notification_email_title;

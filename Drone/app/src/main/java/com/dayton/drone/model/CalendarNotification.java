@@ -7,13 +7,9 @@ import com.dayton.drone.R;
  */
 
 public class CalendarNotification extends NotificationModel {
-
-
-    @Override
-    public boolean getSwitchSign() {
-        return false;
+    public CalendarNotification(boolean enableNotification) {
+        super(enableNotification);
     }
-
     @Override
     public int getNameStringResource() {
         return R.string.notification_calendar_title;

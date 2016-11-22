@@ -5,8 +5,14 @@ package com.dayton.drone.model;
  */
 
 public abstract class NotificationModel   {
-
-    public abstract boolean getSwitchSign();
+    boolean enableNotification;
+    public NotificationModel(boolean enableNotification)
+    {
+        this.enableNotification = enableNotification;
+    }
+    public boolean getSwitchSign(){
+        return enableNotification;
+    }
     public abstract int getNameStringResource();
     public abstract int getImageResource();
 }

@@ -88,7 +88,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="@string/add_watch_activity_content_contacts_notification"
+                    android:text="@string/notifications_notifications"
                     android:textSize="25sp"/>
 
                 <View

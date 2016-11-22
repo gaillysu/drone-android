@@ -8,12 +8,9 @@ import com.dayton.drone.R;
 
 public class WeChatNotification extends NotificationModel {
 
-
-    @Override
-    public boolean getSwitchSign() {
-        return false;
+    public WeChatNotification(boolean enableNotification) {
+        super(enableNotification);
     }
-
     @Override
     public int getNameStringResource() {
         return R.string.notification_wechat_title;

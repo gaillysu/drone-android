@@ -2,17 +2,20 @@ package com.dayton.drone.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.SwitchCompat;
 import android.widget.ListView;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.adapter.NotificationAllAppsAdapter;
+import com.dayton.drone.ble.notification.PackageFilterHelper;
 import com.dayton.drone.model.CalendarNotification;
 import com.dayton.drone.model.EmailNotification;
 import com.dayton.drone.model.FacebookNotification;
 import com.dayton.drone.model.MessageNotification;
 import com.dayton.drone.model.NotificationModel;
 import com.dayton.drone.model.QQNotification;
+import com.dayton.drone.model.SocialNotification;
 import com.dayton.drone.model.TelephoneNotification;
 import com.dayton.drone.model.TwitterNotification;
 import com.dayton.drone.model.WeChatNotification;
@@ -28,7 +31,7 @@ import butterknife.OnClick;
  * Created by Jason on 2016/11/21.
  */
 
-public class NewSetNotificationActivity extends BaseActivity {
+public class NewSetNotificationActivity extends BaseActivity{
 
     @Bind(R.id.notification_all_app_listView)
     ListView allNotificationApps;
@@ -46,22 +49,18 @@ public class NewSetNotificationActivity extends BaseActivity {
 
     private void initView() {
         notificationBean = new ArrayList<>();
-        TelephoneNotification telephone = new TelephoneNotification();
+        TelephoneNotification telephone = new TelephoneNotification(PackageFilterHelper.getCallFilterEnable(this));
         notificationBean.add(telephone);
-        MessageNotification message = new MessageNotification();
+        MessageNotification message = new MessageNotification(PackageFilterHelper.getSmsFilterEnable(this));
         notificationBean.add(message);
-        EmailNotification email = new EmailNotification();
+        EmailNotification email = new EmailNotification(PackageFilterHelper.getEmailFilterEnable(this));
         notificationBean.add(email);
-        CalendarNotification calendar = new CalendarNotification();
+        CalendarNotification calendar = new CalendarNotification(PackageFilterHelper.getCalendarFilterEnable(this));
         notificationBean.add(calendar);
-        FacebookNotification facebook = new FacebookNotification();
-        notificationBean.add(facebook);
-        TwitterNotification twitter = new TwitterNotification();
-        notificationBean.add(twitter);
-        QQNotification qq = new QQNotification();
-        notificationBean.add(qq);
-        WeChatNotification weChat = new WeChatNotification();
-        notificationBean.add(weChat);
+        //we use a social app name to below apps: facebook,twitter,qq,wechat,whatsapp,linkedin,instagram...
+        SocialNotification social = new SocialNotification(PackageFilterHelper.getSocialFilterEnable(this));
+        notificationBean.add(social);
+
         adapter = new NotificationAllAppsAdapter(this, notificationBean);
         allNotificationApps.setAdapter(adapter);
     }
@@ -70,4 +69,5 @@ public class NewSetNotificationActivity extends BaseActivity {
     public void backUp() {
         finish();
     }
+
 }

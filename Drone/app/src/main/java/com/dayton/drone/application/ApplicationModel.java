@@ -12,6 +12,7 @@ import com.dayton.drone.database.entry.NotificationDatabaseHelper;
 import com.dayton.drone.database.entry.StepsDatabaseHelper;
 import com.dayton.drone.database.entry.UserDatabaseHelper;
 import com.dayton.drone.database.entry.WatchesDatabaseHelper;
+import com.dayton.drone.event.NotificationPackagesChangedEvent;
 import com.dayton.drone.model.Contact;
 import com.dayton.drone.model.Notification;
 import com.dayton.drone.model.User;
@@ -160,13 +161,11 @@ public class ApplicationModel extends Application {
         }
         set.addAll(contactsList);
         configEditor.setFilterSet(FilterType.CONTACT, set);
-        configEditor.setFilterMode(FilterType.CONTACT, FilterMode.WHITELIST);
-        //start package filter in whitelist mode, here set ANSCall & ANSSMS packages
+        configEditor.setFilterMode(FilterType.CONTACT, FilterMode.DISABLED);
+        //start package filter in whitelist mode
         final HashSet<String> setPackages = new HashSet<String>();
         setPackages.addAll(PackageFilterHelper.getCallPackages(PackageFilterHelper.getCallFilterEnable(this)));
-        setPackages.addAll(ConfigHelper.getANSCallPackages());
         setPackages.addAll(PackageFilterHelper.getSmsPackages(PackageFilterHelper.getSmsFilterEnable(this)));
-        setPackages.addAll(ConfigHelper.getANSSMSPackages());
         setPackages.addAll(PackageFilterHelper.getEmailPackages(PackageFilterHelper.getEmailFilterEnable(this)));
         setPackages.addAll(PackageFilterHelper.getCalendarPackages(PackageFilterHelper.getCalendarFilterEnable(this)));
         setPackages.addAll(PackageFilterHelper.getSocialPackages(PackageFilterHelper.getSocialFilterEnable(this)));
@@ -181,5 +180,10 @@ public class ApplicationModel extends Application {
         if(event.isConnected()){
             NotificationPermission.getNotificationAccessPermission(this);
         }
+    }
+
+    @Subscribe
+    public void onEvent(NotificationPackagesChangedEvent event){
+        initializeNotifications();
     }
 }

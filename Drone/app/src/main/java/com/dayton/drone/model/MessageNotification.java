@@ -7,9 +7,10 @@ import com.dayton.drone.R;
  */
 
 public class MessageNotification extends NotificationModel {
-    @Override
-    public boolean getSwitchSign() {
-        return false;
+
+    public MessageNotification(boolean enableNotification)
+    {
+        super(enableNotification);
     }
 
     @Override

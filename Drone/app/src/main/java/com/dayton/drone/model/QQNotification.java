@@ -7,9 +7,8 @@ import com.dayton.drone.R;
  */
 
 public class QQNotification extends NotificationModel {
-    @Override
-    public boolean getSwitchSign() {
-        return false;
+    public QQNotification(boolean enableNotification) {
+        super(enableNotification);
     }
 
     @Override

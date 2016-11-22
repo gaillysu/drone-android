@@ -7,9 +7,8 @@ import com.dayton.drone.R;
  */
 
 public class TwitterNotification extends NotificationModel {
-    @Override
-    public boolean getSwitchSign() {
-        return false;
+    public TwitterNotification(boolean enableNotification) {
+        super(enableNotification);
     }
 
     @Override
