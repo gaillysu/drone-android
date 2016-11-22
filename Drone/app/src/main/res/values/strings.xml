@@ -154,4 +154,13 @@
     <string name="notifications_contacts_notifications">Contacts Notifications</string>
     <string name="notifications_notifications">Notifications</string>
     <string name="token">ZQpFYPBMqFbUQq8E99FztS2x6yQ2v1Ei</string>
+
+    <string name="notification_call_title">Call</string>
+    <string name="notification_email_title">Email</string>
+    <string name="notification_facebook_title">Facebook</string>
+    <string name="notification_calendar_title">Calendar</string>
+    <string name="notification_wechat_title">WeChat</string>
+    <string name="notification_message_title">Message</string>
+    <string name="notification_twitter_title">Twitter</string>
+    <string name="notification_qq_title">QQ</string>
 </resources>

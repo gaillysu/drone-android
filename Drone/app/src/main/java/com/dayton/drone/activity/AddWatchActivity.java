@@ -124,7 +124,8 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
 
     @OnClick(R.id.activity_add_watch_contacts_notifications)
     public void ContactsNotifications() {
-        startActivity(SetNotificationActivity.class);
+//        startActivity(SetNotificationActivity.class);
+        startActivity(NewSetNotificationActivity.class);
     }
 
     @OnClick(R.id.activity_add_watch_forget_watch)

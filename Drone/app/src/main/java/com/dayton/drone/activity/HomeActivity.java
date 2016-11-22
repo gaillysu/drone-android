@@ -95,7 +95,8 @@ public class HomeActivity extends BaseActivity {
 
     @OnClick(R.id.manager_fragment_title_right_add)
     public void addWatch() {
-        startActivity(AddWatchActivity.class);
+//        startActivity(AddWatchActivity.class);
+        startActivity(NewSetNotificationActivity.class);
         finish();
     }
 
