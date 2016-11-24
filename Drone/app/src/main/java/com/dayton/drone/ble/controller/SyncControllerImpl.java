@@ -40,7 +40,6 @@ import com.dayton.drone.ble.model.request.sync.GetStepsGoalRequest;
 import com.dayton.drone.ble.model.request.worldclock.SetWorldClockRequest;
 import com.dayton.drone.ble.notification.ListenerService;
 import com.dayton.drone.ble.util.Constants;
-import com.dayton.drone.event.BLEPairStatusChangedEvent;
 import com.dayton.drone.event.BatteryStatusChangedEvent;
 import com.dayton.drone.event.BigSyncEvent;
 import com.dayton.drone.event.DownloadStepsEvent;
@@ -456,20 +455,6 @@ public class SyncControllerImpl implements  SyncController{
     }
 
     @Subscribe
-    public void onEvent(BLEPairStatusChangedEvent pairStateChangedEvent) {
-        if(pairStateChangedEvent.getStatus() == BluetoothDevice.BOND_BONDED
-                || pairStateChangedEvent.getStatus() == BluetoothDevice.BOND_NONE) {
-            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    disConnect();
-                    startConnect(false);
-                }
-            },2000);
-        }
-    }
-
-    @Subscribe
     public void onEvent(WorldClockChangedEvent worldClockChangedEvent) {
         setWorldClock(getSelectedCities());
     }
@@ -519,14 +504,6 @@ public class SyncControllerImpl implements  SyncController{
                         ConnectionController.Singleton.getInstance(context,new GattAttributesDataSourceImpl(context)).scan();
                     }
                 }
-                if(intent.getAction().equals(BluetoothDevice.ACTION_BOND_STATE_CHANGED)) {
-                    BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                    int connectState = device.getBondState();
-                    Log.i("LocalService", "Ble pair state got changed:" + connectState + ",device:" + device.getAddress());
-                    if (BluetoothDevice.BOND_BONDED == connectState || BluetoothDevice.BOND_NONE == connectState) {
-                        EventBus.getDefault().post(new BLEPairStatusChangedEvent(connectState));
-                    }
-                }
             }
         };
 
@@ -540,7 +517,6 @@ public class SyncControllerImpl implements  SyncController{
         public void onCreate() {
             super.onCreate();
             registerReceiver(myReceiver, new IntentFilter(Intent.ACTION_SCREEN_ON));
-            registerReceiver(myReceiver, new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
         }
 
         @Override

@@ -14,9 +14,6 @@ import android.util.Log;
 import com.dayton.drone.application.ApplicationModel;
 import com.dayton.drone.ble.datasource.GattAttributesDataSourceImpl;
 import com.dayton.drone.ble.model.packet.base.DronePacket;
-import com.dayton.drone.event.BLEPairStatusChangedEvent;
-
-
 import net.medcorp.library.ble.controller.ConnectionController;
 import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
 import net.medcorp.library.ble.event.BLEResponseDataEvent;
@@ -56,20 +53,6 @@ public class GetActivityRequestTest extends AndroidTestCase {
     public void onEvent(BLEConnectionStateChangedEvent stateChangedEvent) {
         if(stateChangedEvent.isConnected()) {
             connectionController.sendRequest(new GetActivityRequest(getContext()));
-        }
-    }
-
-    @Subscribe
-    public void onEvent(BLEPairStatusChangedEvent pairStateChangedEvent) {
-        if(pairStateChangedEvent.getStatus() == BluetoothDevice.BOND_BONDED
-                || pairStateChangedEvent.getStatus() == BluetoothDevice.BOND_NONE) {
-                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    connectionController.disconnect();
-                    connectionController.scan();
-                }
-            }, 2000);
         }
     }
 
