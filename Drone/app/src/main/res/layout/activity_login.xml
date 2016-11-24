@@ -7,14 +7,17 @@
               android:orientation="vertical">
 
     <include layout="@layout/register_control_button"/>
+
     <ImageView
         android:id="@+id/register_drone_logo"
-        android:layout_width="match_parent"
+        android:layout_width="280dp"
         android:layout_height="50dp"
         android:layout_marginTop="120dp"
+        android:scaleType="fitXY"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
-        android:src="@mipmap/dronelogo"/>
+        android:src="@drawable/ic_new_drone_logo_icon"/>
+
     <LinearLayout
         android:id="@+id/register_ll"
         android:layout_width="match_parent"

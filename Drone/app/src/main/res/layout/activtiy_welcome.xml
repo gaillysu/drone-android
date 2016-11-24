@@ -11,8 +11,9 @@
         android:layout_width="220dp"
         android:layout_height="36dp"
         android:layout_marginTop="80dp"
+        android:scaleType="fitXY"
         android:layout_centerHorizontal="true"
-        android:src="@mipmap/drone_logo_grey_2"/>
+        android:src="@drawable/ic_new_drone_logo_icon"/>
 
     <LinearLayout
         android:layout_width="match_parent"

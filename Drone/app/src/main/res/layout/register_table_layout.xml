@@ -11,7 +11,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
-        android:src="@mipmap/dronelogo"/>
+        android:src="@drawable/ic_new_drone_logo_icon"/>
     <TextView
     android:id="@+id/register_tx"
     android:layout_width="wrap_content"

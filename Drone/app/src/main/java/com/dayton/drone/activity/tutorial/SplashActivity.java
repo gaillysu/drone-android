@@ -10,6 +10,7 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 /**
  * Created by boy on 2016/4/13.
+ *
  */
 public class SplashActivity extends BaseActivity {
 
