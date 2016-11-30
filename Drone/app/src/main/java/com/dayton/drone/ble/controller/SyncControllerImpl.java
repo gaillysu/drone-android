@@ -99,6 +99,20 @@ public class SyncControllerImpl implements  SyncController{
     private final long BIG_SYNC_INTERVAL = 5*60* 1000L; //5minutes
     private boolean bigSyncFirst = true;
     private Realm realm;
+    private final Object lockObject = new Object();
+    /**
+     * Wait for given number of milliseconds.
+     * @param millis waiting period
+     */
+    protected void waitFor(final int millis) {
+        synchronized (lockObject) {
+            try {
+                lockObject.wait(millis);
+            } catch (final InterruptedException e) {
+                Log.e(TAG,"sleep interrupted");
+            }
+        }
+    }
 
     private void startTimer(final boolean autoSync) {
         if(autoSyncTimer!=null)autoSyncTimer.cancel();
@@ -188,6 +202,7 @@ public class SyncControllerImpl implements  SyncController{
     public void forgetDevice() {
         //steps0:clean pair infomation on watch and drop connection
         sendRequest(new ForgetWatchRequest(application));
+        waitFor(200);
         //step1:disconnect
         if(connectionController.isConnected())
         {
