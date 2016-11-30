@@ -3,6 +3,7 @@ package com.dayton.drone.application;
 import android.app.Application;
 import android.content.Context;
 
+import com.dayton.drone.R;
 import com.dayton.drone.ble.controller.SyncController;
 import com.dayton.drone.ble.controller.SyncControllerImpl;
 import com.dayton.drone.ble.notification.PackageFilterHelper;
@@ -164,11 +165,11 @@ public class ApplicationModel extends Application {
         configEditor.setFilterMode(FilterType.CONTACT, FilterMode.DISABLED);
         //start package filter in whitelist mode
         final HashSet<String> setPackages = new HashSet<String>();
-        setPackages.addAll(PackageFilterHelper.getCallPackages(PackageFilterHelper.getCallFilterEnable(this)));
-        setPackages.addAll(PackageFilterHelper.getSmsPackages(PackageFilterHelper.getSmsFilterEnable(this)));
-        setPackages.addAll(PackageFilterHelper.getEmailPackages(PackageFilterHelper.getEmailFilterEnable(this)));
-        setPackages.addAll(PackageFilterHelper.getCalendarPackages(PackageFilterHelper.getCalendarFilterEnable(this)));
-        setPackages.addAll(PackageFilterHelper.getSocialPackages(PackageFilterHelper.getSocialFilterEnable(this)));
+        setPackages.addAll(PackageFilterHelper.getCallPackages(PackageFilterHelper.getCallFilterEnable(this),this,R.array.CALL_APPS));
+        setPackages.addAll(PackageFilterHelper.getSmsPackages(PackageFilterHelper.getSmsFilterEnable(this),this,R.array.SMS_APPS));
+        setPackages.addAll(PackageFilterHelper.getEmailPackages(PackageFilterHelper.getEmailFilterEnable(this),this,R.array.EMAIL_APPS));
+        setPackages.addAll(PackageFilterHelper.getCalendarPackages(PackageFilterHelper.getCalendarFilterEnable(this),this,R.array.CALENDAR_APPS));
+        setPackages.addAll(PackageFilterHelper.getSocialPackages(PackageFilterHelper.getSocialFilterEnable(this),this,R.array.SOCIAL_APPS));
         configEditor.setFilterSet(FilterType.PACKAGE, setPackages);
         configEditor.setFilterMode(FilterType.PACKAGE, FilterMode.WHITELIST);
         configEditor.apply();

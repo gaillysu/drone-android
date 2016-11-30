@@ -24,13 +24,12 @@ public class PackageFilterHelper {
     final static String CALENDAR_FILTER_ENABLE = "calendar_filter_enable";
     final static String SOCIAL_FILTER_ENABLE = "social_filter_enable";
 
-    //NOTICE: BELOW APP LIST IS MOST OF PHONES INSTALLED,PERHAPS THIRD-PARTY APPS ARE NOT INCLUDE,YOU CAN ADD THEM.
-    final static Set<String> CALL_APPS = new HashSet<String>(Arrays.asList("com.android.dialer", "com.android.server.telecom", "com.android.providers.telephony", "com.android.incallui", "com.android.phone"));
-    final static Set<String> SMS_APPS = new HashSet<String>(Arrays.asList("com.android.mms","com.google.android.talk","com.google.android.apps.messaging","com.sonyericsson.conversations","com.htc.sense.mms"));
-    final static Set<String> EMAIL_APPS = new HashSet<String>(Arrays.asList("com.yahoo.mobile.client.android.mail", "com.google.android.gm", "com.google.android.apps.inbox", "com.microsoft.office.outlook","com.android.email","com.google.android.email","com.kingsoft.email","com.tencent.androidqqmail","com.outlook.Z7"));
-    final static Set<String> CALENDAR_APPS = new HashSet<String>(Arrays.asList("com.google.android.calendar","com.android.calendar"));
-    final static Set<String> SOCIAL_APPS = new HashSet<String>(Arrays.asList("com.facebook.katana", "com.google.android.apps.plus", "com.instagram.android", "com.snapchat.android", "com.linkedin.android", "com.twitter.android", "com.pinterest","com.tencent.mm","com.whatsapp","com.tencent.mobileqq"));
-
+    private static HashSet<String> initAppList(Context context,int resID)
+    {
+        HashSet<String> set = new HashSet<String>();
+        set.addAll(Arrays.asList(context.getResources().getStringArray(resID)));
+        return set;
+    }
 
     public static void setCallFilterEnable(Context context,boolean value){
         SpUtils.putBoolean(context,CALL_FILTER_ENABLE,value);
@@ -63,29 +62,29 @@ public class PackageFilterHelper {
         return SpUtils.getBoolean(context,SOCIAL_FILTER_ENABLE,defaultEnable);
     }
 
-    public static Set<String> getCallPackages(Boolean isEnable) {
+    public static Set<String> getCallPackages(Boolean isEnable,Context context,int resID) {
         HashSet<String> set = new HashSet<String>();
         if(isEnable){
-            set.addAll(CALL_APPS);
+            set.addAll(initAppList(context,resID));
             set.addAll(ConfigHelper.getANSCallPackages());
         }
         return set;
     }
-    public static Set<String> getSmsPackages(Boolean isEnable) {
+    public static Set<String> getSmsPackages(Boolean isEnable,Context context,int resID) {
         HashSet<String> set = new HashSet<String>();
         if(isEnable){
-            set.addAll(SMS_APPS);
+            set.addAll(initAppList(context,resID));
             set.addAll(ConfigHelper.getANSSMSPackages());
         }
         return set;
     }
-    public static Set<String> getEmailPackages(Boolean isEnable) {
-        return isEnable?EMAIL_APPS:new HashSet<String>();
+    public static Set<String> getEmailPackages(Boolean isEnable,Context context,int resID) {
+        return isEnable?initAppList(context,resID):new HashSet<String>();
     }
-    public static Set<String> getCalendarPackages(Boolean isEnable) {
-        return isEnable?CALENDAR_APPS:new HashSet<String>();
+    public static Set<String> getCalendarPackages(Boolean isEnable,Context context,int resID) {
+        return isEnable?initAppList(context,resID):new HashSet<String>();
     }
-    public static Set<String> getSocialPackages(Boolean isEnable) {
-        return isEnable?SOCIAL_APPS:new HashSet<String>();
+    public static Set<String> getSocialPackages(Boolean isEnable,Context context,int resID) {
+        return isEnable?initAppList(context,resID):new HashSet<String>();
     }
 }
