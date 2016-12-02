@@ -40,7 +40,7 @@
     <string name="user_device_select">Setting up your device.</string>
     <string name="user_select_dec">Don\'t have a device here?</string>
     <string name="select_device_pair_later_text">Pair later</string>
-    <string name="user_device_drone">Buy you Drone here.</string>
+    <string name="user_device_drone"></string>
     <string name="user_info_activity_edit_first_name_hint">First Name</string>
     <string name="user_info_activity_edit_last_name_hint">Last Name</string>
     <string name="user_step_goal">Goal:</string>
@@ -52,7 +52,7 @@
 
     <string name="bluetooth_connecting">Connecting…</string>
     <string name="retry_connecting">Retry</string>
-    <string name="watch_name">Drone Watch</string>
+    <string name="watch_name">Dayton Watch</string>
     <string name="watch_version">version 1.0.3</string>
     <string name="watch_bluetooth_id">IMEI 156420156233</string>
     <string name="connecting_fail">Fail</string>
@@ -72,7 +72,7 @@
     <string name="fragment_home_title_active_time">ACTIVE TIME</string>
     <string name="fragment_home_title_kilometer">KM</string>
     <string name="fragment_home_guide_see_history_dec">See your previous activities</string>
-    <string name="fragment_home_guide_see_data_dec">Here is your data from Drone</string>
+    <string name="fragment_home_guide_see_data_dec">Here is your data from Dayton</string>
     <string name="fragment_home_guide_meter_dec">Click the dashboard to see floors</string>
     <string name="fragment_home_guide_histogram_dec">The bar graph will presenting your activities durations</string>
 
@@ -113,14 +113,14 @@
     <string name="add_watch_activity_content_contacts_notification">Contacts Notifications</string>
     <string name="add_watch_activity_content_my_notification">My Notifications</string>
     <string name="add_watch_activity_content_forget_watch">Forget This Watch</string>
-    <string name="add_watch_activity_watch_dec">DRONE Precision Timepieces…</string>
-    <string name="add_watch_activity_prompt_user">HOLD YOUR DRONE!</string>
+    <string name="add_watch_activity_watch_dec">Dayton Smartwatch</string>
+    <string name="add_watch_activity_prompt_user">HOLD YOUR Smartwatch!</string>
     <string name="add_watch_activity_prompt_user_one">It appears that you haven\'t </string>
     <string name="add_watch_activity_prompt_user_two">connected a device yet.</string>
     <string name="add_watch_activity_prompt_user_three">Perhaps you\'d like to</string>
     <string name="add_watch_activity_prompt_user_four">purchase one…</string>
-    <string name="add_watch_activity_shop_address">http://www.hsn.com/shop/drone-\npresented-by-shaquille-oneal/13040</string>
-    <string name="add_watch_activity_shop_address_path">http://www.hsn.com/shop/drone-presented-by-shaquille-oneal/13040</string>
+    <string name="add_watch_activity_shop_address"></string>
+    <string name="add_watch_activity_shop_address_path"></string>
     <string name="add_watch_connected">Connected</string>
     <string name="add_watch_disconnected">Disconnected</string>
     <string name="add_watch_damaged">Damaged</string>
