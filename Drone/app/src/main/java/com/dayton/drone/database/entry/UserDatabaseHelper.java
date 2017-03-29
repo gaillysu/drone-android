@@ -2,105 +2,77 @@ package com.dayton.drone.database.entry;
 
 import android.content.Context;
 
-import com.dayton.drone.database.DatabaseHelper;
-import com.dayton.drone.database.bean.UserBean;
 import com.dayton.drone.model.User;
 
 import net.medcorp.library.ble.util.Optional;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * Created by boy on 2016/4/12.
  */
 public class UserDatabaseHelper implements iEntryDatabaseHelper<User> {
 
-    private DatabaseHelper databaseHelper;
+    private Realm realm;
 
     public UserDatabaseHelper(Context context) {
-        if (databaseHelper == null) {
-            databaseHelper = DatabaseHelper.getHelperInstance(context);
-        }
+        realm = Realm.getDefaultInstance();
     }
 
     @Override
     public Optional<User> add(User object) {
-        Optional<User> userOptional = new Optional<>();
-        try {
-            int res = databaseHelper.getUserBean().create(convertToBean(object));
-            if (res > 0) {
-                userOptional.set(object);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return userOptional;
+        realm.beginTransaction();
+        User user = realm.copyToRealm(object);
+        realm.commitTransaction();
+        return new Optional<>(user);
     }
 
 
     @Override
     public boolean update(User object) {
-        int result = -1;
-        try {
-            List<UserBean> userList = databaseHelper.getUserBean().queryBuilder()
-                    .where().eq(UserBean.fUserID, object.getUserID()).query();
-            if (userList.isEmpty()) {
-                return add(object) != null;
-            }
-            UserBean userBean = convertToBean(object);
-            userBean.setId(userList.get(0).getId());
-            result = databaseHelper.getUserBean().update(userBean);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        User user = realm.where(User.class).equalTo(User.fUserID, object.getUserID()).findFirst();
+        if(user == null){
+            return add(object).notEmpty();
         }
-        return result >= 0;
+
+        realm.beginTransaction();
+        copyToRealm(user,object);
+        realm.commitTransaction();
+        return true;
     }
 
     @Override
     public boolean remove(String userId ,Date date) {
-        try {
-            List<UserBean> userList = databaseHelper.getUserBean().queryBuilder()
-                    .where().eq(UserBean.fUserID, userId).query();
-            if (!userList.isEmpty()) {
-                return databaseHelper.getUserBean().delete(userList) >= 0;
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+        User user = realm.where(User.class).equalTo(User.fUserID, userId).findFirst();
+        if(user != null) {
+            realm.beginTransaction();
+            user.deleteFromRealm();
+            realm.commitTransaction();
+            return true;
         }
         return false;
     }
 
-
     public boolean removeAll(){
-        try {
-            List<UserBean> userBeanList = databaseHelper.getUserBean().queryForAll();
-            return databaseHelper.getUserBean().delete(userBeanList)>=0;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
+        RealmResults<User> users = realm.where(User.class).findAll();
+        realm.beginTransaction();
+        boolean result = users.deleteAllFromRealm();
+        realm.commitTransaction();
+        return result;
     }
 
     //single find
     @Override
     public List<Optional<User>> get(String userId) {
-
         List<Optional<User>> list = new ArrayList<>();
-        try {
-            List<UserBean> userList = databaseHelper.getUserBean()
-                    .queryBuilder().where().eq(UserBean.fUserID, userId).query();
-            for (UserBean userBean : userList) {
-                Optional<User> optional = new Optional<>();
-                optional.set(convertToNormal(userBean));
-                list.add(optional);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        User user = realm.where(User.class).equalTo(User.fUserID, userId).findFirst();
+        if(user != null) {
+            list.add(new Optional<>(user));
         }
         return list;
     }
@@ -108,8 +80,11 @@ public class UserDatabaseHelper implements iEntryDatabaseHelper<User> {
     //find table
     @Override
     public Optional<User> get(String userId, Date date) {
-        List<Optional<User>> userList = get(userId);
-        return userList.isEmpty() ? new Optional<User>() : userList.get(0);
+        User user = realm.where(User.class).equalTo(User.fUserID, userId).findFirst();
+        if(user != null) {
+            return new Optional<>(user);
+        }
+        return new Optional<>();
     }
 
     // find all
@@ -129,53 +104,26 @@ public class UserDatabaseHelper implements iEntryDatabaseHelper<User> {
         return list;
     }
 
-    public Optional<User> getLoginUser()
-    {
-        Optional<User> optionalUser = new Optional<>();
-        try {
-            List<UserBean> userList = databaseHelper.getUserBean()
-                    .queryBuilder().where().eq(UserBean.fUserIsLogin, true).query();
-            for (UserBean userBean : userList) {
-                optionalUser.set(convertToNormal(userBean));
-                return optionalUser;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public Optional<User> getLoginUser()    {
+        User user = realm.where(User.class).equalTo(User.fUserIsLogin, true).findFirst();
+        if(user !=null) {
+            return new Optional<>(user);
         }
-        return optionalUser;
+        return new Optional<>();
     }
 
-    private User convertToNormal(UserBean userDAO) {
-        User user = new User();
-        user.setBirthday(userDAO.getBirthday());
-        user.setHeight(userDAO.getHeight());
-        user.setWeight(userDAO.getWeight());
-        user.setFirstName(userDAO.getFirstName());
-        user.setLastName(userDAO.getLastName());
-        user.setGender(userDAO.getGender());
-        user.setStrideLength(userDAO.getStrideLength());
-        user.setUserEmail(userDAO.getUserEmail());
-        user.setUserPassword(userDAO.getUserPassword());
-        user.setUserID(userDAO.getUserID());
-        user.setUserIsLogin(userDAO.isUserIsLogin());
-        return user;
+    private void copyToRealm(User userRealm, User object) {
+        userRealm.setBirthday(object.getBirthday());
+        userRealm.setHeight(object.getHeight());
+        userRealm.setWeight(object.getWeight());
+        userRealm.setFirstName(object.getFirstName());
+        userRealm.setLastName(object.getLastName());
+        userRealm.setGender(object.getGender());
+        userRealm.setStrideLength(object.getStrideLength());
+        userRealm.setUserEmail(object.getUserEmail());
+        userRealm.setUserPassword(object.getUserPassword());
+        userRealm.setUserID(object.getUserID());
+        userRealm.setUserIsLogin(object.isUserIsLogin());
     }
-
-    public UserBean convertToBean(User user) {
-        UserBean userDAO = new UserBean();
-        userDAO.setHeight(user.getHeight());
-        userDAO.setBirthday(user.getBirthday());
-        userDAO.setWeight(user.getWeight());
-        userDAO.setFirstName(user.getFirstName());
-        userDAO.setLastName(user.getLastName());
-        userDAO.setGender(user.getGender());
-        userDAO.setStrideLength(user.getStrideLength());
-        userDAO.setUserEmail(user.getUserEmail());
-        userDAO.setUserPassword(user.getUserPassword());
-        userDAO.setUserID(user.getUserID());
-        userDAO.setUserIsLogin(user.isUserIsLogin());
-        return userDAO;
-    }
-
 
 }

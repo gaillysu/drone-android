@@ -1,14 +1,132 @@
 package com.dayton.drone.model;
 
-import com.dayton.drone.database.bean.StepsBean;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 
-public class Steps extends StepsBean implements Comparable<Steps>{
+import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
 
+public class Steps extends RealmObject implements Comparable<Steps>{
+
+    @Ignore
     final private int timeFrameSteps;
+    @Ignore
     final private long timeFrame;
+
+    /**
+     * field name and initialize value, Primary field
+     */
+    @Ignore
+    public static final String fID = "id";
+    private int id = (int) Math.floor(Math.random()*Integer.MAX_VALUE);
+
+    /**
+     * which user ID
+     */
+    @Ignore
+    public static final String fUserID = "userID";
+    private String userID;
+
+
+    /**
+     *  date, one day which is Year/Month/Day
+     */
+    @Ignore
+    public static final String fDate = "date";
+    private long date;
+
+
+    /**
+     * this is accumulation steps for every hour a day, like this [[1,2,...12],,....,[24,2,3,...12]]
+     */
+    @Ignore
+    public static final String fHourlySteps = "hourlySteps";
+    private String hourlySteps = "[[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0]]";
+
+    /**
+     * one day's total distance ,unit is meter.
+     */
+    @Ignore
+    public static final String fDistance = "distance";
+    private int distance;
+
+
+    /**
+     * the cloudID is the unique value that saved on Cloud server, "-1" menas that no sync with cloud server
+     */
+    @Ignore
+    public static final String fCloudID = "cloudID";
+    private int cloudID = -1;
+
+    /**
+     * every day perhaps has different goal,default is 10000 steps per day
+     */
+    @Ignore
+    public static final String fStepsGoal = "stepsGoal";
+    private int stepsGoal = 10000;
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+
+    public long getDate() {
+        return date;
+    }
+
+    public void setDate(long date) {
+        this.date = date;
+    }
+
+    public String getHourlySteps() {
+        return hourlySteps;
+    }
+
+    public void setHourlySteps(String hourlySteps) {
+        this.hourlySteps = hourlySteps;
+    }
+
+    public int getDistance() {
+        return distance;
+    }
+
+    public void setDistance(int distance) {
+        this.distance = distance;
+    }
+
+    public int getCloudID() {
+        return cloudID;
+    }
+
+    public void setCloudID(int cloudID) {
+        this.cloudID = cloudID;
+    }
+
+    public int getStepsGoal() {
+        return stepsGoal;
+    }
+
+    public void setStepsGoal(int stepsGoal) {
+        this.stepsGoal = stepsGoal;
+    }
+
+
+    public Steps()
+    {
+        this(0,0);
+    }
 
     public Steps(int timeFrameSteps, long timeFrame) {
         this.timeFrameSteps = timeFrameSteps;

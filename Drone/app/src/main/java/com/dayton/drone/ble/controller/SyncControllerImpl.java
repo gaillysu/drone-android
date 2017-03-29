@@ -2,7 +2,6 @@ package com.dayton.drone.ble.controller;
 
 import android.app.Activity;
 import android.app.Service;
-import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -77,10 +76,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
-import io.realm.RealmResults;
-
 import static com.dayton.drone.ble.util.Constants.ApplicationID.WorldClock;
 
 /**
@@ -98,7 +93,6 @@ public class SyncControllerImpl implements  SyncController{
     private int baseSteps = 0;
     private final long BIG_SYNC_INTERVAL = 5*60* 1000L; //5minutes
     private boolean bigSyncFirst = true;
-    private Realm realm;
     private final Object lockObject = new Object();
     /**
      * Wait for given number of milliseconds.
@@ -137,9 +131,6 @@ public class SyncControllerImpl implements  SyncController{
     }
 
     public  SyncControllerImpl(ApplicationModel application){
-        RealmConfiguration config = new RealmConfiguration.Builder(application).build();
-        Realm.setDefaultConfiguration(config);
-        realm = Realm.getDefaultInstance();
         this.application = application;
         if (!isToday(SpUtils.getLongMethod(application,CacheConstants.TODAY_DATE,0))){
             Log.w("Karl","Resetting today!");
@@ -324,7 +315,7 @@ public class SyncControllerImpl implements  SyncController{
                         //if the cached date is today,use the cached steps to set watch
                         //set world clock to watch
 
-                        setWorldClock(getSelectedCities());
+                        setWorldClock(application.getSelectedCities());
 
 
                         if(SpUtils.getBoolean(application, CacheConstants.TODAY_RESET,false)){
@@ -471,7 +462,7 @@ public class SyncControllerImpl implements  SyncController{
 
     @Subscribe
     public void onEvent(WorldClockChangedEvent worldClockChangedEvent) {
-        setWorldClock(getSelectedCities());
+        setWorldClock(application.getSelectedCities());
     }
     @Subscribe
     public void onEvent(StepsGoalChangedEvent stepsGoalChangedEvent) {
@@ -573,12 +564,4 @@ public class SyncControllerImpl implements  SyncController{
         return false;
     }
 
-    private List<City> getSelectedCities() {
-        RealmResults<City> realmCities = Realm.getDefaultInstance().where(City.class).equalTo("selected",true).findAll();
-        List<City> cities = new ArrayList<>();
-        for (City city: realmCities) {
-            cities.add(city);
-        }
-        return cities;
-    }
 }

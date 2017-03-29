@@ -9,6 +9,7 @@ import com.dayton.drone.ble.controller.SyncControllerImpl;
 import com.dayton.drone.ble.notification.PackageFilterHelper;
 import com.dayton.drone.ble.util.NotificationPermission;
 import com.dayton.drone.cloud.SyncActivityManager;
+import com.dayton.drone.database.DroneDatabaseModule;
 import com.dayton.drone.database.entry.NotificationDatabaseHelper;
 import com.dayton.drone.database.entry.StepsDatabaseHelper;
 import com.dayton.drone.database.entry.UserDatabaseHelper;
@@ -28,7 +29,9 @@ import net.medcorp.library.android.notificationsdk.config.type.FilterType;
 import net.medcorp.library.android.notificationsdk.config.type.OverrideType;
 import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
 import net.medcorp.library.ble.util.Optional;
+import net.medcorp.library.worldclock.City;
 import net.medcorp.library.worldclock.WorldClockDatabaseHelper;
+import net.medcorp.library.worldclock.WorldClockLibraryModule;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -43,6 +46,10 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
+
 /**
  * Created by karl-john on 18/3/16.
  */
@@ -55,14 +62,17 @@ public class ApplicationModel extends Application {
     private StepsDatabaseHelper stepsDatabaseHelper;
     private NotificationDatabaseHelper notificationDatabaseHelper;
     private WatchesDatabaseHelper watchesDatabaseHelper;
-    private WorldClockDatabaseHelper databaseHelper;
+    private WorldClockDatabaseHelper worldClockDatabaseHelper;
 
     @Override
     public void onCreate(){
         super.onCreate();
-//        RealmConfiguration realmConfig = new RealmConfiguration.Builder(this).deleteRealmIfMigrationNeeded().build();
-//        Realm.setDefaultConfiguration(realmConfig);
-        EventBus.builder().sendNoSubscriberEvent(false).sendNoSubscriberEvent(false).logNoSubscriberMessages(false).installDefaultEventBus();
+        Realm.init(this);
+        worldClockDatabaseHelper = new WorldClockDatabaseHelper(this);
+        Realm.setDefaultConfiguration(new RealmConfiguration.Builder().name("drone")
+                .modules(new DroneDatabaseModule(),new WorldClockLibraryModule()).build());
+
+        //EventBus.builder().sendNoSubscriberEvent(false).logNoSubscriberMessages(false).installDefaultEventBus();
         syncController = new SyncControllerImpl(this);
         retrofitManager = new RetrofitManager(this);
         syncActivityManager = new SyncActivityManager(this);
@@ -71,8 +81,6 @@ public class ApplicationModel extends Application {
         notificationDatabaseHelper = new NotificationDatabaseHelper(this);
         watchesDatabaseHelper = new WatchesDatabaseHelper(this);
 
-        databaseHelper = new WorldClockDatabaseHelper(this);
-        databaseHelper.setupWorldClock();
         Optional<User> loginUser = userDatabaseHelper.getLoginUser();
         if(loginUser.notEmpty()) {
             user = loginUser.get();
@@ -105,7 +113,7 @@ public class ApplicationModel extends Application {
         return userDatabaseHelper;
     }
     public WorldClockDatabaseHelper getWorldClockDatabaseHelp(){
-        return databaseHelper;
+        return worldClockDatabaseHelper;
     }
     public NotificationDatabaseHelper getNotificationDatabaseHelper(){
         return notificationDatabaseHelper;
@@ -186,5 +194,14 @@ public class ApplicationModel extends Application {
     @Subscribe
     public void onEvent(NotificationPackagesChangedEvent event){
         initializeNotifications();
+    }
+
+    public List<City> getSelectedCities() {
+        RealmResults<City> realmCities = Realm.getDefaultInstance().where(City.class).equalTo("selected",true).findAll();
+        List<City> cities = new ArrayList<>();
+        for (City city: realmCities) {
+            cities.add(city);
+        }
+        return cities;
     }
 }

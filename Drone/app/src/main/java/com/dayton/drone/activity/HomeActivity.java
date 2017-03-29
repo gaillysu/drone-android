@@ -51,7 +51,6 @@ public class HomeActivity extends BaseActivity {
         }
 
         ButterKnife.bind(this);
-        getModel().getUser().setUserIsLogin(true);
         initData();
         MyHomeMenuAdapter adapter = new MyHomeMenuAdapter(listData, this);
         homeMenuListView.setAdapter(adapter);
