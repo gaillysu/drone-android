@@ -1,17 +1,61 @@
-package com.dayton.drone.model;
+package com.dayton.drone.database.bean;
 
+import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
 
 /**
- * Created by med on 16/5/19.
+ * Created by med on 17/3/30.
  */
-public class Watches {
 
+public class WatchesBean extends RealmObject {
+    /**
+     * field name and initialize value, Primary field, it is a local database value
+     */
+    @Ignore
+    public static final String fID = "id";
     private int id = (int) Math.floor(Math.random()*Integer.MAX_VALUE);
+
+    /**
+     * return from "watch API"
+     */
+    @Ignore
+    public static final String fWatchID = "watchID";
     private int watchID;
+
+    /**
+     * which user ID
+     */
+    @Ignore
+    public static final String fUserID = "userID";
     private String userID;
+
+    /**
+     * serial is the watch unique ID
+     */
+    @Ignore
+    public static final String fSerialNumber = "serialNumber";
     private String serialNumber;
+
+    /**
+     * MAC address is the ble ID
+     */
+    @Ignore
+    public static final String fMacAddress = "macAddress";
     private String macAddress;
+
+    /**
+     * the model type of the watch, to show the name and icon
+     */
+    @Ignore
+    public static final String fModelName = "modelName";
     private String modelName;
+
+
+    /**
+     * the watch firmware version
+     */
+    @Ignore
+    public static final String fFirmwareVersion = "firmwareVersion";
     private String firmwareVersion;
 
     public int getId() {
@@ -70,4 +114,3 @@ public class Watches {
         this.firmwareVersion = firmwareVersion;
     }
 }
-

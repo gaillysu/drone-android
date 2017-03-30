@@ -2,6 +2,7 @@ package com.dayton.drone.database.entry;
 
 import android.content.Context;
 
+import com.dayton.drone.database.bean.UserBean;
 import com.dayton.drone.model.User;
 
 import net.medcorp.library.ble.util.Optional;
@@ -18,40 +19,41 @@ import io.realm.RealmResults;
  */
 public class UserDatabaseHelper implements iEntryDatabaseHelper<User> {
 
-    private Realm realm;
-
     public UserDatabaseHelper(Context context) {
-        realm = Realm.getDefaultInstance();
+
     }
 
     @Override
     public Optional<User> add(User object) {
+        Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
-        User user = realm.copyToRealm(object);
+        UserBean userBean = realm.copyToRealm(convertToBean(new UserBean(),object));
         realm.commitTransaction();
-        return new Optional<>(user);
+        return new Optional<>(convertToNormal(new User(),userBean));
     }
 
 
     @Override
     public boolean update(User object) {
-        User user = realm.where(User.class).equalTo(User.fUserID, object.getUserID()).findFirst();
-        if(user == null){
+        Realm realm = Realm.getDefaultInstance();
+        UserBean userBean = realm.where(UserBean.class).equalTo(UserBean.fUserID, object.getUserID()).findFirst();
+        if(userBean == null){
             return add(object).notEmpty();
         }
 
         realm.beginTransaction();
-        copyToRealm(user,object);
+        convertToBean(userBean,object);
         realm.commitTransaction();
         return true;
     }
 
     @Override
     public boolean remove(String userId ,Date date) {
-        User user = realm.where(User.class).equalTo(User.fUserID, userId).findFirst();
-        if(user != null) {
+        Realm realm = Realm.getDefaultInstance();
+        UserBean userBean = realm.where(UserBean.class).equalTo(UserBean.fUserID, userId).findFirst();
+        if(userBean != null) {
             realm.beginTransaction();
-            user.deleteFromRealm();
+            userBean.deleteFromRealm();
             realm.commitTransaction();
             return true;
         }
@@ -59,7 +61,8 @@ public class UserDatabaseHelper implements iEntryDatabaseHelper<User> {
     }
 
     public boolean removeAll(){
-        RealmResults<User> users = realm.where(User.class).findAll();
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<UserBean> users = realm.where(UserBean.class).findAll();
         realm.beginTransaction();
         boolean result = users.deleteAllFromRealm();
         realm.commitTransaction();
@@ -69,10 +72,11 @@ public class UserDatabaseHelper implements iEntryDatabaseHelper<User> {
     //single find
     @Override
     public List<Optional<User>> get(String userId) {
+        Realm realm = Realm.getDefaultInstance();
         List<Optional<User>> list = new ArrayList<>();
-        User user = realm.where(User.class).equalTo(User.fUserID, userId).findFirst();
-        if(user != null) {
-            list.add(new Optional<>(user));
+        UserBean userBean = realm.where(UserBean.class).equalTo(UserBean.fUserID, userId).findFirst();
+        if(userBean != null) {
+            list.add(new Optional<>(convertToNormal(new User(),userBean)));
         }
         return list;
     }
@@ -80,9 +84,10 @@ public class UserDatabaseHelper implements iEntryDatabaseHelper<User> {
     //find table
     @Override
     public Optional<User> get(String userId, Date date) {
-        User user = realm.where(User.class).equalTo(User.fUserID, userId).findFirst();
-        if(user != null) {
-            return new Optional<>(user);
+        Realm realm = Realm.getDefaultInstance();
+        UserBean userBean = realm.where(UserBean.class).equalTo(UserBean.fUserID, userId).findFirst();
+        if(userBean != null) {
+            return new Optional<>(convertToNormal(new User(),userBean));
         }
         return new Optional<>();
     }
@@ -104,26 +109,45 @@ public class UserDatabaseHelper implements iEntryDatabaseHelper<User> {
         return list;
     }
 
-    public Optional<User> getLoginUser()    {
-        User user = realm.where(User.class).equalTo(User.fUserIsLogin, true).findFirst();
-        if(user !=null) {
-            return new Optional<>(user);
+    public Optional<User> getLoginUser()
+    {
+        Realm realm = Realm.getDefaultInstance();
+        UserBean userBean = realm.where(UserBean.class).equalTo(UserBean.fUserIsLogin, true).findFirst();
+        if(userBean !=null) {
+            return new Optional<>(convertToNormal(new User(),userBean));
         }
         return new Optional<>();
     }
 
-    private void copyToRealm(User userRealm, User object) {
-        userRealm.setBirthday(object.getBirthday());
-        userRealm.setHeight(object.getHeight());
-        userRealm.setWeight(object.getWeight());
-        userRealm.setFirstName(object.getFirstName());
-        userRealm.setLastName(object.getLastName());
-        userRealm.setGender(object.getGender());
-        userRealm.setStrideLength(object.getStrideLength());
-        userRealm.setUserEmail(object.getUserEmail());
-        userRealm.setUserPassword(object.getUserPassword());
-        userRealm.setUserID(object.getUserID());
-        userRealm.setUserIsLogin(object.isUserIsLogin());
+    private User convertToNormal(User user,UserBean userDAO) {
+        user.setBirthday(userDAO.getBirthday());
+        user.setHeight(userDAO.getHeight());
+        user.setWeight(userDAO.getWeight());
+        user.setFirstName(userDAO.getFirstName());
+        user.setLastName(userDAO.getLastName());
+        user.setGender(userDAO.getGender());
+        user.setStrideLength(userDAO.getStrideLength());
+        user.setUserEmail(userDAO.getUserEmail());
+        user.setUserPassword(userDAO.getUserPassword());
+        user.setUserID(userDAO.getUserID());
+        user.setUserIsLogin(userDAO.isUserIsLogin());
+        return user;
     }
+
+    public UserBean convertToBean(UserBean userDAO,User user) {
+        userDAO.setHeight(user.getHeight());
+        userDAO.setBirthday(user.getBirthday());
+        userDAO.setWeight(user.getWeight());
+        userDAO.setFirstName(user.getFirstName());
+        userDAO.setLastName(user.getLastName());
+        userDAO.setGender(user.getGender());
+        userDAO.setStrideLength(user.getStrideLength());
+        userDAO.setUserEmail(user.getUserEmail());
+        userDAO.setUserPassword(user.getUserPassword());
+        userDAO.setUserID(user.getUserID());
+        userDAO.setUserIsLogin(user.isUserIsLogin());
+        return userDAO;
+    }
+
 
 }

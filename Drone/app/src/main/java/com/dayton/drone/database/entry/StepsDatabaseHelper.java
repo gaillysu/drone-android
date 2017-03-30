@@ -3,6 +3,7 @@ package com.dayton.drone.database.entry;
 import android.content.Context;
 
 
+import com.dayton.drone.database.bean.StepsBean;
 import com.dayton.drone.model.CanlendarWeek;
 import com.dayton.drone.model.Steps;
 import com.dayton.drone.utils.Common;
@@ -20,36 +21,36 @@ import io.realm.Realm;
  */
 public class StepsDatabaseHelper {
 
-    private Realm realm;
-
     public StepsDatabaseHelper(Context context) {
-        realm = Realm.getDefaultInstance();
+
     }
 
-
     public Optional<Steps> add(Steps object) {
+        Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
-        Steps steps = realm.copyToRealm(object);
+        StepsBean stepsBean = realm.copyToRealm(convertToDao(new StepsBean(),object));
         realm.commitTransaction();
-        return new Optional<>(steps);
+        return new Optional<>(convertToNormal(new Steps(0,stepsBean.getDate()),stepsBean));
     }
 
     public boolean update(Steps object) {
-        Steps steps = realm.where(Steps.class).equalTo(Steps.fUserID, object.getUserID()).equalTo(Steps.fDate, Common.removeTimeFromDate(new Date(object.getDate())).getTime()).findFirst();
-        if(steps==null) {
+        Realm realm = Realm.getDefaultInstance();
+        StepsBean stepsBean = realm.where(StepsBean.class).equalTo(StepsBean.fUserID, object.getUserID()).equalTo(StepsBean.fDate, Common.removeTimeFromDate(new Date(object.getDate())).getTime()).findFirst();
+        if(stepsBean==null) {
             return add(object).notEmpty();
         }
         realm.beginTransaction();
-        copyToRealm(steps,object);
+        convertToDao(stepsBean,object);
         realm.commitTransaction();
         return true;
     }
 
     public boolean remove(String userId,Date date) {
-        Steps steps = realm.where(Steps.class).equalTo(Steps.fUserID, userId).equalTo(Steps.fDate,Common.removeTimeFromDate(date).getTime()).findFirst();
-        if(steps!=null){
+        Realm realm = Realm.getDefaultInstance();
+        StepsBean stepsBean = realm.where(StepsBean.class).equalTo(StepsBean.fUserID, userId).equalTo(StepsBean.fDate,Common.removeTimeFromDate(date).getTime()).findFirst();
+        if(stepsBean!=null){
             realm.beginTransaction();
-            steps.deleteFromRealm();
+            stepsBean.deleteFromRealm();
             realm.commitTransaction();
             return true;
         }
@@ -57,31 +58,44 @@ public class StepsDatabaseHelper {
     }
 
     public List<Optional<Steps> >  get(String userId,Date date) {
+        Realm realm = Realm.getDefaultInstance();
         List<Optional<Steps> > stepsList = new ArrayList<>();
-        List<Steps> stepses = realm.where(Steps.class).equalTo(Steps.fUserID, userId).equalTo(Steps.fDate,Common.removeTimeFromDate(date).getTime()).findAll();
-        for(Steps steps : stepses) {
-            stepsList.add(new Optional<>(steps));
+        List<StepsBean> all = realm.where(StepsBean.class).equalTo(StepsBean.fUserID, userId).equalTo(StepsBean.fDate,Common.removeTimeFromDate(date).getTime()).findAll();
+        for(StepsBean stepsBean : all) {
+            stepsList.add(new Optional<>(convertToNormal(new Steps(0,stepsBean.getDate()),stepsBean)));
         }
         return stepsList;
     }
 
 
     public List<Optional<Steps> > getAll(String userId) {
+        Realm realm = Realm.getDefaultInstance();
         List<Optional<Steps> > stepsList = new ArrayList<>();
-        List<Steps> stepses = realm.where(Steps.class).equalTo(Steps.fUserID, userId).findAll();
-        for(Steps steps : stepses) {
-            stepsList.add(new Optional<>(steps));
+        List<StepsBean> all = realm.where(StepsBean.class).equalTo(StepsBean.fUserID, userId).findAll();
+        for(StepsBean stepsBean : all) {
+            stepsList.add(new Optional<>(convertToNormal(new Steps(0,stepsBean.getDate()),stepsBean)));
         }
         return stepsList;
     }
 
-    private void copyToRealm(Steps stepsRealm,Steps object){
-        stepsRealm.setUserID(object.getUserID());
-        stepsRealm.setDate(object.getDate());
-        stepsRealm.setHourlySteps(object.getHourlySteps());
-        stepsRealm.setDistance(object.getDistance());
-        stepsRealm.setCloudID(object.getCloudID());
-        stepsRealm.setStepsGoal(object.getStepsGoal());
+    private StepsBean convertToDao(StepsBean stepsDao, Steps steps){
+        stepsDao.setUserID(steps.getUserID());
+        stepsDao.setDate(steps.getDate());
+        stepsDao.setHourlySteps(steps.getHourlySteps());
+        stepsDao.setDistance(steps.getDistance());
+        stepsDao.setCloudID(steps.getCloudID());
+        stepsDao.setStepsGoal(steps.getStepsGoal());
+        return stepsDao;
+    }
+
+    private Steps convertToNormal(Steps steps,StepsBean stepsDAO){
+        steps.setUserID(stepsDAO.getUserID());
+        steps.setDate(stepsDAO.getDate());
+        steps.setHourlySteps(stepsDAO.getHourlySteps());
+        steps.setDistance(stepsDAO.getDistance());
+        steps.setCloudID(stepsDAO.getCloudID());
+        steps.setStepsGoal(stepsDAO.getStepsGoal());
+        return steps;
     }
 
     public List<Steps> convertToNormalList(List<Optional<Steps>> optionals) {

@@ -2,10 +2,12 @@ package com.dayton.drone.database.entry;
 
 import android.content.Context;
 
+import com.dayton.drone.database.bean.WatchesBean;
 import com.dayton.drone.model.Watches;
 
 import net.medcorp.library.ble.util.Optional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
@@ -14,35 +16,37 @@ import io.realm.Realm;
  * Created by med on 16/5/19.
  */
 public class WatchesDatabaseHelper {
-    private Realm realm;
 
     public WatchesDatabaseHelper(Context context) {
-           realm = Realm.getDefaultInstance();
+
     }
 
     public Optional<Watches> add(final Watches object) {
+        Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
-        final Watches watches = realm.copyToRealm(object);
+        final WatchesBean watchesBean = realm.copyToRealm(convertToBean(new WatchesBean(),object));
         realm.commitTransaction();
-        return new Optional<>(watches);
+        return new Optional<>(convertToNormal(new Watches(),watchesBean));
     }
 
     public boolean update(Watches object) {
-        Watches watches = realm.where(Watches.class).equalTo(Watches.fMacAddress, object.getMacAddress()).findFirst();
-        if(watches==null){
+        Realm realm = Realm.getDefaultInstance();
+        WatchesBean watchesBean = realm.where(WatchesBean.class).equalTo(WatchesBean.fMacAddress, object.getMacAddress()).findFirst();
+        if(watchesBean==null){
             return add(object).notEmpty();
         }
         realm.beginTransaction();
-        copyToRealm(watches,object);
+        convertToBean(watchesBean,object);
         realm.commitTransaction();
         return true;
     }
 
     public boolean remove(Watches object) {
-        Watches watches = realm.where(Watches.class).equalTo(Watches.fMacAddress, object.getMacAddress()).equalTo(Watches.fUserID, object.getUserID()).findFirst();
-        if(watches!=null){
+        Realm realm = Realm.getDefaultInstance();
+        WatchesBean watchesBean = realm.where(WatchesBean.class).equalTo(WatchesBean.fMacAddress, object.getMacAddress()).equalTo(WatchesBean.fUserID, object.getUserID()).findFirst();
+        if(watchesBean!=null){
             realm.beginTransaction();
-            watches.deleteFromRealm();
+            watchesBean.deleteFromRealm();
             realm.commitTransaction();
             return true;
         }
@@ -50,15 +54,36 @@ public class WatchesDatabaseHelper {
     }
 
     public List<Watches> getAll(String userId) {
-        return realm.where(Watches.class).equalTo(Watches.fUserID, userId).findAll();
+        Realm realm = Realm.getDefaultInstance();
+        List<Watches> list = new ArrayList<>();
+        List<WatchesBean> all = realm.where(WatchesBean.class).equalTo(WatchesBean.fUserID, userId).findAll();
+        for(WatchesBean watchesBean:all){
+            list.add(convertToNormal(new Watches(),watchesBean));
+        }
+        return list;
     }
 
-    private void copyToRealm(Watches watchesRealm, Watches object){
-        watchesRealm.setWatchID(object.getWatchID());
-        watchesRealm.setUserID(object.getUserID());
-        watchesRealm.setSerialNumber(object.getSerialNumber());
-        watchesRealm.setMacAddress(object.getMacAddress());
-        watchesRealm.setModelName(object.getModelName());
-        watchesRealm.setFirmwareVersion(object.getFirmwareVersion());
+
+    private Watches convertToNormal(Watches watches, WatchesBean watchesBean)
+    {
+        watches.setWatchID(watchesBean.getWatchID());
+        watches.setUserID(watchesBean.getUserID());
+        watches.setSerialNumber(watchesBean.getSerialNumber());
+        watches.setMacAddress(watchesBean.getMacAddress());
+        watches.setModelName(watchesBean.getModelName());
+        watches.setFirmwareVersion(watchesBean.getFirmwareVersion());
+        return watches;
     }
+
+    private WatchesBean convertToBean(WatchesBean watchesBean,Watches watches)
+    {
+        watchesBean.setWatchID(watches.getWatchID());
+        watchesBean.setUserID(watches.getUserID());
+        watchesBean.setSerialNumber(watches.getSerialNumber());
+        watchesBean.setMacAddress(watches.getMacAddress());
+        watchesBean.setModelName(watches.getModelName());
+        watchesBean.setFirmwareVersion(watches.getFirmwareVersion());
+        return watchesBean;
+    }
+
 }

@@ -1,14 +1,37 @@
-package com.dayton.drone.model;
+package com.dayton.drone.database.bean;
 
+import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
 
 /**
- * Created by med on 16/5/9.
+ * Created by med on 17/3/30.
  */
-public class Notification {
 
+public class NotificationBean extends RealmObject {
+    /**
+     * field name and initialize value, Primary field
+     */
+    @Ignore
+    public static final String fID = "id";
     private int id = 1;
+
+    @Ignore
+    public static final String fApplication = "application";
     private String application;
+
+    /**
+     * black/white list mode
+     */
+    @Ignore
+    public static final String fOperationMode = "operationMode";
     private int operationMode;
+
+
+    /**
+     * JSONArray string,eg:{"contacts":[{"name":"Tom","number":"10086"},{"name":"John","number":"10000;10001"},{},...]}
+     */
+    @Ignore
+    public static final String fContactsList = "contactsList";
     private String contactsList;
 
     public int getId() {
