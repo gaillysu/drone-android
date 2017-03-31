@@ -1,5 +1,6 @@
 package com.dayton.drone.activity.tutorial;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
 import net.medcorp.library.ble.event.BLEFirmwareVersionReceivedEvent;
 import net.medcorp.library.ble.event.BLESearchEvent;
+import net.medcorp.library.permission.PermissionRequestDialogBuilder;
 
 import org.greenrobot.eventbus.Subscribe;
 
@@ -67,6 +69,10 @@ public class ShowWatchActivity extends BaseActivity  {
         Intent intent = getIntent();
         int watchIconId = intent.getIntExtra("watchIconId", -1);
         icon.setImageResource(watchIconId);
+        PermissionRequestDialogBuilder builder = new PermissionRequestDialogBuilder(this);
+        builder.addPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
+        builder.askForPermission(this, 1);
+
         if(!getModel().getSyncController().isConnected()) {
             getModel().getSyncController().startConnect(true);
         }
