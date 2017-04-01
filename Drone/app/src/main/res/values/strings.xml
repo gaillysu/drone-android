@@ -132,6 +132,9 @@
     <string name="in_app_notification_bluetooth_disabled">Bluetooth is disabled. Enable Bluetooth.</string>
     <string name="in_app_notification_watch_disconnected">Watch disconnected.</string>
     <string name="in_app_notification_searching">Searching for watch…</string>
+    <string name="in_app_notification_gps_disable">GPS is disabled,Enable GPS.</string>
+    <string name="in_app_notification_gps_permission">Location permission is not granted,please allow it.</string>
+    <string name="in_app_notification_dialog_button_text">Settings</string>
 
     <string name="show_watch_failed_searching">Failed searching for devices.</string>
     <string name="show_watch_connected">Connected</string>

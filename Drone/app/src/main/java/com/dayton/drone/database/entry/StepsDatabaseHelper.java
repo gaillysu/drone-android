@@ -2,7 +2,7 @@ package com.dayton.drone.database.entry;
 
 import android.content.Context;
 
-import com.dayton.drone.database.DatabaseHelper;
+
 import com.dayton.drone.database.bean.StepsBean;
 import com.dayton.drone.model.CanlendarWeek;
 import com.dayton.drone.model.Steps;
@@ -10,119 +10,75 @@ import com.dayton.drone.utils.Common;
 
 import net.medcorp.library.ble.util.Optional;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import io.realm.Realm;
 
 /**
  * Created by karl-john on 17/11/15.
  */
 public class StepsDatabaseHelper {
 
-    private DatabaseHelper databaseHelper;
-
     public StepsDatabaseHelper(Context context) {
-        if (databaseHelper == null) {
-            databaseHelper = DatabaseHelper.getHelperInstance(context);
-        }
-    }
 
+    }
 
     public Optional<Steps> add(Steps object) {
-        Optional<Steps> stepsOptional = new Optional<>();
-        try {
-            StepsBean daoobject = convertToDao(object);
-            daoobject.setHourlySteps(convertToDAOHourlySteps(object.getHourlySteps(),object));
-            StepsBean stepsDAO = databaseHelper.getStepsBean().createIfNotExists(daoobject);
-            if(stepsDAO != null)
-            {
-                stepsOptional.set(convertToNormal(stepsDAO));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return stepsOptional;
+        Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        StepsBean stepsBean = realm.copyToRealm(convertToDao(new StepsBean(),object));
+        realm.commitTransaction();
+        return new Optional<>(convertToNormal(new Steps(0,stepsBean.getDate()),stepsBean));
     }
-
 
     public boolean update(Steps object) {
-
-        int result = -1;
-        try {
-            List<StepsBean> stepsDAOList = databaseHelper.getStepsBean()
-                    .queryBuilder().where().eq(StepsBean.fUserID, object.getUserID())
-                    .and().eq(StepsBean.fDate, Common.removeTimeFromDate(new Date(object.getDate())).getTime())
-                    .query();
-            if(stepsDAOList.isEmpty()) return add(object)!=null;
-            StepsBean daoobject = convertToDao(object);
-            daoobject.setId(stepsDAOList.get(0).getId());
-            daoobject.setHourlySteps(convertToDAOHourlySteps(stepsDAOList.get(0).getHourlySteps(), object));
-            result = databaseHelper.getStepsBean().update(daoobject);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        Realm realm = Realm.getDefaultInstance();
+        StepsBean stepsBean = realm.where(StepsBean.class).equalTo(StepsBean.fUserID, object.getUserID()).equalTo(StepsBean.fDate, Common.removeTimeFromDate(new Date(object.getDate())).getTime()).findFirst();
+        if(stepsBean==null) {
+            return add(object).notEmpty();
         }
-        return result>=0;
+        realm.beginTransaction();
+        convertToDao(stepsBean,object);
+        realm.commitTransaction();
+        return true;
     }
 
-
     public boolean remove(String userId,Date date) {
-        try {
-            List<StepsBean> stepsDAOList = databaseHelper.getStepsBean()
-                    .queryBuilder().where().eq(StepsBean.fUserID, userId)
-                    .and().eq(StepsBean.fDate,Common.removeTimeFromDate(date).getTime()).query();
-            if(!stepsDAOList.isEmpty())
-            {
-                return databaseHelper.getStepsBean().delete(stepsDAOList)>=0;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        Realm realm = Realm.getDefaultInstance();
+        StepsBean stepsBean = realm.where(StepsBean.class).equalTo(StepsBean.fUserID, userId).equalTo(StepsBean.fDate,Common.removeTimeFromDate(date).getTime()).findFirst();
+        if(stepsBean!=null){
+            realm.beginTransaction();
+            stepsBean.deleteFromRealm();
+            realm.commitTransaction();
+            return true;
         }
         return false;
     }
 
-
     public List<Optional<Steps> >  get(String userId,Date date) {
+        Realm realm = Realm.getDefaultInstance();
         List<Optional<Steps> > stepsList = new ArrayList<>();
-        try {
-            List<StepsBean> stepsDAOList = databaseHelper.getStepsBean()
-                    .queryBuilder().where().eq(StepsBean.fUserID, userId)
-                    .and().eq(StepsBean.fDate, Common.removeTimeFromDate(date).getTime())
-                    .query();
-            for(StepsBean stepsBean : stepsDAOList){
-                Optional<Steps> stepsOptional = new Optional<>();
-                stepsOptional.set(convertToNormal(stepsBean));
-                stepsList.add(stepsOptional);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        List<StepsBean> all = realm.where(StepsBean.class).equalTo(StepsBean.fUserID, userId).equalTo(StepsBean.fDate,Common.removeTimeFromDate(date).getTime()).findAll();
+        for(StepsBean stepsBean : all) {
+            stepsList.add(new Optional<>(convertToNormal(new Steps(0,stepsBean.getDate()),stepsBean)));
         }
         return stepsList;
     }
 
 
     public List<Optional<Steps> > getAll(String userId) {
-        List<Optional<Steps> > stepsList = new ArrayList<Optional<Steps> >();
-        try {
-            List<StepsBean> stepsDAOList = databaseHelper.getStepsBean()
-                    .queryBuilder().orderBy(StepsBean.fDate,true).where().
-                            eq(StepsBean.fUserID, userId).query();
-            for(StepsBean stepsDAO : stepsDAOList){
-                Optional<Steps> stepsOptional = new Optional<>();
-                stepsOptional.set(convertToNormal(stepsDAO));
-                stepsList.add(stepsOptional);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        Realm realm = Realm.getDefaultInstance();
+        List<Optional<Steps> > stepsList = new ArrayList<>();
+        List<StepsBean> all = realm.where(StepsBean.class).equalTo(StepsBean.fUserID, userId).findAll();
+        for(StepsBean stepsBean : all) {
+            stepsList.add(new Optional<>(convertToNormal(new Steps(0,stepsBean.getDate()),stepsBean)));
         }
         return stepsList;
     }
 
-    private StepsBean convertToDao(Steps steps){
-        StepsBean stepsDao = new StepsBean();
+    private StepsBean convertToDao(StepsBean stepsDao, Steps steps){
         stepsDao.setUserID(steps.getUserID());
         stepsDao.setDate(steps.getDate());
         stepsDao.setHourlySteps(steps.getHourlySteps());
@@ -132,8 +88,7 @@ public class StepsDatabaseHelper {
         return stepsDao;
     }
 
-    private Steps convertToNormal(StepsBean stepsDAO){
-        Steps steps = new Steps(0,stepsDAO.getDate());
+    private Steps convertToNormal(Steps steps,StepsBean stepsDAO){
         steps.setUserID(stepsDAO.getUserID());
         steps.setDate(stepsDAO.getDate());
         steps.setHourlySteps(stepsDAO.getHourlySteps());
@@ -141,31 +96,6 @@ public class StepsDatabaseHelper {
         steps.setCloudID(stepsDAO.getCloudID());
         steps.setStepsGoal(stepsDAO.getStepsGoal());
         return steps;
-    }
-
-    private String convertToDAOHourlySteps(String srcDAOHourlySteps,Steps steps)
-    {
-        String dstDAOHourlySteps = srcDAOHourlySteps;
-        Date date = new Date(steps.getTimeFrame());
-        int indexHour = date.getHours();
-        int indexMinute = date.getMinutes()/5;  //range: 0~11
-        try {
-            JSONArray hourlySteps = new JSONArray(srcDAOHourlySteps);
-            JSONArray minutesInHour = hourlySteps.optJSONArray(indexHour);
-            minutesInHour.put(indexMinute,steps.getTimeFrameSteps());
-            //fix null Object to 0 value for saving string length
-            for(int k=0;k<indexMinute;k++)
-            {
-                if(minutesInHour.opt(k)==null)
-                {
-                    minutesInHour.put(k,0);
-                }
-            }
-            dstDAOHourlySteps = hourlySteps.toString();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return dstDAOHourlySteps;
     }
 
     public List<Steps> convertToNormalList(List<Optional<Steps>> optionals) {

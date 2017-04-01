@@ -1,59 +1,61 @@
 package com.dayton.drone.database.bean;
 
-import com.j256.ormlite.field.DatabaseField;
+import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
 
 /**
- * Created by med on 16/5/19.
+ * Created by med on 17/3/30.
  */
-public class WatchesBean {
+
+public class WatchesBean extends RealmObject {
     /**
      * field name and initialize value, Primary field, it is a local database value
      */
+    @Ignore
     public static final String fID = "id";
-    @DatabaseField(id = true)
     private int id = (int) Math.floor(Math.random()*Integer.MAX_VALUE);
 
     /**
      * return from "watch API"
      */
+    @Ignore
     public static final String fWatchID = "watchID";
-    @DatabaseField
     private int watchID;
 
     /**
      * which user ID
      */
+    @Ignore
     public static final String fUserID = "userID";
-    @DatabaseField
     private String userID;
 
     /**
      * serial is the watch unique ID
      */
+    @Ignore
     public static final String fSerialNumber = "serialNumber";
-    @DatabaseField
     private String serialNumber;
 
     /**
      * MAC address is the ble ID
      */
+    @Ignore
     public static final String fMacAddress = "macAddress";
-    @DatabaseField
     private String macAddress;
 
     /**
      * the model type of the watch, to show the name and icon
      */
+    @Ignore
     public static final String fModelName = "modelName";
-    @DatabaseField
     private String modelName;
 
 
     /**
      * the watch firmware version
      */
+    @Ignore
     public static final String fFirmwareVersion = "firmwareVersion";
-    @DatabaseField
     private String firmwareVersion;
 
     public int getId() {

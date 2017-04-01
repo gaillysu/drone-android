@@ -2,121 +2,91 @@ package com.dayton.drone.database.entry;
 
 import android.content.Context;
 
-import com.dayton.drone.database.DatabaseHelper;
 import com.dayton.drone.database.bean.NotificationBean;
 import com.dayton.drone.model.Notification;
 
 import net.medcorp.library.ble.util.Optional;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
 
 /**
  * Created by med on 16/5/9.
  */
 public class NotificationDatabaseHelper {
 
-    private DatabaseHelper databaseHelper;
-
     public NotificationDatabaseHelper(Context context) {
-        if (databaseHelper == null) {
-            databaseHelper = DatabaseHelper.getHelperInstance(context);
-        }
+
     }
 
-
     public Optional<Notification> add(Notification object) {
-        Optional<Notification> optional = new Optional<>();
-        try {
-            int res = databaseHelper.getNotificationBean().create(convertToBean(object));
-            if (res > 0) {
-                optional.set(object);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return optional;
+        Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        NotificationBean notificationBean = realm.copyToRealm(convertToBean(new NotificationBean(),object));
+        realm.commitTransaction();
+        return new Optional<>(convertToNormal(new Notification(),notificationBean));
     }
 
 
     public boolean update(Notification object) {
-        int result = -1;
-        try {
-            List<NotificationBean> notificationList = databaseHelper.getNotificationBean().queryBuilder()
-                    .where().eq(NotificationBean.fApplication, object.getApplication()).query();
-            if (notificationList.isEmpty()) {
-                return add(object) != null;
-            }
-            NotificationBean notificationBean = convertToBean(object);
-            notificationBean.setId(notificationList.get(0).getId());
-            result = databaseHelper.getNotificationBean().update(notificationBean);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        Realm realm = Realm.getDefaultInstance();
+        NotificationBean notificationBean = realm.where(NotificationBean.class).equalTo(NotificationBean.fApplication, object.getApplication()).findFirst();
+        if(notificationBean==null) {
+            return add(object).notEmpty();
         }
-        return result >= 0;
+        realm.beginTransaction();
+        convertToBean(notificationBean,object);
+        realm.commitTransaction();
+        return true;
     }
 
 
     public boolean remove(String application) {
-        try {
-            List<NotificationBean> notificationList = databaseHelper.getNotificationBean().queryBuilder()
-                    .where().eq(NotificationBean.fApplication, application).query();
-            if (!notificationList.isEmpty()) {
-                return databaseHelper.getNotificationBean().delete(notificationList) >= 0;
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+        Realm realm = Realm.getDefaultInstance();
+        NotificationBean notificationBean = realm.where(NotificationBean.class).equalTo(NotificationBean.fApplication, application).findFirst();
+        if(notificationBean!=null) {
+            realm.beginTransaction();
+            notificationBean.deleteFromRealm();
+            realm.commitTransaction();
+            return true;
         }
         return false;
     }
 
     public List<Notification> get(String application) {
+        Realm realm = Realm.getDefaultInstance();
         List<Notification> list = new ArrayList<>();
-
-        try {
-            List<NotificationBean> notificationList = databaseHelper.getNotificationBean().queryBuilder()
-                    .where().eq(NotificationBean.fApplication, application).query();
-
-            if(!notificationList.isEmpty()) {
-                list.add(convertToNormal(notificationList.get(0)));
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+        NotificationBean notificationBean = realm.where(NotificationBean.class).equalTo(NotificationBean.fApplication, application).findFirst();
+        if(notificationBean!=null) {
+            list.add(convertToNormal(new Notification(),notificationBean));
         }
         return list;
     }
 
     public List<Notification> getAll() {
+        Realm realm = Realm.getDefaultInstance();
         List<Notification> list = new ArrayList<>();
-        try {
-            List<NotificationBean> notificationList = databaseHelper.getNotificationBean().queryBuilder().query();
-
-            for(NotificationBean notificationBean:notificationList)
-            {
-                list.add(convertToNormal(notificationBean));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        List<NotificationBean> all = realm.where(NotificationBean.class).findAll();
+        for(NotificationBean notificationBean:all){
+            list.add(convertToNormal(new Notification(),notificationBean));
         }
         return list;
     }
 
-    private Notification convertToNormal(NotificationBean notificationBean) {
-        Notification notification = new Notification();
+    private Notification convertToNormal(Notification notification ,NotificationBean notificationBean) {
         notification.setApplication(notificationBean.getApplication());
         notification.setContactsList(notificationBean.getContactsList());
         notification.setOperationMode(notificationBean.getOperationMode());
         return notification;
     }
 
-    private NotificationBean convertToBean(Notification notification) {
-        NotificationBean notificationBean = new NotificationBean();
+    private NotificationBean convertToBean(NotificationBean notificationBean,Notification notification) {
         notificationBean.setApplication(notification.getApplication());
         notificationBean.setContactsList(notification.getContactsList());
         notificationBean.setOperationMode(notification.getOperationMode());
         return notificationBean;
     }
+
 }

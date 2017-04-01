@@ -1,16 +1,26 @@
 package com.dayton.drone.activity.tutorial;
 
+import android.Manifest;
+import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.dayton.drone.R;
 import com.dayton.drone.activity.HomeActivity;
 import com.dayton.drone.activity.base.BaseActivity;
@@ -21,6 +31,7 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
 import net.medcorp.library.ble.event.BLEFirmwareVersionReceivedEvent;
 import net.medcorp.library.ble.event.BLESearchEvent;
+import net.medcorp.library.permission.PermissionRequestDialogBuilder;
 
 import org.greenrobot.eventbus.Subscribe;
 
@@ -67,6 +78,7 @@ public class ShowWatchActivity extends BaseActivity  {
         Intent intent = getIntent();
         int watchIconId = intent.getIntExtra("watchIconId", -1);
         icon.setImageResource(watchIconId);
+        prepareConnect();
         if(!getModel().getSyncController().isConnected()) {
             getModel().getSyncController().startConnect(true);
         }
@@ -176,5 +188,47 @@ public class ShowWatchActivity extends BaseActivity  {
             finish();
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+           Toast.makeText(this,R.string.in_app_notification_gps_permission,Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /**
+     * before connect BLE device, need check some conditions, for example: phone bluetooth is on /off
+     * GPS is on/off, location permission is granted or not
+     */
+    private void prepareConnect(){
+        PermissionRequestDialogBuilder builder = new PermissionRequestDialogBuilder(this);
+        builder.addPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
+        builder.askForPermission(this, 1);
+        if(!((LocationManager)getSystemService(Context.LOCATION_SERVICE)).isProviderEnabled(LocationManager.GPS_PROVIDER))
+        {
+            new MaterialDialog.Builder(this)
+                    .content(R.string.in_app_notification_gps_disable)
+                    .negativeText(R.string.in_app_notification_dialog_button_text)
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
+                            startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS),0);
+                        }
+                    }).show();
+        }
+        if(!BluetoothAdapter.getDefaultAdapter().isEnabled())
+        {
+            new MaterialDialog.Builder(this)
+                    .content(R.string.in_app_notification_bluetooth_disabled)
+                    .negativeText(R.string.in_app_notification_dialog_button_text)
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
+                            startActivityForResult(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS),0);
+                        }
+                    }).show();
+        }
     }
 }
