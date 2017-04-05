@@ -16,7 +16,14 @@
             <item>com.google.android.apps.messaging</item>
             <item>com.sonyericsson.conversations</item>
             <item>com.htc.sense.mms</item>
+        </string-array>
+
+        <string-array name="MESSAGER_FACEBOOK">
             <item>com.facebook.orca</item>
+        </string-array>
+
+        <string-array name="MESSAGER_TELEGRAM">
+            <item>org.telegram.messenger</item>
         </string-array>
 
         <string-array name="EMAIL_APPS">
@@ -39,22 +46,45 @@
             <item>com.htc.calendar</item>
         </string-array>
 
-        <string-array name="SOCIAL_APPS">
-            <item>com.facebook.katana</item>
-            <item>com.facebook.lite</item>
-            <item>com.facebook.Mentions</item>
-            <item>com.google.android.apps.plus</item>
-            <item>com.instagram.android</item>
-            <item>com.snapchat.android</item>
-            <item>com.linkedin.android</item>
-            <item>com.twitter.android</item>
-            <item>com.pinterest</item>
-            <item>com.tencent.mm</item>
-            <item>com.whatsapp</item>
-            <item>com.tencent.mobileqq</item>
-            <item>com.tencent.mobileqqi</item>
-            <item>com.tencent.qq.kddi</item>
-            <item>com.tencent.qqlite</item>
-        </string-array>
+    <string-array name="SOCIAL_APPS_FACEBOOK">
+        <item>com.facebook.katana</item>
+        <item>com.facebook.lite</item>
+        <item>com.facebook.Mentions</item>
+    </string-array>
+
+    <string-array name="SOCIAL_APPS_GOOGLE">
+        <item>com.google.android.apps.plus</item>
+    </string-array>
+
+    <string-array name="SOCIAL_APPS_INSTAGRAM">
+        <item>com.instagram.android</item>
+    </string-array>
+
+    <string-array name="SOCIAL_APPS_SNAPCHAT">
+        <item>com.snapchat.android</item>
+    </string-array>
+
+    <string-array name="SOCIAL_APPS_LINKEDIN">
+        <item>com.linkedin.android</item>
+    </string-array>
+
+    <string-array name="SOCIAL_APPS_TWITTER">
+        <item>com.twitter.android</item>
+    </string-array>
+
+    <string-array name="SOCIAL_APPS_WECHAT">
+        <item>com.tencent.mm</item>
+    </string-array>
+
+    <string-array name="SOCIAL_APPS_WHATSAPP">
+        <item>com.whatsapp</item>
+    </string-array>
+
+    <string-array name="SOCIAL_APPS_QQ">
+        <item>com.tencent.mobileqq</item>
+        <item>com.tencent.mobileqqi</item>
+        <item>com.tencent.qq.kddi</item>
+        <item>com.tencent.qqlite</item>
+    </string-array>
 
 </resources>

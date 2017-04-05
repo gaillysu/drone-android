@@ -1,25 +1,23 @@
 package com.dayton.drone.model;
 
-
 import com.dayton.drone.R;
 
 /**
- * Created by med on 16/11/22.
+ * Created by Jason on 2016/11/21.
  */
 
-public class SocialNotification extends NotificationModel {
-
-    public SocialNotification(boolean enableNotification) {
+public class InstagramNotification extends NotificationModel {
+    public InstagramNotification(boolean enableNotification) {
         super(enableNotification);
     }
+
     @Override
     public int getNameStringResource() {
-        return R.string.notification_social_title;
+        return R.string.notification_instagram_title;
     }
 
     @Override
     public int getImageResource() {
-        //TODO here should replace facebook icon with a new one
         return R.drawable.facebook_notification;
     }
 }
