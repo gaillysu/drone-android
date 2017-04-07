@@ -20,6 +20,6 @@ public class FacebookMessagerNotification extends NotificationModel {
 
     @Override
     public int getImageResource() {
-        return R.drawable.message_notification;
+        return R.drawable.facebook_messager;
     }
 }

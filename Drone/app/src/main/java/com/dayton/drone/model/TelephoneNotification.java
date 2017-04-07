@@ -20,6 +20,6 @@ public class TelephoneNotification extends NotificationModel {
 
     @Override
     public int getImageResource() {
-        return R.drawable.call_notification;
+        return R.drawable.google_dialer;
     }
 }

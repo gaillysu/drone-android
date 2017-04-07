@@ -19,6 +19,6 @@ public class EmailNotification extends NotificationModel {
 
     @Override
     public int getImageResource() {
-        return R.drawable.email_notification;
+        return R.drawable.gmail_inbox_tools;
     }
 }

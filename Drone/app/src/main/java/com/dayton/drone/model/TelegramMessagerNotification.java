@@ -20,6 +20,6 @@ public class TelegramMessagerNotification extends NotificationModel {
 
     @Override
     public int getImageResource() {
-        return R.drawable.message_notification;
+        return R.drawable.telegram_messager;
     }
 }

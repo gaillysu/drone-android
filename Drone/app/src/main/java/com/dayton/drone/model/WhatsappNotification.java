@@ -18,6 +18,6 @@ public class WhatsappNotification extends NotificationModel {
 
     @Override
     public int getImageResource() {
-        return R.drawable.facebook_notification;
+        return R.drawable.whatsapp_messager;
     }
 }

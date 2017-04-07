@@ -17,6 +17,6 @@ public class CalendarNotification extends NotificationModel {
 
     @Override
     public int getImageResource() {
-        return R.drawable.calendar_notification;
+        return R.drawable.calendar_tools;
     }
 }

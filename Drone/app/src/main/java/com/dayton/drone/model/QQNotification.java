@@ -18,6 +18,6 @@ public class QQNotification extends NotificationModel {
 
     @Override
     public int getImageResource() {
-        return R.drawable.ic_notification_qq;
+        return R.drawable.qq_notification;
     }
 }
