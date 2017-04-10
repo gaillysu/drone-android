@@ -73,7 +73,7 @@ public class NotificationAllAppsAdapter extends BaseAdapter {
                         PackageFilterHelper.setCallFilterEnable(context, isChecked);
                     }
                     else if(bean.getNameStringResource()==R.string.notification_facebook_messenger_title) {
-                        PackageFilterHelper.setMessagerFacebookFilterEnable(context, isChecked);
+                        PackageFilterHelper.setMessengerFacebookFilterEnable(context, isChecked);
                     }
                     else if(bean.getNameStringResource()==R.string.notification_message_title) {
                         PackageFilterHelper.setSmsFilterEnable(context, isChecked);
@@ -85,7 +85,7 @@ public class NotificationAllAppsAdapter extends BaseAdapter {
                         PackageFilterHelper.setEmailFilterEnable(context, isChecked);
                     }
                     else if(bean.getNameStringResource()==R.string.notification_telegram_messenger_title) {
-                        PackageFilterHelper.setMessagerTelegramFilterEnable(context, isChecked);
+                        PackageFilterHelper.setMessengerTelegramFilterEnable(context, isChecked);
                     }
                     else if(bean.getNameStringResource()==R.string.notification_calendar_title) {
                         PackageFilterHelper.setCalendarFilterEnable(context, isChecked);

@@ -58,10 +58,10 @@ public class NewSetNotificationActivity extends BaseActivity{
     private void initView() {
         notificationBean = new ArrayList<>();
         notificationBean.add(new TelephoneNotification(PackageFilterHelper.getCallFilterEnable(this)));
-        notificationBean.add(new FacebookMessengerNotification(PackageFilterHelper.getMessagerFacebookFilterEnable(this)));
+        notificationBean.add(new FacebookMessengerNotification(PackageFilterHelper.getMessengerFacebookFilterEnable(this)));
         notificationBean.add(new MessageNotification(PackageFilterHelper.getSmsFilterEnable(this)));
         notificationBean.add(new GmailNotification(PackageFilterHelper.getGmailFilterEnable(this)));
-        notificationBean.add(new TelegramMessengerNotification(PackageFilterHelper.getMessagerTelegramFilterEnable(this)));
+        notificationBean.add(new TelegramMessengerNotification(PackageFilterHelper.getMessengerTelegramFilterEnable(this)));
         notificationBean.add(new CalendarNotification(PackageFilterHelper.getCalendarFilterEnable(this)));
         //we use a social app name to below apps: facebook,twitter,qq,wechat,whatsapp,linkedin,instagram...
         notificationBean.add(new FacebookNotification(PackageFilterHelper.getFacebookFilterEnable(this)));

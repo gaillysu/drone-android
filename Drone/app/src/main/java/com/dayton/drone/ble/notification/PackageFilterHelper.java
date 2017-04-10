@@ -22,8 +22,8 @@ public class PackageFilterHelper {
     //common message, include android Message and iMessage
     final static String SMS_FILTER_ENABLE = "sms_filter_enable";
     //special messager, include facebook and telegram messager
-    final static String MESSAGER_FACEBOOK_FILTER_ENABLE = "messager_facebook_filter_enable";
-    final static String MESSAGER_TELEGRAM_FILTER_ENABLE = "messager_telegram_filter_enable";
+    final static String MESSENGER_FACEBOOK_FILTER_ENABLE = "messenger_facebook_filter_enable";
+    final static String MESSENGER_TELEGRAM_FILTER_ENABLE = "messenger_telegram_filter_enable";
     final static String EMAIL_FILTER_ENABLE = "email_filter_enable";
     final static String GMAIL_FILTER_ENABLE = "gmail_filter_enable";
     final static String OUTLOOK_FILTER_ENABLE = "outlook_filter_enable";
@@ -62,18 +62,18 @@ public class PackageFilterHelper {
         return SpUtils.getBoolean(context,SMS_FILTER_ENABLE,defaultEnable);
     }
 
-    public static void setMessagerFacebookFilterEnable(Context context,boolean value){
-        SpUtils.putBoolean(context,MESSAGER_FACEBOOK_FILTER_ENABLE,value);
+    public static void setMessengerFacebookFilterEnable(Context context, boolean value){
+        SpUtils.putBoolean(context, MESSENGER_FACEBOOK_FILTER_ENABLE,value);
     }
-    public static Boolean getMessagerFacebookFilterEnable(Context context){
-        return SpUtils.getBoolean(context,MESSAGER_FACEBOOK_FILTER_ENABLE,defaultEnable);
+    public static Boolean getMessengerFacebookFilterEnable(Context context){
+        return SpUtils.getBoolean(context, MESSENGER_FACEBOOK_FILTER_ENABLE,defaultEnable);
     }
 
-    public static void setMessagerTelegramFilterEnable(Context context,boolean value){
-        SpUtils.putBoolean(context,MESSAGER_TELEGRAM_FILTER_ENABLE,value);
+    public static void setMessengerTelegramFilterEnable(Context context, boolean value){
+        SpUtils.putBoolean(context, MESSENGER_TELEGRAM_FILTER_ENABLE,value);
     }
-    public static Boolean getMessagerTelegramFilterEnable(Context context){
-        return SpUtils.getBoolean(context,MESSAGER_TELEGRAM_FILTER_ENABLE,defaultEnable);
+    public static Boolean getMessengerTelegramFilterEnable(Context context){
+        return SpUtils.getBoolean(context, MESSENGER_TELEGRAM_FILTER_ENABLE,defaultEnable);
     }
 
 
@@ -201,7 +201,7 @@ public class PackageFilterHelper {
     public static Set<String> getSocialPackages(Boolean isEnable,Context context,int resID) {
         return isEnable?initAppList(context,resID):new HashSet<String>();
     }
-    public static Set<String> getMessagerPackages(Boolean isEnable,Context context,int resID) {
+    public static Set<String> getMessengerPackages(Boolean isEnable, Context context, int resID) {
         return isEnable?initAppList(context,resID):new HashSet<String>();
     }
 }

@@ -174,12 +174,12 @@ public class ApplicationModel extends Application {
         //start package filter in whitelist mode
         final HashSet<String> setPackages = new HashSet<String>();
         setPackages.addAll(PackageFilterHelper.getCallPackages(PackageFilterHelper.getCallFilterEnable(this),this,R.array.CALL_APPS));
-        setPackages.addAll(PackageFilterHelper.getMessagerPackages(PackageFilterHelper.getMessagerFacebookFilterEnable(this),this,R.array.MESSENGER_FACEBOOK));
+        setPackages.addAll(PackageFilterHelper.getMessengerPackages(PackageFilterHelper.getMessengerFacebookFilterEnable(this),this,R.array.MESSENGER_FACEBOOK));
         setPackages.addAll(PackageFilterHelper.getSmsPackages(PackageFilterHelper.getSmsFilterEnable(this),this,R.array.SMS_APPS));
         setPackages.addAll(PackageFilterHelper.getEmailPackages(PackageFilterHelper.getEmailFilterEnable(this),this,R.array.EMAIL_APPS));
         setPackages.addAll(PackageFilterHelper.getEmailPackages(PackageFilterHelper.getGmailFilterEnable(this),this,R.array.GOOGLE_GMAIL));
         setPackages.addAll(PackageFilterHelper.getEmailPackages(PackageFilterHelper.getOutlookFilterEnable(this),this,R.array.MICROSOFT_OUTLOOK));
-        setPackages.addAll(PackageFilterHelper.getMessagerPackages(PackageFilterHelper.getMessagerTelegramFilterEnable(this),this,R.array.MESSENGER_TELEGRAM));
+        setPackages.addAll(PackageFilterHelper.getMessengerPackages(PackageFilterHelper.getMessengerTelegramFilterEnable(this),this,R.array.MESSENGER_TELEGRAM));
         setPackages.addAll(PackageFilterHelper.getCalendarPackages(PackageFilterHelper.getCalendarFilterEnable(this),this,R.array.CALENDAR_APPS));
         setPackages.addAll(PackageFilterHelper.getSocialPackages(PackageFilterHelper.getFacebookFilterEnable(this),this,R.array.SOCIAL_APPS_FACEBOOK));
         setPackages.addAll(PackageFilterHelper.getSocialPackages(PackageFilterHelper.getGooglePlusFilterEnable(this),this,R.array.SOCIAL_APPS_GOOGLE));
