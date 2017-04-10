@@ -45,6 +45,14 @@ public class SetSystemConfig extends RequestBase{
                     (byte)((sleepAutoEndTime>>8)&0xFF),
                     0,0,0,0,0,0,0,0,0,0,0}};
         }
+        else if(id == Constants.SystemConfigID.CompassAutoOnDuration)
+        {
+            return new byte[][]{{(byte) 0x80,HEADER,(byte) id.rawValue(),0x02,0x01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}};
+        }
+        else if(id == Constants.SystemConfigID.TopKeyCustomization)
+        {
+            return new byte[][]{{(byte) 0x80,HEADER,(byte) id.rawValue(),0x01,0x01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}};
+        }
         return null;
     }
 

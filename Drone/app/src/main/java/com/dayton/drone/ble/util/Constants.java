@@ -45,7 +45,9 @@ public class Constants {
         AirplaneMode(2),
         Enabled(4),
         ClockFormat(8),
-        SleepConfig(9);
+        SleepConfig(9),
+        CompassAutoOnDuration(0x10),
+        TopKeyCustomization(0x11);
         SystemConfigID(int id) {
             this.id = id;
         }
@@ -54,9 +56,50 @@ public class Constants {
     }
 
     public enum ApplicationID {
-        WorldClock(1),ActivityTracking(2);
+        WorldClock(1),ActivityTracking(2),Weather(3),Compass(0x10);
         final int id;
         ApplicationID(int id) {
+            this.id = id;
+        }
+        public  int rawValue() {return id;}
+    }
+
+    public enum StartSystemSettingID {
+        AnalogMovement(1),Compass(2);
+        final int id;
+        StartSystemSettingID(int id) {
+            this.id = id;
+        }
+        public  int rawValue() {return id;}
+    }
+
+    public enum CompassSettingOperationID {
+        Stop(0),Start(1);
+        final int id;
+        CompassSettingOperationID(int id) {
+            this.id = id;
+        }
+        public  int rawValue() {return id;}
+    }
+
+    public enum AnalogMovementSettingOperationID {
+        Exit(0),
+        Start(1),
+        StopAllHands(0x10),
+        SecondHandAdvanceOneStep(0x11),
+        SecondHandReverseOneStep(0x12),
+        SecondHandAdvanceMoreSteps(0x13),
+        SecondHandReverseMoreSteps(0x14),
+        MinuteHandAdvanceOneStep(0x15),
+        MinuteHandReverseOneStep(0x16),
+        MinuteHandAdvanceMoreSteps(0x17),
+        MinuteHandReverseMoreSteps(0x18),
+        HourHandAdvanceOneStep(0x19),
+        HourHandReverseOneStep(0x1A),
+        HourHandAdvanceMoreSteps(0x1B),
+        HourHandReverseMoreSteps(0x1C);
+        final int id;
+        AnalogMovementSettingOperationID(int id) {
             this.id = id;
         }
         public  int rawValue() {return id;}
