@@ -6,19 +6,18 @@ import com.dayton.drone.R;
  * Created by Jason on 2016/11/21.
  */
 
-public class EmailNotification extends NotificationModel {
-
-    public EmailNotification(boolean enableNotification)
-    {
+public class SnapchatNotification extends NotificationModel {
+    public SnapchatNotification(boolean enableNotification) {
         super(enableNotification);
     }
+
     @Override
     public int getNameStringResource() {
-        return R.string.notification_email_title;
+        return R.string.notification_snapchat_title;
     }
 
     @Override
     public int getImageResource() {
-        return R.drawable.gmail_inbox_tools;
+        return R.drawable.snapchat_messenger;
     }
 }

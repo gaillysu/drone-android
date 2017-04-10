@@ -20,6 +20,6 @@ public class MessageNotification extends NotificationModel {
 
     @Override
     public int getImageResource() {
-        return R.drawable.message_notification;
+        return R.drawable.google_talk;
     }
 }

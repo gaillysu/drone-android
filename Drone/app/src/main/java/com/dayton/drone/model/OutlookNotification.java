@@ -6,19 +6,19 @@ import com.dayton.drone.R;
  * Created by Jason on 2016/11/21.
  */
 
-public class EmailNotification extends NotificationModel {
+public class OutlookNotification extends NotificationModel {
 
-    public EmailNotification(boolean enableNotification)
+    public OutlookNotification(boolean enableNotification)
     {
         super(enableNotification);
     }
     @Override
     public int getNameStringResource() {
-        return R.string.notification_email_title;
+        return R.string.notification_outlook_title;
     }
 
     @Override
     public int getImageResource() {
-        return R.drawable.gmail_inbox_tools;
+        return R.drawable.outlook_microsoft;
     }
 }

@@ -6,19 +6,20 @@ import com.dayton.drone.R;
  * Created by Jason on 2016/11/21.
  */
 
-public class EmailNotification extends NotificationModel {
+public class FacebookMessengerNotification extends NotificationModel {
 
-    public EmailNotification(boolean enableNotification)
+    public FacebookMessengerNotification(boolean enableNotification)
     {
         super(enableNotification);
     }
+
     @Override
     public int getNameStringResource() {
-        return R.string.notification_email_title;
+        return R.string.notification_facebook_messenger_title;
     }
 
     @Override
     public int getImageResource() {
-        return R.drawable.gmail_inbox_tools;
+        return R.drawable.facebook_messenger;
     }
 }

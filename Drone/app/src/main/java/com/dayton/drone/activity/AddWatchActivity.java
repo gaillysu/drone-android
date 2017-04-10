@@ -195,6 +195,9 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
+                if(connectionStateTextView==null) {
+                    return;
+                }
                 if (stateChangedEvent.isConnected()) {
                     connectionStateTextView.setText(R.string.add_watch_connected);
                     getModel().getSyncController().getBattery();
@@ -217,7 +220,9 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
                     firmwareVersion.add(bleFirmwareVersionReceivedEvent.getVersion());
                 }
                 if (firmwareVersion.size() == 2) {
-                    versionTextView.setText(formatFirmwareVersion(firmwareVersion.get(0), firmwareVersion.get(1)));
+                    if(versionTextView!=null) {
+                        versionTextView.setText(formatFirmwareVersion(firmwareVersion.get(0), firmwareVersion.get(1)));
+                    }
                     firmwareVersion.clear();
                 }
             }
@@ -229,6 +234,9 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
+                if(batteryStateTextView==null) {
+                    return;
+                }
                 if (batteryStatusChangedEvent.getState() == Constants.BatteryStatus.InUse.rawValue()) {
                     batteryStateTextView.setText(batteryStatusChangedEvent.getLevel() + "%");
                 } else if (batteryStatusChangedEvent.getState() == Constants.BatteryStatus.Charging.rawValue()) {

@@ -2,7 +2,6 @@ package com.dayton.drone.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.SwitchCompat;
 import android.widget.ListView;
 
 import com.dayton.drone.R;
@@ -11,14 +10,23 @@ import com.dayton.drone.adapter.NotificationAllAppsAdapter;
 import com.dayton.drone.ble.notification.PackageFilterHelper;
 import com.dayton.drone.model.CalendarNotification;
 import com.dayton.drone.model.EmailNotification;
+import com.dayton.drone.model.FacebookMessengerNotification;
 import com.dayton.drone.model.FacebookNotification;
+import com.dayton.drone.model.GmailNotification;
+import com.dayton.drone.model.GooglePlusNotification;
+import com.dayton.drone.model.InstagramNotification;
+import com.dayton.drone.model.LinkedinNotification;
 import com.dayton.drone.model.MessageNotification;
 import com.dayton.drone.model.NotificationModel;
+import com.dayton.drone.model.OutlookNotification;
 import com.dayton.drone.model.QQNotification;
-import com.dayton.drone.model.SocialNotification;
+import com.dayton.drone.model.SkypeNotification;
+import com.dayton.drone.model.SnapchatNotification;
+import com.dayton.drone.model.TelegramMessengerNotification;
 import com.dayton.drone.model.TelephoneNotification;
 import com.dayton.drone.model.TwitterNotification;
 import com.dayton.drone.model.WeChatNotification;
+import com.dayton.drone.model.WhatsappNotification;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,17 +57,25 @@ public class NewSetNotificationActivity extends BaseActivity{
 
     private void initView() {
         notificationBean = new ArrayList<>();
-        TelephoneNotification telephone = new TelephoneNotification(PackageFilterHelper.getCallFilterEnable(this));
-        notificationBean.add(telephone);
-        MessageNotification message = new MessageNotification(PackageFilterHelper.getSmsFilterEnable(this));
-        notificationBean.add(message);
-        EmailNotification email = new EmailNotification(PackageFilterHelper.getEmailFilterEnable(this));
-        notificationBean.add(email);
-        CalendarNotification calendar = new CalendarNotification(PackageFilterHelper.getCalendarFilterEnable(this));
-        notificationBean.add(calendar);
+        notificationBean.add(new TelephoneNotification(PackageFilterHelper.getCallFilterEnable(this)));
+        notificationBean.add(new FacebookMessengerNotification(PackageFilterHelper.getMessengerFacebookFilterEnable(this)));
+        notificationBean.add(new MessageNotification(PackageFilterHelper.getSmsFilterEnable(this)));
+        notificationBean.add(new GmailNotification(PackageFilterHelper.getGmailFilterEnable(this)));
+        notificationBean.add(new TelegramMessengerNotification(PackageFilterHelper.getMessengerTelegramFilterEnable(this)));
+        notificationBean.add(new CalendarNotification(PackageFilterHelper.getCalendarFilterEnable(this)));
         //we use a social app name to below apps: facebook,twitter,qq,wechat,whatsapp,linkedin,instagram...
-        SocialNotification social = new SocialNotification(PackageFilterHelper.getSocialFilterEnable(this));
-        notificationBean.add(social);
+        notificationBean.add(new FacebookNotification(PackageFilterHelper.getFacebookFilterEnable(this)));
+        notificationBean.add(new GooglePlusNotification(PackageFilterHelper.getGooglePlusFilterEnable(this)));
+        notificationBean.add(new InstagramNotification(PackageFilterHelper.getInstagramFilterEnable(this)));
+        notificationBean.add(new SnapchatNotification(PackageFilterHelper.getSnapchatFilterEnable(this)));
+        notificationBean.add(new LinkedinNotification(PackageFilterHelper.getLinkedinFilterEnable(this)));
+        notificationBean.add(new TwitterNotification(PackageFilterHelper.getTwitterFilterEnable(this)));
+        notificationBean.add(new WeChatNotification(PackageFilterHelper.getWechatFilterEnable(this)));
+        notificationBean.add(new WhatsappNotification(PackageFilterHelper.getWhatsappFilterEnable(this)));
+        notificationBean.add(new QQNotification(PackageFilterHelper.getQQFilterEnable(this)));
+        notificationBean.add(new SkypeNotification(PackageFilterHelper.getSkypeFilterEnable(this)));
+        notificationBean.add(new EmailNotification(PackageFilterHelper.getEmailFilterEnable(this)));
+        notificationBean.add(new OutlookNotification(PackageFilterHelper.getOutlookFilterEnable(this)));
 
         adapter = new NotificationAllAppsAdapter(this, notificationBean);
         allNotificationApps.setAdapter(adapter);
