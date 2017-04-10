@@ -159,7 +159,10 @@
     <string name="token">ZQpFYPBMqFbUQq8E99FztS2x6yQ2v1Ei</string>
 
     <string name="notification_call_title">Calls</string>
-    <string name="notification_email_title">Inbox By Gmail</string>
+    <string name="notification_gmail_inbox_title">Inbox By Gmail</string>
+    <string name="notification_email_title">Email</string>
+    <string name="notification_outlook_title">Microsoft Outlook</string>
+    <string name="notification_skype_title">Skype</string>
     <string name="notification_facebook_title">Facebook</string>
     <string name="notification_calendar_title">Calendar</string>
     <string name="notification_wechat_title">WeChat</string>
@@ -171,6 +174,6 @@
     <string name="notification_snapchat_title">Snapchat</string>
     <string name="notification_linkedin_title">Linkedin</string>
     <string name="notification_whatsapp_title">Whatsapp</string>
-    <string name="notification_facebook_messager_title">Facebook Messager</string>
-    <string name="notification_telegram_messager_title">Telegram Messager</string>
+    <string name="notification_facebook_messenger_title">Facebook Messenger</string>
+    <string name="notification_telegram_messenger_title">Telegram Messenger</string>
 </resources>

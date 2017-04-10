@@ -18,6 +18,6 @@ public class InstagramNotification extends NotificationModel {
 
     @Override
     public int getImageResource() {
-        return R.drawable.instagram_messager;
+        return R.drawable.instagram_messenger;
     }
 }

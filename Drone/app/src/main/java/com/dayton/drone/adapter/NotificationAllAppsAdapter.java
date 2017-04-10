@@ -72,16 +72,19 @@ public class NotificationAllAppsAdapter extends BaseAdapter {
                     if(bean.getNameStringResource()==R.string.notification_call_title) {
                         PackageFilterHelper.setCallFilterEnable(context, isChecked);
                     }
-                    else if(bean.getNameStringResource()==R.string.notification_facebook_messager_title) {
+                    else if(bean.getNameStringResource()==R.string.notification_facebook_messenger_title) {
                         PackageFilterHelper.setMessagerFacebookFilterEnable(context, isChecked);
                     }
                     else if(bean.getNameStringResource()==R.string.notification_message_title) {
                         PackageFilterHelper.setSmsFilterEnable(context, isChecked);
                     }
+                    else if(bean.getNameStringResource()==R.string.notification_gmail_inbox_title) {
+                        PackageFilterHelper.setGmailFilterEnable(context, isChecked);
+                    }
                     else if(bean.getNameStringResource()==R.string.notification_email_title) {
                         PackageFilterHelper.setEmailFilterEnable(context, isChecked);
                     }
-                    else if(bean.getNameStringResource()==R.string.notification_telegram_messager_title) {
+                    else if(bean.getNameStringResource()==R.string.notification_telegram_messenger_title) {
                         PackageFilterHelper.setMessagerTelegramFilterEnable(context, isChecked);
                     }
                     else if(bean.getNameStringResource()==R.string.notification_calendar_title) {
@@ -113,6 +116,12 @@ public class NotificationAllAppsAdapter extends BaseAdapter {
                     }
                     else if(bean.getNameStringResource()==R.string.notification_qq_title) {
                         PackageFilterHelper.setQQFilterEnable(context,isChecked);
+                    }
+                    else if(bean.getNameStringResource()==R.string.notification_skype_title) {
+                        PackageFilterHelper.setSkypeFilterEnable(context,isChecked);
+                    }
+                    else if(bean.getNameStringResource()==R.string.notification_outlook_title) {
+                        PackageFilterHelper.setOutlookFilterEnable(context,isChecked);
                     }
                     EventBus.getDefault().post(new NotificationPackagesChangedEvent());
                 }

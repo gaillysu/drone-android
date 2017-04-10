@@ -6,20 +6,20 @@ import com.dayton.drone.R;
  * Created by Jason on 2016/11/21.
  */
 
-public class TelegramMessagerNotification extends NotificationModel {
+public class TelegramMessengerNotification extends NotificationModel {
 
-    public TelegramMessagerNotification(boolean enableNotification)
+    public TelegramMessengerNotification(boolean enableNotification)
     {
         super(enableNotification);
     }
 
     @Override
     public int getNameStringResource() {
-        return R.string.notification_telegram_messager_title;
+        return R.string.notification_telegram_messenger_title;
     }
 
     @Override
     public int getImageResource() {
-        return R.drawable.telegram_messager;
+        return R.drawable.telegram_messenger;
     }
 }

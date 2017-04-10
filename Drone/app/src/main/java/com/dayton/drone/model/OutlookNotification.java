@@ -6,18 +6,19 @@ import com.dayton.drone.R;
  * Created by Jason on 2016/11/21.
  */
 
-public class SnapchatNotification extends NotificationModel {
-    public SnapchatNotification(boolean enableNotification) {
+public class OutlookNotification extends NotificationModel {
+
+    public OutlookNotification(boolean enableNotification)
+    {
         super(enableNotification);
     }
-
     @Override
     public int getNameStringResource() {
-        return R.string.notification_snapchat_title;
+        return R.string.notification_outlook_title;
     }
 
     @Override
     public int getImageResource() {
-        return R.drawable.snapchat_messenger;
+        return R.drawable.outlook_microsoft;
     }
 }

@@ -18,6 +18,6 @@ public class TwitterNotification extends NotificationModel {
 
     @Override
     public int getImageResource() {
-        return R.drawable.twitter_messager;
+        return R.drawable.twitter_messenger;
     }
 }

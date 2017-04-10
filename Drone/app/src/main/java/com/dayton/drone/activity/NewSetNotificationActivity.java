@@ -10,16 +10,19 @@ import com.dayton.drone.adapter.NotificationAllAppsAdapter;
 import com.dayton.drone.ble.notification.PackageFilterHelper;
 import com.dayton.drone.model.CalendarNotification;
 import com.dayton.drone.model.EmailNotification;
-import com.dayton.drone.model.FacebookMessagerNotification;
+import com.dayton.drone.model.FacebookMessengerNotification;
 import com.dayton.drone.model.FacebookNotification;
+import com.dayton.drone.model.GmailNotification;
 import com.dayton.drone.model.GooglePlusNotification;
 import com.dayton.drone.model.InstagramNotification;
 import com.dayton.drone.model.LinkedinNotification;
 import com.dayton.drone.model.MessageNotification;
 import com.dayton.drone.model.NotificationModel;
+import com.dayton.drone.model.OutlookNotification;
 import com.dayton.drone.model.QQNotification;
+import com.dayton.drone.model.SkypeNotification;
 import com.dayton.drone.model.SnapchatNotification;
-import com.dayton.drone.model.TelegramMessagerNotification;
+import com.dayton.drone.model.TelegramMessengerNotification;
 import com.dayton.drone.model.TelephoneNotification;
 import com.dayton.drone.model.TwitterNotification;
 import com.dayton.drone.model.WeChatNotification;
@@ -55,10 +58,10 @@ public class NewSetNotificationActivity extends BaseActivity{
     private void initView() {
         notificationBean = new ArrayList<>();
         notificationBean.add(new TelephoneNotification(PackageFilterHelper.getCallFilterEnable(this)));
-        notificationBean.add(new FacebookMessagerNotification(PackageFilterHelper.getMessagerFacebookFilterEnable(this)));
+        notificationBean.add(new FacebookMessengerNotification(PackageFilterHelper.getMessagerFacebookFilterEnable(this)));
         notificationBean.add(new MessageNotification(PackageFilterHelper.getSmsFilterEnable(this)));
-        notificationBean.add(new EmailNotification(PackageFilterHelper.getEmailFilterEnable(this)));
-        notificationBean.add(new TelegramMessagerNotification(PackageFilterHelper.getMessagerTelegramFilterEnable(this)));
+        notificationBean.add(new GmailNotification(PackageFilterHelper.getGmailFilterEnable(this)));
+        notificationBean.add(new TelegramMessengerNotification(PackageFilterHelper.getMessagerTelegramFilterEnable(this)));
         notificationBean.add(new CalendarNotification(PackageFilterHelper.getCalendarFilterEnable(this)));
         //we use a social app name to below apps: facebook,twitter,qq,wechat,whatsapp,linkedin,instagram...
         notificationBean.add(new FacebookNotification(PackageFilterHelper.getFacebookFilterEnable(this)));
@@ -70,6 +73,9 @@ public class NewSetNotificationActivity extends BaseActivity{
         notificationBean.add(new WeChatNotification(PackageFilterHelper.getWechatFilterEnable(this)));
         notificationBean.add(new WhatsappNotification(PackageFilterHelper.getWhatsappFilterEnable(this)));
         notificationBean.add(new QQNotification(PackageFilterHelper.getQQFilterEnable(this)));
+        notificationBean.add(new SkypeNotification(PackageFilterHelper.getSkypeFilterEnable(this)));
+        notificationBean.add(new EmailNotification(PackageFilterHelper.getEmailFilterEnable(this)));
+        notificationBean.add(new OutlookNotification(PackageFilterHelper.getOutlookFilterEnable(this)));
 
         adapter = new NotificationAllAppsAdapter(this, notificationBean);
         allNotificationApps.setAdapter(adapter);

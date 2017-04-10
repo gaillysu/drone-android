@@ -6,20 +6,20 @@ import com.dayton.drone.R;
  * Created by Jason on 2016/11/21.
  */
 
-public class FacebookMessagerNotification extends NotificationModel {
+public class FacebookMessengerNotification extends NotificationModel {
 
-    public FacebookMessagerNotification(boolean enableNotification)
+    public FacebookMessengerNotification(boolean enableNotification)
     {
         super(enableNotification);
     }
 
     @Override
     public int getNameStringResource() {
-        return R.string.notification_facebook_messager_title;
+        return R.string.notification_facebook_messenger_title;
     }
 
     @Override
     public int getImageResource() {
-        return R.drawable.facebook_messager;
+        return R.drawable.facebook_messenger;
     }
 }

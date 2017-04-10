@@ -18,19 +18,16 @@
             <item>com.htc.sense.mms</item>
         </string-array>
 
-        <string-array name="MESSAGER_FACEBOOK">
+        <string-array name="MESSENGER_FACEBOOK">
             <item>com.facebook.orca</item>
         </string-array>
 
-        <string-array name="MESSAGER_TELEGRAM">
+        <string-array name="MESSENGER_TELEGRAM">
             <item>org.telegram.messenger</item>
         </string-array>
 
         <string-array name="EMAIL_APPS">
             <item>com.yahoo.mobile.client.android.mail</item>
-            <item>com.google.android.gm</item>
-            <item>com.google.android.apps.inbox</item>
-            <item>com.microsoft.office.outlook</item>
             <item>com.android.email</item>
             <item>com.google.android.email</item>
             <item>com.kingsoft.email</item>
@@ -39,6 +36,21 @@
             <item>com.htc.android.mail</item>
             <item>com.motorola.email</item>
         </string-array>
+
+        <string-array name="GOOGLE_GMAIL">
+            <item>com.google.android.gm</item>
+            <item>com.google.android.apps.inbox</item>
+        </string-array>
+
+        <string-array name="MICROSOFT_OUTLOOK">
+            <item>com.microsoft.office.outlook</item>
+        </string-array>
+
+        <string-array name="SOCIAL_APPS_SKYPE">
+            <item>com.skype.raider</item>
+            <item>com.microsoft.office.lync15</item>
+        </string-array>
+
 
         <string-array name="CALENDAR_APPS">
             <item>com.google.android.calendar</item>

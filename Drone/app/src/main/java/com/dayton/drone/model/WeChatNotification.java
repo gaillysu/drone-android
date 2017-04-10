@@ -18,6 +18,6 @@ public class WeChatNotification extends NotificationModel {
 
     @Override
     public int getImageResource() {
-        return R.drawable.wechat_messager;
+        return R.drawable.wechat_messenger;
     }
 }

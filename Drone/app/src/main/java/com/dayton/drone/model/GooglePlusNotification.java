@@ -18,6 +18,6 @@ public class GooglePlusNotification extends NotificationModel {
 
     @Override
     public int getImageResource() {
-        return R.drawable.googleplus_messager;
+        return R.drawable.googleplus_messenger;
     }
 }

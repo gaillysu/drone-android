@@ -18,6 +18,6 @@ public class LinkedinNotification extends NotificationModel {
 
     @Override
     public int getImageResource() {
-        return R.drawable.linkedin_messager;
+        return R.drawable.linkedin_messenger;
     }
 }
