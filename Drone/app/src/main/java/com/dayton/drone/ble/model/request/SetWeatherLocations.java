@@ -23,7 +23,7 @@ public class SetWeatherLocations extends RequestBase{
 
     @Override
     public byte[][] getRawDataEx() {
-        int count = entries.size();
+        int count = Math.min(WeatherLocationModel.MAXENTRY,entries.size());
         List<Byte> data = new ArrayList<>();
         data.add(HEADER);
         data.add((byte) count);
