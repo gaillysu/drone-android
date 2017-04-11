@@ -105,6 +105,29 @@ public class Constants {
         public  int rawValue() {return id;}
     }
 
+    public enum WeatherCode {
+        InvalidData(0x00),
+        PartlyCloudyNight(0x01),
+        PartlyCloudyDay(0x02),
+        Tornado(0x03),
+        Typhoon(0x04),
+        Hurricane(0x05),
+        Cloudy(0x06),
+        Fog(0x07),
+        Windy(0x08),
+        Snow(0x09),
+        RainLight(0x0A),
+        RainHeavy(0x0B),
+        Stormy(0x0C),
+        ClearDay(0x0D),
+        ClearNight(0x0E);
+        final int id;
+        WeatherCode(int id) {
+            this.id = id;
+        }
+        public  int rawValue() {return id;}
+    }
+
     public enum BatteryStatus {
         InUse(0),Charging(1),Damaged(2),Calculating(3);
         final int status;
