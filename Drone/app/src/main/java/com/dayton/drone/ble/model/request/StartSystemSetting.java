@@ -8,12 +8,12 @@ import com.dayton.drone.ble.util.Constants;
 /**
  * Created by med on 16/4/13.
  */
-public class StartSystemConfig extends RequestBase{
+public class StartSystemSetting extends RequestBase{
     public final static byte HEADER = (byte)0x34;
-    final Constants.StartSystemSettingID id;
+    final int id;
     final  int operation;
 
-    public StartSystemConfig(Context context, int operation, Constants.StartSystemSettingID id) {
+    public StartSystemSetting(Context context, int id, int operation) {
         super(context);
         this.id = id;
         this.operation = operation;
@@ -21,7 +21,7 @@ public class StartSystemConfig extends RequestBase{
 
     @Override
     public byte[][] getRawDataEx() {
-        return new byte[][]{{(byte) 0x80,HEADER, (byte) id.rawValue(),(byte)operation,0x01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}};
+        return new byte[][]{{(byte) 0x80,HEADER, (byte) id,(byte)operation,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}};
     }
 
     @Override
