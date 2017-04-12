@@ -347,6 +347,10 @@ public class SyncControllerImpl implements  SyncController{
                         sendRequest(new SetRTCRequest(application));
                         sendRequest(new SetAppConfigRequest(application, WorldClock));
                         sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.ActivityTracking));
+                        if(getFirmwareVersion()!=null&&Float.valueOf(getFirmwareVersion())>=0.04f) {
+                            sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Weather));
+                            sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Compass));
+                        }
                         sendRequest(new SetUserProfileRequest(application,application.getUser()));
                     }
                     if((systemStatusPacket.getStatus() & Constants.SystemStatus.GoalCompleted.rawValue())==Constants.SystemStatus.GoalCompleted.rawValue())
