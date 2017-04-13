@@ -2,7 +2,6 @@ package com.dayton.drone.ble.model.request;
 
 import android.content.Context;
 
-import com.dayton.drone.ble.model.WeatherLocationModel;
 import com.dayton.drone.ble.model.WeatherUpdateModel;
 import com.dayton.drone.ble.model.request.base.RequestBase;
 import com.dayton.drone.ble.util.Constants;
@@ -33,7 +32,7 @@ public class UpdateWeatherInfomationRequest extends RequestBase{
             data.add((byte)(entries.get(i).getId()));
             data.add((byte) (entries.get(i).getTemperature()&0xFF));
             data.add((byte) (entries.get(i).getTemperature()>>8&0xFF));
-            data.add((byte) entries.get(i).getStatus());
+            data.add((byte) entries.get(i).getStatus().rawValue());
         }
         byte[] rawData = new byte[data.size()];
         for(int i=0;i<data.size();i++){
