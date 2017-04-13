@@ -8,12 +8,12 @@ import com.dayton.drone.ble.util.Constants;
 /**
  * Created by med on 16/4/13.
  */
-public class StartSystemSetting extends RequestBase{
+public class StartSystemSettingRequest extends RequestBase{
     public final static byte HEADER = (byte)0x34;
     final int id;
     final  int operation;
 
-    public StartSystemSetting(Context context, int id, int operation) {
+    public StartSystemSettingRequest(Context context, int id, int operation) {
         super(context);
         this.id = id;
         this.operation = operation;

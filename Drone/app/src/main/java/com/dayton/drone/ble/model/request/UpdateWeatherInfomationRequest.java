@@ -14,10 +14,10 @@ import java.util.List;
 /**
  * Created by med on 16/4/13.
  */
-public class UpdateWeatherInfomation extends RequestBase{
+public class UpdateWeatherInfomationRequest extends RequestBase{
     public final static byte HEADER = (byte)0x26;
     private  List<WeatherUpdateModel> entries;
-    public UpdateWeatherInfomation(Context context, List<WeatherUpdateModel> entries) {
+    public UpdateWeatherInfomationRequest(Context context, List<WeatherUpdateModel> entries) {
         super(context);
         this.entries = entries;
     }

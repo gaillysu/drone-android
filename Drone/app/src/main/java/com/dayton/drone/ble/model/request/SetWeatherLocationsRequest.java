@@ -13,10 +13,10 @@ import java.util.List;
 /**
  * Created by med on 16/4/13.
  */
-public class SetWeatherLocations extends RequestBase{
+public class SetWeatherLocationsRequest extends RequestBase{
     public final static byte HEADER = (byte)0x24;
     private  List<WeatherLocationModel> entries;
-    public SetWeatherLocations(Context context, List<WeatherLocationModel> entries) {
+    public SetWeatherLocationsRequest(Context context, List<WeatherLocationModel> entries) {
         super(context);
         this.entries = entries;
     }

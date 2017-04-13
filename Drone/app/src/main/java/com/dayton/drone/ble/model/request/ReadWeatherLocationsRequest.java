@@ -7,10 +7,10 @@ import com.dayton.drone.ble.model.request.base.RequestBase;
 /**
  * Created by med on 16/4/13.
  */
-public class ReadWeatherLocations extends RequestBase{
+public class ReadWeatherLocationsRequest extends RequestBase{
     public final static byte HEADER = (byte)0x25;
 
-    public ReadWeatherLocations(Context context) {
+    public ReadWeatherLocationsRequest(Context context) {
         super(context);
     }
 
