@@ -157,7 +157,7 @@
     <string name="notifications_contacts_notifications">Contacts Notifications</string>
     <string name="notifications_notifications">Notifications</string>
     <string name="token">ZQpFYPBMqFbUQq8E99FztS2x6yQ2v1Ei</string>
-
+    <string name="weather_api_key">b2e00dd9220bc986ed54db4ed4bf66a1</string>
     <string name="notification_call_title">Calls</string>
     <string name="notification_gmail_inbox_title">Inbox By Gmail</string>
     <string name="notification_email_title">Email</string>
