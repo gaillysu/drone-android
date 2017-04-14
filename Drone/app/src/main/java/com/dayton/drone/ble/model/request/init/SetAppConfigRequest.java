@@ -21,18 +21,8 @@ public class SetAppConfigRequest extends RequestBase{
     }
     @Override
     public byte[][] getRawDataEx() {
-        if(id == Constants.ApplicationID.WorldClock)
-        {
-            return new byte[][] {
-                    {(byte) 0x80,HEADER, (byte) id.rawValue(),1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
-            };
-        }
-        if(id == Constants.ApplicationID.ActivityTracking)
-        {
-            return new byte[][] {
-                    {(byte) 0x80,HEADER, (byte) id.rawValue(),1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
-            };
-        }
-        return null;
+        return new byte[][] {
+                {(byte) 0x80,HEADER, (byte) id.rawValue(),1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+        };
     }
 }

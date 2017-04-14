@@ -276,7 +276,6 @@ public class SyncControllerImpl implements  SyncController{
                 //if packets invaild, discard them, and reset buffer
                 if(!packet.isVaildPackets())
                 {
-                    Log.e(TAG,"InVaild Packets Received!");
                     packetsBuffer.clear();
                     QueuedMainThreadHandler.getInstance(QueuedMainThreadHandler.QueueType.SyncController).next();
                     return;
@@ -306,9 +305,17 @@ public class SyncControllerImpl implements  SyncController{
                         sendRequest(new SetSystemConfig(application,1,0, 0, 0, Constants.SystemConfigID.ClockFormat));
                         sendRequest(new SetSystemConfig(application,1,0, 0, 0, Constants.SystemConfigID.Enabled));
                         sendRequest(new SetSystemConfig(application,1,0, 0, 0, Constants.SystemConfigID.SleepConfig));
+                        if(getFirmwareVersion()!=null&&Float.valueOf(getFirmwareVersion())>=0.04f) {
+                            sendRequest(new SetSystemConfig(application,1,0, 0, 0, Constants.SystemConfigID.CompassAutoOnDuration));
+                            sendRequest(new SetSystemConfig(application,1,0, 0, 0, Constants.SystemConfigID.TopKeyCustomization));
+                        }
                         sendRequest(new SetRTCRequest(application));
                         sendRequest(new SetAppConfigRequest(application, WorldClock));
                         sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.ActivityTracking));
+                        if(getFirmwareVersion()!=null&&Float.valueOf(getFirmwareVersion())>=0.04f) {
+                            sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Weather));
+                            sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Compass));
+                        }
                         sendRequest(new SetUserProfileRequest(application,application.getUser()));
                         //set goal to watch
                         sendRequest(new SetGoalRequest(application, SpUtils.getIntMethod(application, CacheConstants.GOAL_STEP, 10000)));
@@ -340,6 +347,10 @@ public class SyncControllerImpl implements  SyncController{
                         sendRequest(new SetRTCRequest(application));
                         sendRequest(new SetAppConfigRequest(application, WorldClock));
                         sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.ActivityTracking));
+                        if(getFirmwareVersion()!=null&&Float.valueOf(getFirmwareVersion())>=0.04f) {
+                            sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Weather));
+                            sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Compass));
+                        }
                         sendRequest(new SetUserProfileRequest(application,application.getUser()));
                     }
                     if((systemStatusPacket.getStatus() & Constants.SystemStatus.GoalCompleted.rawValue())==Constants.SystemStatus.GoalCompleted.rawValue())

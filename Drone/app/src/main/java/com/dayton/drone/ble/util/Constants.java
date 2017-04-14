@@ -45,7 +45,9 @@ public class Constants {
         AirplaneMode(2),
         Enabled(4),
         ClockFormat(8),
-        SleepConfig(9);
+        SleepConfig(9),
+        CompassAutoOnDuration(0x10),
+        TopKeyCustomization(0x11);
         SystemConfigID(int id) {
             this.id = id;
         }
@@ -54,7 +56,7 @@ public class Constants {
     }
 
     public enum ApplicationID {
-        WorldClock(1),ActivityTracking(2);
+        WorldClock(1),ActivityTracking(2),Weather(3),Compass(0x10);
         final int id;
         ApplicationID(int id) {
             this.id = id;
