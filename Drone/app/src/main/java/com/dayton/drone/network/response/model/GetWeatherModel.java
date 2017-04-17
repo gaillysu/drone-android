@@ -28,8 +28,8 @@ public class GetWeatherModel {
     }
 
     class Wind {
-        int speed;
-        int deg;
+        float speed;
+        float deg;
     }
 
     class Clouds {
