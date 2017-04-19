@@ -19,14 +19,19 @@ import android.util.Log;
 import com.dayton.drone.application.ApplicationModel;
 import com.dayton.drone.ble.datasource.GattAttributesDataSourceImpl;
 import com.dayton.drone.ble.model.TimeZoneModel;
+import com.dayton.drone.ble.model.WeatherLocationModel;
+import com.dayton.drone.ble.model.WeatherUpdateModel;
 import com.dayton.drone.ble.model.packet.ActivityPacket;
 import com.dayton.drone.ble.model.packet.GetBatteryPacket;
 import com.dayton.drone.ble.model.packet.GetStepsGoalPacket;
 import com.dayton.drone.ble.model.packet.SystemEventPacket;
 import com.dayton.drone.ble.model.packet.SystemStatusPacket;
 import com.dayton.drone.ble.model.packet.base.DronePacket;
+import com.dayton.drone.ble.model.request.SetWeatherLocationsRequest;
+import com.dayton.drone.ble.model.request.UpdateWeatherInfomationRequest;
 import com.dayton.drone.ble.model.request.battery.GetBatteryRequest;
 import com.dayton.drone.ble.model.request.clean.ForgetWatchRequest;
+import com.dayton.drone.ble.model.request.dfu.SetDFUModeRequest;
 import com.dayton.drone.ble.model.request.init.GetSystemStatus;
 import com.dayton.drone.ble.model.request.init.SetAppConfigRequest;
 import com.dayton.drone.ble.model.request.init.SetRTCRequest;
@@ -39,8 +44,11 @@ import com.dayton.drone.ble.model.request.sync.GetStepsGoalRequest;
 import com.dayton.drone.ble.model.request.worldclock.SetWorldClockRequest;
 import com.dayton.drone.ble.notification.ListenerService;
 import com.dayton.drone.ble.util.Constants;
+import com.dayton.drone.ble.util.WeatherID2Code;
 import com.dayton.drone.event.BatteryStatusChangedEvent;
 import com.dayton.drone.event.BigSyncEvent;
+import com.dayton.drone.event.CityNumberChangedEvent;
+import com.dayton.drone.event.CityWeatherChangedEvent;
 import com.dayton.drone.event.DownloadStepsEvent;
 import com.dayton.drone.event.GoalCompletedEvent;
 import com.dayton.drone.event.LittleSyncEvent;
@@ -51,10 +59,16 @@ import com.dayton.drone.event.Timer10sEvent;
 import com.dayton.drone.event.WorldClockChangedEvent;
 import com.dayton.drone.model.DailySteps;
 import com.dayton.drone.model.Steps;
+import com.dayton.drone.network.request.GetWeatherRequest;
+import com.dayton.drone.network.response.model.GetWeatherModel;
 import com.dayton.drone.utils.CacheConstants;
 import com.dayton.drone.utils.Common;
 import com.dayton.drone.utils.SpUtils;
 import com.dayton.drone.utils.StepsHandler;
+import com.dayton.drone.utils.WeatherUtils;
+import com.google.gson.Gson;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
 
 import net.medcorp.library.ble.controller.ConnectionController;
 import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
@@ -70,9 +84,11 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -368,6 +384,8 @@ public class SyncControllerImpl implements  SyncController{
                     {
                         Log.d(TAG,"Subscribed to notifications success.");
                     }
+                    //here sync weather
+                    updateCitiesWeather();
                     //here start ANCS service
                     application.getApplicationContext().bindService(new Intent(application, ListenerService.class), notificationServiceConnection, Activity.BIND_AUTO_CREATE);
                      //here start little sync timer
@@ -462,6 +480,7 @@ public class SyncControllerImpl implements  SyncController{
                     //reset last big sync timestamp every got connected.
                     Log.w("Karl","Last time big sync=" + new Date().getTime());
                     SpUtils.putLongMethod(application, CacheConstants.LAST_BIG_SYNC_TIMESTAMP, new Date().getTime());
+                    SpUtils.putLongMethod(application, CacheConstants.LAST_CONNECTED_TIMESTAMP, new Date().getTime());
                     sendRequest(new GetSystemStatus(application));
                 }
             }, 2000);
@@ -482,6 +501,65 @@ public class SyncControllerImpl implements  SyncController{
     @Subscribe
     public void onEvent(ProfileChangedEvent profileChangedEvent) {
         sendRequest(new SetUserProfileRequest(application,profileChangedEvent.getUser()));
+    }
+
+    /**
+     * new feature for firmware r4+
+    1: when user select/unselect one city, after save done,send event 'CityNumberChangedEvent', syncControllerImpl will catch it and call this function
+    2: call this function every hour after connected
+    3: call this function every connected
+     */
+    private void updateCitiesWeather()
+    {
+        if(getFirmwareVersion()!=null&&Float.valueOf(getFirmwareVersion())>=0.04f) {
+            final Set<String> cities = WeatherUtils.getWeatherCities(application);
+            for (final String name : cities) {
+                final GetWeatherRequest request = new GetWeatherRequest(name, application.getRetrofitManager().getWeatherApiKey());
+                application.getRetrofitManager().requestWeather(request, new RequestListener<GetWeatherModel>() {
+                    @Override
+                    public void onRequestFailure(SpiceException spiceException) {
+                        Log.e("weather", "failed by " + spiceException.getCause().getMessage());
+                    }
+
+                    @Override
+                    public void onRequestSuccess(GetWeatherModel getWeatherModel) {
+                        Log.e(getWeatherModel.getName(), "" + new Gson().toJson(getWeatherModel));
+                        EventBus.getDefault().post(new CityWeatherChangedEvent(name, getWeatherModel));
+                    }
+                });
+            }
+        }
+    }
+
+    @Subscribe
+    public void onEvent(Timer10sEvent timer10sEvent) {
+        if ((new Date().getTime() - SpUtils.getLongMethod(application, CacheConstants.LAST_CONNECTED_TIMESTAMP, new Date().getTime())) >= 60*60*1000l) {
+            SpUtils.putLongMethod(application, CacheConstants.LAST_CONNECTED_TIMESTAMP, new Date().getTime());
+            updateCitiesWeather();
+        }
+    }
+    @Subscribe
+    public void onEvent(CityNumberChangedEvent cityNumberChangedEvent) {
+        int index = 0;
+        Set<String> cities = WeatherUtils.getWeatherCities(application);
+        List<WeatherLocationModel> weatherLocationModelList = new ArrayList<>();
+        for(String city:cities){
+            weatherLocationModelList.add(new WeatherLocationModel((byte) (index), (byte) city.length(), city));
+            index++;
+        }
+        SetWeatherLocationsRequest setWeatherLocations = new SetWeatherLocationsRequest(application,weatherLocationModelList);
+        sendRequest(setWeatherLocations);
+        updateCitiesWeather();
+    }
+
+    @Subscribe
+    public void onEvent(CityWeatherChangedEvent cityWeatherChangedEvent) {
+        int locationId = WeatherUtils.getWeatherLocationId(application,cityWeatherChangedEvent.getName());
+        WeatherUpdateModel[] entries = {
+                new WeatherUpdateModel((byte)(locationId), (short) ((short)cityWeatherChangedEvent.getWeatherModel().getMain().getTemp()-273), WeatherID2Code.getWeatherCodeByID(cityWeatherChangedEvent.getWeatherModel().getWeather()[0].getId(),true)),
+        };
+        Log.i(TAG,"No. "+(locationId) + " city changed: "  + cityWeatherChangedEvent.getName() + ",temp: "+(cityWeatherChangedEvent.getWeatherModel().getMain().getTemp() -273) + ",weather: " + cityWeatherChangedEvent.getWeatherModel().getWeather()[0].getMain());
+        sendRequest(new UpdateWeatherInfomationRequest(application,Arrays.asList(entries)));
     }
 
     @Subscribe

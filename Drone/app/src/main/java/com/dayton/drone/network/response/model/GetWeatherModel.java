@@ -12,19 +12,31 @@ public class GetWeatherModel {
         float lat;
     }
 
-    class Weather {
+    public class Weather {
         int id;
         String main;
         String description;
         String icon;
+
+        public int getId() {
+            return id;
+        }
+
+        public String getMain() {
+            return main;
+        }
     }
 
-    class Main {
+    public class Main {
          float temp;
          float pressure;
          float humidity;
          float temp_min;
          float temp_max;
+
+        public float getTemp() {
+            return temp;
+        }
     }
 
     class Wind {

@@ -13,4 +13,5 @@ public class CacheConstants {
     public static String TODAY_DATE = "today_date";
     public static String LAST_BIG_SYNC_TIMESTAMP = "last_big_sync_timestamp";
     public static String MUST_SYNC_STEPS = "must_sync_steps";
+    public static String LAST_CONNECTED_TIMESTAMP = "last_connected_timestamp";
 }
