@@ -523,7 +523,7 @@ public class SyncControllerImpl implements  SyncController{
 
                     @Override
                     public void onRequestSuccess(GetWeatherModel getWeatherModel) {
-                        Log.e(getWeatherModel.getName(), "" + new Gson().toJson(getWeatherModel));
+                        Log.i(getWeatherModel.getName(), "" + new Gson().toJson(getWeatherModel));
                         EventBus.getDefault().post(new CityWeatherChangedEvent(name, getWeatherModel));
                     }
                 });
