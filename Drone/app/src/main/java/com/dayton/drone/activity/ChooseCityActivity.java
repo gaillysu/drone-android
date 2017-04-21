@@ -18,8 +18,8 @@ import android.widget.Toast;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
-import com.dayton.drone.adapter.MySearchResultAdapter;
 import com.dayton.drone.adapter.ChooseCityAdapter;
+import com.dayton.drone.adapter.MySearchResultAdapter;
 import com.dayton.drone.utils.CheckEmailFormat;
 import com.dayton.drone.view.PinyinComparator;
 import com.dayton.drone.view.SideBar;
@@ -35,12 +35,9 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.realm.Realm;
-import io.realm.RealmResults;
 
 /**
  * Created by Administrator on 2016/5/12.
- *
  */
 public class ChooseCityActivity extends BaseActivity {
 
@@ -62,7 +59,7 @@ public class ChooseCityActivity extends BaseActivity {
     private PinyinComparator pinyinComparator;
     private List<ChooseCityViewModel> searchResultViewModelsList;
     private MySearchResultAdapter searchAdapter;
-    private Realm realm = Realm.getDefaultInstance();
+    private List<City> mCities;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,15 +74,15 @@ public class ChooseCityActivity extends BaseActivity {
         }
 
         ButterKnife.bind(this);
-        RealmResults<City> cities = realm.where(City.class).findAll();
-        for (City city: cities) {
+        mCities = getModel().getWorldClockDatabaseHelp().getAll();
+        for (City city : mCities) {
             chooseCityViewModelsList.add(new ChooseCityViewModel(city));
         }
         pinyinComparator = new PinyinComparator();
         cityListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long Id) {
-                    addWorldClock(chooseCityViewModelsList.get(position).getCityId());
+                addWorldClock(chooseCityViewModelsList.get(position).getCityId());
             }
         });
 
@@ -141,7 +138,7 @@ public class ChooseCityActivity extends BaseActivity {
         showSearchResultListView.setVisibility(View.VISIBLE);
         userSearchCityEdit.requestFocus();
         CheckEmailFormat.openInputMethod(ChooseCityActivity.this);
-            userSearchCityEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        userSearchCityEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
@@ -168,9 +165,9 @@ public class ChooseCityActivity extends BaseActivity {
     private void search() {
         String userInputSearchCityName = userSearchCityEdit.getText().toString();
         if (!userInputSearchCityName.isEmpty()) {
-            for (ChooseCityViewModel chooseCityViewModel: chooseCityViewModelsList) {
+            for (ChooseCityViewModel chooseCityViewModel : chooseCityViewModelsList) {
 
-                if (chooseCityViewModel.getDisplayName().toLowerCase().contains(userInputSearchCityName.toLowerCase() )) {
+                if (chooseCityViewModel.getDisplayName().toLowerCase().contains(userInputSearchCityName.toLowerCase())) {
                     searchResultViewModelsList.add(chooseCityViewModel);
                 }
             }
@@ -182,21 +179,27 @@ public class ChooseCityActivity extends BaseActivity {
         }
     }
 
-    public void addWorldClock(int cityId){
-        if (realm.where(City.class).equalTo("selected",true).count() < 5){
-            RealmResults<City> cities = realm.where(City.class).equalTo("id",cityId).findAll();
-            if (cities.size() ==  1){
-                realm.beginTransaction();
-                cities.get(0).setSelected(true);
-                realm.commitTransaction();
+    public void addWorldClock(int cityId) {
+        int count = 0;
+        for (City city : mCities) {
+            chooseCityViewModelsList.add(new ChooseCityViewModel(city));
+            if (city.isSelected()) {
+                count++;
+            }
+        }
+        if (count < 5) {
+            City city= getModel().getWorldClockDatabaseHelp().get(cityId);
+            if (city != null) {
+                city.setSelected(true);
+                getModel().getWorldClockDatabaseHelp().update(city);
                 Intent intent = getIntent();
-                intent.putExtra("isChooseFlag", true);
+                intent.putExtra(getString(R.string.is_choose_flag), true);
                 setResult(0, intent);
                 finish();
-            }else{
-                Log.w("Karl","There is something terribly wrong");
+            } else {
+                Log.w("Karl", "There is something terribly wrong");
             }
-        }else {
+        } else {
             Toast.makeText(ChooseCityActivity.this, getResources().getString(R.string.add_city_toast_text)
                     , Toast.LENGTH_LONG).show();
         }
