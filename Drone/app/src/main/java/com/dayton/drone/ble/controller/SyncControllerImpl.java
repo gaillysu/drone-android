@@ -47,6 +47,7 @@ import com.dayton.drone.ble.util.Constants;
 import com.dayton.drone.ble.util.WeatherID2Code;
 import com.dayton.drone.event.BatteryStatusChangedEvent;
 import com.dayton.drone.event.BigSyncEvent;
+import com.dayton.drone.event.CityForecastChangedEvent;
 import com.dayton.drone.event.CityNumberChangedEvent;
 import com.dayton.drone.event.CityWeatherChangedEvent;
 import com.dayton.drone.event.DownloadStepsEvent;
@@ -59,7 +60,9 @@ import com.dayton.drone.event.Timer10sEvent;
 import com.dayton.drone.event.WorldClockChangedEvent;
 import com.dayton.drone.model.DailySteps;
 import com.dayton.drone.model.Steps;
+import com.dayton.drone.network.request.GetForecastRequest;
 import com.dayton.drone.network.request.GetWeatherRequest;
+import com.dayton.drone.network.response.model.GetForecastModel;
 import com.dayton.drone.network.response.model.GetWeatherModel;
 import com.dayton.drone.utils.CacheConstants;
 import com.dayton.drone.utils.Common;
@@ -82,11 +85,14 @@ import net.medcorp.library.worldclock.City;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Timer;
@@ -514,6 +520,7 @@ public class SyncControllerImpl implements  SyncController{
         if(getFirmwareVersion()!=null&&Float.valueOf(getFirmwareVersion())>=0.04f) {
             final Set<String> cities = WeatherUtils.getWeatherCities(application);
             for (final String name : cities) {
+                /** request weather actual time
                 final GetWeatherRequest request = new GetWeatherRequest(name, application.getRetrofitManager().getWeatherApiKey());
                 application.getRetrofitManager().requestWeather(request, new RequestListener<GetWeatherModel>() {
                     @Override
@@ -527,6 +534,60 @@ public class SyncControllerImpl implements  SyncController{
                         EventBus.getDefault().post(new CityWeatherChangedEvent(name, getWeatherModel));
                     }
                 });
+                 */
+                List<GetForecastModel.Forecast> records = WeatherUtils.getCityWeather(application,name);
+                DateTime theCachedDay = new DateTime(WeatherUtils.getCityWeatherFirstForecastDateTime(application,name));
+                DateTime today = new DateTime();
+                if(records.isEmpty() || theCachedDay.getDayOfMonth()!=today.getDayOfMonth())
+                {
+                    final GetForecastRequest request = new GetForecastRequest(name, application.getRetrofitManager().getWeatherApiKey());
+                    application.getRetrofitManager().requestWeather(request, new RequestListener<GetForecastModel>() {
+                        @Override
+                        public void onRequestFailure(SpiceException spiceException) {
+                            Log.e("weather", "failed by " + spiceException.getCause().getMessage());
+                        }
+
+                        @Override
+                        public void onRequestSuccess(GetForecastModel getForecastModel) {
+                            Log.i(getForecastModel.getCity().getName(), "" + new Gson().toJson(getForecastModel));
+                            if(getForecastModel.getCnt()>0) {
+                                int currentHour = new DateTime().getHourOfDay();
+                                int today = new DateTime().getDayOfMonth();
+                                int index = 0;
+                                int totalDataOfToday =0;
+                                Set<String> todayData = new LinkedHashSet<>();
+                                Calendar calendar = new GregorianCalendar();
+                                long offset = calendar.getTimeZone().getRawOffset();
+                                for(GetForecastModel.Forecast forecast:getForecastModel.getList())
+                                {
+                                    int day  = new DateTime(forecast.getDt()*1000-offset).getDayOfMonth();
+                                    if(day == today) {
+                                        totalDataOfToday++;
+                                        todayData.add(new Gson().toJson(forecast));
+                                    }
+                                }
+                                WeatherUtils.saveCityWeather(application,name,todayData);
+                                WeatherUtils.saveCityWeatherFirstForecastDateTime(application,name,getForecastModel.getList()[0].getDt()*1000-offset);
+
+                                int forecastStartTime = new DateTime(getForecastModel.getList()[0].getDt()*1000-offset).getHourOfDay();
+                                index = ((currentHour - forecastStartTime)/3) % totalDataOfToday;
+                                float temp = getForecastModel.getList()[index].getMain().getTemp();
+                                int id = getForecastModel.getList()[index].getWeather()[0].getId();
+                                String main = getForecastModel.getList()[index].getWeather()[0].getMain();
+                                EventBus.getDefault().post(new CityForecastChangedEvent(name, temp, id, main));
+                            }
+                        }
+                    });
+                }
+                else {
+                    int index = ((today.getHourOfDay() - theCachedDay.getHourOfDay())/3) % records.size();
+                    GetForecastModel.Forecast forecast = records.get(index);
+                    float temp = forecast.getMain().getTemp();
+                    int id = forecast.getWeather()[0].getId();
+                    String main = forecast.getWeather()[0].getMain();
+                    EventBus.getDefault().post(new CityForecastChangedEvent(name, temp, id, main));
+                }
+
             }
         }
     }
@@ -558,7 +619,17 @@ public class SyncControllerImpl implements  SyncController{
         WeatherUpdateModel[] entries = {
                 new WeatherUpdateModel((byte)(locationId), (short) ((short)cityWeatherChangedEvent.getWeatherModel().getMain().getTemp()-273), WeatherID2Code.getWeatherCodeByID(cityWeatherChangedEvent.getWeatherModel().getWeather()[0].getId(),true)),
         };
-        Log.i(TAG,"No. "+(locationId) + " city changed: "  + cityWeatherChangedEvent.getName() + ",temp: "+(cityWeatherChangedEvent.getWeatherModel().getMain().getTemp() -273) + ",weather: " + cityWeatherChangedEvent.getWeatherModel().getWeather()[0].getMain());
+        Log.i(TAG,"No. "+(locationId) + " city weather changed: "  + cityWeatherChangedEvent.getName() + ",temp: "+(cityWeatherChangedEvent.getWeatherModel().getMain().getTemp() -273) + ",weather: " + cityWeatherChangedEvent.getWeatherModel().getWeather()[0].getMain());
+        sendRequest(new UpdateWeatherInfomationRequest(application,Arrays.asList(entries)));
+    }
+
+    @Subscribe
+    public void onEvent(CityForecastChangedEvent cityForecastChangedEvent) {
+        int locationId = WeatherUtils.getWeatherLocationId(application,cityForecastChangedEvent.getName());
+        WeatherUpdateModel[] entries = {
+                new WeatherUpdateModel((byte)(locationId), (short) ((short)cityForecastChangedEvent.getTemp()-273), WeatherID2Code.getWeatherCodeByID(cityForecastChangedEvent.getWeatherId(),true)),
+        };
+        Log.i(TAG,"No. "+(locationId) + " city forecast changed: "  + cityForecastChangedEvent.getName() + ",temp: "+(cityForecastChangedEvent.getTemp() -273) + ",weather: " + cityForecastChangedEvent.getMain());
         sendRequest(new UpdateWeatherInfomationRequest(application,Arrays.asList(entries)));
     }
 
