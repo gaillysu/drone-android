@@ -520,21 +520,6 @@ public class SyncControllerImpl implements  SyncController{
         if(getFirmwareVersion()!=null&&Float.valueOf(getFirmwareVersion())>=0.04f) {
             final Set<String> cities = WeatherUtils.getWeatherCities(application);
             for (final String name : cities) {
-                /** request weather actual time
-                final GetWeatherRequest request = new GetWeatherRequest(name, application.getRetrofitManager().getWeatherApiKey());
-                application.getRetrofitManager().requestWeather(request, new RequestListener<GetWeatherModel>() {
-                    @Override
-                    public void onRequestFailure(SpiceException spiceException) {
-                        Log.e("weather", "failed by " + spiceException.getCause().getMessage());
-                    }
-
-                    @Override
-                    public void onRequestSuccess(GetWeatherModel getWeatherModel) {
-                        Log.i(getWeatherModel.getName(), "" + new Gson().toJson(getWeatherModel));
-                        EventBus.getDefault().post(new CityWeatherChangedEvent(name, getWeatherModel));
-                    }
-                });
-                 */
                 List<GetForecastModel.Forecast> records = WeatherUtils.getCityWeather(application,name);
                 DateTime theCachedDay = new DateTime(WeatherUtils.getCityWeatherFirstForecastDateTime(application,name));
                 DateTime today = new DateTime();
