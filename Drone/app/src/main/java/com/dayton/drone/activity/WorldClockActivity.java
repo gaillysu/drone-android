@@ -34,8 +34,6 @@ import java.util.TimeZone;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.realm.Realm;
-import io.realm.RealmResults;
 
 /**
  * Created by boy on 2016/4/24.
@@ -54,7 +52,6 @@ public class WorldClockActivity extends BaseActivity {
 
     private List<WorldClockViewModel> listData;
     private WorldClockAdapter worldClockAdapter;
-    private Realm realm = Realm.getDefaultInstance();
     private int requestCode = 3 >> 2;
 
     @Override
@@ -123,17 +120,12 @@ public class WorldClockActivity extends BaseActivity {
         startActivityForResult(intent, requestCode);
     }
 
-    public void setListAdapter() {
-        worldClockAdapter = new WorldClockAdapter(listData, this);
-        worldClockListView.setAdapter(worldClockAdapter);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == this.requestCode) {
             if (data != null) {
-                boolean flag = data.getBooleanExtra("isChooseFlag", false);
+                boolean flag = data.getBooleanExtra(getString(R.string.is_choose_flag), false);
                 if (flag) {
                     refreshList();
                     EventBus.getDefault().post(new WorldClockChangedEvent());
@@ -146,13 +138,12 @@ public class WorldClockActivity extends BaseActivity {
         @Override
         public void deleteItem(int position) {
             int id = listData.get(position).getCityId();
-            RealmResults<City> cities = realm.where(City.class).equalTo("id", id).findAll();
-            if (cities.size() == 1) {
+            City city = getModel().getWorldClockDatabaseHelp().get(id);
+            if (city != null) {
                 listData.remove(position);
                 worldClockAdapter.notifyDataSetChanged();
-                realm.beginTransaction();
-                cities.get(0).setSelected(false);
-                realm.commitTransaction();
+                city.setSelected(false);
+                getModel().getWorldClockDatabaseHelp().update(city);
                 refreshList();
             } else {
                 Log.w("Karl", "something really bad is wrong!");
@@ -162,9 +153,8 @@ public class WorldClockActivity extends BaseActivity {
 
     private void refreshList() {
         listData.clear();
-        RealmResults<City> selectedCities = realm.where(City.class).equalTo("selected", true).findAll();
+        List<City> selectedCities = getModel().getWorldClockDatabaseHelp().getSelect();
         for (City city : selectedCities) {
-            city.getOffSetFromGMT();
             listData.add(new WorldClockViewModel(city));
             worldClockAdapter.notifyDataSetChanged();
         }
@@ -172,7 +162,7 @@ public class WorldClockActivity extends BaseActivity {
 
     @Subscribe
     public void onEvent(WorldClockInitializeEvent event) {
-        if(event.getStatus() == WorldClockInitializeEvent.STATUS.FINISHED){
+        if (event.getStatus() == WorldClockInitializeEvent.STATUS.FINISHED) {
             refreshList();
         }
     }
