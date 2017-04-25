@@ -3,6 +3,7 @@ package com.dayton.drone.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.dayton.drone.network.response.model.Forecast;
 import com.dayton.drone.network.response.model.GetForecastModel;
 import com.google.gson.Gson;
 
@@ -88,18 +89,18 @@ public class WeatherUtils {
         editor.apply();
     }
 
-    public static List<GetForecastModel.Forecast> getCityWeather(Context context, String name)
+    public static List<Forecast> getCityWeather(Context context, String name)
     {
         SharedPreferences sp = context.getSharedPreferences(CacheConstants.SP_Name,Context.MODE_PRIVATE);
         Set<String> records =  sp.getStringSet(name, new HashSet<String>());
-        List<GetForecastModel.Forecast> weather = new ArrayList<>();
+        List<Forecast> weather = new ArrayList<>();
         for(String record:records)
         {
-            GetForecastModel.Forecast forecast = new Gson().fromJson(record, GetForecastModel.Forecast.class);
+            Forecast forecast = new Gson().fromJson(record, Forecast.class);
             weather.add(forecast);
         }
-        Comparator<GetForecastModel.Forecast> comparator = new Comparator<GetForecastModel.Forecast>() {
-            public int compare(GetForecastModel.Forecast s1, GetForecastModel.Forecast s2) {
+        Comparator<Forecast> comparator = new Comparator<Forecast>() {
+            public int compare(Forecast s1, Forecast s2) {
                 if (s1.getDt() == s2.getDt()) {
                     return 0;
                 } else if (s1.getDt() > s2.getDt()) {

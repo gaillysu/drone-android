@@ -31,7 +31,6 @@ import com.dayton.drone.ble.model.request.SetWeatherLocationsRequest;
 import com.dayton.drone.ble.model.request.UpdateWeatherInfomationRequest;
 import com.dayton.drone.ble.model.request.battery.GetBatteryRequest;
 import com.dayton.drone.ble.model.request.clean.ForgetWatchRequest;
-import com.dayton.drone.ble.model.request.dfu.SetDFUModeRequest;
 import com.dayton.drone.ble.model.request.init.GetSystemStatus;
 import com.dayton.drone.ble.model.request.init.SetAppConfigRequest;
 import com.dayton.drone.ble.model.request.init.SetRTCRequest;
@@ -44,12 +43,12 @@ import com.dayton.drone.ble.model.request.sync.GetStepsGoalRequest;
 import com.dayton.drone.ble.model.request.worldclock.SetWorldClockRequest;
 import com.dayton.drone.ble.notification.ListenerService;
 import com.dayton.drone.ble.util.Constants;
-import com.dayton.drone.ble.util.WeatherID2Code;
+import com.dayton.drone.ble.util.WeatherCode;
+import com.dayton.drone.ble.util.WeatherID;
 import com.dayton.drone.event.BatteryStatusChangedEvent;
 import com.dayton.drone.event.BigSyncEvent;
 import com.dayton.drone.event.CityForecastChangedEvent;
 import com.dayton.drone.event.CityNumberChangedEvent;
-import com.dayton.drone.event.CityWeatherChangedEvent;
 import com.dayton.drone.event.DownloadStepsEvent;
 import com.dayton.drone.event.GoalCompletedEvent;
 import com.dayton.drone.event.LittleSyncEvent;
@@ -61,9 +60,8 @@ import com.dayton.drone.event.WorldClockChangedEvent;
 import com.dayton.drone.model.DailySteps;
 import com.dayton.drone.model.Steps;
 import com.dayton.drone.network.request.GetForecastRequest;
-import com.dayton.drone.network.request.GetWeatherRequest;
+import com.dayton.drone.network.response.model.Forecast;
 import com.dayton.drone.network.response.model.GetForecastModel;
-import com.dayton.drone.network.response.model.GetWeatherModel;
 import com.dayton.drone.utils.CacheConstants;
 import com.dayton.drone.utils.Common;
 import com.dayton.drone.utils.SpUtils;
@@ -520,7 +518,7 @@ public class SyncControllerImpl implements  SyncController{
         if(getFirmwareVersion()!=null&&Float.valueOf(getFirmwareVersion())>=0.04f) {
             final Set<String> cities = WeatherUtils.getWeatherCities(application);
             for (final String name : cities) {
-                List<GetForecastModel.Forecast> records = WeatherUtils.getCityWeather(application,name);
+                List<Forecast> records = WeatherUtils.getCityWeather(application,name);
                 DateTime theCachedDay = new DateTime(WeatherUtils.getCityWeatherFirstForecastDateTime(application,name));
                 DateTime today = new DateTime();
                 if(records.isEmpty() || theCachedDay.getDayOfMonth()!=today.getDayOfMonth())
@@ -543,7 +541,7 @@ public class SyncControllerImpl implements  SyncController{
                                 Set<String> todayData = new LinkedHashSet<>();
                                 Calendar calendar = new GregorianCalendar();
                                 long offset = calendar.getTimeZone().getRawOffset();
-                                for(GetForecastModel.Forecast forecast:getForecastModel.getList())
+                                for(Forecast forecast:getForecastModel.getList())
                                 {
                                     int day  = new DateTime(forecast.getDt()*1000-offset).getDayOfMonth();
                                     if(day == today) {
@@ -566,7 +564,7 @@ public class SyncControllerImpl implements  SyncController{
                 }
                 else {
                     int index = ((today.getHourOfDay() - theCachedDay.getHourOfDay())/3) % records.size();
-                    GetForecastModel.Forecast forecast = records.get(index);
+                    Forecast forecast = records.get(index);
                     float temp = forecast.getMain().getTemp();
                     int id = forecast.getWeather()[0].getId();
                     String main = forecast.getWeather()[0].getMain();
@@ -599,20 +597,11 @@ public class SyncControllerImpl implements  SyncController{
     }
 
     @Subscribe
-    public void onEvent(CityWeatherChangedEvent cityWeatherChangedEvent) {
-        int locationId = WeatherUtils.getWeatherLocationId(application,cityWeatherChangedEvent.getName());
-        WeatherUpdateModel[] entries = {
-                new WeatherUpdateModel((byte)(locationId), (short) ((short)cityWeatherChangedEvent.getWeatherModel().getMain().getTemp()-273), WeatherID2Code.getWeatherCodeByID(cityWeatherChangedEvent.getWeatherModel().getWeather()[0].getId(),true)),
-        };
-        Log.i(TAG,"No. "+(locationId) + " city weather changed: "  + cityWeatherChangedEvent.getName() + ",temp: "+(cityWeatherChangedEvent.getWeatherModel().getMain().getTemp() -273) + ",weather: " + cityWeatherChangedEvent.getWeatherModel().getWeather()[0].getMain());
-        sendRequest(new UpdateWeatherInfomationRequest(application,Arrays.asList(entries)));
-    }
-
-    @Subscribe
     public void onEvent(CityForecastChangedEvent cityForecastChangedEvent) {
         int locationId = WeatherUtils.getWeatherLocationId(application,cityForecastChangedEvent.getName());
+
         WeatherUpdateModel[] entries = {
-                new WeatherUpdateModel((byte)(locationId), (short) ((short)cityForecastChangedEvent.getTemp()-273), WeatherID2Code.getWeatherCodeByID(cityForecastChangedEvent.getWeatherId(),true)),
+                new WeatherUpdateModel(locationId, (cityForecastChangedEvent.getTemp()-273), new WeatherID(cityForecastChangedEvent.getWeatherId()).convertID2Code(new DateTime().getHourOfDay()<=18)),
         };
         Log.i(TAG,"No. "+(locationId) + " city forecast changed: "  + cityForecastChangedEvent.getName() + ",temp: "+(cityForecastChangedEvent.getTemp() -273) + ",weather: " + cityForecastChangedEvent.getMain());
         sendRequest(new UpdateWeatherInfomationRequest(application,Arrays.asList(entries)));

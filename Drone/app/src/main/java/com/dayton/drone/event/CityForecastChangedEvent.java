@@ -1,8 +1,6 @@
 package com.dayton.drone.event;
 
 
-import com.dayton.drone.network.response.model.GetWeatherModel;
-
 /**
  * Created by med on 16/5/27.
  */
