@@ -516,7 +516,7 @@ public class SyncControllerImpl implements  SyncController{
     private void updateCitiesWeather()
     {
         if(getFirmwareVersion()!=null&&Float.valueOf(getFirmwareVersion())>=0.04f) {
-            final Set<String> cities = WeatherUtils.getWeatherCities(application);
+            final List<String> cities = WeatherUtils.getWeatherCities(application);
             for (final String name : cities) {
                 List<Forecast> records = WeatherUtils.getCityWeather(application,name);
                 DateTime theCachedDay = new DateTime(WeatherUtils.getCityWeatherFirstForecastDateTime(application,name));
@@ -585,7 +585,7 @@ public class SyncControllerImpl implements  SyncController{
     @Subscribe
     public void onEvent(CityNumberChangedEvent cityNumberChangedEvent) {
         int index = 0;
-        Set<String> cities = WeatherUtils.getWeatherCities(application);
+        List<String> cities = WeatherUtils.getWeatherCities(application);
         List<WeatherLocationModel> weatherLocationModelList = new ArrayList<>();
         for(String city:cities){
             weatherLocationModelList.add(new WeatherLocationModel((byte) (index), (byte) city.length(), city));
