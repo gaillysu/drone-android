@@ -28,13 +28,16 @@ public class WeatherUtils {
 
     public static void addWeatherCity(Context context, String name)
     {
+        if(name.contains(",")) {
+            name = name.split(",")[0];
+        }
         List<String> cities = getWeatherCities(context);
         if(!cities.contains(name)){
             SharedPreferences sp = context.getSharedPreferences(CacheConstants.SP_Name,Context.MODE_PRIVATE);
             SharedPreferences.Editor editor =  sp.edit();
             ArrayList<String> cityList = new ArrayList<>(cities);
             cityList.add(name);
-            editor.putString(CITYLIST,cityList.toString());
+            editor.putString(CITYLIST,cityList.toString().replace("[","").replace("]",""));
             editor.apply();
         }
     }
@@ -42,17 +45,11 @@ public class WeatherUtils {
     public static List<String> getWeatherCities(Context context)
     {
         SharedPreferences sp = context.getSharedPreferences(CacheConstants.SP_Name,Context.MODE_PRIVATE);
-        String cites = sp.getString(CITYLIST, new ArrayList<String>().toString());
-        String[] cityArray = new String[0];
-        try {
-            JSONArray jsonArray = new JSONArray(cites);
-            cityArray = new String[jsonArray.length()];
-            for(int i=0;i<jsonArray.length();i++) {
-                cityArray[i] = jsonArray.optString(i);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        String cites = sp.getString(CITYLIST, new String());
+        if(cites.isEmpty()) {
+            return new ArrayList<String>();
         }
+        String [] cityArray = cites.split(",");
         return Arrays.asList(cityArray);
     }
 
@@ -60,7 +57,7 @@ public class WeatherUtils {
     {
         SharedPreferences sp = context.getSharedPreferences(CacheConstants.SP_Name,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor =  sp.edit();
-        editor.putString(CITYLIST,new ArrayList<>().toString());
+        editor.putString(CITYLIST,new String());
         editor.apply();
     }
 
