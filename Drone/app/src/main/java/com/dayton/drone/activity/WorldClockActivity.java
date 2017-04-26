@@ -11,8 +11,10 @@ import android.widget.TextView;
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.adapter.WorldClockAdapter;
+import com.dayton.drone.event.CityNumberChangedEvent;
 import com.dayton.drone.event.Timer10sEvent;
 import com.dayton.drone.event.WorldClockChangedEvent;
+import com.dayton.drone.utils.WeatherUtils;
 import com.dayton.drone.view.ListViewCompat;
 import com.dayton.drone.viewmodel.WorldClockViewModel;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
@@ -153,11 +155,16 @@ public class WorldClockActivity extends BaseActivity {
 
     private void refreshList() {
         listData.clear();
+        WeatherUtils.removeAllCities(getModel());
+        WeatherUtils.addWeatherCity(getModel(), localCity.getText().toString());
         List<City> selectedCities = getModel().getWorldClockDatabaseHelp().getSelect();
         for (City city : selectedCities) {
             listData.add(new WorldClockViewModel(city));
             worldClockAdapter.notifyDataSetChanged();
+            WeatherUtils.addWeatherCity(getModel(), city.getName());
         }
+        Log.w("weather", "city list: " + WeatherUtils.getWeatherCities(getModel()).toString());
+        EventBus.getDefault().post(new CityNumberChangedEvent());
     }
 
     @Subscribe

@@ -4,13 +4,15 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.dayton.drone.network.response.model.Forecast;
-import com.dayton.drone.network.response.model.GetForecastModel;
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -26,48 +28,43 @@ public class WeatherUtils {
 
     public static void addWeatherCity(Context context, String name)
     {
-        Set<String> cities = getWeatherCities(context);
+        if(name.contains(",")) {
+            name = name.split(",")[0];
+        }
+        List<String> cities = getWeatherCities(context);
         if(!cities.contains(name)){
             SharedPreferences sp = context.getSharedPreferences(CacheConstants.SP_Name,Context.MODE_PRIVATE);
             SharedPreferences.Editor editor =  sp.edit();
-            cities.add(name);
-            editor.putStringSet(CITYLIST,cities);
+            ArrayList<String> cityList = new ArrayList<>(cities);
+            cityList.add(name);
+            editor.putString(CITYLIST,cityList.toString().replace("[","").replace("]",""));
             editor.apply();
         }
     }
 
-    public static Set<String> getWeatherCities(Context context)
+    public static List<String> getWeatherCities(Context context)
     {
         SharedPreferences sp = context.getSharedPreferences(CacheConstants.SP_Name,Context.MODE_PRIVATE);
-        return sp.getStringSet(CITYLIST, new HashSet<String>());
-    }
-
-    public static void removeWeatherCity(Context context, String name)
-    {
-        Set<String> cities = getWeatherCities(context);
-        if(cities.contains(name)){
-            SharedPreferences sp = context.getSharedPreferences(CacheConstants.SP_Name,Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor =  sp.edit();
-            cities.remove(name);
-            editor.putStringSet(CITYLIST,cities);
-            editor.apply();
+        String cites = sp.getString(CITYLIST, new String());
+        if(cites.isEmpty()) {
+            return new ArrayList<String>();
         }
+        String [] cityArray = cites.split(",");
+        return Arrays.asList(cityArray);
     }
 
     public static void removeAllCities(Context context)
     {
-        Set<String> cities = getWeatherCities(context);
         SharedPreferences sp = context.getSharedPreferences(CacheConstants.SP_Name,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor =  sp.edit();
-        cities.clear();
-        editor.putStringSet(CITYLIST,cities);
+        editor.putString(CITYLIST,new String());
         editor.apply();
     }
 
     public static int getWeatherLocationId(Context context, String name)
     {
         int index = 0;
-        Set<String> cities = getWeatherCities(context);
+        List<String> cities = getWeatherCities(context);
         for(String city:cities){
             if(name.equals(city)){
                 return index;
