@@ -5,10 +5,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.GridView;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
+import com.dayton.drone.activity.tutorial.LoginActivity;
 import com.dayton.drone.activity.tutorial.WelcomeActivity;
 import com.dayton.drone.adapter.MyHomeMenuAdapter;
 import com.dayton.drone.bean.MenuBean;
@@ -20,24 +21,29 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by boy on 2016/4/21.
  */
-public class HomeActivity extends BaseActivity {
+public class HomeActivity extends BaseActivity implements AdapterView.OnItemClickListener {
 
-    @Bind(R.id.activity_home_meun_listview)
-    ListView homeMenuListView;
-
+    @Bind(R.id.home_activity_grid_view)
+    GridView homeMenu;
     private List<MenuBean> listData;
+    private int[] homeMenuPicture;
+    private int[] homeMenuIconArray = {R.drawable.ic_activities_icon
+            , R.drawable.ic_main_menu_time, R.drawable.ic_main_menu_city_map
+            , R.drawable.ic_main_menu_navigation, R.drawable.ic_main_menu_hot_key
+            , R.drawable.ic_main_menu_notifications, R.drawable.ic_main_menu_profile
+            , R.drawable.ic_main_menu_device};
 
-    private int[] homeMenuIconArray = {R.mipmap.mainmenu_activity_icon
-            , R.mipmap.mainmenu_worldclock_icon};
+    private int[] homeMenuIcon = {R.drawable.ic_activities_icon
+            , R.drawable.ic_main_menu_time, R.drawable.ic_main_menu_city_map
+            , R.drawable.ic_main_menu_navigation, R.drawable.ic_main_menu_hot_key
+            , R.drawable.ic_main_menu_notifications, R.drawable.ic_main_menu_login
+            , R.drawable.ic_main_menu_device};
 
     private String[] homeMenuTextArray;
-    private final String activities = "ACTIVITIES";
-    private final String clock = "WORLD\nCLOCK";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,31 +59,23 @@ public class HomeActivity extends BaseActivity {
         ButterKnife.bind(this);
         initData();
         MyHomeMenuAdapter adapter = new MyHomeMenuAdapter(listData, this);
-        homeMenuListView.setAdapter(adapter);
-        homeMenuListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String content = homeMenuTextArray[position];
-                switch (content) {
-                    case activities:
-                        startActivity(ActivitiesActivity.class);
-                        break;
-                    case clock:
-                        startActivity(WorldClockActivity.class);
-                        break;
-                }
-            }
-
-        });
+        homeMenu.setAdapter(adapter);
+        homeMenu.setOnItemClickListener(this);
         NotificationPermission.getNotificationAccessPermission(HomeActivity.this);
     }
 
     private void initData() {
         listData = new ArrayList<>(homeMenuIconArray.length);
-        homeMenuTextArray = getResources().getStringArray(R.array.home_menu_text_data);
+        if (getModel().getUser().isUserIsLogin()) {
+            homeMenuTextArray = getResources().getStringArray(R.array.home_menu_text_data);
+            homeMenuPicture = homeMenuIconArray;
+        } else {
+            homeMenuTextArray = getResources().getStringArray(R.array.home_menu);
+            homeMenuPicture = homeMenuIcon;
+        }
         for (int i = 0; i < homeMenuIconArray.length; i++) {
             MenuBean bean = new MenuBean();
-            bean.setIconId(homeMenuIconArray[i]);
+            bean.setIconId(homeMenuPicture[i]);
             bean.setDec(homeMenuTextArray[i]);
             listData.add(bean);
         }
@@ -90,18 +88,6 @@ public class HomeActivity extends BaseActivity {
         if (!getModel().getSyncController().isConnected()) {
             getModel().getSyncController().startConnect(false);
         }
-    }
-
-    @OnClick(R.id.manager_fragment_title_right_add)
-    public void addWatch() {
-        startActivity(AddWatchActivity.class);
-        finish();
-    }
-
-    @OnClick(R.id.title_head_icon)
-    public void startProfile() {
-        Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
-        startActivityForResult(intent, 2);
     }
 
     @Override
@@ -121,9 +107,28 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
-
     @Override
-    protected void onPause() {
-        super.onPause();
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        switch (position) {
+            case 0:
+                startActivity(ActivitiesActivity.class);
+                break;
+            case 1:
+                startActivity(WorldClockActivity.class);
+                break;
+            case 7:
+                if (getModel().getUser().isUserIsLogin()) {
+                    Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
+                    startActivityForResult(intent, 2);
+                } else {
+                    startActivity(LoginActivity.class);
+                    finish();
+                }
+                break;
+            case 8:
+                startActivity(AddWatchActivity.class);
+                break;
+        }
+
     }
 }

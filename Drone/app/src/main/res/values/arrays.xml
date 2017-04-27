@@ -18,7 +18,24 @@
         <item>Crystal Bezel</item>
     </array>
     <array name="home_menu_text_data">
-        <item>ACTIVITIES</item>
-        <item>WORLD\nCLOCK</item>
+        <item>Activities</item>
+        <item>Time</item>
+        <item>City Navigation</item>
+        <item>Compass</item>
+        <item>Hot Key</item>
+        <item>Notifications</item>
+        <item>Profile</item>
+        <item>Device</item>
+    </array>
+
+    <array name="home_menu">
+        <item>Activities</item>
+        <item>Time</item>
+        <item>City Navigation</item>
+        <item>Compass</item>
+        <item>Hot Key</item>
+        <item>Notifications</item>
+        <item>Login</item>
+        <item>Device</item>
     </array>
 </resources>

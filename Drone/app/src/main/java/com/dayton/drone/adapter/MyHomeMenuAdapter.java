@@ -17,8 +17,6 @@ public class MyHomeMenuAdapter extends BaseAdapter {
 
     private List<MenuBean> mData;
     private Context mContext;
-    private boolean isShow = false;
-
     public MyHomeMenuAdapter(List<MenuBean> data, Context context) {
         this.mData = data;
         mContext = context;
@@ -72,7 +70,6 @@ public class MyHomeMenuAdapter extends BaseAdapter {
     }
 
     public static class ViewHolder {
-
         ImageView mMenuIv;
         TextView mMenuTv;
     }

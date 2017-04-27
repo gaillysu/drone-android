@@ -2,6 +2,7 @@
 <resources>
     <color name="colorPrimary">#d7d7d7</color>
     <color name="notification_bg_color">#e3c48e</color>
+    <color name="main_menu_color">#987332</color>
     <color name="colorPrimaryDark">#d09d42</color>
     <color name="colorAccent">#FF4081</color>
     <color name="line_color">#20000000</color>
