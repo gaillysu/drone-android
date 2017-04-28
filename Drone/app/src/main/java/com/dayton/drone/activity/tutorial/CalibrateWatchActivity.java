@@ -1,43 +1,11 @@
 package com.dayton.drone.activity.tutorial;
 
-import android.Manifest;
-import android.bluetooth.BluetoothAdapter;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.view.KeyEvent;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.dayton.drone.R;
-import com.dayton.drone.activity.HomeActivity;
 import com.dayton.drone.activity.base.BaseActivity;
-import com.dayton.drone.utils.CacheConstants;
-import com.dayton.drone.utils.SpUtils;
-import com.readystatesoftware.systembartint.SystemBarTintManager;
-
-import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
-import net.medcorp.library.ble.event.BLEFirmwareVersionReceivedEvent;
-import net.medcorp.library.ble.event.BLESearchEvent;
-import net.medcorp.library.permission.PermissionRequestDialogBuilder;
-
-import org.greenrobot.eventbus.Subscribe;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.dayton.drone.ble.model.request.StartSystemSettingRequest;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -63,15 +31,26 @@ public class CalibrateWatchActivity extends BaseActivity  {
         ButterKnife.bind(this);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        getModel().getSyncController().calibrateWatch(StartSystemSettingRequest.AnalogMovementSettingOperationID.Start.rawValue());
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        getModel().getSyncController().calibrateWatch(StartSystemSettingRequest.AnalogMovementSettingOperationID.Exit.rawValue());
+    }
 
     @OnClick(R.id.calibrate_watch_back_imagebutton)
     public void backCalibrate(){
-
+        getModel().getSyncController().calibrateWatch(StartSystemSettingRequest.AnalogMovementSettingOperationID.HourHandReverseOneStep.rawValue());
     }
 
     @OnClick(R.id.calibrate_watch_next_imagebutton)
     public void nextCalibrate(){
-
+        getModel().getSyncController().calibrateWatch(StartSystemSettingRequest.AnalogMovementSettingOperationID.HourHandAdvanceOneStep.rawValue());
     }
 
     @OnClick(R.id.calibrate_next_page_button)

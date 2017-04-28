@@ -28,6 +28,7 @@ import com.dayton.drone.ble.model.packet.SystemEventPacket;
 import com.dayton.drone.ble.model.packet.SystemStatusPacket;
 import com.dayton.drone.ble.model.packet.base.DronePacket;
 import com.dayton.drone.ble.model.request.SetWeatherLocationsRequest;
+import com.dayton.drone.ble.model.request.StartSystemSettingRequest;
 import com.dayton.drone.ble.model.request.UpdateWeatherInfomationRequest;
 import com.dayton.drone.ble.model.request.battery.GetBatteryRequest;
 import com.dayton.drone.ble.model.request.clean.ForgetWatchRequest;
@@ -246,6 +247,11 @@ public class SyncControllerImpl implements  SyncController{
         pm.setComponentEnabledSetting(new ComponentName(application, ListenerService.class),
                 PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
 
+    }
+
+    @Override
+    public void calibrateWatch(int operation) {
+        sendRequest(new StartSystemSettingRequest(application,StartSystemSettingRequest.StartSystemSettingID.AnalogMovement.rawValue(),operation));
     }
 
     /**

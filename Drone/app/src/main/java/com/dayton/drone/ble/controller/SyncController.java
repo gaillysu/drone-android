@@ -40,4 +40,6 @@ public interface SyncController {
 
     void startNotificationListener();
 
+    void calibrateWatch(int operation);
+
 }
