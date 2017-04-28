@@ -38,4 +38,25 @@
         <item>Login</item>
         <item>Device</item>
     </array>
+
+    <array name="homeMenuIconNoUser">
+        <item>@drawable/ic_activities_icon</item>
+        <item>@drawable/ic_main_menu_time</item>
+        <item>@drawable/ic_main_menu_city_map</item>
+        <item>@drawable/ic_main_menu_navigation</item>
+        <item>@drawable/ic_main_menu_hot_key</item>
+        <item>@drawable/ic_main_menu_notifications</item>
+        <item>@drawable/ic_main_menu_login</item>
+        <item>@drawable/ic_main_menu_device</item>
+    </array>
+    <array name="homeMenuIconUser">
+        <item>@drawable/ic_activities_icon</item>
+        <item>@drawable/ic_main_menu_time</item>
+        <item>@drawable/ic_main_menu_city_map</item>
+        <item>@drawable/ic_main_menu_navigation</item>
+        <item>@drawable/ic_main_menu_hot_key</item>
+        <item>@drawable/ic_main_menu_notifications</item>
+        <item>@drawable/ic_main_menu_profile</item>
+        <item>@drawable/ic_main_menu_device</item>
+    </array>
 </resources>

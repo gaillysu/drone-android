@@ -1,6 +1,7 @@
 package com.dayton.drone.activity;
 
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +13,7 @@ import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.activity.tutorial.LoginActivity;
 import com.dayton.drone.activity.tutorial.WelcomeActivity;
 import com.dayton.drone.adapter.MyHomeMenuAdapter;
+import com.dayton.drone.bean.HomeMenuItem;
 import com.dayton.drone.bean.MenuBean;
 import com.dayton.drone.ble.util.NotificationPermission;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
@@ -25,25 +27,14 @@ import butterknife.ButterKnife;
 /**
  * Created by boy on 2016/4/21.
  */
-public class HomeActivity extends BaseActivity implements AdapterView.OnItemClickListener {
+public class HomeActivity extends BaseActivity {
 
     @Bind(R.id.home_activity_grid_view)
     GridView homeMenu;
     private List<MenuBean> listData;
-    private int[] homeMenuPicture;
-    private int[] homeMenuIconArray = {R.drawable.ic_activities_icon
-            , R.drawable.ic_main_menu_time, R.drawable.ic_main_menu_city_map
-            , R.drawable.ic_main_menu_navigation, R.drawable.ic_main_menu_hot_key
-            , R.drawable.ic_main_menu_notifications, R.drawable.ic_main_menu_profile
-            , R.drawable.ic_main_menu_device};
-
-    private int[] homeMenuIcon = {R.drawable.ic_activities_icon
-            , R.drawable.ic_main_menu_time, R.drawable.ic_main_menu_city_map
-            , R.drawable.ic_main_menu_navigation, R.drawable.ic_main_menu_hot_key
-            , R.drawable.ic_main_menu_notifications, R.drawable.ic_main_menu_login
-            , R.drawable.ic_main_menu_device};
-
+    private TypedArray homeMenuIconArray;
     private String[] homeMenuTextArray;
+    private HomeMenuItem[] mHomeMenuItemList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,25 +51,48 @@ public class HomeActivity extends BaseActivity implements AdapterView.OnItemClic
         initData();
         MyHomeMenuAdapter adapter = new MyHomeMenuAdapter(listData, this);
         homeMenu.setAdapter(adapter);
-        homeMenu.setOnItemClickListener(this);
         NotificationPermission.getNotificationAccessPermission(HomeActivity.this);
     }
 
     private void initData() {
-        listData = new ArrayList<>(homeMenuIconArray.length);
+        homeMenuIconArray = getModel().getUser().isUserIsLogin() ? getResources().obtainTypedArray(R.array.homeMenuIconUser)
+                : getResources().obtainTypedArray(R.array.homeMenuIconNoUser);
+        listData = new ArrayList<>();
         if (getModel().getUser().isUserIsLogin()) {
             homeMenuTextArray = getResources().getStringArray(R.array.home_menu_text_data);
-            homeMenuPicture = homeMenuIconArray;
+            mHomeMenuItemList = new HomeMenuItem[]{new HomeMenuItem(0, homeMenuTextArray[0], ActivitiesActivity.class),
+                    new HomeMenuItem(1, homeMenuTextArray[1], WorldClockActivity.class),
+                    new HomeMenuItem(2, homeMenuTextArray[2], WorldClockActivity.class),
+                    new HomeMenuItem(3, homeMenuTextArray[3], WorldClockActivity.class),
+                    new HomeMenuItem(4, homeMenuTextArray[4], WorldClockActivity.class),
+                    new HomeMenuItem(5, homeMenuTextArray[5], WorldClockActivity.class),
+                    new HomeMenuItem(6, homeMenuTextArray[6], ProfileActivity.class),
+                    new HomeMenuItem(7, homeMenuTextArray[7], AddWatchActivity.class),
+            };
         } else {
             homeMenuTextArray = getResources().getStringArray(R.array.home_menu);
-            homeMenuPicture = homeMenuIcon;
+            mHomeMenuItemList = new HomeMenuItem[]{new HomeMenuItem(0, homeMenuTextArray[0], ActivitiesActivity.class),
+                    new HomeMenuItem(1, homeMenuTextArray[1], WorldClockActivity.class),
+                    new HomeMenuItem(2, homeMenuTextArray[2], WorldClockActivity.class),
+                    new HomeMenuItem(3, homeMenuTextArray[3], WorldClockActivity.class),
+                    new HomeMenuItem(4, homeMenuTextArray[4], WorldClockActivity.class),
+                    new HomeMenuItem(5, homeMenuTextArray[5], WorldClockActivity.class),
+                    new HomeMenuItem(6, homeMenuTextArray[6], LoginActivity.class),
+                    new HomeMenuItem(7, homeMenuTextArray[7], AddWatchActivity.class),
+            };
         }
-        for (int i = 0; i < homeMenuIconArray.length; i++) {
+        for (int i = 0; i < homeMenuTextArray.length; i++) {
             MenuBean bean = new MenuBean();
-            bean.setIconId(homeMenuPicture[i]);
+            bean.setDrawable(homeMenuIconArray.getDrawable(i));
             bean.setDec(homeMenuTextArray[i]);
             listData.add(bean);
         }
+        homeMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                startActivity(mHomeMenuItemList[position].getActivityClass());
+            }
+        });
     }
 
 
@@ -105,30 +119,5 @@ public class HomeActivity extends BaseActivity implements AdapterView.OnItemClic
             }
             getModel().getUserDatabaseHelper().update(getModel().getUser());
         }
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        switch (position) {
-            case 0:
-                startActivity(ActivitiesActivity.class);
-                break;
-            case 1:
-                startActivity(WorldClockActivity.class);
-                break;
-            case 7:
-                if (getModel().getUser().isUserIsLogin()) {
-                    Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
-                    startActivityForResult(intent, 2);
-                } else {
-                    startActivity(LoginActivity.class);
-                    finish();
-                }
-                break;
-            case 8:
-                startActivity(AddWatchActivity.class);
-                break;
-        }
-
     }
 }

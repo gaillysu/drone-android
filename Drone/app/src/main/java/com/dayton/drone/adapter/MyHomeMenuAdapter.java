@@ -63,7 +63,7 @@ public class MyHomeMenuAdapter extends BaseAdapter {
 
         if (mData.get(position) != null) {
             MenuBean bean = mData.get(position);
-            holder.mMenuIv.setBackgroundResource(bean.getIconId());
+            holder.mMenuIv.setBackground(bean.getDrawable());
             holder.mMenuTv.setText(bean.getDec());
         }
         return convertView;

@@ -1,10 +1,12 @@
 package com.dayton.drone.bean;
 
+import android.graphics.drawable.Drawable;
+
 /**
  * Created by boy on 2016/4/27.
  */
 public class MenuBean {
-    private int mIconId;
+    private Drawable drawable;
     private String mDec;
 
     public String getDec() {
@@ -15,12 +17,11 @@ public class MenuBean {
         mDec = dec;
     }
 
-    public int getIconId() {
-        return mIconId;
+    public Drawable getDrawable() {
+        return drawable;
     }
 
-    public void setIconId(int iconId) {
-        mIconId = iconId;
+    public void setDrawable(Drawable drawable) {
+        this.drawable = drawable;
     }
-
 }
