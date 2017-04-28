@@ -177,4 +177,5 @@
     <string name="notification_facebook_messenger_title">Facebook Messenger</string>
     <string name="notification_telegram_messenger_title">Telegram Messenger</string>
     <string name="is_choose_flag" translatable="false">isChooseFlag</string>
+    <string name="world_clock_local_time">Local Time</string>
 </resources>

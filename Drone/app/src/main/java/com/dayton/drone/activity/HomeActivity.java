@@ -29,7 +29,6 @@ public class HomeActivity extends BaseActivity {
 
     @Bind(R.id.activity_home_meun_listview)
     ListView homeMenuListView;
-
     private List<MenuBean> listData;
 
     private int[] homeMenuIconArray = {R.mipmap.mainmenu_activity_icon

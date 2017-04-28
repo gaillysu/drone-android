@@ -63,6 +63,7 @@ public class ApplicationModel extends Application {
     private NotificationDatabaseHelper notificationDatabaseHelper;
     private WatchesDatabaseHelper watchesDatabaseHelper;
     private WorldClockDatabaseHelper worldClockDatabaseHelper;
+    private ApplicationModel mApplicationModel;
 
     @Override
     public void onCreate(){
@@ -80,7 +81,6 @@ public class ApplicationModel extends Application {
         stepsDatabaseHelper = new StepsDatabaseHelper(this);
         notificationDatabaseHelper = new NotificationDatabaseHelper(this);
         watchesDatabaseHelper = new WatchesDatabaseHelper(this);
-
         Optional<User> loginUser = userDatabaseHelper.getLoginUser();
         if(loginUser.notEmpty()) {
             user = loginUser.get();
