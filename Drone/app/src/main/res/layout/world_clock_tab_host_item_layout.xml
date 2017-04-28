@@ -7,20 +7,17 @@
 
     <ImageView
         android:id="@+id/world_clock_tab_host_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:focusable="false"
-        android:padding="3dp"
-        android:src="@drawable/ic_world_clock_tab_host_item_clock">
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:focusable="false">
     </ImageView>
 
     <TextView
         android:id="@+id/world_clock_tab_host_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/ic_world_clock_setting_icon"
-        android:textSize="10sp"
-        android:textColor="#ffffff">
+        android:textSize="15sp"
+        android:textColor="@drawable/home_list_adapter_item_text_selected">
     </TextView>
 
 </LinearLayout>

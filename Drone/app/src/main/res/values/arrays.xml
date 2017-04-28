@@ -21,4 +21,9 @@
         <item>ACTIVITIES</item>
         <item>WORLD\nCLOCK</item>
     </array>
+
+    <array name="world_clock_tab_menu">
+        <item>World Clock</item>
+        <item>Settings</item>
+    </array>
 </resources>

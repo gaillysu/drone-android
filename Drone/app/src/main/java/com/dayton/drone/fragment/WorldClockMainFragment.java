@@ -66,10 +66,10 @@ public class WorldClockMainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.worlde_clock_adapter_layout, container, false);
+        View view = inflater.inflate(R.layout.world_clock_main_fragment_layout, container, false);
+        ButterKnife.bind(this, view);
         listData = new ArrayList<>();
         mApplicationModel = (ApplicationModel) getActivity().getApplication();
-        ButterKnife.bind(this, view);
         initLocalDateTime();
         initData();
         return view;
@@ -85,8 +85,6 @@ public class WorldClockMainFragment extends Fragment {
             }
         });
     }
-
-
 
 
     private void initLocalDateTime() {
