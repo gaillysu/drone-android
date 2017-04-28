@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    //this is a temporary file for avoiding merge conflict
+    <string name="calibrate_watch_title">Calibrate your watch</string>
+    <string name="calibrate_watch_message_title">Align the minutes-hand at 12 o’clock</string>
+    <string name="calibrate_watch_message_content">Use the buttons below to allocate the hand at the\n
+right position. Each press represents one minute.</string>
+    <string name="calibrate_watch_button_next">Next ></string>
+</resources>
