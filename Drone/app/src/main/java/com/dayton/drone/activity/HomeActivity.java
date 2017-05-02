@@ -1,7 +1,6 @@
 package com.dayton.drone.activity;
 
 import android.content.Intent;
-import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -10,11 +9,18 @@ import android.widget.GridView;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
-import com.dayton.drone.activity.tutorial.LoginActivity;
 import com.dayton.drone.activity.tutorial.WelcomeActivity;
 import com.dayton.drone.adapter.MyHomeMenuAdapter;
-import com.dayton.drone.bean.HomeMenuItem;
-import com.dayton.drone.bean.MenuBean;
+import com.dayton.drone.bean.menu.ActivitiesMenuItem;
+import com.dayton.drone.bean.menu.CityNavigationMenuItem;
+import com.dayton.drone.bean.menu.CompassMenuItem;
+import com.dayton.drone.bean.menu.DeviceMenuItem;
+import com.dayton.drone.bean.menu.HomeMenuItem;
+import com.dayton.drone.bean.menu.HotKeyMenuItem;
+import com.dayton.drone.bean.menu.LoginMenuItem;
+import com.dayton.drone.bean.menu.NotificationMenuItem;
+import com.dayton.drone.bean.menu.ProfileMenuItem;
+import com.dayton.drone.bean.menu.TimeMenuItem;
 import com.dayton.drone.ble.util.NotificationPermission;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
@@ -31,9 +37,7 @@ public class HomeActivity extends BaseActivity {
 
     @Bind(R.id.home_activity_grid_view)
     GridView homeMenu;
-    private List<MenuBean> listData;
-    private TypedArray homeMenuIconArray;
-    private String[] homeMenuTextArray;
+    private List<HomeMenuItem> listData;
     private HomeMenuItem[] mHomeMenuItemList;
 
     @Override
@@ -55,37 +59,18 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void initData() {
-        homeMenuIconArray = getModel().getUser().isUserIsLogin() ? getResources().obtainTypedArray(R.array.homeMenuIconUser)
-                : getResources().obtainTypedArray(R.array.homeMenuIconNoUser);
         listData = new ArrayList<>();
         if (getModel().getUser().isUserIsLogin()) {
-            homeMenuTextArray = getResources().getStringArray(R.array.home_menu_text_data);
-            mHomeMenuItemList = new HomeMenuItem[]{new HomeMenuItem(0, homeMenuTextArray[0], ActivitiesActivity.class),
-                    new HomeMenuItem(1, homeMenuTextArray[1], WorldClockActivity.class),
-                    new HomeMenuItem(2, homeMenuTextArray[2], WorldClockActivity.class),
-                    new HomeMenuItem(3, homeMenuTextArray[3], WorldClockActivity.class),
-                    new HomeMenuItem(4, homeMenuTextArray[4], WorldClockActivity.class),
-                    new HomeMenuItem(5, homeMenuTextArray[5], WorldClockActivity.class),
-                    new HomeMenuItem(6, homeMenuTextArray[6], ProfileActivity.class),
-                    new HomeMenuItem(7, homeMenuTextArray[7], AddWatchActivity.class),
-            };
+            mHomeMenuItemList = new HomeMenuItem[]{new ActivitiesMenuItem(), new TimeMenuItem(),
+                    new CityNavigationMenuItem(), new CompassMenuItem(), new HotKeyMenuItem(),
+                    new NotificationMenuItem(), new ProfileMenuItem(), new DeviceMenuItem(),};
         } else {
-            homeMenuTextArray = getResources().getStringArray(R.array.home_menu);
-            mHomeMenuItemList = new HomeMenuItem[]{new HomeMenuItem(0, homeMenuTextArray[0], ActivitiesActivity.class),
-                    new HomeMenuItem(1, homeMenuTextArray[1], WorldClockActivity.class),
-                    new HomeMenuItem(2, homeMenuTextArray[2], WorldClockActivity.class),
-                    new HomeMenuItem(3, homeMenuTextArray[3], WorldClockActivity.class),
-                    new HomeMenuItem(4, homeMenuTextArray[4], WorldClockActivity.class),
-                    new HomeMenuItem(5, homeMenuTextArray[5], WorldClockActivity.class),
-                    new HomeMenuItem(6, homeMenuTextArray[6], LoginActivity.class),
-                    new HomeMenuItem(7, homeMenuTextArray[7], AddWatchActivity.class),
-            };
+            mHomeMenuItemList = new HomeMenuItem[]{new ActivitiesMenuItem(), new TimeMenuItem(),
+                    new CityNavigationMenuItem(), new CompassMenuItem(), new HotKeyMenuItem(),
+                    new NotificationMenuItem(), new LoginMenuItem(), new DeviceMenuItem(),};
         }
-        for (int i = 0; i < homeMenuTextArray.length; i++) {
-            MenuBean bean = new MenuBean();
-            bean.setDrawable(homeMenuIconArray.getDrawable(i));
-            bean.setDec(homeMenuTextArray[i]);
-            listData.add(bean);
+        for (int i = 0; i < mHomeMenuItemList.length; i++) {
+            listData.add(mHomeMenuItemList[i]);
         }
         homeMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
