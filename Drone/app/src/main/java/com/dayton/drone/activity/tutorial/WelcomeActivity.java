@@ -119,11 +119,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         });
     }
 
-    @OnClick(R.id.main)
-    public void test(){
-        startActivity(HomeActivity.class);
-    }
-
     @OnClick(R.id.login_bt)
     public void openLoginActivity() {
         startActivity(LoginActivity.class);

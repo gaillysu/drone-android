@@ -177,4 +177,13 @@
     <string name="notification_facebook_messenger_title">Facebook Messenger</string>
     <string name="notification_telegram_messenger_title">Telegram Messenger</string>
     <string name="is_choose_flag" translatable="false">isChooseFlag</string>
+    <string name= "home_menu_name_activities">Activities</string>
+    <string name= "home_menu_name_time">Time</string>
+    <string name= "home_menu_name_city_navigation">City Navigation</string>
+    <string name= "home_menu_name_compass">Compass</string>
+    <string name= "home_menu_name_hot_key">Hot Key</string>
+    <string name= "home_menu_name_login">Login</string>
+    <string name= "home_menu_name_notification">Notifications</string>
+    <string name= "home_menu_name_profile">Profile</string>
+    <string name= "home_menu_name_device">Device</string>
 </resources>

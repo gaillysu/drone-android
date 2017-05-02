@@ -5,13 +5,22 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.GridView;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.activity.tutorial.WelcomeActivity;
 import com.dayton.drone.adapter.MyHomeMenuAdapter;
-import com.dayton.drone.bean.MenuBean;
+import com.dayton.drone.bean.menu.ActivitiesMenuItem;
+import com.dayton.drone.bean.menu.CityNavigationMenuItem;
+import com.dayton.drone.bean.menu.CompassMenuItem;
+import com.dayton.drone.bean.menu.DeviceMenuItem;
+import com.dayton.drone.bean.menu.HomeMenuItem;
+import com.dayton.drone.bean.menu.HotKeyMenuItem;
+import com.dayton.drone.bean.menu.LoginMenuItem;
+import com.dayton.drone.bean.menu.NotificationMenuItem;
+import com.dayton.drone.bean.menu.ProfileMenuItem;
+import com.dayton.drone.bean.menu.TimeMenuItem;
 import com.dayton.drone.ble.util.NotificationPermission;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
@@ -20,24 +29,16 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by boy on 2016/4/21.
  */
 public class HomeActivity extends BaseActivity {
 
-    @Bind(R.id.activity_home_meun_listview)
-    ListView homeMenuListView;
-
-    private List<MenuBean> listData;
-
-    private int[] homeMenuIconArray = {R.mipmap.mainmenu_activity_icon
-            , R.mipmap.mainmenu_worldclock_icon};
-
-    private String[] homeMenuTextArray;
-    private final String activities = "ACTIVITIES";
-    private final String clock = "WORLD\nCLOCK";
+    @Bind(R.id.home_activity_grid_view)
+    GridView homeMenu;
+    private List<HomeMenuItem> listData;
+    private HomeMenuItem[] mHomeMenuItemList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,34 +54,30 @@ public class HomeActivity extends BaseActivity {
         ButterKnife.bind(this);
         initData();
         MyHomeMenuAdapter adapter = new MyHomeMenuAdapter(listData, this);
-        homeMenuListView.setAdapter(adapter);
-        homeMenuListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String content = homeMenuTextArray[position];
-                switch (content) {
-                    case activities:
-                        startActivity(ActivitiesActivity.class);
-                        break;
-                    case clock:
-                        startActivity(WorldClockActivity.class);
-                        break;
-                }
-            }
-
-        });
+        homeMenu.setAdapter(adapter);
         NotificationPermission.getNotificationAccessPermission(HomeActivity.this);
     }
 
     private void initData() {
-        listData = new ArrayList<>(homeMenuIconArray.length);
-        homeMenuTextArray = getResources().getStringArray(R.array.home_menu_text_data);
-        for (int i = 0; i < homeMenuIconArray.length; i++) {
-            MenuBean bean = new MenuBean();
-            bean.setIconId(homeMenuIconArray[i]);
-            bean.setDec(homeMenuTextArray[i]);
-            listData.add(bean);
+        listData = new ArrayList<>();
+        if (getModel().getUser().isUserIsLogin()) {
+            mHomeMenuItemList = new HomeMenuItem[]{new ActivitiesMenuItem(), new TimeMenuItem(),
+                    new CityNavigationMenuItem(), new CompassMenuItem(), new HotKeyMenuItem(),
+                    new NotificationMenuItem(), new ProfileMenuItem(), new DeviceMenuItem(),};
+        } else {
+            mHomeMenuItemList = new HomeMenuItem[]{new ActivitiesMenuItem(), new TimeMenuItem(),
+                    new CityNavigationMenuItem(), new CompassMenuItem(), new HotKeyMenuItem(),
+                    new NotificationMenuItem(), new LoginMenuItem(), new DeviceMenuItem(),};
         }
+        for (int i = 0; i < mHomeMenuItemList.length; i++) {
+            listData.add(mHomeMenuItemList[i]);
+        }
+        homeMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                startActivity(mHomeMenuItemList[position].getActivityClass());
+            }
+        });
     }
 
 
@@ -90,18 +87,6 @@ public class HomeActivity extends BaseActivity {
         if (!getModel().getSyncController().isConnected()) {
             getModel().getSyncController().startConnect(false);
         }
-    }
-
-    @OnClick(R.id.manager_fragment_title_right_add)
-    public void addWatch() {
-        startActivity(AddWatchActivity.class);
-        finish();
-    }
-
-    @OnClick(R.id.title_head_icon)
-    public void startProfile() {
-        Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
-        startActivityForResult(intent, 2);
     }
 
     @Override
@@ -119,11 +104,5 @@ public class HomeActivity extends BaseActivity {
             }
             getModel().getUserDatabaseHelper().update(getModel().getUser());
         }
-    }
-
-
-    @Override
-    protected void onPause() {
-        super.onPause();
     }
 }
