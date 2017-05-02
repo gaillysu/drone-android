@@ -106,6 +106,9 @@
         <activity
             android:name=".activity.ChangePasswordActivity"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.tutorial.CalibrateWatchActivity"
+            android:screenOrientation="portrait"/>
         <!-- register all services used in the application -->
         <service
             android:name="net.medcorp.library.ble.ble.MEDBTService"

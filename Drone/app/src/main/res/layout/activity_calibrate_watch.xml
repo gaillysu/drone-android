@@ -49,25 +49,20 @@
             android:layout_gravity="center_horizontal">
 
             <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/clockview"/>
-
-            <ImageView
                 android:id="@+id/clockHour_ImageView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@mipmap/clockview_hour"/>
+                android:src="@mipmap/calibrate_hour"/>
             <ImageView
                 android:id="@+id/clockMinute_ImageView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@mipmap/clockview_minute"/>
+                android:src="@mipmap/calibrate_minute"/>
             <ImageView
                 android:id="@+id/clockSecond_ImageView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@mipmap/clockview_second"/>
+                android:src="@mipmap/calibrate_second"/>
 
         </RelativeLayout>
 
