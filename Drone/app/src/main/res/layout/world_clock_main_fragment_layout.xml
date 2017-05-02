@@ -4,49 +4,6 @@
               android:layout_height="match_parent"
               android:background="@color/notification_bg_color"
               android:orientation="vertical">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="@color/user_info_sex_bg"
-        android:paddingTop="24dp">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="56dp">
-
-            <ImageButton
-                android:id="@+id/world_clock_back_icon_ib"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_centerVertical="true"
-                android:background="@android:color/transparent"
-                android:padding="12dp"
-                android:scaleType="fitCenter"
-                android:src="@mipmap/world_clock_back_icon"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="@string/world_clock_title_text"
-                android:textColor="@android:color/white"
-                android:textSize="22sp"/>
-
-            <ImageButton
-                android:id="@+id/world_clock_add_city_iv"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
-                android:background="@android:color/transparent"
-                android:padding="12dp"
-                android:scaleType="fitCenter"
-                android:src="@mipmap/world_clock_add_city_icon"/>
-        </RelativeLayout>
-    </RelativeLayout>
-
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="0dp"

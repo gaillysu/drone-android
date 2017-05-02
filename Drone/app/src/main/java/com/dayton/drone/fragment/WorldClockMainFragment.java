@@ -8,6 +8,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -39,7 +41,6 @@ import java.util.TimeZone;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by Jason on 2017/4/27.
@@ -69,6 +70,7 @@ public class WorldClockMainFragment extends Fragment {
         View view = inflater.inflate(R.layout.world_clock_main_fragment_layout, container, false);
         ButterKnife.bind(this, view);
         listData = new ArrayList<>();
+        setHasOptionsMenu(true);
         mApplicationModel = (ApplicationModel) getActivity().getApplication();
         initLocalDateTime();
         initData();
@@ -115,12 +117,20 @@ public class WorldClockMainFragment extends Fragment {
 
     }
 
-    @OnClick(R.id.world_clock_add_city_iv)
-    public void addCityClick() {
-        Intent intent = new Intent(WorldClockMainFragment.this.getActivity(), ChooseCityActivity.class);
-        startActivityForResult(intent, requestCode);
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.toolbar_add_button).setVisible(true);
+        super.onPrepareOptionsMenu(menu);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.toolbar_add_button){
+            Intent intent = new Intent(WorldClockMainFragment.this.getActivity(), ChooseCityActivity.class);
+            startActivityForResult(intent, requestCode);
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

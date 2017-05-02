@@ -92,6 +92,7 @@
     <string name="world_clock_city_time_difference_ahead">hours ahead</string>
     <string name="world_add_city_prompt">Add up to five cities</string>
     <string name="world_clock_search_city_hint">Search</string>
+    <string name="world_clock_settings">Settings</string>
 
     <string name="profile_activity_user_goal">Goal:</string>
     <string name="profile_bottom_tv">GOAl NOTIFICATION </string>
