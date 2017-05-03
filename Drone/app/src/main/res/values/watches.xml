@@ -2,8 +2,19 @@
 <resources>
     //this is a temporary file for avoiding merge conflict
     <string name="calibrate_watch_title">Calibrate your watch</string>
-    <string name="calibrate_watch_message_title">Align the minutes-hand at 12 o’clock</string>
-    <string name="calibrate_watch_message_content">Use the buttons below to allocate the hand at the\n
-right position. Each press represents one minute.</string>
+    <string name="calibrate_watch_hour_message_title">Align the hour-hand at 12 o’clock</string>
+    <string name="calibrate_watch_hour_message_content">Use the buttons below to allocate the hand at the\n
+right position. Each press represents one hour.</string>
     <string name="calibrate_watch_button_next">Next ></string>
+
+    <string name="calibrate_watch_minute_message_title">Align the minute-hand at 12 o’clock</string>
+    <string name="calibrate_watch_minute_message_content">Use the buttons below to allocate the hand at the\n
+right position. Each press represents one minute.</string>
+
+    <string name="calibrate_watch_second_message_title">Align the second-hand at 12 o’clock</string>
+    <string name="calibrate_watch_second_message_content">Use the buttons below to allocate the hand at the\n
+right position. Each press represents one second.</string>
+
+    <string name="calibrate_watch_button_finish">Finish</string>
+
 </resources>

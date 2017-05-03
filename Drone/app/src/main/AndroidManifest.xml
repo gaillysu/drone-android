@@ -107,7 +107,13 @@
             android:name=".activity.ChangePasswordActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activity.tutorial.CalibrateWatchActivity"
+            android:name=".activity.tutorial.CalibrateWatchHourActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.tutorial.CalibrateWatchMinuteActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.tutorial.CalibrateWatchSecondActivity"
             android:screenOrientation="portrait"/>
         <!-- register all services used in the application -->
         <service

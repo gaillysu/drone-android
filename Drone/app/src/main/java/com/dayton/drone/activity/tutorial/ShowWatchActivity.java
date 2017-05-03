@@ -138,7 +138,7 @@ public class ShowWatchActivity extends BaseActivity  {
                     new Handler(getMainLooper()).postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            Intent intent  = new Intent(ShowWatchActivity.this ,HomeActivity.class);
+                            Intent intent  = new Intent(ShowWatchActivity.this ,CalibrateWatchHourActivity.class);
                             intent.putExtra("logOut",false);
                             startActivity(intent);
                             finish();
