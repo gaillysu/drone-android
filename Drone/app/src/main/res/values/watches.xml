@@ -17,4 +17,9 @@ right position. Each press represents one second.</string>
 
     <string name="calibrate_watch_button_finish">Finish</string>
 
+    <string name="compass_title">Compass</string>
+    <string name="compass_enable">Compass Enabled</string>
+    <string name="compass_auto_turn_off_detection_title">Auto turn off motion detection</string>
+    <string name="compass_auto_turn_off_detection_time">15m</string>
+
 </resources>
