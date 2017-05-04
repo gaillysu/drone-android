@@ -3,6 +3,7 @@ package com.dayton.drone.activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -53,6 +54,8 @@ public class ChooseCityActivity extends BaseActivity {
     LinearLayout editSearchContent;
     @Bind(R.id.choose_activity_search_list_view)
     ListView showSearchResultListView;
+    @Bind(R.id.my_toolbar)
+    Toolbar mToolbar;
 
     private List<ChooseCityViewModel> chooseCityViewModelsList;
     private ChooseCityAdapter adapter;
@@ -74,6 +77,16 @@ public class ChooseCityActivity extends BaseActivity {
         }
 
         ButterKnife.bind(this);
+        mToolbar.setTitle("");
+        setSupportActionBar(mToolbar);
+        TextView titleTv = (TextView) mToolbar.findViewById(R.id.toolbar_title_tv);
+        titleTv.setText(getString(R.string.choose_activity_title_choose_city_tv));
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         mCities = getModel().getWorldClockDatabaseHelp().getAll();
         for (City city : mCities) {
             chooseCityViewModelsList.add(new ChooseCityViewModel(city));
@@ -103,11 +116,6 @@ public class ChooseCityActivity extends BaseActivity {
         cityListView.setAdapter(adapter);
         searchResultViewModelsList = new ArrayList<>();
         searchAdapter = new MySearchResultAdapter(ChooseCityActivity.this, searchResultViewModelsList);
-    }
-
-    @OnClick(R.id.choose_activity_cancel_bt)
-    public void cancelClick() {
-        finish();
     }
 
     private TextWatcher myTextWatcher = new TextWatcher() {
@@ -188,7 +196,7 @@ public class ChooseCityActivity extends BaseActivity {
             }
         }
         if (count < 5) {
-            City city= getModel().getWorldClockDatabaseHelp().get(cityId);
+            City city = getModel().getWorldClockDatabaseHelp().get(cityId);
             if (city != null) {
                 city.setSelected(true);
                 getModel().getWorldClockDatabaseHelp().update(city);

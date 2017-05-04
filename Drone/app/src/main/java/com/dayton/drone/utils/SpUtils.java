@@ -9,49 +9,61 @@ import android.util.Log;
  */
 public class SpUtils {
 
-    public static void putBoolean(Context context,String name ,boolean values){
+    public static void putBoolean(Context context, String name, boolean values) {
         SharedPreferences sharedPreferences = context.getSharedPreferences
-                (CacheConstants.SP_Name,Context.MODE_PRIVATE);
-       SharedPreferences.Editor editor =  sharedPreferences.edit();
-        editor.putBoolean(name,values);
+                (CacheConstants.SP_Name, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(name, values);
         editor.apply();
     }
 
-    public static boolean getBoolean(Context context,String name, boolean defaultValue){
+    public static void sevaHomeCityId(Context context, int cityId) {
+        SharedPreferences sharedPreferences =
+                context.getSharedPreferences(CacheConstants.SP_Name, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(CacheConstants.HOME_CITY_ID, cityId).apply();
+    }
+
+    public static int getHomeCityId(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CacheConstants.SP_Name, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(CacheConstants.HOME_CITY_ID, -1);
+    }
+
+    public static boolean getBoolean(Context context, String name, boolean defaultValue) {
         SharedPreferences sharedPreferences = context.getSharedPreferences
-                (CacheConstants.SP_Name,Context.MODE_PRIVATE);
-        return sharedPreferences.getBoolean(name,defaultValue);
+                (CacheConstants.SP_Name, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(name, defaultValue);
     }
 
-    public static void putIntMethod(Context context,String name,int values){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(CacheConstants.SP_Name,Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor =  sharedPreferences.edit();
-        editor.putInt(name,values);
+    public static void putIntMethod(Context context, String name, int values) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CacheConstants.SP_Name, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(name, values);
         editor.apply();
     }
 
-    public static int getIntMethod(Context context,String name, int defaultValues){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(CacheConstants.SP_Name,Context.MODE_PRIVATE);
-        return sharedPreferences.getInt(name,defaultValues);
+    public static int getIntMethod(Context context, String name, int defaultValues) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CacheConstants.SP_Name, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(name, defaultValues);
     }
 
-    public static void putLongMethod(Context context,String name,long values){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(CacheConstants.SP_Name,Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor =  sharedPreferences.edit();
-        editor.putLong(name,values);
+    public static void putLongMethod(Context context, String name, long values) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CacheConstants.SP_Name, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(name, values);
         editor.apply();
     }
 
-    public static long getLongMethod(Context context,String name, long defaultValues){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(CacheConstants.SP_Name,Context.MODE_PRIVATE);
-        return sharedPreferences.getLong(name,defaultValues);
+    public static long getLongMethod(Context context, String name, long defaultValues) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CacheConstants.SP_Name, Context.MODE_PRIVATE);
+        return sharedPreferences.getLong(name, defaultValues);
     }
 
-    public static void printAllConstants(Context context){
-        Log.w("Karl","Base steps = " + getIntMethod(context,CacheConstants.TODAY_BASESTEP,-1));
-        Log.w("Karl","     steps = " + getIntMethod(context,CacheConstants.TODAY_STEP,-1));
-        Log.w("Karl","     reset = " + getBoolean(context,CacheConstants.TODAY_RESET,false));
-        Log.w("Karl","     Date  = " + getLongMethod(context,CacheConstants.TODAY_DATE,0));
-        Log.w("Karl","Must Sync  = " + getBoolean(context,CacheConstants.MUST_SYNC_STEPS,false));
+    public static void printAllConstants(Context context) {
+        Log.w("Karl", "Base steps = " + getIntMethod(context, CacheConstants.TODAY_BASESTEP, -1));
+        Log.w("Karl", "     steps = " + getIntMethod(context, CacheConstants.TODAY_STEP, -1));
+        Log.w("Karl", "     reset = " + getBoolean(context, CacheConstants.TODAY_RESET, false));
+        Log.w("Karl", "     Date  = " + getLongMethod(context, CacheConstants.TODAY_DATE, 0));
+        Log.w("Karl", "Must Sync  = " + getBoolean(context, CacheConstants.MUST_SYNC_STEPS, false));
     }
 }

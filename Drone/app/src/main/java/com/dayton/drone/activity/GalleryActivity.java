@@ -2,6 +2,9 @@ package com.dayton.drone.activity;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -12,15 +15,14 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by Administrator on 2016/5/10.
  */
 public class GalleryActivity extends BaseActivity {
 
-    @Bind(R.id.content_title_dec_tv)
-    TextView titleTextView;
+    @Bind(R.id.my_toolbar)
+    Toolbar mToolbar;
     @Bind(R.id.activity_gallery_list)
     ListView listView;
     private int[] droneImagesIdArray = new int[]{R.mipmap.welcome_logo_1,R.mipmap.welcome_logo_2,
@@ -40,12 +42,28 @@ public class GalleryActivity extends BaseActivity {
         }
 
         ButterKnife.bind(this);
-        titleTextView.setText(getString(R.string.gallery_activity_title));
+        initToolbar();
         listView.setAdapter(new GalleryListAdapter(this ,droneImagesIdArray));
     }
 
-    @OnClick(R.id.content_title_back_bt)
-    public void backClick() {
-        finish();
+
+
+    private void initToolbar() {
+        mToolbar.setTitle("");
+        setSupportActionBar(mToolbar);
+        TextView titleTv = (TextView) mToolbar.findViewById(R.id.toolbar_title_tv);
+        titleTv.setText(getString(R.string.gallery_activity_title));
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.profile_toolbar_menu,menu);
+        return super.onCreateOptionsMenu(menu);
     }
 }

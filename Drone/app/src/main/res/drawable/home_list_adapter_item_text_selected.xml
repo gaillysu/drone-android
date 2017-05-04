@@ -5,5 +5,4 @@
     <item android:color="@color/colorPrimaryDark" android:state_selected="true"/>
     <!-- 默认颜色 -->
     <item android:color="@color/world_tab_host_item_select_color"/>
-    <item android:drawable="@color/world_tab_host_item_select_color" android:state_selected="false"/>
 </selector>

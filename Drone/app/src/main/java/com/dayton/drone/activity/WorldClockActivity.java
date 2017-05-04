@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TabHost;
@@ -46,6 +47,7 @@ public class WorldClockActivity extends BaseActivity {
             tintManager.setStatusBarTintResource(R.color.user_info_sex_bg);
         }
         ButterKnife.bind(this);
+        toolbar.setTitle("");
         setSupportActionBar(toolbar);
         mToolbarTitle = (TextView) toolbar.findViewById(R.id.toolbar_title_tv);
         getSupportActionBar().setElevation(0);
@@ -53,12 +55,19 @@ public class WorldClockActivity extends BaseActivity {
         mTabHost.getTabWidget().setDividerDrawable(null);
         initView();
         mTabHost.setCurrentTab(0);
+        mToolbarTitle.setText(R.string.world_clock_title_text);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_add_item, menu);
+        return true;
     }
 
     private void initView() {
@@ -68,12 +77,15 @@ public class WorldClockActivity extends BaseActivity {
             mTabHost.addTab(tabSpec, mFragmentArray[i], null);
             mTabHost.getTabWidget().getChildAt(i)
                     .setBackgroundResource(R.color.user_info_gender_select_text_color);
-            if (i == 0) {
-                mToolbarTitle.setText(R.string.world_clock_title_text);
-            } else {
-                mToolbarTitle.setText(R.string.world_clock_settings);
-            }
         }
+        mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+                                             @Override
+                                             public void onTabChanged(String tabId) {
+                                                 mToolbarTitle.setText(tabId);
+                                             }
+                                         }
+
+        );
     }
 
     private View getImageView(int index) {

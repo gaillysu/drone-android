@@ -85,6 +85,8 @@
 
     <string name="gallery_activity_title">GALLERY</string>
     <string name="world_clock_title_text">World Clock</string>
+    <string name="world_clock_adapter_home_time">Home Time</string>
+    <string name="world_clock_adapter_world_time">World Time</string>
     <string name="world_clock_Yesterday_tv">Yesterday</string>
     <string name="world_clock_today_tv">Today</string>
     <string name="world_clock_Tomorrow_tv">Tomorrow</string>

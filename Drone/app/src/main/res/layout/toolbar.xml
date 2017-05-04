@@ -13,13 +13,14 @@
         android:elevation="4dp"
         android:navigationIcon="@drawable/md_nav_back"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:navigationIcon="@drawable/md_nav_back"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
         <TextView
             android:id="@+id/toolbar_title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity ="center"
-            android:layout_marginLeft="3dp"
+            android:layout_gravity="center"
             android:textColor="@color/choose_adapter_text_color"
             android:textSize="22sp"
             />

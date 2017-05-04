@@ -1,200 +1,112 @@
 package com.dayton.drone.adapter;
 
-import android.content.Context;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.dayton.drone.R;
-import com.dayton.drone.view.SlideView;
 import com.dayton.drone.viewmodel.WorldClockViewModel;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-
-import static com.dayton.drone.R.id.holder;
 
 /**
  * Created by Administrator on 2016/5/10.
  */
-public class WorldClockAdapter extends BaseAdapter implements SlideView.OnSlideListener {
-    private List<WorldClockViewModel> list;
-    private Context context;
+public class WorldClockAdapter extends RecyclerView.Adapter<WorldClockAdapter.MyViewHolder> {
 
-    private DeleteItemInterface deleteItemInterface;
-    private SlideView mLastSlideViewWithStatusOn;
+    private List<WorldClockViewModel> dataList;
+    private static final int VIEW_TITLE = 0x01;
+    private static final int VIEW_ITEM = 0X02;
+    private WorldClockViewModel homeCity;
 
-    public WorldClockAdapter(List<WorldClockViewModel> listData, Context context) {
-        this.list = listData;
-        this.context = context;
+    public WorldClockAdapter(List<WorldClockViewModel> list) {
+        this.dataList = list;
+        checkHomeCity(dataList);
+    }
+
+    private void checkHomeCity(List<WorldClockViewModel> dataList) {
+        for (WorldClockViewModel model : dataList) {
+            if (model.isHomeCity()) {
+                homeCity = model;
+            }
+        }
+    }
+
+    class MyViewHolder extends RecyclerView.ViewHolder {
+        private TextView cityName, cityDay, cityDifference, cityTime, viewTitle;
+
+        public MyViewHolder(View itemView) {
+            super(itemView);
+            cityName = (TextView) itemView.findViewById(R.id.world_clock_item_city);
+            cityDay = (TextView) itemView.findViewById(R.id.world_clock_item_current_day);
+            cityDifference = (TextView) itemView.findViewById(R.id.world_clock_item_time_difference);
+            cityTime = (TextView) itemView.findViewById(R.id.world_clock_item_city_time);
+            viewTitle = (TextView) itemView.findViewById(R.id.item_title);
+        }
     }
 
     @Override
-    public int getCount() {
-        return list.size() !=0?list.size():0 ;
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == VIEW_TITLE) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.world_clock_adapter_item_title, parent, false);
+            return new MyViewHolder(view);
+        } else {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.worlde_clock_adapter_layout, parent, false);
+            return new MyViewHolder(view);
+        }
     }
 
     @Override
-    public Object getItem(int i) {
-        return list.get(i)!=null?list.get(i):null ;
+    public int getItemCount() {
+        return dataList.size() + 2;
     }
 
     @Override
-    public long getItemId(int i) {
-        return i;
+    public int getItemViewType(int position) {
+        if (homeCity == null) {
+            if (position == 0 | position == 1) {
+                return VIEW_TITLE;
+            }
+            return VIEW_ITEM;
+        } else {
+            if (position == 0 | position == 2) {
+                return VIEW_TITLE;
+            }
+            return VIEW_ITEM;
+        }
     }
 
-
     @Override
-    public View getView(final int position, View convertView, ViewGroup viewGroup) {
-        ViewHolder holder;
-        SlideView slideView = (SlideView) convertView;
-        if (slideView == null) {
-            View itemView = View.inflate(context, R.layout.worlde_clock_adapter_layout, null);
-            slideView = new SlideView(context);
-            slideView.setContentView(itemView);
-            holder = new ViewHolder(slideView);
-            slideView.setOnSlideListener(WorldClockAdapter.this);
-            slideView.setTag(holder);
-
-        } else {
-            holder = (ViewHolder) slideView.getTag();
-        }
-        WorldClockViewModel viewModel= list.get(position);
-        viewModel.setSlideView(slideView);
-        viewModel.getSlideView().shrink();
-
-        String name = viewModel.getName();
-
-        DateTime time = DateTime.now();
-        time = time.toDateTime(DateTimeZone.UTC);
-        int offset = viewModel.getOffSetFromGMT();
-        time = time.plusMinutes(offset);
-        Calendar calendar = time.toCalendar(Locale.US);
-
-        int date = calendar.get(Calendar.DATE);
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minutes = calendar.get(Calendar.MINUTE);
-
-        if(name.contains("_")) {
-            name = name.replace("_"," ");
-        }
-
-        if (name != null && name.contains("/")) {
-            String[] cityDec = name.split("/");
-            holder.cityName.setText(cityDec[1]);
-        } else {
-            holder.cityName.setText(name);
-        }
-        String minutesTime;
-        if (minutes < 10) {
-            minutesTime = "0" + minutes;
-        } else {
-            minutesTime = minutes + "";
-        }
-
-        String hourDay;
-        if (hour < 10) {
-            hourDay = "0" + hour;
-
-        } else {
-            hourDay = "" + hour;
-        }
-
-        if (hour <= 12) {
-            holder.cityCurrentTime.setText(hourDay + ":" + minutesTime + " AM");
-        } else {
-            holder.cityCurrentTime.setText(hourDay + ":" + minutesTime + " PM");
-        }
-
-        if (hour == 0) {
-            hour = 24;
-        }
-
-        Date currentDate = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
-        int currentTime = Integer.valueOf(format.format(currentDate).split(" ")[1].split(":")[0]);
-        int currentDay = Integer.valueOf(format.format(currentDate).split(" ")[0].split("-")[2]);
-
-        if (currentDay > date) {
-            holder.cityDay.setText(context.getResources().getString(R.string.world_clock_Yesterday_tv));
-            int cityTimeDifference = 24 - hour + currentTime;
-            holder.timeDifference.setText(", -" + cityTimeDifference +" "+
-                    context.getResources().getString(R.string.world_clock_city_time_difference_behind));
-
-        } else if (currentDay == date) {
-
-            holder.cityDay.setText(context.getResources().getString(R.string.world_clock_today_tv));
-
-            if (hour > currentTime) {
-                int cityTimeDifference = hour - currentTime;
-                holder.timeDifference.setText(", " + cityTimeDifference +" "+
-                        context.getResources().getString(R.string.world_clock_city_time_difference_ahead));
-            } else if (hour < currentTime) {
-                int cityTimeDifference = currentTime - hour;
-                holder.timeDifference.setText(", -" + cityTimeDifference +" "+
-                        context.getResources().getString(R.string.world_clock_city_time_difference_behind));
+    public void onBindViewHolder(MyViewHolder holder, int position) {
+        if (homeCity == null) {
+            if (position == 0) {
+                holder.viewTitle.setText(R.string.world_clock_adapter_home_time);
+            } else if (position == 1) {
+                holder.viewTitle.setText(R.string.world_clock_adapter_world_time);
             } else {
-                holder.timeDifference.setText("");
+                setData( holder, position-2);
             }
         } else {
-
-            holder.cityDay.setText(context.getResources().getString(R.string.world_clock_Tomorrow_tv));
-
-            holder.timeDifference.setText(", -" + (24 - currentTime) +" "+
-                    context.getResources().getString(R.string.world_clock_city_time_difference_ahead));
-        }
-        holder.deleteHolder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                deleteItemInterface.deleteItem(position);
+            if (position == 0) {
+                holder.viewTitle.setText(R.string.world_clock_adapter_home_time);
+            } else if (position == 1) {
+                holder.cityName.setText(homeCity.getName());
+                //设置城市具体数据
+            } else if (position == 2) {
+                holder.viewTitle.setText(R.string.world_clock_adapter_world_time);
+            } else {
+                setData( holder, position-2);
             }
-        });
-
-        return slideView;
-    }
-
-    @Override
-    public void onSlide(View view, int status) {
-        if (mLastSlideViewWithStatusOn != null && mLastSlideViewWithStatusOn != view) {
-            mLastSlideViewWithStatusOn.shrink();
-        }
-        if (status == SLIDE_STATUS_ON) {
-            mLastSlideViewWithStatusOn = (SlideView) view;
         }
     }
 
-
-    private class ViewHolder {
-
-        private TextView cityName;
-        private TextView cityCurrentTime;
-        private TextView cityDay;
-        private TextView timeDifference;
-        ViewGroup deleteHolder;
-
-        ViewHolder(View view) {
-            cityName = (TextView) view.findViewById(R.id.world_clock_item_city);
-            cityCurrentTime = (TextView) view.findViewById(R.id.world_clock_item_city_time);
-            cityDay = (TextView) view.findViewById(R.id.world_clock_item_current_day);
-            timeDifference = (TextView) view.findViewById(R.id.world_clock_item_time_difference);
-            deleteHolder= (ViewGroup) view.findViewById(holder);
-        }
+    private void setData(MyViewHolder holder, int position) {
+        WorldClockViewModel been = dataList.get(position);
+        holder.cityName.setText(been.getName());
+        //设置城市具体数据
     }
-
-    public void onDeleteItemListener(DeleteItemInterface deleteItemInterface) {
-        this.deleteItemInterface = deleteItemInterface;
-    }
-
-    public interface DeleteItemInterface {
-        void deleteItem(int position);
-    }
-
 }

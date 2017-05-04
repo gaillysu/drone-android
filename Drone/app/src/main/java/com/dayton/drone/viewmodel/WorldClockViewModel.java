@@ -18,10 +18,20 @@ public class WorldClockViewModel {
 
     private final int timeOffsetFromGmt;
 
+    private boolean homeCity;
+
     public WorldClockViewModel(City city) {
         this.cityName = city.getName();
         timeOffsetFromGmt = city.getOffSetFromGMT();
         this.cityId = city.getId();
+    }
+
+    public boolean isHomeCity() {
+        return homeCity;
+    }
+
+    public void setHomeCity(boolean homeCity) {
+        this.homeCity = homeCity;
     }
 
     public String getName(){

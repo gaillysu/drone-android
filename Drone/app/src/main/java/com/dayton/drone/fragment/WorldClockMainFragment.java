@@ -6,6 +6,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,8 +24,8 @@ import com.dayton.drone.application.ApplicationModel;
 import com.dayton.drone.event.CityNumberChangedEvent;
 import com.dayton.drone.event.Timer10sEvent;
 import com.dayton.drone.event.WorldClockChangedEvent;
+import com.dayton.drone.utils.SpUtils;
 import com.dayton.drone.utils.WeatherUtils;
-import com.dayton.drone.view.ListViewCompat;
 import com.dayton.drone.viewmodel.WorldClockViewModel;
 
 import net.medcorp.library.worldclock.City;
@@ -34,6 +37,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -55,7 +59,7 @@ public class WorldClockMainFragment extends Fragment {
     @Bind(R.id.world_clock_item_city_time)
     TextView localTime;
     @Bind(R.id.world_clock_select_city_list)
-    ListViewCompat worldClockListView;
+    RecyclerView worldClockRecyclerView;
 
     public static String FORMAT_LONG = "yyyy-MM-dd HH:mm:ss";
     private List<WorldClockViewModel> listData;
@@ -110,24 +114,64 @@ public class WorldClockMainFragment extends Fragment {
     }
 
     public void initData() {
-        worldClockAdapter = new WorldClockAdapter(listData, WorldClockMainFragment.this.getActivity());
-        worldClockListView.setAdapter(worldClockAdapter);
-        worldClockAdapter.onDeleteItemListener(deleteItemInterface);
-        refreshList();
+        List<City> select = mApplicationModel.getWorldClockDatabaseHelp().getSelect();
+        int homeCityId = SpUtils.getHomeCityId(WorldClockMainFragment.this.getActivity());
+        for(City city:select){
+            WorldClockViewModel worldClockViewModel = new WorldClockViewModel(city);
+            if(city.getId() == homeCityId){
+                worldClockViewModel.setHomeCity(true);
+            }
+            listData.add(worldClockViewModel);
+        }
+        setData(listData);
+    }
 
+    private void setData(final List<WorldClockViewModel> adapterData) {
+        worldClockAdapter = new WorldClockAdapter(adapterData);
+        worldClockRecyclerView.setAdapter(worldClockAdapter);
+        worldClockRecyclerView.setLayoutManager(new LinearLayoutManager(WorldClockMainFragment.this.getActivity()));
+        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
+            @Override
+            public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+                int swipeFlags = ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
+                return makeMovementFlags(dragFlags, swipeFlags);
+            }
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                                  RecyclerView.ViewHolder target) {
+                Collections.swap(adapterData, viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                worldClockAdapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                adapterData.remove(viewHolder.getAdapterPosition());
+                worldClockAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+            }
+
+            @Override
+            public boolean isLongPressDragEnabled() {
+                return true;
+            }
+        });
+        helper.attachToRecyclerView(worldClockRecyclerView);
     }
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        menu.findItem(R.id.toolbar_add_button).setVisible(true);
         super.onPrepareOptionsMenu(menu);
+        menu.findItem(R.id.toolbar_add_button).setVisible(true);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.toolbar_add_button){
+        if (item.getItemId() == R.id.toolbar_add_button) {
             Intent intent = new Intent(WorldClockMainFragment.this.getActivity(), ChooseCityActivity.class);
             startActivityForResult(intent, requestCode);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -146,22 +190,22 @@ public class WorldClockMainFragment extends Fragment {
         }
     }
 
-    private WorldClockAdapter.DeleteItemInterface deleteItemInterface = new WorldClockAdapter.DeleteItemInterface() {
-        @Override
-        public void deleteItem(int position) {
-            int id = listData.get(position).getCityId();
-            City city = mApplicationModel.getWorldClockDatabaseHelp().get(id);
-            if (city != null) {
-                listData.remove(position);
-                worldClockAdapter.notifyDataSetChanged();
-                city.setSelected(false);
-                mApplicationModel.getWorldClockDatabaseHelp().update(city);
-                refreshList();
-            } else {
-                Log.w("Karl", "something really bad is wrong!");
-            }
-        }
-    };
+    //    private WorldClockAdapter.DeleteItemInterface deleteItemInterface = new WorldClockAdapter.DeleteItemInterface() {
+    //        @Override
+    //        public void deleteItem(int position) {
+    //            int id = listData.get(position).getCityId();
+    //            City city = mApplicationModel.getWorldClockDatabaseHelp().get(id);
+    //            if (city != null) {
+    //                listData.remove(position);
+    //                worldClockAdapter.notifyDataSetChanged();
+    //                city.setSelected(false);
+    //                mApplicationModel.getWorldClockDatabaseHelp().update(city);
+    //                refreshList();
+    //            } else {
+    //                Log.w("Karl", "something really bad is wrong!");
+    //            }
+    //        }
+    //    };
 
     private void refreshList() {
         listData.clear();
