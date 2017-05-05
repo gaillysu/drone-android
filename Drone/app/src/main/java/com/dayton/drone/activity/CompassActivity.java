@@ -2,14 +2,13 @@ package com.dayton.drone.activity;
 
 import android.os.Bundle;
 import android.support.v7.widget.SwitchCompat;
-import android.text.TextUtils;
 import android.widget.CompoundButton;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.bruce.pickerview.popwindow.DatePickerPopWin;
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
+import com.dayton.drone.utils.CacheConstants;
 import com.dayton.drone.utils.SpUtils;
 
 import butterknife.Bind;
@@ -23,13 +22,11 @@ import butterknife.OnClick;
 
 public class CompassActivity extends BaseActivity {
 
-    private final String COMPASS_AUTO_OFF_TIME = "compass_auto_off_time";
-    private final String ENABLE_COMPASS = "enable_compass";
     private boolean enableCompass;
-    private int autoOffMinutes;
+    private int compassAutoOnDuration;
 
-    @Bind(R.id.activity_compass_auto_off_minute_textview)
-    TextView autoOffMinuteTextView;
+    @Bind(R.id.activity_compass_auto_on_duration_textview)
+    TextView compassAutoOnDurationTextView;
 
     @Bind(R.id.activity_compass_enable_switch)
     SwitchCompat compassEnableSwitch;
@@ -40,10 +37,10 @@ public class CompassActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compass);
         ButterKnife.bind(this);
-        enableCompass = SpUtils.getBoolean(this,ENABLE_COMPASS,false);
-        autoOffMinutes = SpUtils.getIntMethod(this,COMPASS_AUTO_OFF_TIME,15);
+        enableCompass = SpUtils.getBoolean(this,CacheConstants.ENABLE_COMPASS,false);
+        compassAutoOnDuration = SpUtils.getIntMethod(this, CacheConstants.COMPASS_AUTO_ON_DURATION,CacheConstants.COMPASS_AUTO_ON_DURATION_DEFAULT);
         compassEnableSwitch.setChecked(enableCompass);
-        autoOffMinuteTextView.setText(formatMinutes(autoOffMinutes+""));
+        compassAutoOnDurationTextView.setText(formatMinutes(compassAutoOnDuration +""));
     }
 
     @OnClick(R.id.activity_compass_back_imagebutton)
@@ -58,22 +55,22 @@ public class CompassActivity extends BaseActivity {
                     @Override
                     public void onDatePickCompleted(int year, int month,
                                                     int day, String dateDesc) {
-                        autoOffMinuteTextView.setText(formatMinutes(dateDesc));
-                        SpUtils.putIntMethod(CompassActivity.this,COMPASS_AUTO_OFF_TIME,new Integer(dateDesc).intValue());
-                        //TODO send config commpass command
+                        compassAutoOnDurationTextView.setText(formatMinutes(dateDesc));
+                        int durationMinutes = new Integer(dateDesc).intValue();
+                        SpUtils.putIntMethod(CompassActivity.this,CacheConstants.COMPASS_AUTO_ON_DURATION,durationMinutes);
+                        getModel().getSyncController().setCompassAutoOnDuration(durationMinutes);
                     }
                 }).viewStyle(4)
                 .viewTextSize(20)
-                .dateChose(""+autoOffMinutes)
+                .dateChose(""+ compassAutoOnDuration)
                 .build();
         pickerPopWin.showPopWin(CompassActivity.this);
     }
 
     @OnCheckedChanged(R.id.activity_compass_enable_switch)
     public void enableCompass(CompoundButton buttonView, boolean isChecked){
-        SpUtils.putBoolean(this,ENABLE_COMPASS,isChecked);
-        //TODO send config commpass command
-
+        SpUtils.putBoolean(this,CacheConstants.ENABLE_COMPASS,isChecked);
+        getModel().getSyncController().enableCompass(isChecked);
     }
     private String formatMinutes(String minutes){
         int theMinute = new Integer(minutes).intValue();

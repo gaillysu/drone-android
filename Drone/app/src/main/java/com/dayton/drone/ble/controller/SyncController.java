@@ -42,4 +42,8 @@ public interface SyncController {
 
     void calibrateWatch(int operation);
 
+    void enableCompass(boolean enable);
+
+    void setCompassAutoOnDuration(int duration);
+
 }

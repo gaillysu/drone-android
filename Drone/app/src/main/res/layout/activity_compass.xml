@@ -98,7 +98,7 @@
             android:textColor="@android:color/white"
             android:textSize="15sp"/>
         <TextView
-            android:id="@+id/activity_compass_auto_off_minute_textview"
+            android:id="@+id/activity_compass_auto_on_duration_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"

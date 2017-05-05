@@ -253,6 +253,16 @@ public class SyncControllerImpl implements  SyncController{
         sendRequest(new StartSystemSettingRequest(application,StartSystemSettingRequest.StartSystemSettingID.AnalogMovement.rawValue(),operation));
     }
 
+    @Override
+    public void enableCompass(boolean enable) {
+        sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Compass,enable?(byte)1:(byte)0));
+    }
+
+    @Override
+    public void setCompassAutoOnDuration(int duration) {
+        sendRequest(new SetSystemConfig(application, (short) duration,Constants.SystemConfigID.CompassAutoOnDuration));
+    }
+
     /**
      * send request  package to watch by using a queue
      * @param request
