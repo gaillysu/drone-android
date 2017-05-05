@@ -75,16 +75,19 @@ public class WorldClockActivity extends BaseActivity {
         for (int i = 0; i < mImageArray.length; i++) {
             TabHost.TabSpec tabSpec = mTabHost.newTabSpec(tabName[i]).setIndicator(getImageView(i));
             mTabHost.addTab(tabSpec, mFragmentArray[i], null);
-            mTabHost.getTabWidget().getChildAt(i)
-                    .setBackgroundResource(R.color.user_info_gender_select_text_color);
+            mTabHost.getTabWidget().getChildAt(i).setBackgroundResource(R.color.user_info_gender_select_text_color);
         }
-        mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
-                                             @Override
-                                             public void onTabChanged(String tabId) {
-                                                 mToolbarTitle.setText(tabId);
-                                             }
-                                         }
-
+        mTabHost.setOnTabChangedListener(
+                new TabHost.OnTabChangeListener() {
+                    @Override
+                    public void onTabChanged(String tabId) {
+                        if (tabId.equals(getString(R.string.world_clock_title_text))) {
+                            mToolbarTitle.setText(R.string.world_clock_title_text);
+                        } else {
+                            mToolbarTitle.setText(getString(R.string.world_clock_setting_title));
+                        }
+                    }
+                }
         );
     }
 

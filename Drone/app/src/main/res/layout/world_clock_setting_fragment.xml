@@ -2,8 +2,91 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="#FF0000"
-              android:orientation="vertical"
-    >
+              android:background="@color/notification_bg_color"
+              android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:gravity="bottom"
+        android:paddingBottom="5dp"
+        android:paddingLeft="16dp"
+        android:text="@string/world_clock_setting_fragment_explain"
+        android:textColor="@color/home_list_adapter_item_tv_color"
+        android:textSize="18dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="109dp"
+        android:background="@color/user_info_sex_bg"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="58dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/world_clock_setting_sync_time"
+                android:textSize="18dp"
+                android:textColor="@android:color/white"
+                android:layout_centerVertical="true"/>
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/world_clock_setting_syncing_time_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:shadowColor="@color/activities_calendar_show_bg_color"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"/>
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/notification_bg_color"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="58dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/world_clock_syncing_time_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/world_clock_setting_sync_time"
+                android:textSize="18dp"
+                android:textColor="@color/profile_user_bg"
+                android:layout_centerVertical="true"/>
+
+            <TextView
+                android:id="@+id/world_clock_syncing_time_describe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:textColor="@color/profile_user_bg"
+                android:text="@string/world_clock_adapter_home_time"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/login_text_color"
+        android:text="@string/world_clock_syncing_time_setting_describe"
+        />
 
 </LinearLayout>

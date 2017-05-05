@@ -85,6 +85,7 @@
 
     <string name="gallery_activity_title">GALLERY</string>
     <string name="world_clock_title_text">World Clock</string>
+    <string name="world_clock_setting_title">Time Setting</string>
     <string name="world_clock_adapter_home_time">Home Time</string>
     <string name="world_clock_adapter_world_time">World Time</string>
     <string name="world_clock_Yesterday_tv">Yesterday</string>
@@ -181,4 +182,8 @@
     <string name="notification_telegram_messenger_title">Telegram Messenger</string>
     <string name="is_choose_flag" translatable="false">isChooseFlag</string>
     <string name="world_clock_local_time">Local Time</string>
+    <string name="world_clock_setting_fragment_explain">ANALOG TIME DISPLAY</string>
+    <string name="world_clock_setting_sync_time">Analog Time Syncing</string>
+    <string name="world_clock_syncing_time_type_tv">Sync Time</string>
+    <string name="world_clock_syncing_time_setting_describe">Sync the time of your watch with local or home time If you don\'t turn on Analog Time Syncing, the time on your watch will never change.</string>
 </resources>
