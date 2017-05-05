@@ -365,7 +365,8 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
                     leftPos = new Integer(dateStr).intValue()-25;
                     break;
                 case 4:
-                    middlePos = 0;
+                    List<String> minutes = Arrays.asList(mContext.getResources().getStringArray(R.array.compass_auto_off_minutes_array));
+                    middlePos = minutes.indexOf(dateStr);
                     break;
             }
         }
