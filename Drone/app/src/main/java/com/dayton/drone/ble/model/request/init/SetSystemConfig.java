@@ -17,6 +17,9 @@ public class SetSystemConfig extends RequestBase{
     final long sleepAutoStartTime ;
     final long sleepAutoEndTime ;
     final Constants.SystemConfigID id;
+    private short compassAutoOnDuration;
+    private Constants.TopKeyFunction  topkeyFunction;
+    private byte analogHandsConfig;
 
     public SetSystemConfig(Context context, int clockFormat, int sleepMode, long sleepAutoStartTime, long sleepAutoEndTime, Constants.SystemConfigID id) {
         super(context);
@@ -25,6 +28,21 @@ public class SetSystemConfig extends RequestBase{
         this.sleepAutoStartTime = sleepAutoStartTime;
         this.sleepAutoEndTime = sleepAutoEndTime;
         this.id = id;
+    }
+
+    public SetSystemConfig(Context context, short compassAutoOnDuration,Constants.SystemConfigID id) {
+        this(context,1,0,0,0,id);
+        this.compassAutoOnDuration = compassAutoOnDuration;
+    }
+
+    public SetSystemConfig(Context context, Constants.TopKeyFunction topkeyFunction,Constants.SystemConfigID id) {
+        this(context,1,0,0,0,id);
+        this.topkeyFunction = topkeyFunction;
+    }
+
+    public SetSystemConfig(Context context, byte analogHandsConfig,Constants.SystemConfigID id) {
+        this(context,1,0,0,0,id);
+        this.analogHandsConfig = analogHandsConfig;
     }
 
     @Override
@@ -47,12 +65,20 @@ public class SetSystemConfig extends RequestBase{
         }
         else if(id == Constants.SystemConfigID.CompassAutoOnDuration)
         {
-            return new byte[][]{{(byte) 0x80,HEADER,(byte) id.rawValue(),0x02,0x01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}};
+            return new byte[][]{{(byte) 0x80,HEADER,(byte) id.rawValue(),0x02,
+                    (byte)(compassAutoOnDuration&0xFF),
+                    (byte)((compassAutoOnDuration>>8)&0xFF),
+                    0,0,0,0,0,0,0,0,0,0,0,0,0,0}};
         }
         else if(id == Constants.SystemConfigID.TopKeyCustomization)
         {
-            return new byte[][]{{(byte) 0x80,HEADER,(byte) id.rawValue(),0x01,0x01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}};
+            return new byte[][]{{(byte) 0x80,HEADER,(byte) id.rawValue(),0x01,(byte)topkeyFunction.rawValue(),0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}};
         }
+        else if(id == Constants.SystemConfigID.AnalogHandsConfig)
+        {
+            return new byte[][]{{(byte) 0x80,HEADER,(byte) id.rawValue(),0x01,analogHandsConfig,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}};
+        }
+
         return null;
     }
 

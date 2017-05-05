@@ -47,7 +47,8 @@ public class Constants {
         ClockFormat(8),
         SleepConfig(9),
         CompassAutoOnDuration(0x10),
-        TopKeyCustomization(0x11);
+        TopKeyCustomization(0x11),
+        AnalogHandsConfig(0x12);
         SystemConfigID(int id) {
             this.id = id;
         }
@@ -71,6 +72,15 @@ public class Constants {
             this.status = status;
         }
         public  int rawValue() {return status;}
+    }
+
+    public enum TopKeyFunction {
+        Default(0),RemoteCamera(1),FindMyPhone(2),MusicControl(3);
+        final int function;
+        TopKeyFunction(int function) {
+            this.function = function;
+        }
+        public  int rawValue() {return function;}
     }
 
     //below used by android notification server
