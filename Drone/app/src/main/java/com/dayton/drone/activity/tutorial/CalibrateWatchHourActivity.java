@@ -1,6 +1,5 @@
 package com.dayton.drone.activity.tutorial;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 
@@ -34,20 +33,18 @@ public class CalibrateWatchHourActivity extends BaseActivity  {
         getModel().getSyncController().calibrateWatch(StartSystemSettingRequest.AnalogMovementSettingOperationID.Start.rawValue());
     }
 
-    @OnClick(R.id.calibrate_watch_back_imagebutton)
-    public void backCalibrate(){
+    @OnClick(R.id.calibrate_watch_reverse_imagebutton)
+    public void reverseCalibrate(){
         getModel().getSyncController().calibrateWatch(StartSystemSettingRequest.AnalogMovementSettingOperationID.HourHandReverseOneStep.rawValue());
     }
 
-    @OnClick(R.id.calibrate_watch_next_imagebutton)
-    public void nextCalibrate(){
+    @OnClick(R.id.calibrate_watch_advance_imagebutton)
+    public void advanceCalibrate(){
         getModel().getSyncController().calibrateWatch(StartSystemSettingRequest.AnalogMovementSettingOperationID.HourHandAdvanceOneStep.rawValue());
     }
 
     @OnClick(R.id.calibrate_next_page_button)
     public void nextCalibrateStep(){
         startActivity(CalibrateWatchMinuteActivity.class);
-        finish();
     }
-
 }

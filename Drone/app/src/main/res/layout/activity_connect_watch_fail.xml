@@ -18,7 +18,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginTop="40dp"
-          android:text="@string/bluetooth_connecting"
+          android:text="@string/show_watch_failed_searching"
           android:textSize="25sp" />
     <Button
         android:id="@+id/retry_connecting"
@@ -29,30 +29,7 @@
         android:textColor="@android:color/white"
         android:background="@color/user_info_sex_bg"
         android:text="@string/retry_connecting"
-        android:visibility="gone"
+        android:visibility="visible"
         />
-    <TextView
-        android:id="@+id/watch_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:layout_marginTop="15dp"
-        android:text="@string/watch_name"
-        android:visibility="gone"/>
-    <TextView
-        android:id="@+id/watch_version"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="15sp"
-        android:layout_marginTop="3dp"
-        android:visibility="gone"
-        android:text="@string/watch_version"/>
-    <TextView
-        android:id="@+id/watch_buletooth_id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="10sp"
-        android:visibility="gone"
-        android:layout_marginTop="1dp"
-        android:text="@string/watch_bluetooth_id"/>
+
 </LinearLayout>

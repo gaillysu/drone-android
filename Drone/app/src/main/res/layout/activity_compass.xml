@@ -65,7 +65,7 @@
             android:layout_centerHorizontal="true"
             android:focusable="false"
             android:shadowColor="@android:color/transparent"
-            android:theme="@style/my_switch_color"/>
+            android:theme="@style/compass_enable_switch_color"/>
 
         <TextView
             android:layout_width="wrap_content"

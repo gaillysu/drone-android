@@ -75,7 +75,7 @@ public class CompassActivity extends BaseActivity {
     private String formatMinutes(String minutes){
         int theMinute = new Integer(minutes).intValue();
         if(theMinute%60==0) {
-            return theMinute/60 + "h";
+            return String.format("%.1f",theMinute/60f) + "h";
         }
         else {
            if(theMinute<60) {

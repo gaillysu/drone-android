@@ -69,7 +69,17 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activity.tutorial.ShowWatchActivity"
+            android:name=".activity.tutorial.ConnectingWatchActivity"
+            android:configChanges="keyboardHidden|screenLayout|orientation"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.tutorial.ConnectWatchSuccessActivity"
+            android:configChanges="keyboardHidden|screenLayout|orientation"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.tutorial.ConnectWatchFailActivity"
             android:configChanges="keyboardHidden|screenLayout|orientation"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"/>
