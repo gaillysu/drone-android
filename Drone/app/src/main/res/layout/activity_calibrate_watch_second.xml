@@ -8,7 +8,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@color/grey">
+        android:background="@color/colorPrimaryDark">
         <TextView
             android:id="@+id/activity_calibrate_watch_title_textview"
             android:layout_width="wrap_content"
