@@ -22,4 +22,6 @@ right position. Each press represents one second.</string>
     <string name="compass_auto_turn_off_detection_title">Auto turn off motion detection</string>
     <string name="compass_auto_turn_off_detection_time">15m</string>
 
+    <string name="activity_finisher_key">finisher</string>
+
 </resources>

@@ -42,7 +42,7 @@ public class CalibrateWatchMinuteActivity extends BaseActivity  {
             @Override
             protected void onReceiveResult(int resultCode, Bundle resultData) {
                 CalibrateWatchMinuteActivity.this.finish();
-                finishActivityWithResultReceiver((ResultReceiver)getIntent().getExtras().getParcelable("finisher"));
+                finishActivityWithResultReceiver((ResultReceiver)getIntent().getExtras().getParcelable(getString(R.string.activity_finisher_key)));
             }
         },CalibrateWatchSecondActivity.class);
     }

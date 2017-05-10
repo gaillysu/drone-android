@@ -48,7 +48,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void startActivityWithResultReceiver(ResultReceiver resultReceiver, Class <?> cls) {
         Intent intent = new Intent(this, cls);
-        intent.putExtra("finisher", resultReceiver);
+        intent.putExtra(getString(R.string.activity_finisher_key), resultReceiver);
         startActivityForResult(intent,1);
     }
 

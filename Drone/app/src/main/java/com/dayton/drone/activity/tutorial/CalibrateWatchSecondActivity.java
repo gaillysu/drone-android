@@ -48,6 +48,6 @@ public class CalibrateWatchSecondActivity extends BaseActivity  {
     public void nextCalibrateStep(){
         startActivity(HomeActivity.class);
         finish();
-        finishActivityWithResultReceiver((ResultReceiver)getIntent().getExtras().getParcelable("finisher"));
+        finishActivityWithResultReceiver((ResultReceiver)getIntent().getExtras().getParcelable(getString(R.string.activity_finisher_key)));
     }
 }
