@@ -1,6 +1,7 @@
 package com.dayton.drone.activity.tutorial;
 
 import android.os.Bundle;
+import android.os.ResultReceiver;
 import android.widget.ImageView;
 
 import com.dayton.drone.R;
@@ -45,6 +46,12 @@ public class CalibrateWatchHourActivity extends BaseActivity  {
 
     @OnClick(R.id.calibrate_next_page_button)
     public void nextCalibrateStep(){
-        startActivity(CalibrateWatchMinuteActivity.class);
+        startActivityWithResultReceiver(new ResultReceiver(null){
+            @Override
+            protected void onReceiveResult(int resultCode, Bundle resultData) {
+                CalibrateWatchHourActivity.this.finish();
+            }
+        },CalibrateWatchMinuteActivity.class);
     }
+
 }

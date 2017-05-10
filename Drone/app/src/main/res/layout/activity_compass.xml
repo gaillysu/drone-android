@@ -38,8 +38,6 @@
 
     </RelativeLayout>
 
-
-
     <ImageView
         android:id="@+id/compass_ImageView"
         android:layout_width="220dp"
@@ -48,7 +46,6 @@
         android:layout_marginTop="30dp"
         android:layout_below="@+id/activity_compass_header_layout"
         android:src="@mipmap/compass"/>
-
 
     <RelativeLayout
         android:id="@+id/activity_compass_enable_layout"
@@ -77,8 +74,6 @@
             android:textSize="18sp"/>
     </RelativeLayout>
 
-
-
     <RelativeLayout
         android:id = "@+id/activity_compass_setting_layout"
         android:layout_width="match_parent"
@@ -102,12 +97,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/activity_compass_auto_detect_textview"
+            android:layout_toLeftOf="@+id/compass_arrow_image"
+            android:layout_marginRight="10dp"
             android:text="@string/compass_auto_turn_off_detection_time"
-            android:layout_marginLeft="30dp"
             android:textColor="@android:color/white"
             android:textSize="15sp"/>
         <ImageButton
+            android:id="@+id/compass_arrow_image"
             android:layout_width="12dp"
             android:layout_height="12dp"
             android:scaleType="fitXY"

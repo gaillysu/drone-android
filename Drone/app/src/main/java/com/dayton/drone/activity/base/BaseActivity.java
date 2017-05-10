@@ -2,10 +2,13 @@ package com.dayton.drone.activity.base;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.ResultReceiver;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ViewGroup;
@@ -43,6 +46,17 @@ public abstract class BaseActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    protected void startActivityWithResultReceiver(ResultReceiver resultReceiver, Class <?> cls) {
+        Intent intent = new Intent(this, cls);
+        intent.putExtra("finisher", resultReceiver);
+        startActivityForResult(intent,1);
+    }
+
+    protected void finishActivityWithResultReceiver(ResultReceiver resultReceiver) {
+        if(resultReceiver!=null) {
+            resultReceiver.send(1, new Bundle());
+        }
+    }
 
     @TargetApi(19)
     public void setTranslucentStatus(boolean on) {
