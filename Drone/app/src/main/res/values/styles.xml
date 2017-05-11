@@ -123,4 +123,10 @@
         <item name="android:layout_marginEnd">15dp</item>
         <item name="android:layout_width">40dp</item>
     </style>
+
+    <style name="compass_enable_switch_color">
+        <item name="colorControlActivated">@color/colorPrimaryDark</item>
+        <item name="colorSwitchThumbNormal">@android:color/white</item>
+        <item name="android:colorForeground">@android:color/white</item>
+    </style>
 </resources>

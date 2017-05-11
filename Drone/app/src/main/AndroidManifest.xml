@@ -69,13 +69,23 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activity.tutorial.ShowWatchActivity"
+            android:name=".activity.tutorial.ConnectingWatchActivity"
+            android:configChanges="keyboardHidden|screenLayout|orientation"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.tutorial.ConnectWatchSuccessActivity"
+            android:configChanges="keyboardHidden|screenLayout|orientation"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.tutorial.ConnectWatchFailActivity"
             android:configChanges="keyboardHidden|screenLayout|orientation"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.HomeActivity"
-            android:launchMode="singleTop"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.ActivitiesActivity"
@@ -105,6 +115,18 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.ChangePasswordActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.tutorial.CalibrateWatchHourActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.tutorial.CalibrateWatchMinuteActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.tutorial.CalibrateWatchSecondActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.CompassActivity"
             android:screenOrientation="portrait"/>
         <!-- register all services used in the application -->
         <service

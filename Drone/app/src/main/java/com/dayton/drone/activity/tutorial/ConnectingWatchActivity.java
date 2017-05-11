@@ -45,28 +45,24 @@ import butterknife.OnClick;
 /**
  * Created by boy on 2016/4/20.
  */
-public class ShowWatchActivity extends BaseActivity  {
+public class ConnectingWatchActivity extends BaseActivity  {
 
     @Bind(R.id.device_connecting_status)
     TextView selectConnectingStatus;
-    @Bind(R.id.retry_connecting)
-     Button retryConnecting_bt;
-    @Bind(R.id.watch_name)
-    TextView watchName;
-    @Bind(R.id.watch_version)
-    TextView watchVersion;
-    @Bind(R.id.watch_buletooth_id)
-    TextView buletoothID;
     @Bind(R.id.show_watch_iv)
     ImageView icon;
 
     private int searchCount = 0;
     private List<String> firmwareVersion = new ArrayList<>();
 
+    private String watchName;
+    private int watchIconId;
+    private int type;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_show_watch);
+        setContentView(R.layout.activity_connecting_watch);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             setTranslucentStatus(true);
@@ -76,8 +72,11 @@ public class ShowWatchActivity extends BaseActivity  {
         }
         ButterKnife.bind(this);
         Intent intent = getIntent();
-        int watchIconId = intent.getIntExtra("watchIconId", -1);
+        watchIconId = intent.getIntExtra("watchIconId", -1);
         icon.setImageResource(watchIconId);
+        watchName = intent.getStringExtra("selectWatchName");
+        type = intent.getIntExtra("type", -1);
+
         prepareConnect();
         if(!getModel().getSyncController().isConnected()) {
             getModel().getSyncController().startConnect(true);
@@ -89,13 +88,7 @@ public class ShowWatchActivity extends BaseActivity  {
             finish();
         }
     }
-    @OnClick(R.id.retry_connecting)
-    public void reConnect(){
-        searchCount = 0;
-        selectConnectingStatus.setText(R.string.bluetooth_connecting);
-        retryConnecting_bt.setVisibility(View.INVISIBLE);
-        getModel().getSyncController().startConnect(true);
-    }
+
     @Subscribe
     public void onEvent(BLESearchEvent event){
         switch (event.getSearchEvent()) {
@@ -103,8 +96,12 @@ public class ShowWatchActivity extends BaseActivity  {
                 runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    selectConnectingStatus.setText(R.string.show_watch_failed_searching);
-                    retryConnecting_bt.setVisibility(View.VISIBLE);
+                    Intent intent = new Intent(ConnectingWatchActivity.this, ConnectWatchFailActivity.class);
+                    intent.putExtra("watchIconId", watchIconId);
+                    intent.putExtra("selectWatchName", watchName);
+                    intent.putExtra("type",type);
+                    startActivity(intent);
+                    finish();
                 }
             });
                 break;
@@ -127,55 +124,20 @@ public class ShowWatchActivity extends BaseActivity  {
     @Subscribe
     public void onEvent(final BLEConnectionStateChangedEvent event){
         if (event.isConnected()){
-            runOnUiThread(new Runnable() {
+            new Handler(getMainLooper()).postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    selectConnectingStatus.setText(R.string.show_watch_connected);
-                    watchName.setVisibility(View.VISIBLE);
-                    watchVersion.setVisibility(View.VISIBLE);
-                    buletoothID.setVisibility(View.VISIBLE);
-                    buletoothID.setText("MAC: "+event.getAddress());
-                    new Handler(getMainLooper()).postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            Intent intent  = new Intent(ShowWatchActivity.this ,HomeActivity.class);
-                            intent.putExtra("logOut",false);
-                            startActivity(intent);
-                            finish();
-                        }
-                    },10000);
-                    SpUtils.putBoolean(ShowWatchActivity.this, CacheConstants.MUST_SYNC_STEPS, true);
-
+                    Intent intent = new Intent(ConnectingWatchActivity.this, ConnectWatchSuccessActivity.class);
+                    intent.putExtra("watchIconId", watchIconId);
+                    intent.putExtra("selectWatchName", watchName);
+                    intent.putExtra("address",event.getAddress());
+                    intent.putExtra("type",type);
+                    startActivity(intent);
+                    SpUtils.putBoolean(ConnectingWatchActivity.this, CacheConstants.MUST_SYNC_STEPS, true);
+                    finish();
                 }
-            });
+            },1000); //wait 1s to get the right firmware version
         }
-    }
-
-    @Subscribe
-    public void onEvent(final BLEFirmwareVersionReceivedEvent bleFirmwareVersionReceivedEvent) {
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                if(bleFirmwareVersionReceivedEvent.getFirmwareTypes() == net.medcorp.library.ble.util.Constants.DfuFirmwareTypes.BLUETOOTH)
-                {
-                    firmwareVersion.add(0,bleFirmwareVersionReceivedEvent.getVersion());
-                }
-                if(bleFirmwareVersionReceivedEvent.getFirmwareTypes() == net.medcorp.library.ble.util.Constants.DfuFirmwareTypes.MCU)
-                {
-                    firmwareVersion.add(bleFirmwareVersionReceivedEvent.getVersion());
-                }
-                if(firmwareVersion.size()==2)
-                {
-                    watchVersion.setText(formatFirmwareVersion(firmwareVersion.get(0),firmwareVersion.get(1)));
-                    firmwareVersion.clear();
-                }
-            }
-        });
-    }
-
-    private String formatFirmwareVersion(String bleVersion,String mcuVersion)
-    {
-        return "version: "+bleVersion+"/"+mcuVersion;
     }
 
     @Override
