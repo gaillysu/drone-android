@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#33000000">
+
+    <LinearLayout
+        android:id="@+id/container_picker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#f2f7fa"
+        android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/set_goal_title_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="Set goal"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"/>
+
+    <com.bruce.pickerview.LoopView
+        android:id="@+id/goal_loopview"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp" />
+
+    <LinearLayout
+        android:id="@+id/goal_edit_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="visible">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:text="@string/activity_activities_customize_goal"
+            android:textColor="@color/home_list_adapter_item_tv_color"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/set_goal_edit"
+            style="@style/profile_activity_text_style"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_weight="1"
+            android:inputType="number"
+            android:maxLength="8"
+            android:maxLines="1"
+            android:hint="@string/activity_activities_customize_goal_hint"
+            android:paddingLeft="10dp"
+            android:textColorHint="@color/colorPrimary"
+            android:textSize="16sp" />
+
+        <ImageButton
+            android:id="@+id/set_goal_edit_imagebutton"
+            style="@style/profile_activity_image_button_style"
+            android:visibility="invisible"/>
+    </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+            <Button
+                android:id="@+id/popup_window_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:text="@string/set_goal_popup_button_cancel"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/btn_text_size"
+                android:background="@null"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="50dp" />
+
+            <Button
+                android:id="@+id/popup_window_confirm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="50dp"
+                android:text="@string/set_goal_popup_button_confirm"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/btn_text_size"
+                android:background="@null"/>
+        </RelativeLayout>
+
+    </LinearLayout>
+</RelativeLayout>

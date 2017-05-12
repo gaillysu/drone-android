@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bruce.pickerview.popwindow.DatePickerPopWin;
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.database.entry.StepsDatabaseHelper;
@@ -29,6 +30,7 @@ import com.dayton.drone.utils.Common;
 import com.dayton.drone.utils.SpUtils;
 import com.dayton.drone.utils.StepsHandler;
 import com.dayton.drone.view.CalendarView;
+import com.dayton.drone.view.SetGoalPopupWindow;
 import com.dayton.drone.view.TipsView;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
@@ -536,6 +538,11 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         } else {
             finish();
         }
+    }
+
+    @OnClick(R.id.activities_title_set_goal_tv)
+    public void setGoal() {
+        new SetGoalPopupWindow(this).show(this);
     }
 
     @Override
