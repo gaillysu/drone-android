@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.content.ContextCompat;
+import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -16,13 +17,14 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bruce.pickerview.popwindow.DatePickerPopWin;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.database.entry.StepsDatabaseHelper;
 import com.dayton.drone.event.BigSyncEvent;
 import com.dayton.drone.event.DownloadStepsEvent;
 import com.dayton.drone.event.LittleSyncEvent;
+import com.dayton.drone.event.StepsGoalChangedEvent;
 import com.dayton.drone.model.DailySteps;
 import com.dayton.drone.model.Steps;
 import com.dayton.drone.utils.CacheConstants;
@@ -30,7 +32,6 @@ import com.dayton.drone.utils.Common;
 import com.dayton.drone.utils.SpUtils;
 import com.dayton.drone.utils.StepsHandler;
 import com.dayton.drone.view.CalendarView;
-import com.dayton.drone.view.SetGoalPopupWindow;
 import com.dayton.drone.view.TipsView;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
@@ -58,11 +59,13 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import net.medcorp.library.ble.util.Optional;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -542,7 +545,46 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
 
     @OnClick(R.id.activities_title_set_goal_tv)
     public void setGoal() {
-        new SetGoalPopupWindow(this).show(this);
+        final String[] goals = getResources().getStringArray(R.array.steps_goal_array);
+        List<String> stringList = new ArrayList<>(Arrays.asList(goals));
+        stringList.add(getString(R.string.activity_activities_customize_goal));
+        CharSequence[] cs = stringList.toArray(new CharSequence[stringList.size()]);
+        new MaterialDialog.Builder(this)
+                .title(R.string.set_goal_popup_title)
+                .items(cs)
+                .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        if (which >= 0) {
+                            if(which<=2) {
+                                SpUtils.putIntMethod(ActivitiesActivity.this, CacheConstants.GOAL_STEP, Integer.valueOf(goals[which]));
+                                EventBus.getDefault().post(new StepsGoalChangedEvent(Integer.valueOf(goals[which])));
+                            }
+                            else if(which == 3)
+                            {
+                                new MaterialDialog.Builder(ActivitiesActivity.this)
+                                        .title(R.string.activity_activities_set_goal)
+                                        .content(R.string.activity_activities_customize_goal_hint)
+                                        .inputType(InputType.TYPE_CLASS_NUMBER)
+                                        .input(getString(R.string.activity_activities_customize_goal_hint), "",
+                                                new MaterialDialog.InputCallback() {
+                                                    @Override
+                                                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                                                        if (input.length() == 0)
+                                                            return;
+                                                        int steps = Integer.parseInt(input.toString());
+                                                        SpUtils.putIntMethod(ActivitiesActivity.this, CacheConstants.GOAL_STEP, steps);
+                                                        EventBus.getDefault().post(new StepsGoalChangedEvent(steps));
+                                                    }
+                                                }).negativeText(R.string.set_goal_popup_button_cancel)
+                                        .show();
+                            }
+                        }
+                        return true;
+                    }
+                })
+                .negativeText(R.string.set_goal_popup_button_cancel)
+                .show();
     }
 
     @Override
