@@ -6,9 +6,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,7 +25,12 @@ import com.dayton.drone.event.Timer10sEvent;
 import com.dayton.drone.event.WorldClockChangedEvent;
 import com.dayton.drone.utils.SpUtils;
 import com.dayton.drone.utils.WeatherUtils;
-import com.dayton.drone.viewmodel.WorldClockViewModel;
+import com.dayton.drone.viewmodel.DragListViewItem;
+import com.dayton.drone.viewmodel.WorldClockCityItemModel;
+import com.dayton.drone.viewmodel.WorldClockTitleModel;
+import com.woxthebox.draglistview.DragListView;
+import com.woxthebox.draglistview.swipe.ListSwipeHelper;
+import com.woxthebox.draglistview.swipe.ListSwipeItem;
 
 import net.medcorp.library.worldclock.City;
 import net.medcorp.library.worldclock.event.WorldClockInitializeEvent;
@@ -37,7 +41,6 @@ import org.greenrobot.eventbus.Subscribe;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -54,18 +57,15 @@ public class WorldClockMainFragment extends Fragment {
 
     @Bind(R.id.world_clock_date_tv)
     TextView dateTv;
-    @Bind(R.id.world_clock_localhost_city)
-    TextView localCity;
-    @Bind(R.id.world_clock_item_city_time)
-    TextView localTime;
-    @Bind(R.id.world_clock_select_city_list)
-    RecyclerView worldClockRecyclerView;
 
-    public static String FORMAT_LONG = "yyyy-MM-dd HH:mm:ss";
-    private List<WorldClockViewModel> listData;
+    @Bind(R.id.world_clock_select_city_list)
+    DragListView mDragListView;
+
+    private ArrayList<Pair<Integer, DragListViewItem>> listData;
     private WorldClockAdapter worldClockAdapter;
     private int requestCode = 3 >> 2;
     private ApplicationModel mApplicationModel;
+    private boolean hasHomeCity;
 
     @Nullable
     @Override
@@ -78,6 +78,7 @@ public class WorldClockMainFragment extends Fragment {
         mApplicationModel = (ApplicationModel) getActivity().getApplication();
         initLocalDateTime();
         initData();
+        setData();
         return view;
     }
 
@@ -92,73 +93,104 @@ public class WorldClockMainFragment extends Fragment {
         });
     }
 
-
     private void initLocalDateTime() {
         Date date = new Date();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         String currentTime = format.format(date);
         String[] currentTimeArray = currentTime.split("-");
         dateTv.setText(currentTimeArray[2] + " " + new SimpleDateFormat("MMM").format(date) + " " + currentTimeArray[0]);
-        format = new SimpleDateFormat(FORMAT_LONG);
-        Calendar calendar = Calendar.getInstance();
-        TimeZone timeZone = calendar.getTimeZone();
-        String timeName = timeZone.getID().split("/")[1].replace("_", " ");
-        localCity.setText(timeName);
-        String[] localTimeStr = format.format(calendar.getTime()).split(" ");
-        if (new Integer(localTimeStr[1].split(":")[0]).intValue() <= 12) {
-
-            localTime.setText(localTimeStr[1].split(":")[0] + ":" + localTimeStr[1].split(":")[1] + " AM");
-        } else {
-            localTime.setText(localTimeStr[1].split(":")[0] + ":" + localTimeStr[1].split(":")[1] + " PM");
-        }
     }
 
     public void initData() {
         List<City> select = mApplicationModel.getWorldClockDatabaseHelp().getSelect();
-        int homeCityId = SpUtils.getHomeCityId(WorldClockMainFragment.this.getActivity());
-        for(City city:select){
-            WorldClockViewModel worldClockViewModel = new WorldClockViewModel(city);
-            if(city.getId() == homeCityId){
-                worldClockViewModel.setHomeCity(true);
-            }
-            listData.add(worldClockViewModel);
-        }
-        setData(listData);
+        addLocalCity();
+        addCity(select);
     }
 
-    private void setData(final List<WorldClockViewModel> adapterData) {
-        worldClockAdapter = new WorldClockAdapter(adapterData);
-        worldClockRecyclerView.setAdapter(worldClockAdapter);
-        worldClockRecyclerView.setLayoutManager(new LinearLayoutManager(WorldClockMainFragment.this.getActivity()));
-        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
+
+    private void setData() {
+        worldClockAdapter = new WorldClockAdapter(mApplicationModel, R.id.drag_item, listData, false);
+        mDragListView.setAdapter(worldClockAdapter, true);
+        mDragListView.getRecyclerView().setVerticalScrollBarEnabled(true);
+        hasHomeCity = SpUtils.getHomeCityId(WorldClockMainFragment.this.getActivity()) != -1;
+        mDragListView.setLayoutManager(new LinearLayoutManager(WorldClockMainFragment.this.getActivity()));
+        mDragListView.setDragEnabled(true);
+        mDragListView.setCanDragHorizontally(false);
+        mDragListView.setCanNotDragAboveTopItem(false);
+        mDragListView.setHorizontalScrollBarEnabled(false);
+        mDragListView.setCanNotDragBelowBottomItem(false);
+        mDragListView.setDragListCallback(new DragListView.DragListCallback() {
             @Override
-            public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-                int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
-                int swipeFlags = ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
-                return makeMovementFlags(dragFlags, swipeFlags);
+            public boolean canDragItemAtPosition(int dragPosition) {
+                int itemViewType = worldClockAdapter.getItemViewType(dragPosition);
+                if (dragPosition == 1 | dragPosition == 3) {
+                    return false;
+                }
+                if (itemViewType == WorldClockAdapter.VIEW_TYPE_TITLE) {
+                    return false;
+                }
+                return true;
             }
 
             @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
-                                  RecyclerView.ViewHolder target) {
-                Collections.swap(adapterData, viewHolder.getAdapterPosition(), target.getAdapterPosition());
-                worldClockAdapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
-                return false;
-            }
+            public boolean canDropItemAtPosition(int dropPosition) {
+                int itemViewType = worldClockAdapter.getItemViewType(3);
+                if (itemViewType == WorldClockAdapter.VIEW_TYPE_TITLE) {
+                    if (dropPosition == 0 | dropPosition == 1 | dropPosition == 2) {
+                        return false;
+                    }
+                } else {
+                    if (dropPosition == 0 | dropPosition == 1 | dropPosition == 2 | dropPosition == 3 | dropPosition == 4) {
+                        return false;
+                    }
+                }
 
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                adapterData.remove(viewHolder.getAdapterPosition());
-                worldClockAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
-            }
-
-            @Override
-            public boolean isLongPressDragEnabled() {
                 return true;
             }
         });
-        helper.attachToRecyclerView(worldClockRecyclerView);
+
+        mDragListView.setSwipeListener(new ListSwipeHelper.OnSwipeListenerAdapter() {
+            @Override
+            public void onItemSwipeStarted(ListSwipeItem item) {
+
+            }
+
+            @Override
+            public void onItemSwipeEnded(ListSwipeItem item, ListSwipeItem.SwipeDirection swipedDirection) {
+                // Swipe to delete on left
+                if (swipedDirection == ListSwipeItem.SwipeDirection.LEFT) {
+                    Pair<Long, String> adapterItem = (Pair<Long, String>) item.getTag();
+                    int pos = mDragListView.getAdapter().getPositionForItem(adapterItem);
+                    mDragListView.getAdapter().removeItem(pos);
+                }
+            }
+        });
+
+        mDragListView.setDragListListener(new DragListView.DragListListener() {
+            @Override
+            public void onItemDragStarted(int position) {
+
+            }
+
+            @Override
+            public void onItemDragging(int itemPosition, float x, float y) {
+            }
+
+            @Override
+            public void onItemDragEnded(int fromPosition, int toPosition) {
+                int itemViewType = worldClockAdapter.getItemViewType(3);
+                if (toPosition == 3) {
+                    if (itemViewType != WorldClockAdapter.VIEW_TYPE_TITLE) {
+                        SpUtils.saveHomeCityId(WorldClockMainFragment.this.getActivity(), listData.get(fromPosition).second.getItem().getCityId());
+                    }
+                }
+                worldClockAdapter.notifyDataSetChanged();
+            }
+        });
+
+
     }
+
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
@@ -190,35 +222,53 @@ public class WorldClockMainFragment extends Fragment {
         }
     }
 
-    //    private WorldClockAdapter.DeleteItemInterface deleteItemInterface = new WorldClockAdapter.DeleteItemInterface() {
-    //        @Override
-    //        public void deleteItem(int position) {
-    //            int id = listData.get(position).getCityId();
-    //            City city = mApplicationModel.getWorldClockDatabaseHelp().get(id);
-    //            if (city != null) {
-    //                listData.remove(position);
-    //                worldClockAdapter.notifyDataSetChanged();
-    //                city.setSelected(false);
-    //                mApplicationModel.getWorldClockDatabaseHelp().update(city);
-    //                refreshList();
-    //            } else {
-    //                Log.w("Karl", "something really bad is wrong!");
-    //            }
-    //        }
-    //    };
-
     private void refreshList() {
         listData.clear();
         WeatherUtils.removeAllCities(WorldClockMainFragment.this.getActivity());
-        WeatherUtils.addWeatherCity(WorldClockMainFragment.this.getActivity(), localCity.getText().toString());
+        WeatherUtils.addWeatherCity(WorldClockMainFragment.this.getActivity(), Calendar.getInstance().getTimeZone().getID().split("/")[1].replace("_", " "));
         List<City> selectedCities = mApplicationModel.getWorldClockDatabaseHelp().getSelect();
-        for (City city : selectedCities) {
-            listData.add(new WorldClockViewModel(city));
-            worldClockAdapter.notifyDataSetChanged();
-            WeatherUtils.addWeatherCity(WorldClockMainFragment.this.getActivity(), city.getName());
-        }
+        addLocalCity();
+        addCity(selectedCities);
         Log.w("weather", "city list: " + WeatherUtils.getWeatherCities(WorldClockMainFragment.this.getActivity()).toString());
         EventBus.getDefault().post(new CityNumberChangedEvent());
+    }
+
+    private void addLocalCity() {
+        Calendar calendar = Calendar.getInstance();
+        TimeZone timeZone = calendar.getTimeZone();
+        String timeName = timeZone.getID().split("/")[1].replace("_", " ");
+        City localCity = mApplicationModel.getWorldClockDatabaseHelp().get(timeName);
+        listData.add(new Pair<Integer, DragListViewItem>
+                (0, new DragListViewItem(null, new WorldClockTitleModel(getString(R.string.world_clock_local_time)))));
+        listData.add(new Pair<Integer, DragListViewItem>
+                (1, new DragListViewItem(new WorldClockCityItemModel(localCity), null)));
+    }
+
+
+    private void addCity(List<City> selectedCities) {
+        int homeCityId = SpUtils.getHomeCityId(WorldClockMainFragment.this.getContext());
+        WorldClockTitleModel worldClockTitleModel = new WorldClockTitleModel(getString(R.string.world_clock_adapter_home_time));
+        listData.add(new Pair<>(2, new DragListViewItem(null, worldClockTitleModel)));
+        if (homeCityId != -1) {
+            City city = mApplicationModel.getWorldClockDatabaseHelp().get(homeCityId);
+            listData.add(new Pair<Integer, DragListViewItem>(3, new DragListViewItem(new WorldClockCityItemModel(city), null)));
+            listData.add(new Pair<>(4, new DragListViewItem(null, new WorldClockTitleModel(getString(R.string.world_clock_adapter_world_time)))));
+            for (int i = 0; i < selectedCities.size(); i++) {
+                City worldClickCity = selectedCities.get(i);
+                if (selectedCities.get(i).getId() == homeCityId) {
+                    continue;
+                }
+                WorldClockCityItemModel model = new WorldClockCityItemModel(worldClickCity);
+                listData.add(new Pair<>(i + 5, new DragListViewItem(model, null)));
+            }
+        } else {
+            listData.add(new Pair<>(3, new DragListViewItem(null, new WorldClockTitleModel(getString(R.string.world_clock_adapter_world_time)))));
+            for (int i = 0; i < selectedCities.size(); i++) {
+                City worldClickCity = selectedCities.get(i);
+                WorldClockCityItemModel model = new WorldClockCityItemModel(worldClickCity);
+                listData.add(new Pair<>(i + 4, new DragListViewItem(model, null)));
+            }
+        }
     }
 
     @Subscribe

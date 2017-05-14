@@ -17,18 +17,6 @@ public class SpUtils {
         editor.apply();
     }
 
-    public static void sevaHomeCityId(Context context, int cityId) {
-        SharedPreferences sharedPreferences =
-                context.getSharedPreferences(CacheConstants.SP_Name, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(CacheConstants.HOME_CITY_ID, cityId).apply();
-    }
-
-    public static int getHomeCityId(Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(CacheConstants.SP_Name, Context.MODE_PRIVATE);
-        return sharedPreferences.getInt(CacheConstants.HOME_CITY_ID, -1);
-    }
-
     public static boolean getBoolean(Context context, String name, boolean defaultValue) {
         SharedPreferences sharedPreferences = context.getSharedPreferences
                 (CacheConstants.SP_Name, Context.MODE_PRIVATE);
@@ -57,6 +45,18 @@ public class SpUtils {
     public static long getLongMethod(Context context, String name, long defaultValues) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(CacheConstants.SP_Name, Context.MODE_PRIVATE);
         return sharedPreferences.getLong(name, defaultValues);
+    }
+
+    public static void saveHomeCityId(Context context, int cityId) {
+        SharedPreferences sharedPreferences =
+                context.getSharedPreferences(CacheConstants.SP_Name, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(CacheConstants.HOME_CITY_ID, cityId).apply();
+    }
+
+    public static int getHomeCityId(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CacheConstants.SP_Name, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(CacheConstants.HOME_CITY_ID, -1);
     }
 
     public static void printAllConstants(Context context) {

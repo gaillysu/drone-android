@@ -4,10 +4,11 @@
               android:layout_height="match_parent"
               android:background="@color/notification_bg_color"
               android:orientation="vertical">
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="3dp"
         android:layout_weight="3"
         android:scaleType="fitXY"
         android:src="@mipmap/world_clock"/>
@@ -26,56 +27,9 @@
             android:textColor="@color/profile_watch_is_connected"
             android:textSize="18sp"
             />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="16dp"
-            android:text="@string/world_clock_local_time"
-            android:textAllCaps="false"
-            android:textColor="@color/profile_watch_is_connected"
-            android:textSize="18sp"
-            />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/user_info_sex_bg"
-            android:paddingLeft="24dp"
-            android:paddingRight="24dp">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/world_clock_localhost_city"
-                    style="@style/world_clock_adapter_tv_style"
-                    android:textSize="16sp"/>
-
-                <TextView
-                    android:id="@+id/world_clock_item_current_day"
-                    style="@style/world_clock_adapter_tv_style"
-                    android:text="@string/world_clock_today_tv"
-                    android:textSize="14sp"/>
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/world_clock_item_city_time"
-                style="@style/world_clock_adapter_tv_style"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:textSize="16sp"/>
-        </RelativeLayout>
-
-        <android.support.v7.widget.RecyclerView
+        <com.woxthebox.draglistview.DragListView
             android:id="@+id/world_clock_select_city_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:divider="@android:color/white"
-            android:scrollbars="none"/>
+            android:layout_height="match_parent"/>
     </LinearLayout>
 </LinearLayout>
