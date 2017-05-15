@@ -69,12 +69,13 @@
                 />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/activities_title_set_goal_tv"
+        <Button
+            android:id="@+id/activities_title_set_goal_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:textColor="@android:color/white"
+            android:background="@android:color/transparent"
             android:text="@string/activity_activities_set_goal"
             android:layout_alignParentRight="true"
             android:layout_marginRight="12dp"

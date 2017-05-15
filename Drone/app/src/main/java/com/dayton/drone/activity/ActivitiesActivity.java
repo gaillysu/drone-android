@@ -543,7 +543,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         }
     }
 
-    @OnClick(R.id.activities_title_set_goal_tv)
+    @OnClick(R.id.activities_title_set_goal_button)
     public void setGoal() {
         final String[] goals = getResources().getStringArray(R.array.steps_goal_array);
         List<String> stringList = new ArrayList<>(Arrays.asList(goals));
