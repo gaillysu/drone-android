@@ -57,15 +57,12 @@ public class WorldClockMainFragment extends Fragment {
 
     @Bind(R.id.world_clock_date_tv)
     TextView dateTv;
-
     @Bind(R.id.world_clock_select_city_list)
     DragListView mDragListView;
-
     private ArrayList<Pair<Integer, DragListViewItem>> listData;
     private WorldClockAdapter worldClockAdapter;
     private int requestCode = 3 >> 2;
     private ApplicationModel mApplicationModel;
-    private boolean hasHomeCity;
 
     @Nullable
     @Override
@@ -110,20 +107,18 @@ public class WorldClockMainFragment extends Fragment {
 
     private void setData() {
         worldClockAdapter = new WorldClockAdapter(mApplicationModel, R.id.drag_item, listData, false);
-        mDragListView.setAdapter(worldClockAdapter, true);
-        mDragListView.getRecyclerView().setVerticalScrollBarEnabled(true);
-        hasHomeCity = SpUtils.getHomeCityId(WorldClockMainFragment.this.getActivity()) != -1;
+        mDragListView.getRecyclerView().setVerticalScrollBarEnabled(false);
         mDragListView.setLayoutManager(new LinearLayoutManager(WorldClockMainFragment.this.getActivity()));
-        mDragListView.setDragEnabled(true);
         mDragListView.setCanDragHorizontally(false);
-        mDragListView.setCanNotDragAboveTopItem(false);
-        mDragListView.setHorizontalScrollBarEnabled(false);
+        mDragListView.setCustomDragItem(null);
+        mDragListView.setHorizontalFadingEdgeEnabled(false);
         mDragListView.setCanNotDragBelowBottomItem(false);
+        mDragListView.setAdapter(worldClockAdapter, true);
         mDragListView.setDragListCallback(new DragListView.DragListCallback() {
             @Override
             public boolean canDragItemAtPosition(int dragPosition) {
                 int itemViewType = worldClockAdapter.getItemViewType(dragPosition);
-                if (dragPosition == 1 | dragPosition == 3) {
+                if (dragPosition == 1) {
                     return false;
                 }
                 if (itemViewType == WorldClockAdapter.VIEW_TYPE_TITLE) {
@@ -144,7 +139,6 @@ public class WorldClockMainFragment extends Fragment {
                         return false;
                     }
                 }
-
                 return true;
             }
         });
@@ -152,16 +146,22 @@ public class WorldClockMainFragment extends Fragment {
         mDragListView.setSwipeListener(new ListSwipeHelper.OnSwipeListenerAdapter() {
             @Override
             public void onItemSwipeStarted(ListSwipeItem item) {
-
             }
 
             @Override
             public void onItemSwipeEnded(ListSwipeItem item, ListSwipeItem.SwipeDirection swipedDirection) {
-                // Swipe to delete on left
-                if (swipedDirection == ListSwipeItem.SwipeDirection.LEFT) {
-                    Pair<Long, String> adapterItem = (Pair<Long, String>) item.getTag();
-                    int pos = mDragListView.getAdapter().getPositionForItem(adapterItem);
+                Pair<Integer, DragListViewItem> adapterItem = (Pair<Integer, DragListViewItem>) item.getTag();
+                int pos = mDragListView.getAdapter().getPositionForItem(adapterItem);
+                if (pos != 1) {
+                    int cityId = adapterItem.second.getItem().getCityId();
+                    if (pos == 3) {
+                        SpUtils.saveHomeCityId(WorldClockMainFragment.this.getActivity(), -1);
+                    }
+                    City city = mApplicationModel.getWorldClockDatabaseHelp().get(cityId);
+                    city.setSelected(false);
+                    mApplicationModel.getWorldClockDatabaseHelp().update(city);
                     mDragListView.getAdapter().removeItem(pos);
+                    worldClockAdapter.notifyDataSetChanged();
                 }
             }
         });
@@ -179,12 +179,11 @@ public class WorldClockMainFragment extends Fragment {
             @Override
             public void onItemDragEnded(int fromPosition, int toPosition) {
                 int itemViewType = worldClockAdapter.getItemViewType(3);
-                if (toPosition == 3) {
-                    if (itemViewType != WorldClockAdapter.VIEW_TYPE_TITLE) {
-                        SpUtils.saveHomeCityId(WorldClockMainFragment.this.getActivity(), listData.get(fromPosition).second.getItem().getCityId());
-                    }
+                if (itemViewType == WorldClockAdapter.VIEW_TYPE_ITEM) {
+                    DragListViewItem second = listData.get(3).second;
+                    SpUtils.saveHomeCityId(WorldClockMainFragment.this.getActivity(),
+                            second.getItem().getCityId());
                 }
-                worldClockAdapter.notifyDataSetChanged();
             }
         });
 
@@ -229,6 +228,7 @@ public class WorldClockMainFragment extends Fragment {
         List<City> selectedCities = mApplicationModel.getWorldClockDatabaseHelp().getSelect();
         addLocalCity();
         addCity(selectedCities);
+        worldClockAdapter.notifyDataSetChanged();
         Log.w("weather", "city list: " + WeatherUtils.getWeatherCities(WorldClockMainFragment.this.getActivity()).toString());
         EventBus.getDefault().post(new CityNumberChangedEvent());
     }

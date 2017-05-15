@@ -29,7 +29,7 @@ public class WorldClockAdapter extends DragItemAdapter<Pair<Integer, DragListVie
     private Calendar localCalendar;
     private List<Pair<Integer, DragListViewItem>> list;
     private int itemId;
-    public  static final int VIEW_TYPE_TITLE = 0X01;
+    public static final int VIEW_TYPE_TITLE = 0X01;
     public static final int VIEW_TYPE_ITEM = 0X02;
 
     public WorldClockAdapter(ApplicationModel applicationModel, int itemId, List<Pair<Integer, DragListViewItem>> list, boolean dragOnLongPress) {
@@ -61,6 +61,7 @@ public class WorldClockAdapter extends DragItemAdapter<Pair<Integer, DragListVie
         } else {
             setTitle(holder, position);
         }
+        holder.itemView.setTag(mItemList.get(position));
     }
 
     private void setTitle(ViewHolder holder, int position) {
@@ -83,7 +84,7 @@ public class WorldClockAdapter extends DragItemAdapter<Pair<Integer, DragListVie
 
     @Override
     public long getItemId(int position) {
-        return position;
+        return mItemList.get(position).first;
     }
 
     class ViewHolder extends DragItemAdapter.ViewHolder {
@@ -119,7 +120,6 @@ public class WorldClockAdapter extends DragItemAdapter<Pair<Integer, DragListVie
             holder.mCityDay.setText(obtainCityDayDifference(city));
             holder.mDifference.setText(countTimeDifference(city));
         }
-
     }
 
     private String countTimeDifference(City city) {

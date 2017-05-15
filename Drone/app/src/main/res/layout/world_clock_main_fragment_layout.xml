@@ -25,8 +25,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:textColor="@color/profile_watch_is_connected"
-            android:textSize="18sp"
-            />
+            android:textSize="18sp"/>
+
         <com.woxthebox.draglistview.DragListView
             android:id="@+id/world_clock_select_city_list"
             android:layout_width="match_parent"
