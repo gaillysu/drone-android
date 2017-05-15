@@ -23,5 +23,19 @@ right position. Each press represents one second.</string>
     <string name="compass_auto_turn_off_detection_time">15m</string>
 
     <string name="activity_finisher_key">finisher</string>
+    <string name="activity_activities_set_goal">Set goal</string>
+    <string name="activity_activities_customize_goal">Customize...</string>
+    <string name="activity_activities_customize_goal_hint">Input the goal</string>
+
+    <array name="steps_goal_array">
+        <item>"7000"</item>
+        <item>"10000"</item>
+        <item>"20000"</item>
+    </array>
+
+
+    <string name="set_goal_popup_title">Select your goal</string>
+    <string name="set_goal_popup_button_confirm">Confirm</string>
+    <string name="set_goal_popup_button_cancel">Cancel</string>
 
 </resources>
