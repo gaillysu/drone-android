@@ -25,6 +25,7 @@ import com.bruce.pickerview.R;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -66,6 +67,7 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
     List<String> heightList = new ArrayList<>();
     List<String> weightListPoint = new ArrayList<>();
     List<String> weightList = new ArrayList<>();
+    List<String> compassAutoOffList = new ArrayList<>();
 
     public static class Builder {
 
@@ -203,6 +205,13 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
                 tv_pickerRight.setTextSize(viewTextSize);
                 tv_pickerRight.setText("kg");
                 break;
+            case 4:
+                leftLoopView.setVisibility(View.INVISIBLE);
+                rightLoopView.setVisibility(View.GONE);
+                tv_pickerRight.setVisibility(View.VISIBLE);
+                tv_pickerRight.setText("minutes");
+                tv_pickerRight.setTextSize(viewTextSize);
+                break;
         }
 
         //do not loop,default can loop
@@ -299,6 +308,11 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
                 middleLoopView.setArrayList((ArrayList) weightListPoint);
                 middleLoopView.setInitPosition(middlePos);
                 break;
+            case 4://compass auto off minutes
+                compassAutoOffList.addAll(Arrays.asList(mContext.getResources().getStringArray(R.array.compass_auto_off_minutes_array)));
+                middleLoopView.setArrayList((ArrayList) compassAutoOffList);
+                middleLoopView.setInitPosition(middlePos);
+                break;
         }
 
     }
@@ -349,6 +363,10 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
                     break;
                 case 3:
                     leftPos = new Integer(dateStr).intValue()-25;
+                    break;
+                case 4:
+                    List<String> minutes = Arrays.asList(mContext.getResources().getStringArray(R.array.compass_auto_off_minutes_array));
+                    middlePos = minutes.indexOf(dateStr);
                     break;
             }
         }
@@ -436,6 +454,9 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
                     int weight = leftPos;
                     int porint = middlePos;
                     mListener.onDatePickCompleted(weight, porint, 0, (weight + 25) + "." + porint + "");
+                    break;
+                case 4:
+                    mListener.onDatePickCompleted(0, middlePos, 0, compassAutoOffList.get(middlePos));
                     break;
                 default:
                     dismissPopWin();

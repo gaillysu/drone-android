@@ -188,4 +188,13 @@
     <string name="world_clock_syncing_time_setting_describe">Sync the time of your watch with local or home time If you don\'t turn on Analog Time Syncing, the time on your watch will never change.</string>
     <string name="world_clock_am" translatable="false">AM</string>
     <string name="world_clock_pm" translatable="false">PM</string>
+    <string name= "home_menu_name_activities">Activities</string>
+    <string name= "home_menu_name_time">Time</string>
+    <string name= "home_menu_name_city_navigation">City Navigation</string>
+    <string name= "home_menu_name_compass">Compass</string>
+    <string name= "home_menu_name_hot_key">Hot Key</string>
+    <string name= "home_menu_name_login">Login</string>
+    <string name= "home_menu_name_notification">Notifications</string>
+    <string name= "home_menu_name_profile">Profile</string>
+    <string name= "home_menu_name_device">Device</string>
 </resources>

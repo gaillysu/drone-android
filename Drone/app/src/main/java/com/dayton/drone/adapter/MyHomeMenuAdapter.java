@@ -8,18 +8,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dayton.drone.R;
-import com.dayton.drone.bean.MenuBean;
+import com.dayton.drone.bean.menu.HomeMenuItem;
 
 import java.util.List;
 
 
 public class MyHomeMenuAdapter extends BaseAdapter {
 
-    private List<MenuBean> mData;
+    private List<HomeMenuItem> mData;
     private Context mContext;
-    private boolean isShow = false;
-
-    public MyHomeMenuAdapter(List<MenuBean> data, Context context) {
+    public MyHomeMenuAdapter(List<HomeMenuItem> data, Context context) {
         this.mData = data;
         mContext = context;
     }
@@ -64,15 +62,14 @@ public class MyHomeMenuAdapter extends BaseAdapter {
         holder.mMenuTv = (TextView) convertView.findViewById(R.id.home_adapter_menu_tv);
 
         if (mData.get(position) != null) {
-            MenuBean bean = mData.get(position);
-            holder.mMenuIv.setBackgroundResource(bean.getIconId());
-            holder.mMenuTv.setText(bean.getDec());
+            HomeMenuItem bean = mData.get(position);
+            holder.mMenuIv.setImageDrawable(mContext.getResources().getDrawable(bean.getMenuItemIcon()));
+            holder.mMenuTv.setText(mContext.getResources().getString(bean.getMenuItemName()));
         }
         return convertView;
     }
 
     public static class ViewHolder {
-
         ImageView mMenuIv;
         TextView mMenuTv;
     }

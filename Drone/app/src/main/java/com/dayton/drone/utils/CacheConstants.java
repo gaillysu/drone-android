@@ -15,4 +15,7 @@ public class CacheConstants {
     public static String MUST_SYNC_STEPS = "must_sync_steps";
     public static String LAST_CONNECTED_TIMESTAMP = "last_connected_timestamp";
     public static String HOME_CITY_ID="home_city_ic";
+    public static final String COMPASS_AUTO_ON_DURATION = "compass_auto_on_duration";
+    public static final String ENABLE_COMPASS = "enable_compass";
+    public static int  COMPASS_AUTO_ON_DURATION_DEFAULT = 15; //in "minute"
 }

@@ -67,7 +67,7 @@ public class SelectDeviceActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 int iconId = droneImagesIdArray[position];
                 String watchName = watchNameArray[position];
-                Intent intent = new Intent(SelectDeviceActivity.this, ShowWatchActivity.class);
+                Intent intent = new Intent(SelectDeviceActivity.this, ConnectingWatchActivity.class);
                 intent.putExtra("watchIconId", iconId);
                 intent.putExtra("selectWatchName", watchName);
                 intent.putExtra("type",type);

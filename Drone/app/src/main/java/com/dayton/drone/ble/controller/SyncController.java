@@ -40,4 +40,10 @@ public interface SyncController {
 
     void startNotificationListener();
 
+    void calibrateWatch(int operation);
+
+    void enableCompass(boolean enable);
+
+    void setCompassAutoOnDuration(int duration);
+
 }

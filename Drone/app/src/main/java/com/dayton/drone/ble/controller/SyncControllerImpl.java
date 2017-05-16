@@ -28,6 +28,7 @@ import com.dayton.drone.ble.model.packet.SystemEventPacket;
 import com.dayton.drone.ble.model.packet.SystemStatusPacket;
 import com.dayton.drone.ble.model.packet.base.DronePacket;
 import com.dayton.drone.ble.model.request.SetWeatherLocationsRequest;
+import com.dayton.drone.ble.model.request.StartSystemSettingRequest;
 import com.dayton.drone.ble.model.request.UpdateWeatherInfomationRequest;
 import com.dayton.drone.ble.model.request.battery.GetBatteryRequest;
 import com.dayton.drone.ble.model.request.clean.ForgetWatchRequest;
@@ -43,7 +44,6 @@ import com.dayton.drone.ble.model.request.sync.GetStepsGoalRequest;
 import com.dayton.drone.ble.model.request.worldclock.SetWorldClockRequest;
 import com.dayton.drone.ble.notification.ListenerService;
 import com.dayton.drone.ble.util.Constants;
-import com.dayton.drone.ble.util.WeatherCode;
 import com.dayton.drone.ble.util.WeatherID;
 import com.dayton.drone.event.BatteryStatusChangedEvent;
 import com.dayton.drone.event.BigSyncEvent;
@@ -248,6 +248,21 @@ public class SyncControllerImpl implements  SyncController{
 
     }
 
+    @Override
+    public void calibrateWatch(int operation) {
+        sendRequest(new StartSystemSettingRequest(application,StartSystemSettingRequest.StartSystemSettingID.AnalogMovement.rawValue(),operation));
+    }
+
+    @Override
+    public void enableCompass(boolean enable) {
+        sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Compass,enable?(byte)1:(byte)0));
+    }
+
+    @Override
+    public void setCompassAutoOnDuration(int duration) {
+        sendRequest(new SetSystemConfig(application, (short) duration,Constants.SystemConfigID.CompassAutoOnDuration));
+    }
+
     /**
      * send request  package to watch by using a queue
      * @param request
@@ -326,15 +341,15 @@ public class SyncControllerImpl implements  SyncController{
                         sendRequest(new SetSystemConfig(application,1,0, 0, 0, Constants.SystemConfigID.Enabled));
                         sendRequest(new SetSystemConfig(application,1,0, 0, 0, Constants.SystemConfigID.SleepConfig));
                         if(getFirmwareVersion()!=null&&Float.valueOf(getFirmwareVersion())>=0.04f) {
-                            sendRequest(new SetSystemConfig(application,1,0, 0, 0, Constants.SystemConfigID.CompassAutoOnDuration));
-                            sendRequest(new SetSystemConfig(application,1,0, 0, 0, Constants.SystemConfigID.TopKeyCustomization));
+                            sendRequest(new SetSystemConfig(application, (short) SpUtils.getIntMethod(application,CacheConstants.COMPASS_AUTO_ON_DURATION,CacheConstants.COMPASS_AUTO_ON_DURATION_DEFAULT),Constants.SystemConfigID.CompassAutoOnDuration));
+                            sendRequest(new SetSystemConfig(application, Constants.TopKeyFunction.Default, Constants.SystemConfigID.TopKeyCustomization));
                         }
                         sendRequest(new SetRTCRequest(application));
-                        sendRequest(new SetAppConfigRequest(application, WorldClock));
-                        sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.ActivityTracking));
+                        sendRequest(new SetAppConfigRequest(application, WorldClock, (byte)1));
+                        sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.ActivityTracking, (byte)1));
                         if(getFirmwareVersion()!=null&&Float.valueOf(getFirmwareVersion())>=0.04f) {
-                            sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Weather));
-                            sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Compass));
+                            sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Weather, (byte)1));
+                            sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Compass, SpUtils.getBoolean(application,CacheConstants.ENABLE_COMPASS,true)?(byte)1:(byte)0));
                         }
                         sendRequest(new SetUserProfileRequest(application,application.getUser()));
                         //set goal to watch
@@ -365,11 +380,11 @@ public class SyncControllerImpl implements  SyncController{
                     else if((systemStatusPacket.getStatus() & Constants.SystemStatus.InvalidTime.rawValue())==Constants.SystemStatus.InvalidTime.rawValue())
                     {
                         sendRequest(new SetRTCRequest(application));
-                        sendRequest(new SetAppConfigRequest(application, WorldClock));
-                        sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.ActivityTracking));
+                        sendRequest(new SetAppConfigRequest(application, WorldClock, (byte)1));
+                        sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.ActivityTracking, (byte)1));
                         if(getFirmwareVersion()!=null&&Float.valueOf(getFirmwareVersion())>=0.04f) {
-                            sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Weather));
-                            sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Compass));
+                            sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Weather, (byte)1));
+                            sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Compass, SpUtils.getBoolean(application,CacheConstants.ENABLE_COMPASS,true)?(byte)1:(byte)0));
                         }
                         sendRequest(new SetUserProfileRequest(application,application.getUser()));
                     }

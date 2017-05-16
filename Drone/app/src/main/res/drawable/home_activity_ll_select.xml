@@ -3,4 +3,7 @@
     <item android:drawable="@color/colorPrimaryDark" android:state_selected="true"/>
     <item android:state_pressed="true" android:drawable="@color/colorPrimaryDark"/>
     <item android:drawable="@color/world_tab_host_item_select_color"/>
+    <item android:drawable="@drawable/main_menu_item_bg" android:state_selected="true"/>
+    <item android:state_pressed="true" android:drawable="@drawable/main_menu_item_bg"/>
+    <item android:drawable="@drawable/main_menu_default_bg"/>
 </selector>

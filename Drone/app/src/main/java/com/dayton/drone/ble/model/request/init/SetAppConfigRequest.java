@@ -11,9 +11,11 @@ import com.dayton.drone.ble.util.Constants;
 public class SetAppConfigRequest extends RequestBase{
     public final static byte HEADER = (byte)0x04;
     private final Constants.ApplicationID id;
-    public SetAppConfigRequest(Context context, Constants.ApplicationID id) {
+    private final byte enable;
+    public SetAppConfigRequest(Context context, Constants.ApplicationID id, byte enable) {
         super(context);
         this.id = id;
+        this.enable = enable;
     }
     @Override
     public byte getHeader() {
@@ -22,7 +24,7 @@ public class SetAppConfigRequest extends RequestBase{
     @Override
     public byte[][] getRawDataEx() {
         return new byte[][] {
-                {(byte) 0x80,HEADER, (byte) id.rawValue(),1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+                {(byte) 0x80,HEADER, (byte) id.rawValue(),enable,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
         };
     }
 }
