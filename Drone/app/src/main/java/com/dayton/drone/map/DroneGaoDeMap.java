@@ -9,18 +9,19 @@ import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.UiSettings;
+import com.dayton.drone.map.request.Request;
 
 /**
  * Created by med on 17/5/15.
  */
 
-public class GaoDeMap implements BaseMap {
+public class DroneGaoDeMap implements BaseMap {
 
     private Context context;
     private MapView mapView;
     private AMapLocationListener externalAMapLocationListener;
 
-    public GaoDeMap(Context context) {
+    public DroneGaoDeMap(Context context) {
         this.context = context;
         this.mapView = new MapView(context);
         UiSettings settings = mapView.getMap().getUiSettings();
@@ -36,6 +37,17 @@ public class GaoDeMap implements BaseMap {
     public View getMap() {
         return mapView;
     }
+
+    @Override
+    public void followGPS(boolean follow) {
+
+    }
+
+    @Override
+    public void searchPOI(Request request) {
+
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
