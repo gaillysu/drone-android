@@ -49,7 +49,7 @@ import java.util.TimeZone;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-/**
+/***
  * Created by Jason on 2017/4/27.
  */
 
@@ -107,11 +107,10 @@ public class WorldClockMainFragment extends Fragment {
 
     private void setData() {
         worldClockAdapter = new WorldClockAdapter(mApplicationModel, R.id.drag_item, listData, false);
-        mDragListView.getRecyclerView().setVerticalScrollBarEnabled(false);
         mDragListView.setLayoutManager(new LinearLayoutManager(WorldClockMainFragment.this.getActivity()));
+        mDragListView.getRecyclerView().setVerticalScrollBarEnabled(true);
         mDragListView.setCanDragHorizontally(false);
-        mDragListView.setCustomDragItem(null);
-        mDragListView.setHorizontalFadingEdgeEnabled(false);
+        mDragListView.setDragEnabled(true);
         mDragListView.setCanNotDragBelowBottomItem(false);
         mDragListView.setAdapter(worldClockAdapter, true);
         mDragListView.setDragListCallback(new DragListView.DragListCallback() {
@@ -146,22 +145,25 @@ public class WorldClockMainFragment extends Fragment {
         mDragListView.setSwipeListener(new ListSwipeHelper.OnSwipeListenerAdapter() {
             @Override
             public void onItemSwipeStarted(ListSwipeItem item) {
+                mDragListView.resetSwipedViews(item);
             }
 
             @Override
             public void onItemSwipeEnded(ListSwipeItem item, ListSwipeItem.SwipeDirection swipedDirection) {
-                Pair<Integer, DragListViewItem> adapterItem = (Pair<Integer, DragListViewItem>) item.getTag();
-                int pos = mDragListView.getAdapter().getPositionForItem(adapterItem);
-                if (pos != 1) {
-                    int cityId = adapterItem.second.getItem().getCityId();
-                    if (pos == 3) {
-                        SpUtils.saveHomeCityId(WorldClockMainFragment.this.getActivity(), -1);
+                if (swipedDirection == ListSwipeItem.SwipeDirection.LEFT|swipedDirection==ListSwipeItem.SwipeDirection.RIGHT) {
+                    Pair<Integer, DragListViewItem> adapterItem = (Pair<Integer, DragListViewItem>) item.getTag();
+                    int pos = mDragListView.getAdapter().getPositionForItem(adapterItem);
+                    if (pos != 1) {
+                        int cityId = adapterItem.second.getItem().getCityId();
+                        if (pos == 3) {
+                            SpUtils.saveHomeCityId(WorldClockMainFragment.this.getActivity(), -1);
+                        }
+                        City city = mApplicationModel.getWorldClockDatabaseHelp().get(cityId);
+                        city.setSelected(false);
+                        mApplicationModel.getWorldClockDatabaseHelp().update(city);
+                        mDragListView.getAdapter().removeItem(pos);
+                        worldClockAdapter.notifyDataSetChanged();
                     }
-                    City city = mApplicationModel.getWorldClockDatabaseHelp().get(cityId);
-                    city.setSelected(false);
-                    mApplicationModel.getWorldClockDatabaseHelp().update(city);
-                    mDragListView.getAdapter().removeItem(pos);
-                    worldClockAdapter.notifyDataSetChanged();
                 }
             }
         });
@@ -183,6 +185,8 @@ public class WorldClockMainFragment extends Fragment {
                     DragListViewItem second = listData.get(3).second;
                     SpUtils.saveHomeCityId(WorldClockMainFragment.this.getActivity(),
                             second.getItem().getCityId());
+                }else{
+                    SpUtils.saveHomeCityId(WorldClockMainFragment.this.getActivity(),-1);
                 }
             }
         });
