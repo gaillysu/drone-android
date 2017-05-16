@@ -109,10 +109,8 @@ public class WorldClockMainFragment extends Fragment {
         worldClockAdapter = new WorldClockAdapter(mApplicationModel, R.id.drag_item, listData, false);
         mDragListView.setLayoutManager(new LinearLayoutManager(WorldClockMainFragment.this.getActivity()));
         mDragListView.getRecyclerView().setVerticalScrollBarEnabled(true);
-        mDragListView.setCanDragHorizontally(false);
-        mDragListView.setDragEnabled(true);
         mDragListView.setCanNotDragBelowBottomItem(false);
-        mDragListView.setAdapter(worldClockAdapter, true);
+
         mDragListView.setDragListCallback(new DragListView.DragListCallback() {
             @Override
             public boolean canDragItemAtPosition(int dragPosition) {
@@ -191,7 +189,8 @@ public class WorldClockMainFragment extends Fragment {
             }
         });
 
-
+        mDragListView.setAdapter(worldClockAdapter, true);
+        mDragListView.setCanDragHorizontally(false);
     }
 
 
