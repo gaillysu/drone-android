@@ -9,11 +9,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -95,17 +98,11 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     LineChart lastWeekLineChart;
     @Bind(R.id.activity_activities_monthly_line)
     LineChart lastMonthLineChart;
-    @Bind(R.id.activities_calendar_title_date_tv)
-    TextView mTitleCalendarTextView;
 
     @Bind(R.id.activities_calendar_group)
     LinearLayout calendarGroup;
     @Bind(R.id.calendar_date_view)
     CalendarView calendar;
-    @Bind(R.id.activities_activity_calendar_back_month)
-    ImageButton backMonth;
-    @Bind(R.id.activities_activity_title_next_month)
-    ImageButton nextMonth;
 
 
     //day
@@ -137,6 +134,14 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     @Bind(R.id.weekly_header_layout_km_textview_last_month)
     TextView textViewDistanceLastMonth;
 
+    @Bind(R.id.my_toolbar)
+    Toolbar mToolbar;
+    private ImageView calendarIcon;
+    private TextView mTitleCalendarTextView;
+    private ImageButton nextMonthIcon;
+    private Button setGoalButton;
+    private ImageButton backMonth;
+
     private Date selectedDate = new Date(); //the selected date comes from calendar.
     private int guidePage = 1;
     private boolean isShowCalendar = false;
@@ -156,9 +161,13 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
             tintManager.setStatusBarTintResource(R.color.user_info_sex_bg);
         }
         ButterKnife.bind(this);
+        mToolbar.setTitle("");
+        setSupportActionBar(mToolbar);
+        initToolbar();
+
         calendarGroup.setVisibility(View.GONE);
         calendar.setSelectMore(false);
-        nextMonth.setVisibility(View.GONE);
+        nextMonthIcon.setVisibility(View.GONE);
         backMonth.setVisibility(View.GONE);
         stepsDatabaseHelper = getModel().getStepsDatabaseHelper();
         date = new Date(System.currentTimeMillis());
@@ -171,6 +180,51 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
+    private void initToolbar() {
+        backMonth = (ImageButton) mToolbar.findViewById(R.id.activities_activity_calendar_back_month);
+        calendarIcon = (ImageView) mToolbar.findViewById(R.id.toolbar_calendar_icon);
+        mTitleCalendarTextView = (TextView) mToolbar.findViewById(R.id.toolbar_title_tv);
+        nextMonthIcon = (ImageButton) mToolbar.findViewById(R.id.activities_activity_title_next_month);
+        setGoalButton = (Button) mToolbar.findViewById(R.id.activities_title_set_goal_button);
+        backMonth.setVisibility(View.VISIBLE);
+        calendarIcon.setVisibility(View.VISIBLE);
+        nextMonthIcon.setVisibility(View.VISIBLE);
+        setGoalButton.setVisibility(View.VISIBLE);
+        backMonth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mIvBackMonthClick();
+            }
+        });
+        nextMonthIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mIvNextMonthClick();
+            }
+        });
+
+        setGoalButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setGoal();
+            }
+        });
+
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isShowCalendar) {
+                    calendarGroup.setVisibility(View.GONE);
+                    nextMonthIcon.setVisibility(View.GONE);
+                    backMonth.setVisibility(View.GONE);
+                    isShowCalendar = false;
+                } else {
+                    finish();
+                }
+            }
+        });
+    }
+
 
     private enum ActivityTimeSlot {
         DAFAULT, THISWEEK, LASTWEEK, LASTMONTH;
@@ -179,11 +233,12 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
     private void drawCalculateData(boolean all) {
         setCurrentDayData(selectedDate);
         setThisWeekData(selectedDate);
-        if(all) {
+        if (all) {
             setLastWeekData(selectedDate);
             setLastMonthData(selectedDate);
         }
     }
+
     private void drawGraph(boolean all) {
         StepsHandler stepsHandler = new StepsHandler(getModel().getStepsDatabaseHelper(), getModel().getUser());
         setDataInProgressBar(stepsHandler.getDailySteps(selectedDate));
@@ -197,8 +252,8 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
 
     private void setDataInProgressBar(DailySteps dailySteps) {
         int steps = SpUtils.getIntMethod(this, CacheConstants.TODAY_STEP, 0);
-        if (SpUtils.getBoolean(this,CacheConstants.TODAY_RESET,false)){
-            steps += SpUtils.getIntMethod(this,CacheConstants.TODAY_BASESTEP,0);
+        if (SpUtils.getBoolean(this, CacheConstants.TODAY_RESET, false)) {
+            steps += SpUtils.getIntMethod(this, CacheConstants.TODAY_BASESTEP, 0);
         }
         int goal = SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000);
         //when user select a history date, show its data with that day
@@ -229,12 +284,12 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         int labelCount = 6;
         if (maxValue == 0) {
             maxValue = 500;
-        } else{
+        } else {
             maxValue = maxValue + abs(stepsModulo - (maxValue % stepsModulo));
-            labelCount = (maxValue/stepsModulo) +1;
+            labelCount = (maxValue / stepsModulo) + 1;
         }
         barChart.getAxisLeft().setAxisMaxValue(maxValue);
-        barChart.getAxisLeft().setLabelCount(labelCount,true);
+        barChart.getAxisLeft().setLabelCount(labelCount, true);
 
         barChart.setScaleMinima((.14f), 1f);
         BarDataSet dataSet = new BarDataSet(yValue, "");
@@ -257,30 +312,30 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         for (int i = 0; i < stepsList.size(); i++) {
             DailySteps dailySteps = stepsList.get(i);
             int steps = dailySteps.getDailySteps();
-            if (dailySteps.getDailySteps() > maxValue){
+            if (dailySteps.getDailySteps() > maxValue) {
                 maxValue = steps;
             }
             yValue.add(new Entry(steps, i));
             xVals.add(sdf.format(new Date(dailySteps.getDate())));
         }
-        Log.w("Karl","Max vlaue = " + maxValue);
+        Log.w("Karl", "Max vlaue = " + maxValue);
         boolean putTop = false;
-        if (maxValue == 0 ||  maxValue  < goal){
+        if (maxValue == 0 || maxValue < goal) {
             maxValue = goal + stepsModulo;
-        }else{
+        } else {
             putTop = true;
             maxValue = maxValue + abs(stepsModulo - (maxValue % stepsModulo));
         }
 
-        LimitLine limitLine = new LimitLine(goal, "Goal: " +  goal);
+        LimitLine limitLine = new LimitLine(goal, "Goal: " + goal);
         limitLine.setLineWidth(1.5f);
         limitLine.setLineColor(R.color.grey);
         limitLine.setTextSize(18f);
         limitLine.setTextColor(R.color.grey);
 
-        if(putTop) {
+        if (putTop) {
             limitLine.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_TOP);
-        }else{
+        } else {
             limitLine.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_BOTTOM);
         }
         LineDataSet set = new LineDataSet(yValue, "");
@@ -444,9 +499,8 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         Steps steps;
         DecimalFormat df = new DecimalFormat("######0.00");
         List<Optional<Steps>> list = stepsDatabaseHelper.get(getModel().getUser().getUserID(), date);
-        if(list.isEmpty())
-        {
-            steps = new Steps(0,date.getTime());
+        if (list.isEmpty()) {
+            steps = new Steps(0, date.getTime());
         } else {
             steps = list.get(0).get();
         }
@@ -486,7 +540,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         return buffer.toString();
     }
 
-    @OnClick(R.id.activities_activity_calendar_back_month)
     public void mIvBackMonthClick() {
         Date leftMouth = calendar.clickLeftMonth();
         SimpleDateFormat simple = new SimpleDateFormat("yyyy-mm-dd");
@@ -494,7 +547,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         mTitleCalendarTextView.setText(leftdate.split("-")[2] + " " + new SimpleDateFormat("MMM", Locale.US).format(leftMouth));
     }
 
-    @OnClick(R.id.activities_activity_title_next_month)
     public void mIvNextMonthClick() {
         Date rightMouth = calendar.clickRightMonth();
         SimpleDateFormat simple = new SimpleDateFormat("yyyy-mm-dd");
@@ -504,7 +556,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
 
     @OnClick(R.id.activities_activity_title_date)
     public void showCalendarClick() {
-        nextMonth.setVisibility(View.VISIBLE);
+        nextMonthIcon.setVisibility(View.VISIBLE);
         backMonth.setVisibility(View.VISIBLE);
         calendarGroup.setVisibility(View.VISIBLE);
         isShowCalendar = true;
@@ -515,7 +567,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
             public void OnItemClick(Date selectedStartDate, Date selectedEndDate, Date downDate) {
                 date = downDate;
                 selectedDate = downDate;
-                nextMonth.setVisibility(View.GONE);
+                nextMonthIcon.setVisibility(View.GONE);
                 backMonth.setVisibility(View.GONE);
                 calendarGroup.setVisibility(View.GONE);
                 mTitleCalendarTextView.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(downDate).split("-")[2] + " " +
@@ -524,26 +576,13 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
                 drawGraph(true);
                 List<Optional<Steps>> stepsList = getModel().getStepsDatabaseHelper().get(getModel().getUser().getUserID(), selectedDate);
                 if (stepsList.isEmpty()) {
-                    Log.w("Karl","Downloading steps");
+                    Log.w("Karl", "Downloading steps");
                     getModel().getSyncActivityManager().downloadSteps(selectedDate);
                 }
             }
         });
     }
 
-    @OnClick(R.id.activities_title_back)
-    public void backOnClick() {
-        if (isShowCalendar) {
-            calendarGroup.setVisibility(View.GONE);
-            nextMonth.setVisibility(View.GONE);
-            backMonth.setVisibility(View.GONE);
-            isShowCalendar = false;
-        } else {
-            finish();
-        }
-    }
-
-    @OnClick(R.id.activities_title_set_goal_button)
     public void setGoal() {
         final String[] goals = getResources().getStringArray(R.array.steps_goal_array);
         List<String> stringList = new ArrayList<>(Arrays.asList(goals));
@@ -556,12 +595,10 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         if (which >= 0) {
-                            if(which<=2) {
+                            if (which <= 2) {
                                 SpUtils.putIntMethod(ActivitiesActivity.this, CacheConstants.GOAL_STEP, Integer.valueOf(goals[which]));
                                 EventBus.getDefault().post(new StepsGoalChangedEvent(Integer.valueOf(goals[which])));
-                            }
-                            else if(which == 3)
-                            {
+                            } else if (which == 3) {
                                 new MaterialDialog.Builder(ActivitiesActivity.this)
                                         .title(R.string.activity_activities_set_goal)
                                         .content(R.string.activity_activities_customize_goal_hint)
@@ -592,7 +629,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (isShowCalendar) {
                 calendarGroup.setVisibility(View.GONE);
-                nextMonth.setVisibility(View.GONE);
+                nextMonthIcon.setVisibility(View.GONE);
                 backMonth.setVisibility(View.GONE);
                 isShowCalendar = false;
                 return true;
@@ -620,7 +657,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
      */
     @Subscribe
     public void onEvent(final LittleSyncEvent event) {
-        Log.w("Karl","Little sync triggered?");
+        Log.w("Karl", "Little sync triggered?");
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
