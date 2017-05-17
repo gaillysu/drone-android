@@ -9,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.dayton.drone.R;
+import com.dayton.drone.network.response.model.GeocodeResult;
 
 import java.util.List;
 
@@ -19,9 +20,9 @@ import java.util.List;
 public class MapSearchAdapter extends BaseAdapter {
 
     private Context context;
-    List<Address> addresses;
+    List<GeocodeResult> addresses;
 
-    public MapSearchAdapter(Context context,List<Address> addresses) {
+    public MapSearchAdapter(Context context,List<GeocodeResult> addresses) {
         this.context = context;
         this.addresses = addresses;
     }
@@ -47,7 +48,7 @@ public class MapSearchAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(context).inflate(R.layout.map_search_adapter_item, null);
         }
         TextView addrerss = (TextView) convertView.findViewById(R.id.map_search_adapter_item_tv);
-        addrerss.setText(addresses.get(position).getLocality());
+        addrerss.setText(addresses.get(position).getFormatted_address());
         return convertView;
     }
 }

@@ -13,7 +13,11 @@ import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
 
+import com.dayton.drone.application.ApplicationModel;
 import com.dayton.drone.map.request.Request;
+import com.dayton.drone.network.request.GetGeocodeRequest;
+import com.dayton.drone.network.response.model.GetGeocodeModel;
+import com.dayton.drone.network.response.model.Route;
 import com.dayton.drone.view.GoogleMapView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -21,6 +25,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
 
 import java.io.IOException;
 import java.util.List;
@@ -31,13 +37,14 @@ import java.util.List;
 
 public class DroneGoogleMap implements BaseMap,OnMapReadyCallback {
 
-    private Context context;
+    private ApplicationModel applicationModel;
     private GoogleMapView googleMapView;
     private GoogleMap googleMap;
+    private Location location;
 
-    public DroneGoogleMap(Context context) {
-        this.context = context;
-        this.googleMapView = new GoogleMapView(context, this);
+    public DroneGoogleMap(ApplicationModel applicationModel) {
+        this.applicationModel = applicationModel;
+        this.googleMapView = new GoogleMapView(applicationModel, this);
     }
 
     @Override
@@ -50,7 +57,7 @@ public class DroneGoogleMap implements BaseMap,OnMapReadyCallback {
         if(googleMap == null) {
             return;
         }
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(applicationModel, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(applicationModel, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
@@ -60,8 +67,8 @@ public class DroneGoogleMap implements BaseMap,OnMapReadyCallback {
         googleMap.setBuildingsEnabled(false);
         googleMap.setMyLocationEnabled(follow);
 
-        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        LocationManager locationManager = (LocationManager) applicationModel.getSystemService(Context.LOCATION_SERVICE);
+        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         if(location == null) {
             location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         }
@@ -77,26 +84,28 @@ public class DroneGoogleMap implements BaseMap,OnMapReadyCallback {
 
     @Override
     public void searchPOI(final Request request) {
-        //start a new thread to get the Address list
-        new Thread(new Runnable() {
+        GetGeocodeRequest getGeocodeRequest = new GetGeocodeRequest(request.getInput(),applicationModel.getRetrofitManager().getGoogleMapApiKey());
+        applicationModel.getRetrofitManager().executeGoogleMapApi(getGeocodeRequest, new RequestListener<GetGeocodeModel>() {
             @Override
-            public void run() {
-                Geocoder geocoder = new Geocoder(context);
-                try {
-                    final List<Address> result =  geocoder.getFromLocationName(request.getInput(),5);
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            request.onSuccess(result);
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    request.onError(e);
-                }
+            public void onRequestFailure(SpiceException spiceException) {
+                request.onError(spiceException);
             }
-        }).start();
 
+            @Override
+            public void onRequestSuccess(GetGeocodeModel getGeocodeModel) {
+                request.onSuccess(getGeocodeModel);
+            }
+        });
+    }
+
+    @Override
+    public Location getLocalLocation() {
+        return location;
+    }
+
+    @Override
+    public void renderRouteMap(Route[] route) {
+        //TODO  render google map
     }
 
     @Override
