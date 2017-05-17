@@ -164,11 +164,7 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_geo_key"/>
-        <meta-data
-            android:name="com.amap.api.v2.apikey"
-            android:value="@string/gaode_maps_key"/>
 
-        <service android:name="com.amap.api.location.APSService"/>
         <activity
             android:name="com.dayton.drone.activity.NewSetNotificationActivity"
             android:screenOrientation="portrait"

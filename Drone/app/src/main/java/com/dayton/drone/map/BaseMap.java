@@ -10,15 +10,6 @@ import com.dayton.drone.map.request.Request;
  */
 
 public interface BaseMap {
-    void onCreate(Bundle savedInstanceState);
-
-    void onResume();
-
-    void onDestroy();
-
-    void onPause();
-
-    void onSaveInstanceState(Bundle outState);
 
     View getMap();
 
