@@ -1,7 +1,7 @@
 package com.dayton.drone.bean.menu;
 
 import com.dayton.drone.R;
-import com.dayton.drone.activity.WorldClockActivity;
+import com.dayton.drone.activity.tutorial.HotKeyActivity;
 
 /**
  * Created by Jason on 2017/5/2.
@@ -25,6 +25,6 @@ public class HotKeyMenuItem implements HomeMenuItem {
 
     @Override
     public Class getActivityClass() {
-        return WorldClockActivity.class;
+        return HotKeyActivity.class;
     }
 }

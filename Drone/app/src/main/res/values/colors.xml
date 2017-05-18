@@ -34,4 +34,5 @@
     <color name="add_watch_activity_content_bg">#ededed</color>
     <color name="notification_delete_bg">#3d3ba6</color>
     <color name="world_tab_host_item_select_color">#5C5D5D</color>
+    <color name="hot_key_background_color">#EFEFF4</color>
 </resources>

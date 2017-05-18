@@ -139,5 +139,6 @@
         <item name="colorControlActivated">@color/colorPrimaryDark</item>
         <item name="colorSwitchThumbNormal">@android:color/white</item>
         <item name="android:colorForeground">@android:color/white</item>
+        <item name="colorAccent">@color/colorPrimaryDark</item>
     </style>
 </resources>

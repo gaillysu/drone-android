@@ -103,7 +103,7 @@ public class WorldClockAdapter extends DragItemAdapter<Pair<Integer, DragListVie
     private String obtainCityTime(City city) {
         String temp = city.getTimezoneRef().getGmt();
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(temp.substring(temp.indexOf("(") + 1, temp.indexOf(")"))));
-        String am_pm = calendar.get(Calendar.HOUR) < 12 ?
+        String am_pm = calendar.get(Calendar.HOUR_OF_DAY) <= 12 ?
                 mApplicationModel.getString(R.string.world_clock_am) : mApplicationModel.getString(R.string.world_clock_pm);
         String minute = calendar.get(Calendar.MINUTE) >= 10 ? calendar.get(Calendar.MINUTE) + "" : "0" + calendar.get(Calendar.MINUTE);
         int hour = calendar.get(Calendar.HOUR);
@@ -128,15 +128,19 @@ public class WorldClockAdapter extends DragItemAdapter<Pair<Integer, DragListVie
         int localDayOfMonth = localCalendar.get(Calendar.DAY_OF_MONTH);
         int homeDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
         if (localDayOfMonth == homeDayOfMonth) {
-            return localCalendar.get(Calendar.HOUR) - calendar.get(Calendar.HOUR) > 0 ?
-                    localCalendar.get(Calendar.HOUR) - calendar.get(Calendar.HOUR) + mApplicationModel.getString(R.string.world_clock_city_time_difference_ahead) :
-                    localCalendar.get(Calendar.HOUR) - calendar.get(Calendar.HOUR) + mApplicationModel.getString(R.string.world_clock_city_time_difference_behind);
+            if (localCalendar.get(Calendar.HOUR_OF_DAY) - calendar.get(Calendar.HOUR_OF_DAY) > 0) {
+                return localCalendar.get(Calendar.HOUR) - calendar.get(Calendar.HOUR) + mApplicationModel.getString(R.string.world_clock_city_time_difference_ahead);
+            } else if (localCalendar.get(Calendar.HOUR_OF_DAY) - calendar.get(Calendar.HOUR_OF_DAY) < 0) {
+                return localCalendar.get(Calendar.HOUR_OF_DAY) - calendar.get(Calendar.HOUR_OF_DAY) + mApplicationModel.getString(R.string.world_clock_city_time_difference_behind);
+            } else {
+                return "";
+            }
         } else if ((localDayOfMonth - homeDayOfMonth) > 0) {
 
-            return localCalendar.get(Calendar.HOUR) + (24 - calendar.get(Calendar.HOUR))
-                    + mApplicationModel.getString(R.string.world_clock_city_time_difference_behind);
+            return "-"+(localCalendar.get(Calendar.HOUR_OF_DAY) + (24 - calendar.get(Calendar.HOUR_OF_DAY)))
+                    + mApplicationModel.getString(R.string.world_clock_city_time_difference_ahead);
         } else if (localDayOfMonth - homeDayOfMonth < 0) {
-            return localCalendar.get(Calendar.HOUR) + (24 - calendar.get(Calendar.HOUR))
+            return localCalendar.get(Calendar.HOUR_OF_DAY) + (24 - calendar.get(Calendar.HOUR_OF_DAY))
                     + mApplicationModel.getString(R.string.world_clock_city_time_difference_behind);
         } else {
             return "";
@@ -158,9 +162,9 @@ public class WorldClockAdapter extends DragItemAdapter<Pair<Integer, DragListVie
             } else if (timeDifference == -1) {
                 return mApplicationModel.getString(R.string.world_clock_Yesterday_tv);
             } else if (timeDifference > 1) {
-                return mApplicationModel.getString(R.string.world_clock_Yesterday_tv);
-            } else if (timeDifference < -1) {
                 return mApplicationModel.getString(R.string.world_clock_Tomorrow_tv);
+            } else if (timeDifference < -1) {
+                return mApplicationModel.getString(R.string.world_clock_Yesterday_tv);
             } else {
                 return mApplicationModel.getString(R.string.world_clock_today_tv);
             }

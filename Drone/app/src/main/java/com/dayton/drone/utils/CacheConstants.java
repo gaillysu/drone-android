@@ -18,4 +18,7 @@ public class CacheConstants {
     public static final String COMPASS_AUTO_ON_DURATION = "compass_auto_on_duration";
     public static final String ENABLE_COMPASS = "enable_compass";
     public static int  COMPASS_AUTO_ON_DURATION_DEFAULT = 15; //in "minute"
+    public static String SYNC_TIME = "synce_time";
+    public static String IS_SYNC_TIME="is_sync_time";
+
 }
