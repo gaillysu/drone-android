@@ -24,7 +24,7 @@ import butterknife.ButterKnife;
  * Created by Jason on 2017/5/17.
  */
 
-public class HotKeyActivity extends BaseActivity {
+public class HotKeyActivity extends BaseActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     @Bind(R.id.my_toolbar)
     Toolbar toolbar;
@@ -70,6 +70,14 @@ public class HotKeyActivity extends BaseActivity {
         hotKeySwitch.setChecked(hotKeyEnable);
         setHotKeyIsEnable(hotKeyEnable);
         int hotKey = SpUtils.getHotKey(this);
+       initHotKey(hotKey);
+        hotKeySwitch.setOnCheckedChangeListener(this);
+        findYourPhoneLL.setOnClickListener(this);
+        remoteCameraLL.setOnClickListener(this);
+        controlMusicLL.setOnClickListener(this);
+    }
+
+    private void initHotKey(int hotKey) {
         switch (hotKey) {
             case FIND_PHONE:
                 findPhone();
@@ -84,38 +92,6 @@ public class HotKeyActivity extends BaseActivity {
                 findPhone();
                 break;
         }
-        hotKeySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                setHotKeyIsEnable(isChecked);
-                SpUtils.saveHotKeyEnable(HotKeyActivity.this, isChecked);
-            }
-        });
-
-        findYourPhoneLL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                findPhone();
-                SpUtils.saveHotKey(HotKeyActivity.this, FIND_PHONE);
-            }
-        });
-
-        remoteCameraLL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                remoteCamera();
-                SpUtils.saveHotKey(HotKeyActivity.this, REMOTE_CAMERA);
-            }
-        });
-
-        controlMusicLL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                controlMusic();
-                SpUtils.saveHotKey(HotKeyActivity.this, CONTROL_MUSIC);
-            }
-        });
-
     }
 
     private void initToolbar() {
@@ -142,43 +118,30 @@ public class HotKeyActivity extends BaseActivity {
         findYourPhoneLL.setBackgroundDrawable(getResources().getDrawable(R.drawable.hot_key_button_bg));
         findPhoneIv.setImageDrawable(getResources().getDrawable(R.drawable.ic_find_your_phone_white));
         findPhoneDescribe.setTextColor(Color.WHITE);
-
-        remoteCameraLL.setBackground(getResources().getDrawable(R.drawable.hot_key_button_def_bg));
-        remoteCameraIv.setImageDrawable(getResources().getDrawable(R.drawable.ic_camera));
-        remoteCameraTv.setTextColor(getResources().getColor(R.color.colorPrimary));
-
-        controlMusicLL.setBackground(getResources().getDrawable(R.drawable.hot_key_button_def_bg));
-        controlMusicIv.setImageDrawable(getResources().getDrawable(R.drawable.ic_control_music));
-        controlMusicTv.setTextColor(getResources().getColor(R.color.colorPrimary));
     }
 
     public void remoteCamera() {
-        findYourPhoneLL.setBackgroundDrawable(getResources().getDrawable(R.drawable.hot_key_button_def_bg));
-        findPhoneIv.setImageDrawable(getResources().getDrawable(R.drawable.ic_find_your_phone));
-        findPhoneDescribe.setTextColor(getResources().getColor(R.color.colorPrimary));
-
         remoteCameraLL.setBackground(getResources().getDrawable(R.drawable.hot_key_button_bg));
         remoteCameraIv.setImageDrawable(getResources().getDrawable(R.drawable.ic_camera_white));
         remoteCameraTv.setTextColor(Color.WHITE);
-
-        controlMusicLL.setBackground(getResources().getDrawable(R.drawable.hot_key_button_def_bg));
-        controlMusicIv.setImageDrawable(getResources().getDrawable(R.drawable.ic_control_music));
-        controlMusicTv.setTextColor(getResources().getColor(R.color.colorPrimary));
-
     }
 
     public void controlMusic() {
-        findYourPhoneLL.setBackgroundDrawable(getResources().getDrawable(R.drawable.hot_key_button_def_bg));
-        findPhoneIv.setImageDrawable(getResources().getDrawable(R.drawable.ic_find_your_phone));
-        findPhoneDescribe.setTextColor(getResources().getColor(R.color.colorPrimary));
-
-        remoteCameraLL.setBackground(getResources().getDrawable(R.drawable.hot_key_button_def_bg));
-        remoteCameraIv.setImageDrawable(getResources().getDrawable(R.drawable.ic_camera));
-        remoteCameraTv.setTextColor(getResources().getColor(R.color.colorPrimary));
-
         controlMusicLL.setBackground(getResources().getDrawable(R.drawable.hot_key_button_bg));
         controlMusicIv.setImageDrawable(getResources().getDrawable(R.drawable.ic_control_music_white));
         controlMusicTv.setTextColor(Color.WHITE);
+    }
+
+    public void resetView() {
+        findYourPhoneLL.setBackgroundDrawable(getResources().getDrawable(R.drawable.hot_key_button_def_bg));
+        findPhoneIv.setImageDrawable(getResources().getDrawable(R.drawable.ic_find_your_phone));
+        findPhoneDescribe.setTextColor(getResources().getColor(R.color.colorPrimary));
+        remoteCameraLL.setBackground(getResources().getDrawable(R.drawable.hot_key_button_def_bg));
+        remoteCameraIv.setImageDrawable(getResources().getDrawable(R.drawable.ic_camera));
+        remoteCameraTv.setTextColor(getResources().getColor(R.color.colorPrimary));
+        controlMusicLL.setBackground(getResources().getDrawable(R.drawable.hot_key_button_def_bg));
+        controlMusicIv.setImageDrawable(getResources().getDrawable(R.drawable.ic_control_music));
+        controlMusicTv.setTextColor(getResources().getColor(R.color.colorPrimary));
     }
 
     public void setHotKeyIsEnable(boolean hotKeyIsEnable) {
@@ -187,5 +150,32 @@ public class HotKeyActivity extends BaseActivity {
         } else {
             selectLayout.setVisibility(View.INVISIBLE);
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.hot_key_find_phone_ll:
+                resetView();
+                findPhone();
+                SpUtils.saveHotKey(this, FIND_PHONE);
+                break;
+            case R.id.hot_key_remote_camera_ll:
+                resetView();
+                remoteCamera();
+                SpUtils.saveHotKey(this, REMOTE_CAMERA);
+                break;
+            case R.id.hot_key_control_music_ll:
+                resetView();
+                controlMusic();
+                SpUtils.saveHotKey(this, CONTROL_MUSIC);
+                break;
+        }
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        setHotKeyIsEnable(isChecked);
+        SpUtils.saveHotKeyEnable(HotKeyActivity.this, isChecked);
     }
 }
