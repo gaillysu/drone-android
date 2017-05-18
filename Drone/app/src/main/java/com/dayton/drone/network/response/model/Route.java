@@ -5,5 +5,15 @@ package com.dayton.drone.network.response.model;
  */
 
 public class Route {
-    //TODO too complex struct, need carefully coding it
+    Bound bounds;
+    String copyrights;
+    Leg[] legs;
+    Overview_polyline overview_polyline;
+    String summary;
+    Warning[] warnings;
+    Waypoint_order[] waypoint_order;
+
+    public Leg[] getLegs() {
+        return legs;
+    }
 }

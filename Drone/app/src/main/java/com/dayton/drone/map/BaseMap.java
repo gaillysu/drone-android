@@ -17,9 +17,11 @@ public interface BaseMap {
 
     void followGPS(boolean follow);
 
-    void searchPOI(Request request);
-
     Location getLocalLocation();
 
-    void renderRouteMap(Route[] route);
+    void renderRouteMap(Route[] routes);
+
+    void zoomTo(double latitude, double longitude);
+
+
 }

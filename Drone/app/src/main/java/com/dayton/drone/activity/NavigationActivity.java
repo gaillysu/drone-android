@@ -22,6 +22,7 @@ import com.dayton.drone.map.BaseMap;
 import com.dayton.drone.map.builder.MapBuilder;
 import com.dayton.drone.map.listener.ResponseListener;
 import com.dayton.drone.map.request.GeoRequest;
+import com.dayton.drone.network.request.GetGeocodeRequest;
 import com.dayton.drone.network.request.GetRouteMapRequest;
 import com.dayton.drone.network.response.model.GeocodeResult;
 import com.dayton.drone.network.response.model.GetGeocodeModel;
@@ -62,34 +63,34 @@ public class NavigationActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
         ButterKnife.bind(this);
-        map = new MapBuilder(mapLayout,getModel()).build(savedInstanceState);
+        map = new MapBuilder(mapLayout,this).build(savedInstanceState);
         searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                map.searchPOI(new GeoRequest(v.getText() + "", new ResponseListener<GetGeocodeModel>() {
+                GetGeocodeRequest getGeocodeRequest = new GetGeocodeRequest(v.getText() + "",getModel().getRetrofitManager().getGoogleMapApiKey());
+                getModel().getRetrofitManager().executeGoogleMapApi(getGeocodeRequest, new RequestListener<GetGeocodeModel>() {
                     @Override
-                    public void onSuccess(final GetGeocodeModel result) {
-                        searchListView.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                geocodeResults = Arrays.asList(result.getResults());
-                                searchListView.setAdapter(new MapSearchAdapter(NavigationActivity.this, geocodeResults));
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onError(final Exception error) {
+                    public void onRequestFailure(final SpiceException spiceException) {
                         searchListView.post(new Runnable() {
                             @Override
                             public void run() {
                                 searchListView.removeAllViews();
-                                Toast.makeText(NavigationActivity.this,error.getLocalizedMessage(),Toast.LENGTH_LONG).show();
+                                Toast.makeText(NavigationActivity.this,spiceException.getLocalizedMessage(),Toast.LENGTH_LONG).show();
                             }
                         });
                     }
 
-                }));
+                    @Override
+                    public void onRequestSuccess(final GetGeocodeModel getGeocodeModel) {
+                        searchListView.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                geocodeResults = Arrays.asList(getGeocodeModel.getResults());
+                                searchListView.setAdapter(new MapSearchAdapter(NavigationActivity.this, geocodeResults));
+                            }
+                        });
+                    }
+                });
                 return false;
             }
         });
