@@ -17,7 +17,7 @@
             android:orientation="vertical">
 
             <ImageButton
-                android:id="@+id/activity_compass_back_imagebutton"
+                android:id="@+id/activity_navigation_back_imagebutton"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginStart="10dp"
@@ -26,7 +26,7 @@
                 android:src="@mipmap/left_arrpw_1"/>
 
             <TextView
-                android:id="@+id/activity_compass_title_textview"
+                android:id="@+id/activity_navigation_title_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -39,7 +39,7 @@
     <RelativeLayout
         android:id="@+id/map_content"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="400dp"
         android:layout_below="@id/activity_navigation_header_layout">
 
     </RelativeLayout>
@@ -53,7 +53,7 @@
         android:layout_marginStart="15dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/world_clock_search_bg"
-        android:drawableStart="@mipmap/world_clock_search_city"
+        android:drawableRight="@mipmap/world_clock_search_city"
         android:layout_below="@id/map_content"
         android:imeOptions="actionSearch"
         android:inputType="text"/>
@@ -62,7 +62,7 @@
         android:id="@+id/address_search_list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
+        android:background="@android:color/white"
         android:layout_marginTop="10dp"
         android:layout_below="@id/address_search_edit_text"
         />

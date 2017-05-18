@@ -119,4 +119,9 @@ public class NavigationActivity extends BaseActivity {
         });
      }
 
+    @OnClick(R.id.activity_navigation_back_imagebutton)
+    public void back2MainMenu(){
+        finish();
+    }
+
 }
