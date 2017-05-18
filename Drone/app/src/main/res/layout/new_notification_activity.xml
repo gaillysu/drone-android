@@ -4,35 +4,7 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:background="@color/colorPrimaryDark">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="20dp"
-            >
-            <ImageButton
-                android:id="@+id/activity_set_notification_back_imagebutton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:background="@android:color/transparent"
-                android:src="@mipmap/left_arrpw_1"
-                android:tint="@color/notification_delete_bg"/>
-            <TextView
-                android:id="@+id/activity_set_notification_title_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="@string/notifications_notifications"
-                android:textColor="@android:color/white"
-                android:textSize="22sp"/>
-        </RelativeLayout>
-    </RelativeLayout>
+    <include layout="@layout/toolbar"/>
 
     <ListView
         android:id="@+id/notification_all_app_listView"
@@ -40,5 +12,5 @@
         android:layout_height="match_parent"
         android:background="@color/notification_bg_color"
         android:divider="@null"
-        ></ListView>
+        />
 </LinearLayout>
