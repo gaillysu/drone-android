@@ -1,4 +1,4 @@
-package com.dayton.drone.activity.tutorial;
+package com.dayton.drone.activity;
 
 import android.graphics.Color;
 import android.os.Build;
@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
+import com.dayton.drone.utils.SpUtils;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import butterknife.Bind;
@@ -51,6 +52,9 @@ public class HotKeyActivity extends BaseActivity {
     TextView controlMusicTv;
 
     private TextView toolbarTitle;
+    private static final int FIND_PHONE = 0x01;
+    private static final int REMOTE_CAMERA = 0x02;
+    private static final int CONTROL_MUSIC = 0x03;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,14 +66,29 @@ public class HotKeyActivity extends BaseActivity {
     }
 
     private void initView() {
+        boolean hotKeyEnable = SpUtils.getHotKeyEnable(this);
+        hotKeySwitch.setChecked(hotKeyEnable);
+        setHotKeyIsEnable(hotKeyEnable);
+        int hotKey = SpUtils.getHotKey(this);
+        switch (hotKey) {
+            case FIND_PHONE:
+                findPhone();
+                break;
+            case REMOTE_CAMERA:
+                remoteCamera();
+                break;
+            case CONTROL_MUSIC:
+                controlMusic();
+                break;
+            default:
+                findPhone();
+                break;
+        }
         hotKeySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    selectLayout.setVisibility(View.VISIBLE);
-                } else {
-                    selectLayout.setVisibility(View.INVISIBLE);
-                }
+                setHotKeyIsEnable(isChecked);
+                SpUtils.saveHotKeyEnable(HotKeyActivity.this, isChecked);
             }
         });
 
@@ -77,6 +96,7 @@ public class HotKeyActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 findPhone();
+                SpUtils.saveHotKey(HotKeyActivity.this, FIND_PHONE);
             }
         });
 
@@ -84,6 +104,7 @@ public class HotKeyActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 remoteCamera();
+                SpUtils.saveHotKey(HotKeyActivity.this, REMOTE_CAMERA);
             }
         });
 
@@ -91,6 +112,7 @@ public class HotKeyActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 controlMusic();
+                SpUtils.saveHotKey(HotKeyActivity.this, CONTROL_MUSIC);
             }
         });
 
@@ -142,6 +164,7 @@ public class HotKeyActivity extends BaseActivity {
         controlMusicLL.setBackground(getResources().getDrawable(R.drawable.hot_key_button_def_bg));
         controlMusicIv.setImageDrawable(getResources().getDrawable(R.drawable.ic_control_music));
         controlMusicTv.setTextColor(getResources().getColor(R.color.colorPrimary));
+
     }
 
     public void controlMusic() {
@@ -156,5 +179,13 @@ public class HotKeyActivity extends BaseActivity {
         controlMusicLL.setBackground(getResources().getDrawable(R.drawable.hot_key_button_bg));
         controlMusicIv.setImageDrawable(getResources().getDrawable(R.drawable.ic_control_music_white));
         controlMusicTv.setTextColor(Color.WHITE);
+    }
+
+    public void setHotKeyIsEnable(boolean hotKeyIsEnable) {
+        if (hotKeyIsEnable) {
+            selectLayout.setVisibility(View.VISIBLE);
+        } else {
+            selectLayout.setVisibility(View.INVISIBLE);
+        }
     }
 }

@@ -1,7 +1,7 @@
 package com.dayton.drone.bean.menu;
 
 import com.dayton.drone.R;
-import com.dayton.drone.activity.tutorial.HotKeyActivity;
+import com.dayton.drone.activity.HotKeyActivity;
 
 /**
  * Created by Jason on 2017/5/2.

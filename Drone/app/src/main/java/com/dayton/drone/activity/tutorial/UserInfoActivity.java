@@ -51,6 +51,7 @@ public class UserInfoActivity extends BaseActivity {
 
     private int gender = 1; //0:female, 1: male
     private int viewType = 1;
+    private String user_birthday_data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +101,7 @@ public class UserInfoActivity extends BaseActivity {
                             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                             Date userSelectDate = dateFormat.parse(dateDesc);
                             tv_userBirth.setText(new SimpleDateFormat("MMM").format(userSelectDate) + "-" + day + "-" + year);
+                            user_birthday_data = dateDesc;
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
@@ -157,7 +159,7 @@ public class UserInfoActivity extends BaseActivity {
 
     @OnClick(R.id.register_next_iv)
     public void next() {
-        final String birthday = tv_userBirth.getText().toString();
+        final String birthday = tv_userBirth.getText().toString() != null ? user_birthday_data : null;
         String height = tv_userHeight.getText().toString();
         String weight = tv_userWeight.getText().toString();
         String firstName = editFirstName.getText().toString();

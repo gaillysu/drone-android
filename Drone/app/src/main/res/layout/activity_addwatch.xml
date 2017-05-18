@@ -4,40 +4,9 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
     <!-- header-->
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="70dp"
-
-        android:background="@color/colorPrimaryDark">
-
-        <RelativeLayout
-            android:id="@+id/activity_add_watch_header_layout"
-            android:layout_width="match_parent"
-            android:layout_alignParentBottom="true"
-            android:layout_height="50dp"
-            android:layout_marginTop="20dp"
-            android:orientation="vertical">
-
-            <ImageButton
-                android:id="@+id/activity_add_watch_back_imagebutton"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="10dp"
-                android:layout_centerVertical="true"
-                android:background="@android:color/transparent"
-                android:src="@mipmap/left_arrpw_1"/>
-
-            <TextView
-                android:id="@+id/activity_add_watch_title_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="@string/add_watch_watches"
-                android:textColor="@android:color/white"
-                android:textSize="22sp"/>
-        </RelativeLayout>
-
-    </RelativeLayout>
+    <include
+        android:id="@+id/activity_add_watch_header_layout"
+        layout="@layout/toolbar"/>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -112,8 +81,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/white"
-            android:visibility="gone"
             android:orientation="vertical"
+            android:visibility="gone"
             >
 
             <ImageView
@@ -162,10 +131,10 @@
                     android:id="@+id/activity_add_watch_open_shop"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
                     android:layout_marginLeft="50dp"
                     android:layout_marginRight="50dp"
                     android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
                     android:background="@android:color/transparent"
                     android:gravity="center_horizontal"
                     android:text="@string/add_watch_activity_shop_address"

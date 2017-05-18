@@ -130,7 +130,7 @@
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".activity.tutorial.HotKeyActivity"
+            android:name=".activity.HotKeyActivity"
             android:screenOrientation="portrait"
             />
         <!-- register all services used in the application -->
