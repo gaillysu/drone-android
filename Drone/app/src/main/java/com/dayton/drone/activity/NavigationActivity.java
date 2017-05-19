@@ -1,17 +1,14 @@
 package com.dayton.drone.activity;
 
-import android.database.DataSetObserver;
-import android.location.Address;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,8 +17,6 @@ import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.adapter.MapSearchAdapter;
 import com.dayton.drone.map.BaseMap;
 import com.dayton.drone.map.builder.MapBuilder;
-import com.dayton.drone.map.listener.ResponseListener;
-import com.dayton.drone.map.request.GeoRequest;
 import com.dayton.drone.network.request.GetGeocodeRequest;
 import com.dayton.drone.network.request.GetRouteMapRequest;
 import com.dayton.drone.network.response.model.GeocodeResult;
@@ -33,7 +28,6 @@ import com.octo.android.robospice.request.listener.RequestListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -53,6 +47,12 @@ public class NavigationActivity extends BaseActivity {
 
     @Bind(R.id.address_search_list_view)
     ListView searchListView;
+
+    @Bind(R.id.navigation_search_layout)
+    LinearLayout navigationSearchLayout;
+
+    @Bind(R.id.navigation_operation_layout)
+    LinearLayout navigationOperationLayout;
 
     List<GeocodeResult> geocodeResults = new ArrayList<>();
 
@@ -98,10 +98,15 @@ public class NavigationActivity extends BaseActivity {
         searchListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                navigationSearchLayout.setVisibility(View.GONE);
+                navigationOperationLayout.setVisibility(View.VISIBLE);
+
                 GetRouteMapRequest getRouteMapRequest = new GetRouteMapRequest(map.getLocalLocation().getLatitude(),
                         map.getLocalLocation().getLongitude(),
                         geocodeResults.get(position).getGeometry().getLocation().getLat(),
                         geocodeResults.get(position).getGeometry().getLocation().getLng(),
+                        getString(R.string.map_navigation_mode),
                         getModel().getRetrofitManager().getGoogleMapApiKey());
 
                 getModel().getRetrofitManager().executeGoogleMapApi(getRouteMapRequest, new RequestListener<GetRouteMapModel>() {
@@ -122,6 +127,12 @@ public class NavigationActivity extends BaseActivity {
     @OnClick(R.id.activity_navigation_back_imagebutton)
     public void back2MainMenu(){
         finish();
+    }
+
+    @OnClick(R.id.navigation_back_to_search_image_button)
+    public void back2Search(){
+        navigationOperationLayout.setVisibility(View.GONE);
+        navigationSearchLayout.setVisibility(View.VISIBLE);
     }
 
 }

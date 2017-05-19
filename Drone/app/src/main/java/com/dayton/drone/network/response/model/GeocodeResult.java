@@ -15,6 +15,10 @@ public class GeocodeResult {
         return formatted_address;
     }
 
+    public Address_Component[] getAddress_components() {
+        return address_components;
+    }
+
     public Geometry getGeometry() {
         return geometry;
     }

@@ -15,5 +15,5 @@ public interface GoogleMap {
     GetGeocodeModel getGeocode(@Query("address") String name, @Query("key") String apiKey);
 
     @GET("/directions/json")
-    GetRouteMapModel getRouteMap(@Query("origin") String originAddress, @Query("destination") String destinationAddress, @Query("key") String apiKey);
+    GetRouteMapModel getRouteMap(@Query("origin") String originAddress, @Query("destination") String destinationAddress,@Query("mode") String mode, @Query("key") String apiKey);
 }

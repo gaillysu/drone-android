@@ -39,33 +39,16 @@
     <RelativeLayout
         android:id="@+id/map_content"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="match_parent"
         android:layout_below="@id/activity_navigation_header_layout">
 
     </RelativeLayout>
 
-
-    <EditText
-        android:id="@+id/address_search_edit_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="15dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/world_clock_search_bg"
-        android:drawableRight="@mipmap/world_clock_search_city"
-        android:layout_below="@id/map_content"
-        android:imeOptions="actionSearch"
-        android:inputType="text"/>
-
-    <ListView
-        android:id="@+id/address_search_list_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        android:layout_marginTop="10dp"
-        android:layout_below="@id/address_search_edit_text"
+    <include layout="@layout/navigation_search_layout"
+        android:visibility="visible"
         />
-
+    <include layout="@layout/navigation_operation_layout"
+             android:visibility="gone"
+        />
 
 </RelativeLayout>

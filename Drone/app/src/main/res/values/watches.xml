@@ -39,5 +39,6 @@ right position. Each press represents one second.</string>
     <string name="set_goal_popup_button_cancel">Cancel</string>
 
     <string name="map_navigation_title">Navigation</string>
+    <string name="map_navigation_mode">walking</string>
 
 </resources>

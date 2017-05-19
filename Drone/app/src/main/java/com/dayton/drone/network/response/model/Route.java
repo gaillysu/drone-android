@@ -10,8 +10,8 @@ public class Route {
     Leg[] legs;
     Overview_polyline overview_polyline;
     String summary;
-    Warning[] warnings;
-    Waypoint_order[] waypoint_order;
+    String[] warnings;
+    int[] waypoint_order;
 
     public Leg[] getLegs() {
         return legs;

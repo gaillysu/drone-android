@@ -9,11 +9,10 @@ public class Step {
     Duration duration;
     Location end_location;
     String html_instructions;
+    String maneuver;
     Polyline polyline;
     Location start_location;
     String travel_mode;
-    Traffic_speed_entry[] traffic_speed_entry;
-    Via_waypoint[] via_waypoint;
 
     public Location getEnd_location() {
         return end_location;

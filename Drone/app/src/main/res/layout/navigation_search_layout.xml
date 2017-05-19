@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/navigation_search_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:visibility="visible"
+    android:layout_alignParentBottom="true"
+    android:background="#f2f7fa"
+    android:orientation="vertical">
+    <EditText
+        android:id="@+id/address_search_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/world_clock_search_bg"
+        android:drawableLeft="@mipmap/world_clock_search_city"
+        android:imeOptions="actionSearch"
+        android:inputType="text"/>
+
+    <ListView
+        android:id="@+id/address_search_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@android:color/white"
+        android:layout_marginTop="10dp"
+        />
+</LinearLayout>
