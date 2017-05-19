@@ -1,5 +1,7 @@
 package com.dayton.drone.activity;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -25,7 +27,7 @@ import butterknife.ButterKnife;
  * Created by Jason on 2017/5/17.
  */
 
-public class HotKeyActivity extends BaseActivity implements  CompoundButton.OnCheckedChangeListener, RadioGroup.OnCheckedChangeListener {
+public class HotKeyActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener, RadioGroup.OnCheckedChangeListener {
 
     @Bind(R.id.my_toolbar)
     Toolbar toolbar;
@@ -41,11 +43,14 @@ public class HotKeyActivity extends BaseActivity implements  CompoundButton.OnCh
     RadioButton remoteCamera;
     @Bind(R.id.hot_key_control_music)
     RadioButton controlMusic;
+    @Bind(R.id.hor_key_describe)
+    TextView describe;
 
     private TextView toolbarTitle;
     private static final int FIND_PHONE = 0x01;
     private static final int REMOTE_CAMERA = 0x02;
     private static final int CONTROL_MUSIC = 0x03;
+    private boolean visibleOrGone;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,7 +66,7 @@ public class HotKeyActivity extends BaseActivity implements  CompoundButton.OnCh
         hotKeySwitch.setChecked(hotKeyEnable);
         setHotKeyIsEnable(hotKeyEnable);
         int hotKey = SpUtils.getHotKey(this);
-       initHotKey(hotKey);
+        initHotKey(hotKey);
         hotKeySwitch.setOnCheckedChangeListener(this);
         allHotKey.setOnCheckedChangeListener(this);
     }
@@ -111,23 +116,49 @@ public class HotKeyActivity extends BaseActivity implements  CompoundButton.OnCh
         }
     }
 
+
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         setHotKeyIsEnable(isChecked);
         SpUtils.saveHotKeyEnable(HotKeyActivity.this, isChecked);
+        if (isChecked) {
+            visibleViewAnimation();
+        } else {
+            goneViewAnimation();
+        }
+    }
+
+    private void goneViewAnimation() {
+        ObjectAnimator alpha = ObjectAnimator.ofFloat(selectLayout, "alpha", 1, 0);
+        ObjectAnimator translationX =
+                ObjectAnimator.ofFloat(selectLayout, "translationX",0, selectLayout.getWidth());
+        AnimatorSet set = new AnimatorSet();
+        set.play(translationX).with(alpha);
+        set.setDuration(300);
+        set.start();
+    }
+
+    public void visibleViewAnimation() {
+        ObjectAnimator alpha = ObjectAnimator.ofFloat(selectLayout, "alpha", 0, 1);
+        ObjectAnimator translationX =
+                ObjectAnimator.ofFloat(selectLayout, "translationX", selectLayout.getWidth(), 0);
+        AnimatorSet set = new AnimatorSet();
+        set.play(translationX).with(alpha);
+        set.setDuration(300);
+        set.start();
     }
 
     @Override
     public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-        switch(checkedId){
+        switch (checkedId) {
             case R.id.hot_key_find_phone:
-                SpUtils.saveHotKey(this,FIND_PHONE);
+                SpUtils.saveHotKey(this, FIND_PHONE);
                 break;
             case R.id.hot_key_remote_camera:
-                SpUtils.saveHotKey(this,REMOTE_CAMERA);
+                SpUtils.saveHotKey(this, REMOTE_CAMERA);
                 break;
             case R.id.hot_key_control_music:
-                SpUtils.saveHotKey(this,CONTROL_MUSIC);
+                SpUtils.saveHotKey(this, CONTROL_MUSIC);
                 break;
         }
     }

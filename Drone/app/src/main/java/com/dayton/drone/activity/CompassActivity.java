@@ -2,6 +2,8 @@ package com.dayton.drone.activity;
 
 import android.os.Bundle;
 import android.support.v7.widget.SwitchCompat;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
@@ -30,6 +32,8 @@ public class CompassActivity extends BaseActivity {
 
     @Bind(R.id.activity_compass_enable_switch)
     SwitchCompat compassEnableSwitch;
+    @Bind(R.id.my_toolbar)
+    Toolbar mToolbar;
 
 
     @Override
@@ -37,15 +41,24 @@ public class CompassActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compass);
         ButterKnife.bind(this);
+        initToolbar();
         enableCompass = SpUtils.getBoolean(this,CacheConstants.ENABLE_COMPASS,false);
         compassAutoOnDuration = SpUtils.getIntMethod(this, CacheConstants.COMPASS_AUTO_ON_DURATION,CacheConstants.COMPASS_AUTO_ON_DURATION_DEFAULT);
         compassEnableSwitch.setChecked(enableCompass);
         compassAutoOnDurationTextView.setText(formatMinutes(compassAutoOnDuration +""));
     }
 
-    @OnClick(R.id.activity_compass_back_imagebutton)
-    public void back2MainMenu(){
-        finish();
+    private void initToolbar() {
+        mToolbar.setTitle("");
+        setSupportActionBar(mToolbar);
+        TextView title = (TextView) mToolbar.findViewById(R.id.toolbar_title_tv);
+        title.setText(getString(R.string.compass_title));
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     @OnClick(R.id.activity_compass_setting_layout)

@@ -4,7 +4,6 @@
               android:layout_height="match_parent"
               android:background="@color/hot_key_background_color"
               android:orientation="vertical">
-
     <include layout="@layout/toolbar"/>
 
     <RelativeLayout
@@ -46,14 +45,14 @@
     </RelativeLayout>
 
     <TextView
+        android:id="@+id/hor_key_describe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:paddingTop="10dp"
         android:text="@string/hot_key_describe"
-        android:textColor="@color/login_text_color"
-        />
+        android:textColor="@color/login_text_color"/>
 
     <LinearLayout
         android:id="@+id/hot_key_select_item"
