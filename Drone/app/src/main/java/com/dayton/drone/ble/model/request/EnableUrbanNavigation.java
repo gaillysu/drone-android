@@ -17,7 +17,7 @@ public class EnableUrbanNavigation extends RequestBase {
     private long longitude; //in 1e-7 deg
     private String address;
 
-    protected EnableUrbanNavigation(Context context,long latitude,long longitude,String address) {
+    public EnableUrbanNavigation(Context context,long latitude,long longitude,String address) {
         super(context);
         this.latitude = latitude;
         this.longitude = longitude;

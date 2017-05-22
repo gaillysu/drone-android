@@ -7,11 +7,13 @@ import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.View;
 
 import com.dayton.drone.R;
@@ -41,7 +43,7 @@ import java.util.List;
  * Created by med on 17/5/16.
  */
 
-public class DroneGoogleMap implements BaseMap,OnMapReadyCallback {
+public class DroneGoogleMap implements BaseMap,OnMapReadyCallback, LocationListener {
 
     private Context context;
     private GoogleMapView googleMapView;
@@ -77,6 +79,10 @@ public class DroneGoogleMap implements BaseMap,OnMapReadyCallback {
         location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         if(location == null) {
             location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 0, this);
+        }
+        else {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0, this);
         }
         if(location!=null) {
             zoomTo(location.getLatitude(), location.getLongitude());
@@ -135,4 +141,25 @@ public class DroneGoogleMap implements BaseMap,OnMapReadyCallback {
         followGPS(true);
     }
 
+
+    @Override
+    public void onLocationChanged(Location location) {
+        Log.i("location",location.getProvider() + " location changed: " + location.getLatitude() + "," + location.getLongitude());
+        this.location = location;
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
 }

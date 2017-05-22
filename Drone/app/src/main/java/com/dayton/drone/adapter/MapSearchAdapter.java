@@ -8,8 +8,11 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.dayton.drone.R;
+import com.dayton.drone.network.response.model.Address_Component;
 import com.dayton.drone.network.response.model.GeocodeResult;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -46,16 +49,60 @@ public class MapSearchAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.map_search_adapter_item, null);
         }
-        //TODO here need format the output address by 'type'
+
         TextView addrerss = (TextView) convertView.findViewById(R.id.map_search_address_item_tv);
-        addrerss.setText(addresses.get(position).getFormatted_address());
         TextView road = (TextView) convertView.findViewById(R.id.map_search_road_item_tv);
-        road.setText(addresses.get(position).getAddress_components()[1].getShort_name());
-
         TextView distance = (TextView) convertView.findViewById(R.id.map_search_distance_item_tv);
-        //TODO here need calculate the distance, below is a dummy value
-        distance.setText("1000km");
-
+        formatAddress(addresses.get(position));
+        addrerss.setText(addresses.get(position).getFormattedCityRegion());
+        road.setText(addresses.get(position).getFormattedRoad());
+        distance.setText(addresses.get(position).getFormattedDistance());
         return convertView;
+    }
+
+    private String getComponentAddress(Address_Component[] address_components,String type)
+    {
+        for(Address_Component address_component:address_components)
+        {
+            if(Arrays.asList(address_component.getTypes()).contains(type))
+            {
+                return address_component.getLong_name();
+            }
+        }
+        return null;
+    }
+    private void formatAddress(GeocodeResult result)
+    {
+        String  address = null;
+        //city region address
+        if((address = getComponentAddress(result.getAddress_components(),context.getString(R.string.address_type_1)))!=null)
+        {
+            result.setFormattedCityRegion(address);
+        }
+        if((address = getComponentAddress(result.getAddress_components(),context.getString(R.string.address_type_2)))!=null)
+        {
+            result.setFormattedCityRegion(result.getFormattedCityRegion()+","+address);
+        }
+        if((address = getComponentAddress(result.getAddress_components(),context.getString(R.string.address_type_3)))!=null)
+        {
+            result.setFormattedCityRegion(result.getFormattedCityRegion()+","+address);
+        }
+        if((address = getComponentAddress(result.getAddress_components(),context.getString(R.string.address_type_4)))!=null)
+        {
+            result.setFormattedCityRegion(result.getFormattedCityRegion()+","+address);
+        }
+        //road address
+        if((address = getComponentAddress(result.getAddress_components(),context.getString(R.string.address_type_5)))!=null)
+        {
+            result.setFormattedRoad(address);
+        }
+        if((address = getComponentAddress(result.getAddress_components(),context.getString(R.string.address_type_6)))!=null)
+        {
+            result.setFormattedRoad(result.getFormattedRoad()+" "+address);
+        }
+        if((address = getComponentAddress(result.getAddress_components(),context.getString(R.string.address_type_7)))!=null)
+        {
+            result.setFormattedRoad(result.getFormattedRoad()+","+address);
+        }
     }
 }

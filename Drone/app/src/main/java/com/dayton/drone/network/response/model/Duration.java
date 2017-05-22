@@ -7,4 +7,12 @@ package com.dayton.drone.network.response.model;
 public class Duration {
     String text;
     int value;
+
+    public String getText() {
+        return text;
+    }
+
+    public int getValue() {
+        return value;
+    }
 }
