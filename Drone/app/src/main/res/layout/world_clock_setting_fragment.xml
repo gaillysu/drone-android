@@ -32,16 +32,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:text="@string/world_clock_setting_sync_time"
-                android:textSize="18dp"
                 android:textColor="@android:color/white"
-                android:layout_centerVertical="true"/>
+                android:textSize="18dp"/>
 
             <android.support.v7.widget.SwitchCompat
                 android:id="@+id/world_clock_setting_syncing_time_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:shadowColor="@color/activities_calendar_show_bg_color"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"/>
 
@@ -61,32 +60,31 @@
                 android:id="@+id/world_clock_syncing_time_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:text="@string/world_clock_setting_sync_time"
-                android:textSize="18dp"
                 android:textColor="@color/profile_user_bg"
-                android:layout_centerVertical="true"/>
+                android:textSize="18dp"/>
 
             <TextView
                 android:id="@+id/world_clock_syncing_time_describe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="18dp"
-                android:textColor="@color/profile_user_bg"
-                android:text="@string/world_clock_adapter_home_time"
                 android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"/>
+                android:layout_centerVertical="true"
+                android:text="@string/world_clock_adapter_home_time"
+                android:textColor="@color/profile_user_bg"
+                android:textSize="18dp"/>
         </RelativeLayout>
     </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="10dp"
-        android:textColor="@color/login_text_color"
         android:text="@string/world_clock_syncing_time_setting_describe"
-        />
+        android:textColor="@color/login_text_color"
+        android:textSize="16dp"/>
 
 </LinearLayout>

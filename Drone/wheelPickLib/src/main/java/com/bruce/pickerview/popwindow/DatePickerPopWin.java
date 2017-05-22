@@ -212,6 +212,10 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
                 tv_pickerRight.setText("minutes");
                 tv_pickerRight.setTextSize(viewTextSize);
                 break;
+            case 5:
+                leftLoopView.setVisibility(View.GONE);
+                rightLoopView.setVisibility(View.GONE);
+
         }
 
         //do not loop,default can loop
@@ -290,7 +294,6 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
             case 2://height
                 for (int j = 120; j < 300; j++) {
                     heightList.add(format2LenStr(j));
-
                 }
                 middleLoopView.setArrayList((ArrayList) heightList);
                 middleLoopView.setInitPosition(middlePos);
@@ -313,6 +316,10 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
                 middleLoopView.setArrayList((ArrayList) compassAutoOffList);
                 middleLoopView.setInitPosition(middlePos);
                 break;
+            case 5:
+                middleList.add("World Clock");
+                middleList.add("Home Time");
+                middleLoopView.setArrayList((ArrayList) middleList);
         }
 
     }
@@ -359,15 +366,21 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
                     }
                     break;
                 case 2:
-                    middlePos = new Integer(dateStr).intValue()-120;
+                    middlePos = new Integer(dateStr).intValue() - 120;
                     break;
                 case 3:
-                    leftPos = new Integer(dateStr).intValue()-25;
+                    leftPos = new Integer(dateStr).intValue() - 25;
                     break;
                 case 4:
                     List<String> minutes = Arrays.asList(mContext.getResources().getStringArray(R.array.compass_auto_off_minutes_array));
                     middlePos = minutes.indexOf(dateStr);
                     break;
+                case 5:
+                    if (dateStr.equals("World Time")) {
+                        middlePos = 1;
+                    } else {
+                        middlePos = 2;
+                    }
             }
         }
     }
@@ -429,7 +442,7 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if (v == contentView   ) {
+        if (v == contentView) {
             dismissPopWin();
         }
         if (null != mListener) {
@@ -448,7 +461,7 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
                     break;
                 case 2:
                     int height = middlePos;
-                    mListener.onDatePickCompleted(0, height, 0, height + 120 +"");
+                    mListener.onDatePickCompleted(0, height, 0, height + 120 + "");
                     break;
                 case 3:
                     int weight = leftPos;
@@ -458,6 +471,8 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
                 case 4:
                     mListener.onDatePickCompleted(0, middlePos, 0, compassAutoOffList.get(middlePos));
                     break;
+                case 5:
+                    mListener.onDatePickCompleted(0, middlePos, 0, middlePos + "");
                 default:
                     dismissPopWin();
                     break;

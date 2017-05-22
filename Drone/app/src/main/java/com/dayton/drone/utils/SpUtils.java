@@ -59,6 +59,55 @@ public class SpUtils {
         return sharedPreferences.getInt(CacheConstants.HOME_CITY_ID, -1);
     }
 
+    public static void saveSyncTime(Context context, int typeTime) {
+        SharedPreferences sharedPreferences =
+                context.getSharedPreferences(CacheConstants.SP_Name, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(CacheConstants.SYNC_TIME, typeTime).apply();
+    }
+
+    public static int getSyncTime(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CacheConstants.SP_Name, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(CacheConstants.SYNC_TIME, 1);
+    }
+
+    public static void setIsSyncTime(Context context,boolean isSync) {
+        SharedPreferences sharedPreferences =
+                context.getSharedPreferences(CacheConstants.SP_Name, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(CacheConstants.IS_SYNC_TIME, isSync).apply();
+    }
+
+    public static boolean getIsSyncTime(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CacheConstants.SP_Name, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(CacheConstants.IS_SYNC_TIME, false);
+    }
+
+    public static void saveHotKeyEnable(Context context,boolean isEnable) {
+        SharedPreferences sharedPreferences =
+                context.getSharedPreferences(CacheConstants.SP_Name, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(CacheConstants.HOT_KEY_ENABLE, isEnable).apply();
+    }
+
+    public static boolean getHotKeyEnable(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CacheConstants.SP_Name, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(CacheConstants.HOT_KEY_ENABLE, false);
+    }
+
+    public static void saveHotKey(Context context, int hotKey) {
+        SharedPreferences sharedPreferences =
+                context.getSharedPreferences(CacheConstants.SP_Name, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(CacheConstants.HOT_KEY, hotKey).apply();
+    }
+
+    public static int getHotKey(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CacheConstants.SP_Name, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(CacheConstants.HOT_KEY, -1);
+    }
+
+
     public static void printAllConstants(Context context) {
         Log.w("Karl", "Base steps = " + getIntMethod(context, CacheConstants.TODAY_BASESTEP, -1));
         Log.w("Karl", "     steps = " + getIntMethod(context, CacheConstants.TODAY_STEP, -1));

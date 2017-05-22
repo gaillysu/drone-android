@@ -128,6 +128,11 @@
         <activity
             android:name=".activity.CompassActivity"
             android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".activity.HotKeyActivity"
+            android:screenOrientation="portrait"
+            />
         <!-- register all services used in the application -->
         <service
             android:name="net.medcorp.library.ble.ble.MEDBTService"

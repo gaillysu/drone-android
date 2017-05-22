@@ -2,7 +2,10 @@ package com.dayton.drone.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
@@ -33,7 +36,6 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by Jason on 2016/11/21.
@@ -43,6 +45,8 @@ public class NewSetNotificationActivity extends BaseActivity{
 
     @Bind(R.id.notification_all_app_listView)
     ListView allNotificationApps;
+    @Bind(R.id.my_toolbar)
+    Toolbar mToolbar;
 
     private NotificationAllAppsAdapter adapter;
     private List<NotificationModel> notificationBean;
@@ -53,6 +57,20 @@ public class NewSetNotificationActivity extends BaseActivity{
         setContentView(R.layout.new_notification_activity);
         ButterKnife.bind(this);
         initView();
+        initToolbar();
+    }
+
+    private void initToolbar() {
+        mToolbar.setTitle("");
+        setSupportActionBar(mToolbar);
+        TextView title = (TextView) mToolbar.findViewById(R.id.toolbar_title_tv);
+        title.setText(getString(R.string.notifications_notifications));
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void initView() {
@@ -79,11 +97,6 @@ public class NewSetNotificationActivity extends BaseActivity{
 
         adapter = new NotificationAllAppsAdapter(this, notificationBean);
         allNotificationApps.setAdapter(adapter);
-    }
-
-    @OnClick(R.id.activity_set_notification_back_imagebutton)
-    public void backUp() {
-        finish();
     }
 
 }

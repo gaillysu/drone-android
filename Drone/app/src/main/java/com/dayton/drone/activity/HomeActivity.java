@@ -51,7 +51,6 @@ public class HomeActivity extends BaseActivity {
             tintManager.setStatusBarTintEnabled(true);
             tintManager.setStatusBarTintResource(R.color.user_info_sex_bg);
         }
-
         ButterKnife.bind(this);
         initData();
         MyHomeMenuAdapter adapter = new MyHomeMenuAdapter(listData, this);

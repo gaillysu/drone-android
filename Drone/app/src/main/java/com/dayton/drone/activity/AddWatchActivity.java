@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +45,7 @@ import butterknife.OnClick;
 public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
 
     @Bind(R.id.activity_add_watch_viewpager)
-    ViewPager addwatchViewPager;
+    ViewPager addWatchViewPager;
 
     @Bind(R.id.activity_add_watch_view_pager_current_page_layout)
     LinearLayout viewPagerGroupLayout;
@@ -52,7 +53,9 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
     @Bind(R.id.activity_addwatch_nowatch_layout)
     LinearLayout noWatchLayout;
     @Bind(R.id.add_watch_activity_page)
-    LinearLayout addWarchPage;
+    LinearLayout addWatchPage;
+    @Bind(R.id.my_toolbar)
+    Toolbar mToolbar;
 
     private TextView batteryStateTextView;
     private TextView versionTextView;
@@ -71,6 +74,7 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
             tintManager.setStatusBarTintResource(R.color.user_info_sex_bg);
         }
         ButterKnife.bind(this);
+        initToolbar();
         List<View> viewList = new ArrayList<>();
         List<Watches> watchesList = getModel().getWatchesDatabaseHelper().getAll(getModel().getUser().getUserID());
         if (!getModel().getSyncController().isConnected()) {
@@ -111,27 +115,34 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
             }
 
         }
-        addwatchViewPager.setAdapter(new AddWatchViewPagerAdapter(viewList));
-        addwatchViewPager.addOnPageChangeListener(this);
+        addWatchViewPager.setAdapter(new AddWatchViewPagerAdapter(viewList));
+        addWatchViewPager.addOnPageChangeListener(this);
 
     }
 
-    @OnClick(R.id.activity_add_watch_back_imagebutton)
-    public void back() {
-        startActivity(HomeActivity.class);
-        finish();
+    private void initToolbar() {
+        mToolbar.setTitle("");
+        setSupportActionBar(mToolbar);
+        TextView titleText = (TextView) mToolbar.findViewById(R.id.toolbar_title_tv);
+        titleText.setText(getString(R.string.add_watch_watches));
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     @OnClick(R.id.activity_add_watch_contacts_notifications)
     public void ContactsNotifications() {
-//        startActivity(SetNotificationActivity.class);
+        //        startActivity(SetNotificationActivity.class);
         startActivity(NewSetNotificationActivity.class);
     }
 
     @OnClick(R.id.activity_add_watch_forget_watch)
     public void forgetNotification() {
         getModel().getSyncController().forgetDevice();
-        SpUtils.putBoolean(this, CacheConstants.MUST_SYNC_STEPS,true);
+        SpUtils.putBoolean(this, CacheConstants.MUST_SYNC_STEPS, true);
         Intent intent = new Intent(this, HomeActivity.class);
         intent.putExtra("logOut", false);
         startActivity(intent);
@@ -195,7 +206,7 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                if(connectionStateTextView==null) {
+                if (connectionStateTextView == null) {
                     return;
                 }
                 if (stateChangedEvent.isConnected()) {
@@ -220,7 +231,7 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
                     firmwareVersion.add(bleFirmwareVersionReceivedEvent.getVersion());
                 }
                 if (firmwareVersion.size() == 2) {
-                    if(versionTextView!=null) {
+                    if (versionTextView != null) {
                         versionTextView.setText(formatFirmwareVersion(firmwareVersion.get(0), firmwareVersion.get(1)));
                     }
                     firmwareVersion.clear();
@@ -234,7 +245,7 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                if(batteryStateTextView==null) {
+                if (batteryStateTextView == null) {
                     return;
                 }
                 if (batteryStatusChangedEvent.getState() == Constants.BatteryStatus.InUse.rawValue()) {

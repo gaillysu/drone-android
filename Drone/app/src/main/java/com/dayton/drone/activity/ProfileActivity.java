@@ -76,6 +76,7 @@ public class ProfileActivity extends BaseActivity {
     TextView userBirthdayTextView;
     @Bind(R.id.my_toolbar)
     Toolbar mToolbar;
+
     private int userStepGoal;
     private int viewType = -1;
     private int resultCode = 2 >> 5;

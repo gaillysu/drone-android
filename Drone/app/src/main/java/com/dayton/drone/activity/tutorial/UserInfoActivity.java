@@ -51,6 +51,7 @@ public class UserInfoActivity extends BaseActivity {
 
     private int gender = 1; //0:female, 1: male
     private int viewType = 1;
+    private String userBirthdayDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +64,6 @@ public class UserInfoActivity extends BaseActivity {
             tintManager.setStatusBarTintEnabled(true);
             tintManager.setStatusBarTintResource(R.color.user_info_gender_select_text_color);
         }
-
         ButterKnife.bind(this);
     }
 
@@ -100,6 +100,7 @@ public class UserInfoActivity extends BaseActivity {
                             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                             Date userSelectDate = dateFormat.parse(dateDesc);
                             tv_userBirth.setText(new SimpleDateFormat("MMM").format(userSelectDate) + "-" + day + "-" + year);
+                            userBirthdayDate = dateDesc;
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
@@ -157,7 +158,7 @@ public class UserInfoActivity extends BaseActivity {
 
     @OnClick(R.id.register_next_iv)
     public void next() {
-        final String birthday = tv_userBirth.getText().toString();
+        final String birthday = tv_userBirth.getText().toString() != null ? userBirthdayDate : null;
         String height = tv_userHeight.getText().toString();
         String weight = tv_userWeight.getText().toString();
         String firstName = editFirstName.getText().toString();
