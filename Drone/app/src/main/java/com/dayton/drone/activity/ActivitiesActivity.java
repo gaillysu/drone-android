@@ -16,7 +16,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -75,7 +74,6 @@ import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 import static java.lang.Math.abs;
 
@@ -136,7 +134,7 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
 
     @Bind(R.id.my_toolbar)
     Toolbar mToolbar;
-    private ImageView calendarIcon;
+    private ImageButton calendarIcon;
     private TextView mTitleCalendarTextView;
     private ImageButton nextMonthIcon;
     private Button setGoalButton;
@@ -182,13 +180,11 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
 
     private void initToolbar() {
         backMonth = (ImageButton) mToolbar.findViewById(R.id.activities_activity_calendar_back_month);
-        calendarIcon = (ImageView) mToolbar.findViewById(R.id.toolbar_calendar_icon);
+        calendarIcon = (ImageButton) mToolbar.findViewById(R.id.toolbar_calendar_icon);
         mTitleCalendarTextView = (TextView) mToolbar.findViewById(R.id.toolbar_title_tv);
         nextMonthIcon = (ImageButton) mToolbar.findViewById(R.id.activities_activity_title_next_month);
         setGoalButton = (Button) mToolbar.findViewById(R.id.activities_title_set_goal_button);
-        backMonth.setVisibility(View.VISIBLE);
         calendarIcon.setVisibility(View.VISIBLE);
-        nextMonthIcon.setVisibility(View.VISIBLE);
         setGoalButton.setVisibility(View.VISIBLE);
         backMonth.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -200,6 +196,12 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
             @Override
             public void onClick(View v) {
                 mIvNextMonthClick();
+            }
+        });
+        calendarIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCalendarClick();
             }
         });
 
@@ -554,7 +556,6 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         mTitleCalendarTextView.setText(rightdate.split("-")[2] + " " + new SimpleDateFormat("MMM", Locale.US).format(rightMouth));
     }
 
-    @OnClick(R.id.activities_activity_title_date)
     public void showCalendarClick() {
         nextMonthIcon.setVisibility(View.VISIBLE);
         backMonth.setVisibility(View.VISIBLE);

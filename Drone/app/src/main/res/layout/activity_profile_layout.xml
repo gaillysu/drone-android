@@ -2,13 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@android:color/white"
-    >
+                android:background="@android:color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <include layout="@layout/toolbar"/>
 
         <LinearLayout
@@ -31,7 +31,7 @@
                     style="@style/profile_activity_text_style"
                     android:maxLength="20"
                     android:maxLines="1"
-                    android:textSize="29sp"
+                    android:textSize="18sp"
                     />
 
                 <ImageButton
@@ -40,179 +40,185 @@
                     />
 
             </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <EditText
-                    android:id="@+id/profile_activity_user_fist_name"
-                    style="@style/profile_activity_text_style"
-                    android:maxLength="20"
-                    android:maxLines="1" />
-
-                <ImageButton
-                    android:id="@+id/profile_activity_edit_fist_name_ib"
-                    style="@style/profile_activity_image_button_style"
-                    />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/profile_user_bg"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/profile_activity_user_email_account"
-                    style="@style/profile_activity_text_style"/>
-
-                <ImageButton
-                    android:id="@+id/profile_activity_edit_email_ib"
-                    style="@style/profile_activity_image_button_style"/>
-
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/profile_user_bg"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/profile_activity_user_height"
-                    style="@style/profile_activity_text_style"
-                    android:maxLength="5"
-                    android:maxLines="1" />
-
-                <ImageButton
-                    android:id="@+id/profile_activity_edit_user_height"
-                    style="@style/profile_activity_image_button_style"/>
-
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/profile_user_bg"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/profile_activity_user_weight"
-                    style="@style/profile_activity_text_style"
-                    android:maxLength="7"
-                    android:maxLines="1" />
-
-                <ImageButton
-                    android:id="@+id/profile_activity_edit_user_weight"
-                    style="@style/profile_activity_image_button_style"/>
-
-            </LinearLayout>
-
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/profile_user_bg"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:id="@+id/profile_activity_user_goal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:text="@string/profile_activity_user_goal"
-                    android:textColor="@color/home_list_adapter_item_tv_color"
-                    android:textSize="26sp"/>
-
-                <EditText
-                    android:id="@+id/profile_activity_step_goal_et"
-                    style="@style/profile_activity_text_style"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:paddingLeft="10dp"
-                    android:inputType="number"
-                    android:maxLength="8"
-                    android:maxLines="1"
-                    android:textColorHint="@color/home_list_adapter_item_tv_color"
-                    android:textSize="25sp"/>
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
-                <ImageButton
-                    android:id="@+id/profile_activity_edit_goal_ib"
-                    style="@style/profile_activity_image_button_style"/>
+                    <EditText
+                        android:id="@+id/profile_activity_user_fist_name"
+                        style="@style/profile_activity_text_style"
+                        android:maxLength="20"
+                        android:maxLines="1"/>
 
+                    <ImageButton
+                        android:id="@+id/profile_activity_edit_fist_name_ib"
+                        style="@style/profile_activity_image_button_style"/>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/profile_user_bg"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/profile_activity_user_email_account"
+                        style="@style/profile_activity_text_style"/>
+
+                    <ImageButton
+                        android:id="@+id/profile_activity_edit_email_ib"
+                        style="@style/profile_activity_image_button_style"/>
+
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/profile_user_bg"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/profile_activity_user_height"
+                        style="@style/profile_activity_text_style"
+                        android:maxLength="5"
+                        android:maxLines="1"/>
+
+                    <ImageButton
+                        android:id="@+id/profile_activity_edit_user_height"
+                        style="@style/profile_activity_image_button_style"/>
+
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/profile_user_bg"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/profile_activity_user_weight"
+                        style="@style/profile_activity_text_style"
+                        android:maxLength="7"
+                        android:maxLines="1"/>
+
+                    <ImageButton
+                        android:id="@+id/profile_activity_edit_user_weight"
+                        style="@style/profile_activity_image_button_style"/>
+
+                </LinearLayout>
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/profile_user_bg"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/profile_activity_user_goal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:text="@string/profile_activity_user_goal"
+                        android:textColor="@color/home_list_adapter_item_tv_color"
+                        android:textSize="22sp"/>
+
+                    <EditText
+                        android:id="@+id/profile_activity_step_goal_et"
+                        style="@style/profile_activity_text_style"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:layout_weight="1"
+                        android:inputType="number"
+                        android:maxLength="8"
+                        android:maxLines="1"
+                        android:paddingLeft="10dp"
+                        android:textColorHint="@color/home_list_adapter_item_tv_color"
+                        android:textSize="25sp"/>
+
+                    <ImageButton
+                        android:id="@+id/profile_activity_edit_goal_ib"
+                        style="@style/profile_activity_image_button_style"/>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/profile_user_bg"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:text="@string/profile_birthday_dec"
+                        android:textColor="@color/home_list_adapter_item_tv_color"
+                        android:textSize="22sp"/>
+
+                    <TextView
+                        android:id="@+id/profile_activity_user_birthday"
+                        style="@style/profile_activity_text_style"
+                        android:layout_marginLeft="10dp"/>
+
+                    <ImageButton
+                        android:id="@+id/profile_activity_edit_user_birthday"
+                        style="@style/profile_activity_image_button_style"/>
+
+                </LinearLayout>
             </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/profile_user_bg"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:textColor="@color/home_list_adapter_item_tv_color"
-                android:textSize="26sp"
-                android:text="@string/profile_birthday_dec"/>
-            <TextView
-                android:id="@+id/profile_activity_user_birthday"
-                style="@style/profile_activity_text_style"
-                android:layout_marginLeft="10dp"/>
-
-            <ImageButton
-                android:id="@+id/profile_activity_edit_user_birthday"
-                style="@style/profile_activity_image_button_style"/>
-
-        </LinearLayout>
-        </LinearLayout>
 
 
         </LinearLayout>
+
         <Button
             android:id="@+id/profile_activity_log_out_bt"
             android:layout_width="match_parent"
@@ -222,32 +228,36 @@
             android:textColor="@android:color/white"
             android:textSize="24sp"/>
     </LinearLayout>
+
     <RelativeLayout
         android:id="@+id/profile_save_no_watch_connected_show"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/activities_calendar_show_bg_color"
         android:orientation="vertical"
-        android:visibility="gone"
-        android:background="@color/activities_calendar_show_bg_color">
+        android:visibility="gone">
+
         <LinearLayout
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:background="@drawable/profile"
             android:layout_centerInParent="true"
+            android:background="@drawable/profile"
             android:orientation="vertical">
-        <TextView
-            android:layout_width="match_parent"
-            android:gravity="center"
-            android:layout_height="wrap_content"
-            android:textColor="@color/profile_watch_is_connected"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:text="@string/profile_save_text_dec"/>
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="2dp"
-            android:src="@mipmap/save_error_icon"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/profile_save_text_dec"
+                android:textColor="@color/profile_watch_is_connected"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="2dp"
+                android:src="@mipmap/save_error_icon"/>
         </LinearLayout>
     </RelativeLayout>
 </RelativeLayout>
