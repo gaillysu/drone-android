@@ -1,5 +1,7 @@
 package com.dayton.drone.network.response.model;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by med on 17/5/18.
  */
@@ -7,18 +9,22 @@ package com.dayton.drone.network.response.model;
 public class Step {
     Distance distance;
     Duration duration;
-    Location end_location;
-    String html_instructions;
+    @SerializedName("end_location")
+    Location endLocation;
+    @SerializedName("html_instructions")
+    String htmlInstructions;
     String maneuver;
     Polyline polyline;
-    Location start_location;
-    String travel_mode;
+    @SerializedName("start_location")
+    Location startLocation;
+    @SerializedName("travel_mode")
+    String travelMode;
 
-    public Location getEnd_location() {
-        return end_location;
+    public Location getEndLocation() {
+        return endLocation;
     }
 
-    public Location getStart_location() {
-        return start_location;
+    public Location getStartLocation() {
+        return startLocation;
     }
 }

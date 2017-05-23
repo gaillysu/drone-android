@@ -21,6 +21,7 @@
             android:id="@+id/navigation_back_to_search_image_button"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:background="@android:color/transparent"
             android:src="@mipmap/left_arrpw_1"/>
 
         <Button

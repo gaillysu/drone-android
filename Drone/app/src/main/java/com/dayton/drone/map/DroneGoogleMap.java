@@ -4,23 +4,15 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 
 import com.dayton.drone.R;
-import com.dayton.drone.application.ApplicationModel;
-import com.dayton.drone.map.request.Request;
-import com.dayton.drone.network.request.GetGeocodeRequest;
-import com.dayton.drone.network.response.model.GetGeocodeModel;
 import com.dayton.drone.network.response.model.Route;
 import com.dayton.drone.network.response.model.Step;
 import com.dayton.drone.view.GoogleMapView;
@@ -30,14 +22,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.octo.android.robospice.persistence.exception.SpiceException;
-import com.octo.android.robospice.request.listener.RequestListener;
-
-import java.io.IOException;
-import java.util.List;
 
 /**
  * Created by med on 17/5/16.
@@ -108,16 +94,16 @@ public class DroneGoogleMap implements BaseMap, OnMapReadyCallback, LocationList
                     for (int i = 0; i < steps.length; i++) {
                         if (i == 0) {
                             googleMap.addMarker(new MarkerOptions()
-                                    .position(new LatLng(steps[i].getStart_location().getLat(), steps[i].getStart_location().getLng()))
+                                    .position(new LatLng(steps[i].getStartLocation().getLat(), steps[i].getStartLocation().getLng()))
                                     .icon(BitmapDescriptorFactory.fromResource(R.mipmap.map_icon_map_start)));
                         }
                         if (i == route.getLegs()[0].getSteps().length - 1) {
                             googleMap.addMarker(new MarkerOptions()
-                                    .position(new LatLng(steps[i].getEnd_location().getLat(), steps[i].getEnd_location().getLng()))
+                                    .position(new LatLng(steps[i].getEndLocation().getLat(), steps[i].getEndLocation().getLng()))
                                     .icon(BitmapDescriptorFactory.fromResource(R.mipmap.map_icon_map_stop)));
                         }
-                        polylineOptions.add(new LatLng(steps[i].getStart_location().getLat(), steps[i].getStart_location().getLng()));
-                        polylineOptions.add(new LatLng(steps[i].getEnd_location().getLat(), steps[i].getEnd_location().getLng()));
+                        polylineOptions.add(new LatLng(steps[i].getStartLocation().getLat(), steps[i].getStartLocation().getLng()));
+                        polylineOptions.add(new LatLng(steps[i].getEndLocation().getLat(), steps[i].getEndLocation().getLng()));
                     }
                     googleMap.addPolyline(polylineOptions);
                 }

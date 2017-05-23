@@ -1,27 +1,35 @@
 package com.dayton.drone.network.response.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by med on 17/5/17.
  */
-
 public class GeocodeResult {
-    Address_Component[] address_components;
-    String formatted_address;
+    @SerializedName("address_components")
+    AddressComponent[] addressComponents;
+    @SerializedName("formatted_address")
+    String formattedAddress;
     Geometry geometry;
-    String place_id;
+    @SerializedName("place_id")
+    String placeId;
     String[] types;
 
     // transient fields only is used for UI
-    transient String formattedCityRegion;
-    transient String formattedRoad;
-    transient String formattedDistance="";
+    @Expose(serialize=false,deserialize=false)
+    String formattedCityRegion;
+    @Expose(serialize=false,deserialize=false)
+    String formattedRoad;
+    @Expose(serialize=false,deserialize=false)
+    String formattedDistance="";
 
-    public String getFormatted_address() {
-        return formatted_address;
+    public String getFormattedAddress() {
+        return formattedAddress;
     }
 
-    public Address_Component[] getAddress_components() {
-        return address_components;
+    public AddressComponent[] getAddressComponents() {
+        return addressComponents;
     }
 
     public Geometry getGeometry() {
