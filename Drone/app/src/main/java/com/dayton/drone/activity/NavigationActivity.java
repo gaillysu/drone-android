@@ -224,13 +224,12 @@ public class NavigationActivity extends BaseActivity {
                 }
                 else {
                     if(getRouteMapModel.getRoutes().length==0) {
-                        route1.setVisibility(View.INVISIBLE);
                         return;
                     }
                     if(getRouteMapModel.getRoutes().length==2) {
                         route2.setVisibility(View.VISIBLE);
                     }
-                    if(getRouteMapModel.getRoutes().length==3) {
+                    if(getRouteMapModel.getRoutes().length>=3) {
                         route2.setVisibility(View.VISIBLE);
                         route3.setVisibility(View.VISIBLE);
                     }

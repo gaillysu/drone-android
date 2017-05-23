@@ -42,7 +42,7 @@
             android:background="@color/colorPrimaryDark"
             android:textColor="@android:color/white"
             android:textSize="12sp"
-            android:visibility="gone"/>
+            android:visibility="invisible"/>
         <Button
             android:id="@+id/navigation_route3_button"
             android:layout_width="wrap_content"
@@ -52,7 +52,7 @@
             android:background="@color/colorPrimaryDark"
             android:textColor="@android:color/white"
             android:textSize="12sp"
-            android:visibility="gone"/>
+            android:visibility="invisible"/>
     </LinearLayout>
 
     <RelativeLayout
