@@ -268,7 +268,7 @@ public class SyncControllerImpl implements  SyncController{
 
     @Override
     public void startNavigation(double latitude, double longitude, String address) {
-        sendRequest(new EnableUrbanNavigation(application,(long)(latitude*1000000),(long)(longitude*1000000),address));
+        sendRequest(new EnableUrbanNavigation(application,(long)(latitude*10000000),(long)(longitude*10000000),address));
     }
 
     @Override
@@ -278,7 +278,7 @@ public class SyncControllerImpl implements  SyncController{
 
     @Override
     public void updateNavigation(double latitude, double longitude,long distanceInMeters) {
-        sendRequest(new UpdateUrbanNavigation(application,(long)(latitude*1000000),(long)(longitude*1000000),distanceInMeters));
+        sendRequest(new UpdateUrbanNavigation(application,(long)(latitude*10000000),(long)(longitude*10000000),distanceInMeters));
     }
 
     /**

@@ -43,7 +43,7 @@ import java.util.List;
  * Created by med on 17/5/16.
  */
 
-public class DroneGoogleMap implements BaseMap,OnMapReadyCallback, LocationListener {
+public class DroneGoogleMap implements BaseMap, OnMapReadyCallback, LocationListener {
 
     private Context context;
     private GoogleMapView googleMapView;
@@ -62,7 +62,7 @@ public class DroneGoogleMap implements BaseMap,OnMapReadyCallback, LocationListe
 
     @Override
     public void followGPS(boolean follow) {
-        if(googleMap == null) {
+        if (googleMap == null) {
             return;
         }
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -77,19 +77,16 @@ public class DroneGoogleMap implements BaseMap,OnMapReadyCallback, LocationListe
 
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if(location == null) {
+        if (location == null) {
             location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 0, this);
         }
-        else {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0, this);
-        }
-        if(location!=null) {
+        if (location != null) {
             zoomTo(location.getLatitude(), location.getLongitude());
+        } else {
+            zoomTo(0, 0);
         }
-        else {
-            zoomTo(0,0);
-        }
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0, this);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 0, this);
     }
 
     @Override
@@ -103,29 +100,28 @@ public class DroneGoogleMap implements BaseMap,OnMapReadyCallback, LocationListe
         PolylineOptions polylineOptions = new PolylineOptions();
         polylineOptions.width(12);
         polylineOptions.color(Color.BLUE);
-        for(Route route:routes){
-             if(route.getLegs().length>0) {
-                 //only select the first Leg for every route
-                 Step[] steps = route.getLegs()[0].getSteps();
-                 if(steps.length>0)
-                 {
-                     for (int i = 0; i < steps.length; i++) {
-                         if (i == 0) {
-                             googleMap.addMarker(new MarkerOptions()
-                                     .position(new LatLng(steps[i].getStart_location().getLat(), steps[i].getStart_location().getLng()))
-                                     .icon(BitmapDescriptorFactory.fromResource(R.mipmap.map_icon_map_start)));
-                         }
-                         if (i == route.getLegs()[0].getSteps().length - 1) {
-                             googleMap.addMarker(new MarkerOptions()
-                                     .position(new LatLng(steps[i].getEnd_location().getLat(), steps[i].getEnd_location().getLng()))
-                                     .icon(BitmapDescriptorFactory.fromResource(R.mipmap.map_icon_map_stop)));
-                         }
-                         polylineOptions.add(new LatLng(steps[i].getStart_location().getLat(), steps[i].getStart_location().getLng()));
-                         polylineOptions.add(new LatLng(steps[i].getEnd_location().getLat(), steps[i].getEnd_location().getLng()));
-                     }
-                     googleMap.addPolyline(polylineOptions);
-                 }
-             }
+        for (Route route : routes) {
+            if (route.getLegs().length > 0) {
+                //only select the first Leg for every route
+                Step[] steps = route.getLegs()[0].getSteps();
+                if (steps.length > 0) {
+                    for (int i = 0; i < steps.length; i++) {
+                        if (i == 0) {
+                            googleMap.addMarker(new MarkerOptions()
+                                    .position(new LatLng(steps[i].getStart_location().getLat(), steps[i].getStart_location().getLng()))
+                                    .icon(BitmapDescriptorFactory.fromResource(R.mipmap.map_icon_map_start)));
+                        }
+                        if (i == route.getLegs()[0].getSteps().length - 1) {
+                            googleMap.addMarker(new MarkerOptions()
+                                    .position(new LatLng(steps[i].getEnd_location().getLat(), steps[i].getEnd_location().getLng()))
+                                    .icon(BitmapDescriptorFactory.fromResource(R.mipmap.map_icon_map_stop)));
+                        }
+                        polylineOptions.add(new LatLng(steps[i].getStart_location().getLat(), steps[i].getStart_location().getLng()));
+                        polylineOptions.add(new LatLng(steps[i].getEnd_location().getLat(), steps[i].getEnd_location().getLng()));
+                    }
+                    googleMap.addPolyline(polylineOptions);
+                }
+            }
         }
     }
 
@@ -144,7 +140,7 @@ public class DroneGoogleMap implements BaseMap,OnMapReadyCallback, LocationListe
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.i("location",location.getProvider() + " location changed: " + location.getLatitude() + "," + location.getLongitude());
+        Log.i("location",location.getProvider() + " location changed: " + location.getLatitude() + "," + location.getLongitude()+ ",Accuracy: " + location.getAccuracy());
         this.location = location;
     }
 
