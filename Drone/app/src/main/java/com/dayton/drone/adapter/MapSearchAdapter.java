@@ -24,21 +24,21 @@ import butterknife.ButterKnife;
 public class MapSearchAdapter extends BaseAdapter {
 
     private Context context;
-    List<GeocodeResult> addresses;
+    List<GeocodeResult> geocodeResultList;
 
-    public MapSearchAdapter(Context context,List<GeocodeResult> addresses) {
+    public MapSearchAdapter(Context context,List<GeocodeResult> geocodeResultList) {
         this.context = context;
-        this.addresses = addresses;
+        this.geocodeResultList = geocodeResultList;
     }
 
     @Override
     public int getCount() {
-        return addresses.size();
+        return geocodeResultList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return addresses.get(position);
+        return geocodeResultList.get(position);
     }
 
     @Override
@@ -53,16 +53,16 @@ public class MapSearchAdapter extends BaseAdapter {
             convertView.setTag(new ViewHolder(convertView));
         }
         ViewHolder viewHolder = (ViewHolder) convertView.getTag();
-        formatAddress(addresses.get(position));
-        viewHolder.addrerss.setText(addresses.get(position).getFormattedCityRegion());
-        viewHolder.road.setText(addresses.get(position).getFormattedRoad());
-        viewHolder.distance.setText(addresses.get(position).getFormattedDistance());
+        formatAddress(geocodeResultList.get(position));
+        viewHolder.addrerss.setText(geocodeResultList.get(position).getFormattedCityRegion());
+        viewHolder.road.setText(geocodeResultList.get(position).getFormattedRoad());
+        viewHolder.distance.setText(geocodeResultList.get(position).getFormattedDistance());
         return convertView;
     }
 
-    private String getComponentAddress(AddressComponent[] address_components, String type)
+    private String getComponentAddress(AddressComponent[] addressComponents, String type)
     {
-        for(AddressComponent address_component:address_components)
+        for(AddressComponent address_component:addressComponents)
         {
             if(Arrays.asList(address_component.getTypes()).contains(type))
             {
@@ -71,38 +71,38 @@ public class MapSearchAdapter extends BaseAdapter {
         }
         return null;
     }
-    private void formatAddress(GeocodeResult result)
+    private void formatAddress(GeocodeResult geocodeResult)
     {
         String  address = null;
         //city region address
-        if((address = getComponentAddress(result.getAddressComponents(),context.getString(R.string.address_type_1)))!=null)
+        if((address = getComponentAddress(geocodeResult.getAddressComponents(),context.getString(R.string.address_type_1)))!=null)
         {
-            result.setFormattedCityRegion(address);
+            geocodeResult.setFormattedCityRegion(address);
         }
-        if((address = getComponentAddress(result.getAddressComponents(),context.getString(R.string.address_type_2)))!=null)
+        if((address = getComponentAddress(geocodeResult.getAddressComponents(),context.getString(R.string.address_type_2)))!=null)
         {
-            result.setFormattedCityRegion(result.getFormattedCityRegion()+","+address);
+            geocodeResult.setFormattedCityRegion(geocodeResult.getFormattedCityRegion()+","+address);
         }
-        if((address = getComponentAddress(result.getAddressComponents(),context.getString(R.string.address_type_3)))!=null)
+        if((address = getComponentAddress(geocodeResult.getAddressComponents(),context.getString(R.string.address_type_3)))!=null)
         {
-            result.setFormattedCityRegion(result.getFormattedCityRegion()+","+address);
+            geocodeResult.setFormattedCityRegion(geocodeResult.getFormattedCityRegion()+","+address);
         }
-        if((address = getComponentAddress(result.getAddressComponents(),context.getString(R.string.address_type_4)))!=null)
+        if((address = getComponentAddress(geocodeResult.getAddressComponents(),context.getString(R.string.address_type_4)))!=null)
         {
-            result.setFormattedCityRegion(result.getFormattedCityRegion()+","+address);
+            geocodeResult.setFormattedCityRegion(geocodeResult.getFormattedCityRegion()+","+address);
         }
         //road address
-        if((address = getComponentAddress(result.getAddressComponents(),context.getString(R.string.address_type_5)))!=null)
+        if((address = getComponentAddress(geocodeResult.getAddressComponents(),context.getString(R.string.address_type_5)))!=null)
         {
-            result.setFormattedRoad(address);
+            geocodeResult.setFormattedRoad(address);
         }
-        if((address = getComponentAddress(result.getAddressComponents(),context.getString(R.string.address_type_6)))!=null)
+        if((address = getComponentAddress(geocodeResult.getAddressComponents(),context.getString(R.string.address_type_6)))!=null)
         {
-            result.setFormattedRoad(result.getFormattedRoad()+" "+address);
+            geocodeResult.setFormattedRoad(geocodeResult.getFormattedRoad()+" "+address);
         }
-        if((address = getComponentAddress(result.getAddressComponents(),context.getString(R.string.address_type_7)))!=null)
+        if((address = getComponentAddress(geocodeResult.getAddressComponents(),context.getString(R.string.address_type_7)))!=null)
         {
-            result.setFormattedRoad(result.getFormattedRoad()+","+address);
+            geocodeResult.setFormattedRoad(geocodeResult.getFormattedRoad()+","+address);
         }
     }
 
