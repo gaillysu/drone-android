@@ -46,4 +46,7 @@ public interface SyncController {
 
     void setCompassAutoOnDuration(int duration);
 
+    void startNavigation(double latitude,double longitude,String address);
+    void stopNavigation();
+    void updateNavigation(double latitude,double longitude,long distanceInMeters);
 }

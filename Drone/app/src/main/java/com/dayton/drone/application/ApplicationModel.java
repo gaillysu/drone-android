@@ -2,6 +2,7 @@ package com.dayton.drone.application;
 
 import android.app.Application;
 import android.content.Context;
+import android.support.multidex.MultiDex;
 
 import com.dayton.drone.R;
 import com.dayton.drone.ble.controller.SyncController;
@@ -64,6 +65,12 @@ public class ApplicationModel extends Application {
     private WatchesDatabaseHelper watchesDatabaseHelper;
     private WorldClockDatabaseHelper worldClockDatabaseHelper;
     private ApplicationModel mApplicationModel;
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
 
     @Override
     public void onCreate(){

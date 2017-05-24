@@ -17,7 +17,7 @@ public class UpdateUrbanNavigation extends RequestBase {
     private long longitude; //in 1e-7 deg
     private long distance;  //in "meter"
 
-    protected UpdateUrbanNavigation(Context context, long latitude, long longitude, long distance) {
+    public UpdateUrbanNavigation(Context context, long latitude, long longitude, long distance) {
         super(context);
         this.latitude = latitude;
         this.longitude = longitude;

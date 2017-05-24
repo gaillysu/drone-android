@@ -38,4 +38,22 @@ right position. Each press represents one second.</string>
     <string name="set_goal_popup_button_confirm">Confirm</string>
     <string name="set_goal_popup_button_cancel">Cancel</string>
 
+    <string name="map_navigation_title">Navigation</string>
+    <string name="map_navigation_mode">walking</string>
+
+
+    <string name="address_type_1">administrative_area_level_1</string>
+    <string name="address_type_2">locality</string>
+    <string name="address_type_3">sublocality</string>
+    <string name="address_type_4">neighborhood</string>
+    <string name="address_type_5">route</string>
+    <string name="address_type_6">street_number</string>
+    <string name="address_type_7">postal_code</string>
+
+    <string name="navigation_start">Start</string>
+    <string name="navigation_stop">Stop</string>
+    <string name="route_map_1">Route 1</string>
+    <string name="route_map_2">Route 2</string>
+    <string name="route_map_3">Route 3</string>
+
 </resources>

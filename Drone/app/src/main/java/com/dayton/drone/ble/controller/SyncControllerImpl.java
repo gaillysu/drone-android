@@ -27,8 +27,11 @@ import com.dayton.drone.ble.model.packet.GetStepsGoalPacket;
 import com.dayton.drone.ble.model.packet.SystemEventPacket;
 import com.dayton.drone.ble.model.packet.SystemStatusPacket;
 import com.dayton.drone.ble.model.packet.base.DronePacket;
+import com.dayton.drone.ble.model.request.DisableUrbanNavigation;
+import com.dayton.drone.ble.model.request.EnableUrbanNavigation;
 import com.dayton.drone.ble.model.request.SetWeatherLocationsRequest;
 import com.dayton.drone.ble.model.request.StartSystemSettingRequest;
+import com.dayton.drone.ble.model.request.UpdateUrbanNavigation;
 import com.dayton.drone.ble.model.request.UpdateWeatherInfomationRequest;
 import com.dayton.drone.ble.model.request.battery.GetBatteryRequest;
 import com.dayton.drone.ble.model.request.clean.ForgetWatchRequest;
@@ -261,6 +264,21 @@ public class SyncControllerImpl implements  SyncController{
     @Override
     public void setCompassAutoOnDuration(int duration) {
         sendRequest(new SetSystemConfig(application, (short) duration,Constants.SystemConfigID.CompassAutoOnDuration));
+    }
+
+    @Override
+    public void startNavigation(double latitude, double longitude, String address) {
+        sendRequest(new EnableUrbanNavigation(application,(long)(latitude*10000000),(long)(longitude*10000000),address));
+    }
+
+    @Override
+    public void stopNavigation() {
+        sendRequest(new DisableUrbanNavigation(application));
+    }
+
+    @Override
+    public void updateNavigation(double latitude, double longitude,long distanceInMeters) {
+        sendRequest(new UpdateUrbanNavigation(application,(long)(latitude*10000000),(long)(longitude*10000000),distanceInMeters));
     }
 
     /**

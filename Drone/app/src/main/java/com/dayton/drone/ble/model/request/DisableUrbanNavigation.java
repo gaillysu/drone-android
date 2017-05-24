@@ -10,7 +10,7 @@ import com.dayton.drone.ble.model.request.base.RequestBase;
 
 public class DisableUrbanNavigation extends RequestBase {
     public final static byte HEADER = (byte)0x35;
-    protected DisableUrbanNavigation(Context context) {
+    public DisableUrbanNavigation(Context context) {
         super(context);
     }
 
