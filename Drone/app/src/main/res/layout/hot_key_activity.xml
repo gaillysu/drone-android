@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/hot_key_background_color"
+              android:orientation="vertical">
+    <include layout="@layout/toolbar"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="40dp"
+        android:background="@android:color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp">
+
+        <ImageView
+            android:id="@+id/hot_key_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_star"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@id/hot_key_iv"
+            android:text="@string/hot_key_enable"
+            android:textColor="@color/activities_calendar_show_bg_color"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            />
+
+        <Switch
+            android:id="@+id/hot_key_hot_key_switch"
+            style="@style/compass_enable_switch_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="right"
+            android:layout_marginRight="16dp"
+            />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/hor_key_describe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="10dp"
+        android:text="@string/hot_key_describe"
+        android:textColor="@color/login_text_color"/>
+
+    <LinearLayout
+        android:id="@+id/hot_key_select_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:text="@string/hot_key_select_function"
+            android:textAllCaps="true"/>
+
+        <RadioGroup
+            android:id="@+id/hot_key_rg"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/white"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/hot_key_find_phone"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/layout_bg_select"
+                android:button="@null"
+                android:checked="true"
+                android:drawablePadding="5dp"
+                android:drawableTop="@drawable/find_phone_select"
+                android:gravity="center_horizontal"
+                android:paddingTop="15dp"
+                android:text="@string/hot_key_find_phone"
+                android:textColor="@drawable/radio_button_text_color"
+                android:textSize="12sp">
+            </RadioButton>
+            <RadioButton
+                android:id="@+id/hot_key_remote_camera"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/layout_bg_select"
+                android:button="@null"
+                android:clickable="true"
+                android:drawablePadding="5dp"
+                android:drawableTop="@drawable/remote_camera_select"
+                android:gravity="center_horizontal"
+                android:paddingTop="15dp"
+                android:text="@string/hot_key_remote_camera"
+                android:textColor="@drawable/radio_button_text_color"
+                android:textSize="12sp">
+
+            </RadioButton>
+
+            <RadioButton
+                android:id="@+id/hot_key_control_music"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/layout_bg_select"
+                android:button="@null"
+                android:drawablePadding="5dp"
+                android:drawableTop="@drawable/control_music_select"
+                android:gravity="center_horizontal"
+                android:paddingTop="15dp"
+                android:text="@string/hot_key_control_music"
+                android:textColor="@drawable/radio_button_text_color"
+                android:textSize="12sp">
+
+            </RadioButton>
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="@string/hot_key_bottom_describe"/>
+    </LinearLayout>
+</LinearLayout>

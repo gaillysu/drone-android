@@ -7,14 +7,16 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -55,8 +57,7 @@ public class ProfileActivity extends BaseActivity {
     private User mUser;
     @Bind(R.id.profile_activity_user_name_tv)
     EditText accountName;
-    @Bind(R.id.content_title_dec_tv)
-    TextView titleText;
+
     @Bind(R.id.profile_activity_user_fist_name)
     EditText userFirstName;
     @Bind(R.id.profile_activity_user_email_account)
@@ -67,15 +68,15 @@ public class ProfileActivity extends BaseActivity {
     TextView userWeight;
     @Bind(R.id.profile_activity_step_goal_et)
     EditText stepGoal;
-    @Bind(R.id.home_title_right_save_bt)
-    ImageButton saveButton;
-
     @Bind(R.id.profile_activity_log_out_bt)
     Button logOut;
     @Bind(R.id.profile_save_no_watch_connected_show)
     RelativeLayout noWatchConnect;
     @Bind(R.id.profile_activity_user_birthday)
     TextView userBirthdayTextView;
+    @Bind(R.id.my_toolbar)
+    Toolbar mToolbar;
+
     private int userStepGoal;
     private int viewType = -1;
     private int resultCode = 2 >> 5;
@@ -93,12 +94,43 @@ public class ProfileActivity extends BaseActivity {
             tintManager.setStatusBarTintEnabled(true);
             tintManager.setStatusBarTintResource(R.color.user_info_sex_bg);
         }
-
         ButterKnife.bind(this);
-        saveButton.setVisibility(View.VISIBLE);
+        initToolbar();
+        initView();
+
+    }
+
+    private void initToolbar() {
+        mToolbar.setTitle("");
+        setSupportActionBar(mToolbar);
+        TextView titleText = (TextView) mToolbar.findViewById(R.id.toolbar_title_tv);
+        titleText.setText(getString(R.string.home_guide_profile));
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = getIntent();
+                intent.putExtra("logOut", false);
+                setResult(resultCode, intent);
+                finish();
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.tool_bar_save_item, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.toolbar_save_button).setVisible(true);
+        return true;
+    }
+
+    private void initView() {
         userStepGoal = SpUtils.getIntMethod(this, CacheConstants.GOAL_STEP, 10000);
         stepGoal.setText(userStepGoal + "");
-        titleText.setText(getString(R.string.home_guide_profile));
         mUser = getModel().getUser();
         accountName.setText(mUser.getLastName() != null ? mUser.getLastName() :
                 getResources().getString(R.string.profile_edit_prompt));
@@ -119,14 +151,6 @@ public class ProfileActivity extends BaseActivity {
         } else {
             userWeight.setText(getResources().getString(R.string.profile_edit_prompt));
         }
-    }
-
-    @OnClick(R.id.content_title_back_bt)
-    public void back() {
-        Intent intent = getIntent();
-        intent.putExtra("logOut", false);
-        setResult(resultCode, intent);
-        finish();
     }
 
     @OnClick(R.id.profile_activity_edit_user_name_ib)
@@ -314,45 +338,47 @@ public class ProfileActivity extends BaseActivity {
         showDiaLogMethod(logOut.getId());
     }
 
-    @OnClick(R.id.home_title_right_save_bt)
-    public void saveEdit() {
-        boolean watchConnected = getModel().getSyncController().isConnected();
-        if (!watchConnected) {
-            noWatchConnect.setVisibility(View.VISIBLE);
-            AlphaAnimation alpha = new AlphaAnimation(1, 0);
-            alpha.setDuration(2000);
-            alpha.setFillAfter(true);
-            alpha.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.toolbar_save_button) {
+            boolean watchConnected = getModel().getSyncController().isConnected();
+            if (!watchConnected) {
+                noWatchConnect.setVisibility(View.VISIBLE);
+                AlphaAnimation alpha = new AlphaAnimation(1, 0);
+                alpha.setDuration(2000);
+                alpha.setFillAfter(true);
+                alpha.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
 
-                }
+                    }
 
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    noWatchConnect.setVisibility(View.GONE);
-                    saveUserCurrentEdit();
-                }
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        noWatchConnect.setVisibility(View.GONE);
+                        saveUserCurrentEdit();
+                    }
 
-                @Override
-                public void onAnimationRepeat(Animation animation) {
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
 
-                }
-            });
-            noWatchConnect.startAnimation(alpha);
-        } else {
+                    }
+                });
+                noWatchConnect.startAnimation(alpha);
+            } else {
 
-            currentTime = System.currentTimeMillis();
-            progressDialog = new ProgressDialog(this);
-            progressDialog.setIndeterminate(true);
-            progressDialog.setCancelable(false);
-            progressDialog.setMessage(getString(R.string.forget_password_dialog_text));
-            progressDialog.show();
-            saveUserCurrentEdit();
+                currentTime = System.currentTimeMillis();
+                progressDialog = new ProgressDialog(this);
+                progressDialog.setIndeterminate(true);
+                progressDialog.setCancelable(false);
+                progressDialog.setMessage(getString(R.string.forget_password_dialog_text));
+                progressDialog.show();
+                saveUserCurrentEdit();
+            }
+            return true;
         }
-
+        return super.onOptionsItemSelected(item);
     }
-
 
     @OnClick(R.id.profile_activity_edit_user_birthday)
     public void editUserBirthday() {

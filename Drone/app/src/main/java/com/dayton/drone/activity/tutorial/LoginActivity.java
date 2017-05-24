@@ -114,25 +114,6 @@ public class LoginActivity extends BaseActivity {
                                 }
                             }
                         });
-//            String path = "drone.karljohnchow.com/user/login";
-//            String token = getModel().getRetrofitManager().getAccessToken();
-//            new RequestLoginRequest(path, token, email, password).getUserLoginResponse(new RequestLoginRequest.UserLoginResponseListener() {
-//                @Override
-//                public void requestSuccess(String json) {
-//                    progressDialog.dismiss();
-//                    Gson mgson = new Gson();
-//                    UserWithLocation loginUserModel = mgson.fromJson(json, UserWithLocation.class);
-//                    onLoginFailed();
-//
-//                }
-//
-//                @Override
-//                public void requestFail(String failMessage) {
-//                    progressDialog.dismiss();
-//                    onLoginFailed();
-//                }
-//            });
-//
         } else {
             ed_account.setError(getString(R.string.register_email_format_error));
         }

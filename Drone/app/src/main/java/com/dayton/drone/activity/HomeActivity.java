@@ -35,6 +35,7 @@ import butterknife.ButterKnife;
  */
 public class HomeActivity extends BaseActivity {
 
+
     @Bind(R.id.home_activity_grid_view)
     GridView homeMenu;
     private List<HomeMenuItem> listData;
@@ -50,7 +51,6 @@ public class HomeActivity extends BaseActivity {
             tintManager.setStatusBarTintEnabled(true);
             tintManager.setStatusBarTintResource(R.color.user_info_sex_bg);
         }
-
         ButterKnife.bind(this);
         initData();
         MyHomeMenuAdapter adapter = new MyHomeMenuAdapter(listData, this);

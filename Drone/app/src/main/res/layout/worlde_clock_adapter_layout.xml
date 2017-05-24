@@ -1,23 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-                android:paddingLeft="24dp"
-                android:paddingRight="24dp"
-                android:paddingBottom="4dp"
-                android:paddingTop="4dp"
-                android:layout_height="64dp">
+<com.woxthebox.draglistview.swipe.ListSwipeItem
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/user_info_sex_bg"
+    app:leftViewId="@+id/item_left"
+    app:rightViewId="@+id/item_right"
+    app:swipeViewId="@+id/drag_item">
+
+    <TextView
+        android:id="@+id/item_left"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/drag_item"
+        android:layout_alignTop="@+id/drag_item"
+        android:background="#00000000"
+        android:gravity="start|center_vertical"/>
+
+    <TextView
+        android:id="@+id/item_right"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/drag_item"
+        android:layout_alignTop="@+id/drag_item"
+        android:background="#00000000"
+        android:gravity="end|center_vertical"/>
+
+    <RelativeLayout
+        android:id="@+id/drag_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp">
+
+        <TextView
+            android:id="@+id/world_clock_item_city_time"
+            style="@style/world_clock_adapter_tv_style"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:textSize="16sp"/>
 
         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:orientation="vertical"
-            android:layout_centerVertical="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_alignParentTop="true"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/world_clock_item_city"
                 style="@style/world_clock_adapter_tv_style"
-                android:textSize="20sp"/>
+                android:textSize="16sp"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -27,22 +62,15 @@
                 <TextView
                     android:id="@+id/world_clock_item_current_day"
                     style="@style/world_clock_adapter_tv_style"
-                    android:textSize="18sp"/>
+                    android:textSize="14sp"/>
 
                 <TextView
                     android:id="@+id/world_clock_item_time_difference"
                     style="@style/world_clock_adapter_tv_style"
+                    android:layout_marginLeft="5dp"
                     android:maxLines="1"
-                    android:textSize="18sp"/>
+                    android:textSize="14sp"/>
             </LinearLayout>
         </LinearLayout>
-
-
-    <TextView
-        android:id="@+id/world_clock_item_city_time"
-        style="@style/world_clock_adapter_tv_style"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:textSize="20sp"/>
-
-</RelativeLayout>
+    </RelativeLayout>
+</com.woxthebox.draglistview.swipe.ListSwipeItem>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#d7d7d7</color>
+    <color name="colorPrimary">#d09d42</color>
     <color name="notification_bg_color">#e3c48e</color>
     <color name="main_menu_color">#987332</color>
     <color name="colorPrimaryDark">#d09d42</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#6A4E75</color>
     <color name="line_color">#20000000</color>
     <color name="user_info_sex_bg">#d09d42</color>
     <color name="login_text_color">#989898</color>
@@ -33,4 +33,6 @@
     <color name="add_watch_activity_view_bg_color">#e1e1e1</color>
     <color name="add_watch_activity_content_bg">#ededed</color>
     <color name="notification_delete_bg">#3d3ba6</color>
+    <color name="world_tab_host_item_select_color">#5C5D5D</color>
+    <color name="hot_key_background_color">#EFEFF4</color>
 </resources>

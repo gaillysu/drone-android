@@ -1,115 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/notification_bg_color"
-              android:orientation="vertical">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <RelativeLayout
+    <include layout="@layout/toolbar"/>
+
+    <android.support.v4.app.FragmentTabHost
+        android:id="@android:id/tabhost"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:paddingTop="24dp"
-        android:background="@color/user_info_sex_bg">
+        android:layout_height="match_parent">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="56dp">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <ImageButton
-                android:id="@+id/world_clock_back_icon_ib"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:padding="12dp"
-                android:layout_centerVertical="true"
-                android:scaleType="fitCenter"
-                android:background="@android:color/transparent"
-                android:src="@mipmap/world_clock_back_icon"/>
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="@string/world_clock_title_text"
-                android:textColor="@android:color/white"
-                android:textSize="22sp"/>
-
-            <ImageButton
-                android:id="@+id/world_clock_add_city_iv"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:padding="12dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:scaleType="fitCenter"
-                android:layout_marginEnd="10dp"
-                android:background="@android:color/transparent"
-                android:src="@mipmap/world_clock_add_city_icon"
-                />
-        </RelativeLayout>
-    </RelativeLayout>
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="15dp"
-        android:layout_weight="3"
-        android:scaleType="fitXY"
-        android:src="@mipmap/world_clock"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="6"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_gravity="center_horizontal"
-            android:id="@+id/world_clock_date_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/choose_adapter_text_color"
-            android:textSize="24sp"
-            />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp">
-
-            <LinearLayout
-                android:layout_alignParentStart="true"
-                android:layout_width="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                        android:id="@+id/world_clock_localhost_city"
-                        style="@style/world_clock_adapter_tv_style"
-                        android:textSize="20sp"/>
-
-                <TextView
-                    android:id="@+id/world_clock_item_current_day"
-                    style="@style/world_clock_adapter_tv_style"
-                    android:text="@string/world_clock_today_tv"
-                    android:textSize="18sp"/>
-            </LinearLayout>
-
-            <TextView
-                android:layout_centerVertical="true"
-                android:id="@+id/world_clock_item_city_time"
-                style="@style/world_clock_adapter_tv_style"
-                android:layout_alignParentEnd="true"
-                android:textSize="20sp"/>
-
-        </RelativeLayout>
-
-        <com.dayton.drone.view.ListViewCompat
-            android:id="@+id/world_clock_select_city_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:divider="@android:color/white"
-            android:scrollbars="none"/>
-    </LinearLayout>
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_gravity="bottom"/>
+        </LinearLayout>
+    </android.support.v4.app.FragmentTabHost>
 </LinearLayout>

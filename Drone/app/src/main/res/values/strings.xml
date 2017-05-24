@@ -85,6 +85,9 @@
 
     <string name="gallery_activity_title">GALLERY</string>
     <string name="world_clock_title_text">World Clock</string>
+    <string name="world_clock_setting_title">Time Setting</string>
+    <string name="world_clock_adapter_home_time">Home Time</string>
+    <string name="world_clock_adapter_world_time">World Time</string>
     <string name="world_clock_Yesterday_tv">Yesterday</string>
     <string name="world_clock_today_tv">Today</string>
     <string name="world_clock_Tomorrow_tv">Tomorrow</string>
@@ -92,6 +95,7 @@
     <string name="world_clock_city_time_difference_ahead">hours ahead</string>
     <string name="world_add_city_prompt">Add up to five cities</string>
     <string name="world_clock_search_city_hint">Search</string>
+    <string name="world_clock_settings">Settings</string>
 
     <string name="profile_activity_user_goal">Goal:</string>
     <string name="profile_bottom_tv">GOAl NOTIFICATION </string>
@@ -177,13 +181,28 @@
     <string name="notification_facebook_messenger_title">Facebook Messenger</string>
     <string name="notification_telegram_messenger_title">Telegram Messenger</string>
     <string name="is_choose_flag" translatable="false">isChooseFlag</string>
-    <string name= "home_menu_name_activities">Activities</string>
-    <string name= "home_menu_name_time">Time</string>
-    <string name= "home_menu_name_city_navigation">City Navigation</string>
-    <string name= "home_menu_name_compass">Compass</string>
-    <string name= "home_menu_name_hot_key">Hot Key</string>
-    <string name= "home_menu_name_login">Login</string>
-    <string name= "home_menu_name_notification">Notifications</string>
-    <string name= "home_menu_name_profile">Profile</string>
-    <string name= "home_menu_name_device">Device</string>
+    <string name="world_clock_local_time">Local Time</string>
+    <string name="world_clock_setting_fragment_explain">ANALOG TIME DISPLAY</string>
+    <string name="world_clock_setting_sync_time">Analog Time Syncing</string>
+    <string name="world_clock_syncing_time_type_tv">Sync Time</string>
+    <string name="world_clock_syncing_time_setting_describe">Sync the time of your watch with local or home time If you don\'t turn on Analog Time Syncing, the time on your watch will never change.</string>
+    <string name="world_clock_am" translatable="false">AM</string>
+    <string name="world_clock_pm" translatable="false">PM</string>
+    <string name="home_menu_name_activities">Activities</string>
+    <string name="home_menu_name_time">Time</string>
+    <string name="home_menu_name_city_navigation">City Navigation</string>
+    <string name="home_menu_name_compass">Compass</string>
+    <string name="home_menu_name_hot_key">Hot Key</string>
+    <string name="home_menu_name_login">Login</string>
+    <string name="home_menu_name_notification">Notifications</string>
+    <string name="home_menu_name_profile">Profile</string>
+    <string name="home_menu_name_device">Device</string>
+    <string name="hot_key_toolbar_title">Hot Keys</string>
+    <string name="hot_key_enable">Enable</string>
+    <string name="hot_key_describe">Hot Keys makes your watch even more useful! Enable the Hot Keys and select your favorite function below</string>
+    <string name="hot_key_select_function">Select Function</string>
+    <string name="hot_key_find_phone">Find Your Phone</string>
+    <string name="hot_key_remote_camera">Remote Camera</string>
+    <string name="hot_key_control_music">Control Music</string>
+    <string name="hot_key_bottom_describe">If your Dayton watch is not connected, it will sync as soon as it gets connected.</string>
 </resources>

@@ -4,44 +4,13 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
+    <include layout="@layout/toolbar"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/user_info_sex_bg"
-        android:orientation="vertical"
-        android:layout_marginTop="24dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:layout_height="56dp">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@color/user_info_sex_bg"
-                android:gravity="center_vertical">
-
-                <ImageButton
-                    android:id="@+id/choose_activity_cancel_bt"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:padding="10dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="10dp"
-                    android:background="@android:color/transparent"
-                    android:scaleType="fitXY"
-                    android:src="@mipmap/choose_city_back_icon"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="@string/choose_activity_title_choose_city_tv"
-                    android:textColor="@color/choose_adapter_text_color"
-                    android:textSize="22sp"/>
-            </RelativeLayout>
-        </LinearLayout>
+        android:orientation="vertical">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -51,9 +20,9 @@
                 android:id="@+id/world_clock_city_edit_ll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:focusableInTouchMode="true"
                 android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="horizontal"
                 android:visibility="gone">
 
                 <EditText
@@ -116,6 +85,7 @@
         </FrameLayout>
 
     </LinearLayout>
+
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">

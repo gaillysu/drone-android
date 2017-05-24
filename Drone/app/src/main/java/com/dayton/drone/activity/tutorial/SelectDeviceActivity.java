@@ -46,7 +46,7 @@ public class SelectDeviceActivity extends BaseActivity {
             setTranslucentStatus(true);
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
             tintManager.setStatusBarTintEnabled(true);
-            tintManager.setStatusBarTintResource(R.color.user_info_gender_select_text_color);
+            tintManager.setStatusBarTintResource(R.color.user_info_sex_bg);
         }
         ButterKnife.bind(this);
         Intent intent = getIntent();

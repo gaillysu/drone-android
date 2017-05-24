@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/toolbar_save_button"
+        android:icon="@drawable/ic_world_clock_edit_icon"
+        android:title="save"
+        android:visible="false"
+        app:showAsAction="always"
+        />
+</menu>
