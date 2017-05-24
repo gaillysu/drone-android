@@ -1,6 +1,7 @@
 package com.dayton.drone.activity;
 
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -77,6 +78,8 @@ public class NavigationActivity extends BaseActivity {
     Button route3;
     @Bind(R.id.navigation_start_stop_button)
     Button startStopNavigation;
+    @Bind(R.id.my_toolbar)
+    Toolbar toolbar;
 
     boolean navigationOnGoing = false;
     int currentRoute = 0;
@@ -93,6 +96,7 @@ public class NavigationActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
         ButterKnife.bind(this);
+        initToolbar();
         map = new MapBuilder(mapLayout,this).build(savedInstanceState);
         searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -135,9 +139,17 @@ public class NavigationActivity extends BaseActivity {
         });
      }
 
-    @OnClick(R.id.activity_navigation_back_imagebutton)
-    public void back2MainMenu(){
-        finish();
+    private void initToolbar() {
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+        TextView title = (TextView) toolbar.findViewById(R.id.toolbar_title_tv);
+        title.setText(getString(R.string.map_navigation_title));
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     @OnClick(R.id.navigation_back_to_search_image_button)
