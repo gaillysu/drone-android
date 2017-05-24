@@ -104,7 +104,7 @@ public class SpUtils {
 
     public static int getHotKey(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(CacheConstants.SP_Name, Context.MODE_PRIVATE);
-        return sharedPreferences.getInt(CacheConstants.HOT_KEY, -1);
+        return sharedPreferences.getInt(CacheConstants.HOT_KEY, 0);
     }
 
 

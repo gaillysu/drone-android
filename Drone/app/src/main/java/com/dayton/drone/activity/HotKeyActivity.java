@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
+import com.dayton.drone.ble.util.Constants;
 import com.dayton.drone.utils.SpUtils;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
@@ -47,10 +48,10 @@ public class HotKeyActivity extends BaseActivity implements CompoundButton.OnChe
     TextView describe;
 
     private TextView toolbarTitle;
-    private static final int FIND_PHONE = 0x01;
-    private static final int REMOTE_CAMERA = 0x02;
-    private static final int CONTROL_MUSIC = 0x03;
-    private boolean visibleOrGone;
+    //see@Constants.TopKeyFunction, @BLE profile R4_3
+    private static final int REMOTE_CAMERA = 1;
+    private static final int FIND_PHONE = 2;
+    private static final int CONTROL_MUSIC = 3;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -161,5 +162,6 @@ public class HotKeyActivity extends BaseActivity implements CompoundButton.OnChe
                 SpUtils.saveHotKey(this, CONTROL_MUSIC);
                 break;
         }
+        getModel().getSyncController().setHotKeyFunction(SpUtils.getHotKey(this));
     }
 }
