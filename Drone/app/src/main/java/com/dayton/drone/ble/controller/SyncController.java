@@ -49,4 +49,5 @@ public interface SyncController {
     void startNavigation(double latitude,double longitude,String address);
     void stopNavigation();
     void updateNavigation(double latitude,double longitude,long distanceInMeters);
+    void setHotKeyFunction(int functionId);
 }

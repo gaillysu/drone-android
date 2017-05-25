@@ -54,7 +54,7 @@ public class MapSearchAdapter extends BaseAdapter {
         }
         ViewHolder viewHolder = (ViewHolder) convertView.getTag();
         formatAddress(geocodeResultList.get(position));
-        viewHolder.addrerss.setText(geocodeResultList.get(position).getFormattedCityRegion());
+        viewHolder.address.setText(geocodeResultList.get(position).getFormattedCityRegion());
         viewHolder.road.setText(geocodeResultList.get(position).getFormattedRoad());
         viewHolder.distance.setText(geocodeResultList.get(position).getFormattedDistance());
         return convertView;
@@ -108,7 +108,7 @@ public class MapSearchAdapter extends BaseAdapter {
 
     class ViewHolder{
         @Bind(R.id.map_search_address_item_tv)
-        TextView addrerss;
+        TextView address;
         @Bind(R.id.map_search_road_item_tv)
         TextView road;
         @Bind(R.id.map_search_distance_item_tv)

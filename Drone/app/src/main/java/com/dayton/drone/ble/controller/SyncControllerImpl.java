@@ -281,6 +281,22 @@ public class SyncControllerImpl implements  SyncController{
         sendRequest(new UpdateUrbanNavigation(application,(long)(latitude*10000000),(long)(longitude*10000000),distanceInMeters));
     }
 
+    @Override
+    public void setHotKeyFunction(int functionId) {
+        //see@BLE profile R4_3: System Config Commands
+        Constants.TopKeyFunction topKeyFunction = Constants.TopKeyFunction.Default;
+        if(functionId==1) {
+            topKeyFunction = Constants.TopKeyFunction.RemoteCamera;
+        }
+        if(functionId==2) {
+            topKeyFunction = Constants.TopKeyFunction.FindMyPhone;
+        }
+        if(functionId==3) {
+            topKeyFunction = Constants.TopKeyFunction.MusicControl;
+        }
+        sendRequest(new SetSystemConfig(application, topKeyFunction, Constants.SystemConfigID.TopKeyCustomization));
+    }
+
     /**
      * send request  package to watch by using a queue
      * @param request
@@ -360,7 +376,6 @@ public class SyncControllerImpl implements  SyncController{
                         sendRequest(new SetSystemConfig(application,1,0, 0, 0, Constants.SystemConfigID.SleepConfig));
                         if(getFirmwareVersion()!=null&&Float.valueOf(getFirmwareVersion())>=0.04f) {
                             sendRequest(new SetSystemConfig(application, (short) SpUtils.getIntMethod(application,CacheConstants.COMPASS_AUTO_ON_DURATION,CacheConstants.COMPASS_AUTO_ON_DURATION_DEFAULT),Constants.SystemConfigID.CompassAutoOnDuration));
-                            sendRequest(new SetSystemConfig(application, Constants.TopKeyFunction.Default, Constants.SystemConfigID.TopKeyCustomization));
                         }
                         sendRequest(new SetRTCRequest(application));
                         sendRequest(new SetAppConfigRequest(application, WorldClock, (byte)1));
