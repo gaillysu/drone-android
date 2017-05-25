@@ -49,6 +49,7 @@ public class HotKeyActivity extends BaseActivity implements CompoundButton.OnChe
 
     private TextView toolbarTitle;
     //see@Constants.TopKeyFunction, @BLE profile R4_3
+    private static final int DEFAULT = 0;
     private static final int REMOTE_CAMERA = 1;
     private static final int FIND_PHONE = 2;
     private static final int CONTROL_MUSIC = 3;
@@ -122,6 +123,8 @@ public class HotKeyActivity extends BaseActivity implements CompoundButton.OnChe
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         setHotKeyIsEnable(isChecked);
         SpUtils.saveHotKeyEnable(HotKeyActivity.this, isChecked);
+        int functionId = isChecked?(SpUtils.getHotKey(this)==DEFAULT?FIND_PHONE:SpUtils.getHotKey(this)):DEFAULT;
+        getModel().getSyncController().setHotKeyFunction(functionId);
         if (isChecked) {
             visibleViewAnimation();
         } else {
