@@ -83,6 +83,18 @@ public class SpUtils {
         return sharedPreferences.getBoolean(CacheConstants.IS_SYNC_TIME, false);
     }
 
+    public static void set24HourFormat(Context context,boolean format24Hour) {
+        SharedPreferences sharedPreferences =
+                context.getSharedPreferences(CacheConstants.SP_Name, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(CacheConstants.IS_24_HOUR_FORMAT, format24Hour).apply();
+    }
+
+    public static boolean get24HourFormat(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CacheConstants.SP_Name, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(CacheConstants.IS_24_HOUR_FORMAT, true);
+    }
+
     public static void saveHotKeyEnable(Context context,boolean isEnable) {
         SharedPreferences sharedPreferences =
                 context.getSharedPreferences(CacheConstants.SP_Name, Context.MODE_PRIVATE);

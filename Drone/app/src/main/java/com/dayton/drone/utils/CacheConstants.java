@@ -20,6 +20,7 @@ public class CacheConstants {
     public static int COMPASS_AUTO_ON_DURATION_DEFAULT = 15; //in "minute"
     public static String SYNC_TIME = "synce_time";
     public static String IS_SYNC_TIME = "is_sync_time";
+    public static String IS_24_HOUR_FORMAT = "is_24_hour_format";
     public static String HOT_KEY_ENABLE = "hot_key_enable";
     public static String HOT_KEY = "hot_key";
 

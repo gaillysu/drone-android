@@ -12,44 +12,52 @@ import java.util.Date;
  */
 public class SetSystemConfig extends RequestBase{
     public final static byte HEADER = (byte)0x0F;
-    final int clockFormat;
-    final int sleepMode ;
-    final long sleepAutoStartTime ;
-    final long sleepAutoEndTime ;
-    final Constants.SystemConfigID id;
+    int clockFormat;
+    int sleepMode ;
+    long sleepAutoStartTime ;
+    long sleepAutoEndTime ;
+    Constants.SystemConfigID id;
     private short compassAutoOnDuration;
-    private Constants.TopKeyFunction  topkeyFunction;
+    private byte  topkeyFunction;
     private byte analogHandsConfig;
 
-    public SetSystemConfig(Context context, int clockFormat, int sleepMode, long sleepAutoStartTime, long sleepAutoEndTime, Constants.SystemConfigID id) {
+    public SetSystemConfig(Context context,Constants.SystemConfigID id) {
         super(context);
-        this.clockFormat = clockFormat;
+        this.id = id;
+    }
+    public SetSystemConfig(Context context, int sleepMode, long sleepAutoStartTime, long sleepAutoEndTime, Constants.SystemConfigID id) {
+        this(context,id);
         this.sleepMode = sleepMode;
         this.sleepAutoStartTime = sleepAutoStartTime;
         this.sleepAutoEndTime = sleepAutoEndTime;
         this.id = id;
     }
 
-    public SetSystemConfig(Context context, short compassAutoOnDuration,Constants.SystemConfigID id) {
-        this(context,1,0,0,0,id);
-        this.compassAutoOnDuration = compassAutoOnDuration;
+    public SetSystemConfig(Context context, short value,Constants.SystemConfigID id) {
+        this(context,id);
+        if(id == Constants.SystemConfigID.CompassAutoOnDuration) {
+            this.compassAutoOnDuration = value;
+        }
     }
 
-    public SetSystemConfig(Context context, Constants.TopKeyFunction topkeyFunction,Constants.SystemConfigID id) {
-        this(context,1,0,0,0,id);
-        this.topkeyFunction = topkeyFunction;
-    }
-
-    public SetSystemConfig(Context context, byte analogHandsConfig,Constants.SystemConfigID id) {
-        this(context,1,0,0,0,id);
-        this.analogHandsConfig = analogHandsConfig;
+    public SetSystemConfig(Context context, byte value,Constants.SystemConfigID id) {
+        this(context,id);
+        if(id == Constants.SystemConfigID.ClockFormat) {
+            this.clockFormat = value;
+        }
+        if(id == Constants.SystemConfigID.AnalogHandsConfig) {
+            this.analogHandsConfig = value;
+        }
+        if(id == Constants.SystemConfigID.TopKeyCustomization) {
+            this.topkeyFunction = value;
+        }
     }
 
     @Override
     public byte[][] getRawDataEx() {
         if(id == Constants.SystemConfigID.ClockFormat)
         {
-            return new byte[][]{{(byte) 0x80,HEADER, (byte) id.rawValue(),(byte)clockFormat,0x01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}};
+            return new byte[][]{{(byte) 0x80,HEADER, (byte) id.rawValue(),0x01,(byte)clockFormat,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}};
         }
         else if(id == Constants.SystemConfigID.Enabled)
         {
@@ -72,7 +80,7 @@ public class SetSystemConfig extends RequestBase{
         }
         else if(id == Constants.SystemConfigID.TopKeyCustomization)
         {
-            return new byte[][]{{(byte) 0x80,HEADER,(byte) id.rawValue(),0x01,(byte)topkeyFunction.rawValue(),0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}};
+            return new byte[][]{{(byte) 0x80,HEADER,(byte) id.rawValue(),0x01,(byte)topkeyFunction,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}};
         }
         else if(id == Constants.SystemConfigID.AnalogHandsConfig)
         {

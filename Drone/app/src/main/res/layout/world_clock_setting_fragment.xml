@@ -18,7 +18,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="109dp"
+        android:layout_height="wrap_content"
         android:background="@color/user_info_sex_bg"
         android:orientation="vertical"
         android:paddingLeft="16dp"
@@ -61,7 +61,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:text="@string/world_clock_setting_sync_time"
+                android:text="@string/world_clock_syncing_time_type_tv"
                 android:textColor="@color/profile_user_bg"
                 android:textSize="18dp"/>
 
@@ -74,6 +74,32 @@
                 android:text="@string/world_clock_adapter_home_time"
                 android:textColor="@color/profile_user_bg"
                 android:textSize="18dp"/>
+
+        </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/notification_bg_color"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="58dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/world_clock_setting_24h_format"
+                android:textColor="@android:color/white"
+                android:textSize="18dp"/>
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/world_clock_setting_24h_format_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"/>
+
         </RelativeLayout>
     </LinearLayout>
 

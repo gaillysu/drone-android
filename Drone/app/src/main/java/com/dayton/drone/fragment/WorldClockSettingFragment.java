@@ -28,6 +28,8 @@ public class WorldClockSettingFragment extends Fragment {
     @Bind(R.id.world_clock_syncing_time_describe)
     TextView syncingTime;
 
+    @Bind(R.id.world_clock_setting_24h_format_switch)
+    SwitchCompat is24HourFormat;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,6 +49,14 @@ public class WorldClockSettingFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SpUtils.setIsSyncTime(WorldClockSettingFragment.this.getContext(), isChecked);
                 setTextColor(isChecked);
+            }
+        });
+
+        is24HourFormat.setChecked(SpUtils.get24HourFormat(WorldClockSettingFragment.this.getActivity()));
+        is24HourFormat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SpUtils.set24HourFormat(WorldClockSettingFragment.this.getContext(), isChecked);
             }
         });
 

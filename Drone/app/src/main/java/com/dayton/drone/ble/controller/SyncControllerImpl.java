@@ -283,18 +283,7 @@ public class SyncControllerImpl implements  SyncController{
 
     @Override
     public void setHotKeyFunction(int functionId) {
-        //see@BLE profile R4_3: System Config Commands
-        Constants.TopKeyFunction topKeyFunction = Constants.TopKeyFunction.Default;
-        if(functionId==1) {
-            topKeyFunction = Constants.TopKeyFunction.RemoteCamera;
-        }
-        if(functionId==2) {
-            topKeyFunction = Constants.TopKeyFunction.FindMyPhone;
-        }
-        if(functionId==3) {
-            topKeyFunction = Constants.TopKeyFunction.MusicControl;
-        }
-        sendRequest(new SetSystemConfig(application, topKeyFunction, Constants.SystemConfigID.TopKeyCustomization));
+        sendRequest(new SetSystemConfig(application, (byte)functionId, Constants.SystemConfigID.TopKeyCustomization));
     }
 
     /**
@@ -371,9 +360,9 @@ public class SyncControllerImpl implements  SyncController{
                     {
                         SpUtils.printAllConstants(application);
                         SpUtils.putBoolean(application,CacheConstants.TODAY_RESET,true);
-                        sendRequest(new SetSystemConfig(application,1,0, 0, 0, Constants.SystemConfigID.ClockFormat));
-                        sendRequest(new SetSystemConfig(application,1,0, 0, 0, Constants.SystemConfigID.Enabled));
-                        sendRequest(new SetSystemConfig(application,1,0, 0, 0, Constants.SystemConfigID.SleepConfig));
+                        sendRequest(new SetSystemConfig(application,SpUtils.get24HourFormat(application)?(byte)1:0, Constants.SystemConfigID.ClockFormat));
+                        sendRequest(new SetSystemConfig(application,Constants.SystemConfigID.Enabled));
+                        sendRequest(new SetSystemConfig(application,0, 0, 0, Constants.SystemConfigID.SleepConfig));
                         if(getFirmwareVersion()!=null&&Float.valueOf(getFirmwareVersion())>=0.04f) {
                             sendRequest(new SetSystemConfig(application, (short) SpUtils.getIntMethod(application,CacheConstants.COMPASS_AUTO_ON_DURATION,CacheConstants.COMPASS_AUTO_ON_DURATION_DEFAULT),Constants.SystemConfigID.CompassAutoOnDuration));
                         }
