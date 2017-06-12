@@ -12,4 +12,12 @@
         <item>"210"</item>
         <item>"240"</item>
     </array>
+    <array name="compass_screen_timeout_seconds_array">
+        <item>"15"</item>
+        <item>"30"</item>
+        <item>"45"</item>
+        <item>"60"</item>
+        <item>"90"</item>
+        <item>"120"</item>
+    </array>
 </resources>

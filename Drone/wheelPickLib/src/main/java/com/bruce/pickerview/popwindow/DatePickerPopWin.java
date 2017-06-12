@@ -68,6 +68,7 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
     List<String> weightListPoint = new ArrayList<>();
     List<String> weightList = new ArrayList<>();
     List<String> compassAutoOffList = new ArrayList<>();
+    List<String> compassSreenTimeoutList = new ArrayList<>();
 
     public static class Builder {
 
@@ -215,6 +216,14 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
             case 5:
                 leftLoopView.setVisibility(View.GONE);
                 rightLoopView.setVisibility(View.GONE);
+                break;
+            case 6:
+                leftLoopView.setVisibility(View.INVISIBLE);
+                rightLoopView.setVisibility(View.GONE);
+                tv_pickerRight.setVisibility(View.VISIBLE);
+                tv_pickerRight.setText("seconds");
+                tv_pickerRight.setTextSize(viewTextSize);
+                break;
 
         }
 
@@ -320,6 +329,12 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
                 middleList.add("World Clock");
                 middleList.add("Home Time");
                 middleLoopView.setArrayList((ArrayList) middleList);
+                break;
+            case 6://compass auto off minutes
+                compassSreenTimeoutList.addAll(Arrays.asList(mContext.getResources().getStringArray(R.array.compass_screen_timeout_seconds_array)));
+                middleLoopView.setArrayList((ArrayList) compassSreenTimeoutList);
+                middleLoopView.setInitPosition(middlePos);
+                break;
         }
 
     }
@@ -381,6 +396,11 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
                     } else {
                         middlePos = 2;
                     }
+                    break;
+                case 6:
+                    List<String> seconds = Arrays.asList(mContext.getResources().getStringArray(R.array.compass_screen_timeout_seconds_array));
+                    middlePos = seconds.indexOf(dateStr);
+                    break;
             }
         }
     }
@@ -473,6 +493,10 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
                     break;
                 case 5:
                     mListener.onDatePickCompleted(0, middlePos, 0, middlePos + "");
+                    break;
+                case 6:
+                    mListener.onDatePickCompleted(0, middlePos, 0, compassSreenTimeoutList.get(middlePos));
+                    break;
                 default:
                     dismissPopWin();
                     break;

@@ -20,6 +20,7 @@ public class SetSystemConfig extends RequestBase{
     private short compassAutoOnDuration;
     private byte  topkeyFunction;
     private byte analogHandsConfig;
+    private byte compassTimeout;
 
     public SetSystemConfig(Context context,Constants.SystemConfigID id) {
         super(context);
@@ -50,6 +51,9 @@ public class SetSystemConfig extends RequestBase{
         }
         if(id == Constants.SystemConfigID.TopKeyCustomization) {
             this.topkeyFunction = value;
+        }
+        if(id == Constants.SystemConfigID.CompassTimeout) {
+            this.compassTimeout = value;
         }
     }
 
@@ -85,6 +89,10 @@ public class SetSystemConfig extends RequestBase{
         else if(id == Constants.SystemConfigID.AnalogHandsConfig)
         {
             return new byte[][]{{(byte) 0x80,HEADER,(byte) id.rawValue(),0x01,analogHandsConfig,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}};
+        }
+        else if(id == Constants.SystemConfigID.CompassTimeout)
+        {
+            return new byte[][]{{(byte) 0x80,HEADER,(byte) id.rawValue(),0x01,compassTimeout,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}};
         }
 
         return null;

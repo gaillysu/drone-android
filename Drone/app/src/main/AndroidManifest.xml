@@ -129,6 +129,9 @@
             android:name=".activity.CompassActivity"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".activity.CalibrateCompassActivity"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".activity.NavigationActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden"/>

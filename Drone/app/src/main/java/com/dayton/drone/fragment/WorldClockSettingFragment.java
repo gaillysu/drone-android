@@ -1,5 +1,6 @@
 package com.dayton.drone.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.SwitchCompat;
@@ -11,10 +12,12 @@ import android.widget.TextView;
 
 import com.bruce.pickerview.popwindow.DatePickerPopWin;
 import com.dayton.drone.R;
+import com.dayton.drone.activity.tutorial.CalibrateWatchHourActivity;
 import com.dayton.drone.utils.SpUtils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Jason on 2017/4/28.
@@ -97,5 +100,10 @@ public class WorldClockSettingFragment extends Fragment {
             syncingTime.setTextColor(getResources().getColor(R.color.profile_user_bg));
             syncingTimeType.setTextColor(getResources().getColor(R.color.profile_user_bg));
         }
+    }
+
+    @OnClick(R.id.time_setting_calibrate_hands_layout)
+    public void startHandsCalibration(){
+        startActivity(new Intent(WorldClockSettingFragment.this.getActivity() ,CalibrateWatchHourActivity.class));
     }
 }

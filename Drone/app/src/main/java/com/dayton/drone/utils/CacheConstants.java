@@ -16,8 +16,10 @@ public class CacheConstants {
     public static String LAST_CONNECTED_TIMESTAMP = "last_connected_timestamp";
     public static String HOME_CITY_ID = "home_city_ic";
     public static final String COMPASS_AUTO_ON_DURATION = "compass_auto_on_duration";
+    public static final String COMPASS_SCREEN_TIMEOUT = "compass_screen_timeout";
     public static final String ENABLE_COMPASS = "enable_compass";
     public static int COMPASS_AUTO_ON_DURATION_DEFAULT = 15; //in "minute"
+    public static int COMPASS_SCREEN_TIMEOUT_DEFAULT = 15; //in "seconds"
     public static String SYNC_TIME = "synce_time";
     public static String IS_SYNC_TIME = "is_sync_time";
     public static String IS_24_HOUR_FORMAT = "is_24_hour_format";

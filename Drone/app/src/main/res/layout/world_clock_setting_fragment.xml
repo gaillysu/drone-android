@@ -102,6 +102,41 @@
 
         </RelativeLayout>
     </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:gravity="bottom"
+        android:paddingBottom="5dp"
+        android:paddingLeft="16dp"
+        android:text="@string/world_clock_setting_fragment_calibration"
+        android:textColor="@color/home_list_adapter_item_tv_color"
+        android:textSize="18dp"
+        />
+    <RelativeLayout
+        android:id="@+id/time_setting_calibrate_hands_layout"
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:background="@color/user_info_sex_bg"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/world_clock_setting_fragment_recalibrate_hands"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"/>
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/right_arrow_1"
+            />
+
+    </RelativeLayout>
 
     <TextView
         android:layout_width="wrap_content"

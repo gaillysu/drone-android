@@ -286,6 +286,16 @@ public class SyncControllerImpl implements  SyncController{
         sendRequest(new SetSystemConfig(application, (byte)functionId, Constants.SystemConfigID.TopKeyCustomization));
     }
 
+    @Override
+    public void setCompassTimeout(int timeoutInseconds) {
+        sendRequest(new SetSystemConfig(application, (byte)timeoutInseconds, Constants.SystemConfigID.CompassTimeout));
+    }
+
+    @Override
+    public void calibrateCompass(int operation) {
+        sendRequest(new StartSystemSettingRequest(application,StartSystemSettingRequest.StartSystemSettingID.Compass.rawValue(),operation));
+    }
+
     /**
      * send request  package to watch by using a queue
      * @param request
