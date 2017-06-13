@@ -96,6 +96,7 @@ import java.util.GregorianCalendar;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -321,6 +322,7 @@ public class SyncControllerImpl implements  SyncController{
         List<TimeZoneModel> timeZoneModelList = new ArrayList<>();
         for(City city:worldClockList)
         {
+            //getOffSetFromGMT() unit is "minutes", pls make sure "worldclock" database table "TimeZone" is right
             timeZoneModelList.add(new TimeZoneModel(city.getOffSetFromGMT()/60,city.getName()));
         }
         sendRequest(new SetWorldClockRequest(application,timeZoneModelList));
@@ -389,7 +391,7 @@ public class SyncControllerImpl implements  SyncController{
                         //if the cached date is today,use the cached steps to set watch
                         //set world clock to watch
 
-                        setWorldClock(application.getSelectedCities());
+                        setWorldClock(application.getWorldClockDatabaseHelper().getSelect());
 
 
                         if(SpUtils.getBoolean(application, CacheConstants.TODAY_RESET,false)){
@@ -543,7 +545,7 @@ public class SyncControllerImpl implements  SyncController{
 
     @Subscribe
     public void onEvent(WorldClockChangedEvent worldClockChangedEvent) {
-        setWorldClock(application.getSelectedCities());
+        setWorldClock(application.getWorldClockDatabaseHelper().getSelect());
     }
     @Subscribe
     public void onEvent(StepsGoalChangedEvent stepsGoalChangedEvent) {

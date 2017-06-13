@@ -99,7 +99,7 @@ public class WorldClockMainFragment extends Fragment {
     }
 
     public void initData() {
-        List<City> select = mApplicationModel.getWorldClockDatabaseHelp().getSelect();
+        List<City> select = mApplicationModel.getWorldClockDatabaseHelper().getSelect();
         addLocalCity();
         addCity(select);
     }
@@ -156,11 +156,14 @@ public class WorldClockMainFragment extends Fragment {
                         if (pos == 3) {
                             SpUtils.saveHomeCityId(WorldClockMainFragment.this.getActivity(), -1);
                         }
-                        City city = mApplicationModel.getWorldClockDatabaseHelp().get(cityId);
+                        City city = mApplicationModel.getWorldClockDatabaseHelper().get(cityId);
                         city.setSelected(false);
-                        mApplicationModel.getWorldClockDatabaseHelp().update(city);
+                        mApplicationModel.getWorldClockDatabaseHelper().update(city);
                         mDragListView.getAdapter().removeItem(pos);
                         worldClockAdapter.notifyDataSetChanged();
+                        WeatherUtils.removeWeatherCity(mApplicationModel,city.getName());
+                        EventBus.getDefault().post(new CityNumberChangedEvent());
+                        EventBus.getDefault().post(new WorldClockChangedEvent());
                     }
                 }
             }
@@ -218,7 +221,6 @@ public class WorldClockMainFragment extends Fragment {
                 boolean flag = data.getBooleanExtra(getString(R.string.is_choose_flag), false);
                 if (flag) {
                     refreshList();
-                    EventBus.getDefault().post(new WorldClockChangedEvent());
                 }
             }
         }
@@ -227,20 +229,24 @@ public class WorldClockMainFragment extends Fragment {
     private void refreshList() {
         listData.clear();
         WeatherUtils.removeAllCities(WorldClockMainFragment.this.getActivity());
-        WeatherUtils.addWeatherCity(WorldClockMainFragment.this.getActivity(), Calendar.getInstance().getTimeZone().getID().split("/")[1].replace("_", " "));
-        List<City> selectedCities = mApplicationModel.getWorldClockDatabaseHelp().getSelect();
+        List<City> selectedCities = mApplicationModel.getWorldClockDatabaseHelper().getSelect();
         addLocalCity();
         addCity(selectedCities);
+        WeatherUtils.addWeatherCity(WorldClockMainFragment.this.getActivity(), Calendar.getInstance().getTimeZone().getID().split("/")[1].replace("_", " "));
+        for(City city:selectedCities) {
+            WeatherUtils.addWeatherCity(WorldClockMainFragment.this.getActivity(), city.getName());
+        }
         worldClockAdapter.notifyDataSetChanged();
         Log.w("weather", "city list: " + WeatherUtils.getWeatherCities(WorldClockMainFragment.this.getActivity()).toString());
         EventBus.getDefault().post(new CityNumberChangedEvent());
+        EventBus.getDefault().post(new WorldClockChangedEvent());
     }
 
     private void addLocalCity() {
         Calendar calendar = Calendar.getInstance();
         TimeZone timeZone = calendar.getTimeZone();
         String timeName = timeZone.getID().split("/")[1].replace("_", " ");
-        City localCity = mApplicationModel.getWorldClockDatabaseHelp().get(timeName);
+        City localCity = mApplicationModel.getWorldClockDatabaseHelper().get(timeName);
         listData.add(new Pair<Integer, DragListViewItem>
                 (0, new DragListViewItem(null, new WorldClockTitleModel(getString(R.string.world_clock_local_time)))));
         listData.add(new Pair<Integer, DragListViewItem>
@@ -253,7 +259,7 @@ public class WorldClockMainFragment extends Fragment {
         WorldClockTitleModel worldClockTitleModel = new WorldClockTitleModel(getString(R.string.world_clock_adapter_home_time));
         listData.add(new Pair<>(2, new DragListViewItem(null, worldClockTitleModel)));
         if (homeCityId != -1) {
-            City city = mApplicationModel.getWorldClockDatabaseHelp().get(homeCityId);
+            City city = mApplicationModel.getWorldClockDatabaseHelper().get(homeCityId);
             listData.add(new Pair<Integer, DragListViewItem>(3, new DragListViewItem(new WorldClockCityItemModel(city), null)));
             listData.add(new Pair<>(4, new DragListViewItem(null, new WorldClockTitleModel(getString(R.string.world_clock_adapter_world_time)))));
             for (int i = 0; i < selectedCities.size(); i++) {

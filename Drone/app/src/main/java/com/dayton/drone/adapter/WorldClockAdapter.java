@@ -115,7 +115,7 @@ public class WorldClockAdapter extends DragItemAdapter<Pair<Integer, DragListVie
         WorldClockCityItemModel model = item.getItem();
         if (model != null) {
             holder.mCityName.setText(model.getCityName());
-            City city = mApplicationModel.getWorldClockDatabaseHelp().get(model.getCityId());
+            City city = mApplicationModel.getWorldClockDatabaseHelper().get(model.getCityId());
             holder.mCityTime.setText(obtainCityTime(city));
             holder.mCityDay.setText(obtainCityDayDifference(city));
             holder.mDifference.setText(countTimeDifference(city));

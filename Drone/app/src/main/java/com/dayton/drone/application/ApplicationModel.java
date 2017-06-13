@@ -119,7 +119,7 @@ public class ApplicationModel extends Application {
     public UserDatabaseHelper getUserDatabaseHelper() {
         return userDatabaseHelper;
     }
-    public WorldClockDatabaseHelper getWorldClockDatabaseHelp(){
+    public WorldClockDatabaseHelper getWorldClockDatabaseHelper(){
         return worldClockDatabaseHelper;
     }
     public NotificationDatabaseHelper getNotificationDatabaseHelper(){
@@ -217,12 +217,4 @@ public class ApplicationModel extends Application {
         initializeNotifications();
     }
 
-    public List<City> getSelectedCities() {
-        RealmResults<City> realmCities = Realm.getDefaultInstance().where(City.class).equalTo("selected",true).findAll();
-        List<City> cities = new ArrayList<>();
-        for (City city: realmCities) {
-            cities.add(city);
-        }
-        return cities;
-    }
 }

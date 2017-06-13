@@ -61,6 +61,23 @@ public class WeatherUtils {
         editor.apply();
     }
 
+    public static void removeWeatherCity(Context context, String name)
+    {
+        if(name.contains(",")) {
+            name = name.split(",")[0];
+        }
+        List<String> cities = getWeatherCities(context);
+        if(cities.contains(name))
+        {
+            cities.remove(name);
+        }
+        SharedPreferences sp = context.getSharedPreferences(CacheConstants.SP_Name,Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor =  sp.edit();
+        editor.putString(CITYLIST,cities.toString().replace("[","").replace("]",""));
+        editor.apply();
+
+    }
+
     public static int getWeatherLocationId(Context context, String name)
     {
         int index = 0;

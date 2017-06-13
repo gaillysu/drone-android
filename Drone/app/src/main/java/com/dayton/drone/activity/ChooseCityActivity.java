@@ -87,7 +87,7 @@ public class ChooseCityActivity extends BaseActivity {
                 finish();
             }
         });
-        mCities = getModel().getWorldClockDatabaseHelp().getAll();
+        mCities = getModel().getWorldClockDatabaseHelper().getAll();
         for (City city : mCities) {
             chooseCityViewModelsList.add(new ChooseCityViewModel(city));
         }
@@ -196,10 +196,10 @@ public class ChooseCityActivity extends BaseActivity {
             }
         }
         if (count < 5) {
-            City city = getModel().getWorldClockDatabaseHelp().get(cityId);
+            City city = getModel().getWorldClockDatabaseHelper().get(cityId);
             if (city != null) {
                 city.setSelected(true);
-                getModel().getWorldClockDatabaseHelp().update(city);
+                getModel().getWorldClockDatabaseHelper().update(city);
                 Intent intent = getIntent();
                 intent.putExtra(getString(R.string.is_choose_flag), true);
                 setResult(0, intent);
