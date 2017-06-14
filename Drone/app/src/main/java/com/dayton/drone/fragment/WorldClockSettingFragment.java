@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.bruce.pickerview.popwindow.DatePickerPopWin;
 import com.dayton.drone.R;
 import com.dayton.drone.activity.tutorial.CalibrateWatchHourActivity;
+import com.dayton.drone.application.ApplicationModel;
 import com.dayton.drone.utils.SpUtils;
 
 import butterknife.Bind;
@@ -60,6 +61,7 @@ public class WorldClockSettingFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SpUtils.set24HourFormat(WorldClockSettingFragment.this.getContext(), isChecked);
+                ((ApplicationModel) getActivity().getApplication()).getSyncController().setClockFormat(isChecked);
             }
         });
 

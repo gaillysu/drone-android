@@ -52,4 +52,5 @@ public interface SyncController {
     void setHotKeyFunction(int functionId);
     void setCompassTimeout(int timeoutInseconds);
     void calibrateCompass(int operation);
+    void setClockFormat(boolean format24Hour);
 }

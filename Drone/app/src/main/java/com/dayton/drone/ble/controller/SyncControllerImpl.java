@@ -302,6 +302,11 @@ public class SyncControllerImpl implements  SyncController{
         sendRequest(new StartSystemSettingRequest(application,StartSystemSettingRequest.StartSystemSettingID.Compass.rawValue(),operation));
     }
 
+    @Override
+    public void setClockFormat(boolean format24Hour) {
+        sendRequest(new SetSystemConfig(application,format24Hour?(byte)1:0, Constants.SystemConfigID.ClockFormat));
+    }
+
     /**
      * send request  package to watch by using a queue
      * @param request
