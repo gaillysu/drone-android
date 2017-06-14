@@ -26,12 +26,13 @@ public class CalibrateWatchHourActivity extends BaseActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calibrate_watch_hour);
         ButterKnife.bind(this);
+        getModel().getSyncController().calibrateWatch(StartSystemSettingRequest.AnalogMovementSettingOperationID.Start.rawValue());
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        getModel().getSyncController().calibrateWatch(StartSystemSettingRequest.AnalogMovementSettingOperationID.Start.rawValue());
+    protected void onDestroy() {
+        super.onDestroy();
+        getModel().getSyncController().calibrateWatch(StartSystemSettingRequest.AnalogMovementSettingOperationID.Exit.rawValue());
     }
 
     @OnClick(R.id.calibrate_watch_reverse_imagebutton)

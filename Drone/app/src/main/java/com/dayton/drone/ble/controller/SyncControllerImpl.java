@@ -13,15 +13,19 @@ import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.os.PowerManager;
+import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.dayton.drone.R;
 import com.dayton.drone.application.ApplicationModel;
 import com.dayton.drone.ble.datasource.GattAttributesDataSourceImpl;
 import com.dayton.drone.ble.model.TimeZoneModel;
 import com.dayton.drone.ble.model.WeatherLocationModel;
 import com.dayton.drone.ble.model.WeatherUpdateModel;
 import com.dayton.drone.ble.model.packet.ActivityPacket;
+import com.dayton.drone.ble.model.packet.FindPhonePacket;
 import com.dayton.drone.ble.model.packet.GetBatteryPacket;
 import com.dayton.drone.ble.model.packet.GetStepsGoalPacket;
 import com.dayton.drone.ble.model.packet.SystemEventPacket;
@@ -67,6 +71,7 @@ import com.dayton.drone.network.response.model.Forecast;
 import com.dayton.drone.network.response.model.GetForecastModel;
 import com.dayton.drone.utils.CacheConstants;
 import com.dayton.drone.utils.Common;
+import com.dayton.drone.utils.SoundPlayer;
 import com.dayton.drone.utils.SpUtils;
 import com.dayton.drone.utils.StepsHandler;
 import com.dayton.drone.utils.WeatherUtils;
@@ -514,6 +519,14 @@ public class SyncControllerImpl implements  SyncController{
                         sendRequest(new GetActivityRequest(application));
                     }
                 }
+                else if (FindPhonePacket.HEADER == packet.getHeader()) {
+                    FindPhonePacket findPhonePacket = new FindPhonePacket(packet.getPackets());
+                    if (localBinder != null) {
+                        if(findPhonePacket.getFindPhoneOperation()==1) {
+                            localBinder.findCellPhone();
+                        }
+                    }
+                }
                 //process done current cmd's response, request next cmd
                 packetsBuffer.clear();
                 QueuedMainThreadHandler.getInstance(QueuedMainThreadHandler.QueueType.SyncController).next();
@@ -714,8 +727,29 @@ public class SyncControllerImpl implements  SyncController{
             unregisterReceiver(myReceiver);
         }
 
+        private void findCellPhone() {
+            Vibrator vibrator = (Vibrator) LocalService.this.getSystemService(Context.VIBRATOR_SERVICE);
+            long[] pattern = {1, 2000, 1000, 2000, 1000, 2000, 1000};
+            if (vibrator.hasVibrator()) {
+                vibrator.cancel();
+            }
+            vibrator.vibrate(pattern, -1);
+
+            PowerManager pm = (PowerManager) LocalService.this.getSystemService(Context.POWER_SERVICE);
+            PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP
+                    | PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "bright");
+            wl.acquire();
+            wl.release();
+
+            //play ring bell to alert user that phone is here
+            new SoundPlayer(this).startPlayer(R.raw.bell);
+        }
+
         public class LocalBinder extends Binder {
             //you can add some functions here
+            public void findCellPhone() {
+                LocalService.this.findCellPhone();
+            }
         }
 
     }

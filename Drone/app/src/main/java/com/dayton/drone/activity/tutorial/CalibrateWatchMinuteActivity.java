@@ -46,4 +46,9 @@ public class CalibrateWatchMinuteActivity extends BaseActivity  {
             }
         },CalibrateWatchSecondActivity.class);
     }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finishActivityWithResultReceiver((ResultReceiver)getIntent().getExtras().getParcelable(getString(R.string.activity_finisher_key)));
+    }
 }

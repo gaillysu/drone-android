@@ -28,12 +28,6 @@ public class CalibrateWatchSecondActivity extends BaseActivity  {
         ButterKnife.bind(this);
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        getModel().getSyncController().calibrateWatch(StartSystemSettingRequest.AnalogMovementSettingOperationID.Exit.rawValue());
-    }
-
     @OnClick(R.id.calibrate_watch_reverse_imagebutton)
     public void reverseCalibrate(){
         getModel().getSyncController().calibrateWatch(StartSystemSettingRequest.AnalogMovementSettingOperationID.SecondHandReverseOneStep.rawValue());
@@ -48,6 +42,11 @@ public class CalibrateWatchSecondActivity extends BaseActivity  {
     public void nextCalibrateStep(){
         startActivity(HomeActivity.class);
         finish();
+        finishActivityWithResultReceiver((ResultReceiver)getIntent().getExtras().getParcelable(getString(R.string.activity_finisher_key)));
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
         finishActivityWithResultReceiver((ResultReceiver)getIntent().getExtras().getParcelable(getString(R.string.activity_finisher_key)));
     }
 }
