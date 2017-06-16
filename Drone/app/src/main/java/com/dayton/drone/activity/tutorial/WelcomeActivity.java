@@ -32,8 +32,7 @@ import butterknife.OnClick;
  */
 public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
 
-    private int[] droneImageViewIdList = new int[]{R.mipmap.welcome_logo_1, R.mipmap.welcome_logo_2,
-            R.mipmap.welcome_logo_3, R.mipmap.welcome_logo_4, R.mipmap.welcome_logo_5,R.mipmap.welcome_logo_6};
+    private int[] droneImageViewIdList = new int[]{R.mipmap.welcome_logo_1, R.mipmap.welcome_logo_2 };
 
     @Bind(R.id.activity_login_vp)
     ViewPager viewPager;
@@ -91,10 +90,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         }
 
         viewPager.addOnPageChangeListener(this);
-        int middle = Integer.MAX_VALUE / 2;
-        int surplus = middle % droneImageViewIdList.length;
-        int selectPoint = middle - surplus;
-        viewPager.setCurrentItem(selectPoint);
 
         if (switchPicTask == null) {
             switchPicTask = new SwitchPicTask();
@@ -163,7 +158,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         @Override
         public void run() {
             int currentItem = viewPager.getCurrentItem();
-            viewPager.setCurrentItem(++currentItem);
+            viewPager.setCurrentItem((currentItem+1)%droneImageViewIdList.length);
             handler.postDelayed(this, 2000);
         }
 

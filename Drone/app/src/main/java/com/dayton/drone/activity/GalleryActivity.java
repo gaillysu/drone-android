@@ -25,8 +25,7 @@ public class GalleryActivity extends BaseActivity {
     Toolbar mToolbar;
     @Bind(R.id.activity_gallery_list)
     ListView listView;
-    private int[] droneImagesIdArray = new int[]{R.mipmap.welcome_logo_1,R.mipmap.welcome_logo_2,
-            R.mipmap.welcome_logo_3,R.mipmap.welcome_logo_4,R.mipmap.welcome_logo_5,R.mipmap.welcome_logo_6};
+    private int[] droneImagesIdArray = new int[]{R.mipmap.welcome_logo_1,R.mipmap.welcome_logo_2};
 
 
     @Override
