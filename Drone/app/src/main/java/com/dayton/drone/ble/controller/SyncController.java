@@ -50,4 +50,7 @@ public interface SyncController {
     void stopNavigation();
     void updateNavigation(double latitude,double longitude,long distanceInMeters);
     void setHotKeyFunction(int functionId);
+    void setCompassTimeout(int timeoutInseconds);
+    void calibrateCompass(int operation);
+    void setClockFormat(boolean format24Hour);
 }

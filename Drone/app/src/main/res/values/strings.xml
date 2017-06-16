@@ -183,7 +183,10 @@
     <string name="is_choose_flag" translatable="false">isChooseFlag</string>
     <string name="world_clock_local_time">Local Time</string>
     <string name="world_clock_setting_fragment_explain">ANALOG TIME DISPLAY</string>
+    <string name="world_clock_setting_fragment_calibration">CALIBRATION</string>
+    <string name="world_clock_setting_fragment_recalibrate_hands">Recalibrate Hands</string>
     <string name="world_clock_setting_sync_time">Analog Time Syncing</string>
+    <string name="world_clock_setting_24h_format">24 Hour Format</string>
     <string name="world_clock_syncing_time_type_tv">Sync Time</string>
     <string name="world_clock_syncing_time_setting_describe">Sync the time of your watch with local or home time If you don\'t turn on Analog Time Syncing, the time on your watch will never change.</string>
     <string name="world_clock_am" translatable="false">AM</string>

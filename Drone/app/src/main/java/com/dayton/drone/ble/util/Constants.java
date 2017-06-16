@@ -48,7 +48,8 @@ public class Constants {
         SleepConfig(9),
         CompassAutoOnDuration(0x10),
         TopKeyCustomization(0x11),
-        AnalogHandsConfig(0x12);
+        AnalogHandsConfig(0x12),
+        CompassTimeout(0x13);
         SystemConfigID(int id) {
             this.id = id;
         }

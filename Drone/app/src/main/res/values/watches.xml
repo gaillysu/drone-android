@@ -19,8 +19,14 @@ right position. Each press represents one second.</string>
 
     <string name="compass_title">Compass</string>
     <string name="compass_enable">Compass Enabled</string>
-    <string name="compass_auto_turn_off_detection_title">Auto turn off motion detection</string>
-    <string name="compass_auto_turn_off_detection_time">15m</string>
+    <string name="compass_auto_turn_off_detection_title">Turn off auto motion detection</string>
+    <string name="compass_auto_turn_off_detection_time">15mins</string>
+    <string name="compass_screen_timeout_title">Screen timeout</string>
+    <string name="compass_screen_timeout_time">15secs</string>
+    <string name="compass_start_compass_calibration_title">Start Compass Calibration</string>
+    <string name="compass_calibrate_title">Calibrate</string>
+    <string name="compass_calibrate_caption">Calibrate the compass</string>
+    <string name="compass_calibrate_message">Rotate the watch slowly and follow the\ninstructions on the watch.</string>
 
     <string name="activity_finisher_key">finisher</string>
     <string name="activity_activities_set_goal">Set goal</string>

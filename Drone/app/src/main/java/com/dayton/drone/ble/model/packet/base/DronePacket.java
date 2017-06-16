@@ -33,7 +33,7 @@ public class DronePacket {
     {
         return mPackets.get(0).getRawData()[1];
     }
-    protected List<MEDRawData> getPackets()
+    public List<MEDRawData> getPackets()
     {
         return mPackets;
     }

@@ -13,15 +13,19 @@ import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.os.PowerManager;
+import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.dayton.drone.R;
 import com.dayton.drone.application.ApplicationModel;
 import com.dayton.drone.ble.datasource.GattAttributesDataSourceImpl;
 import com.dayton.drone.ble.model.TimeZoneModel;
 import com.dayton.drone.ble.model.WeatherLocationModel;
 import com.dayton.drone.ble.model.WeatherUpdateModel;
 import com.dayton.drone.ble.model.packet.ActivityPacket;
+import com.dayton.drone.ble.model.packet.FindPhonePacket;
 import com.dayton.drone.ble.model.packet.GetBatteryPacket;
 import com.dayton.drone.ble.model.packet.GetStepsGoalPacket;
 import com.dayton.drone.ble.model.packet.SystemEventPacket;
@@ -67,6 +71,7 @@ import com.dayton.drone.network.response.model.Forecast;
 import com.dayton.drone.network.response.model.GetForecastModel;
 import com.dayton.drone.utils.CacheConstants;
 import com.dayton.drone.utils.Common;
+import com.dayton.drone.utils.SoundPlayer;
 import com.dayton.drone.utils.SpUtils;
 import com.dayton.drone.utils.StepsHandler;
 import com.dayton.drone.utils.WeatherUtils;
@@ -96,6 +101,7 @@ import java.util.GregorianCalendar;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -283,18 +289,22 @@ public class SyncControllerImpl implements  SyncController{
 
     @Override
     public void setHotKeyFunction(int functionId) {
-        //see@BLE profile R4_3: System Config Commands
-        Constants.TopKeyFunction topKeyFunction = Constants.TopKeyFunction.Default;
-        if(functionId==1) {
-            topKeyFunction = Constants.TopKeyFunction.RemoteCamera;
-        }
-        if(functionId==2) {
-            topKeyFunction = Constants.TopKeyFunction.FindMyPhone;
-        }
-        if(functionId==3) {
-            topKeyFunction = Constants.TopKeyFunction.MusicControl;
-        }
-        sendRequest(new SetSystemConfig(application, topKeyFunction, Constants.SystemConfigID.TopKeyCustomization));
+        sendRequest(new SetSystemConfig(application, (byte)functionId, Constants.SystemConfigID.TopKeyCustomization));
+    }
+
+    @Override
+    public void setCompassTimeout(int timeoutInseconds) {
+        sendRequest(new SetSystemConfig(application, (byte)timeoutInseconds, Constants.SystemConfigID.CompassTimeout));
+    }
+
+    @Override
+    public void calibrateCompass(int operation) {
+        sendRequest(new StartSystemSettingRequest(application,StartSystemSettingRequest.StartSystemSettingID.Compass.rawValue(),operation));
+    }
+
+    @Override
+    public void setClockFormat(boolean format24Hour) {
+        sendRequest(new SetSystemConfig(application,format24Hour?(byte)1:0, Constants.SystemConfigID.ClockFormat));
     }
 
     /**
@@ -322,6 +332,7 @@ public class SyncControllerImpl implements  SyncController{
         List<TimeZoneModel> timeZoneModelList = new ArrayList<>();
         for(City city:worldClockList)
         {
+            //getOffSetFromGMT() unit is "minutes", pls make sure "worldclock" database table "TimeZone" is right
             timeZoneModelList.add(new TimeZoneModel(city.getOffSetFromGMT()/60,city.getName()));
         }
         sendRequest(new SetWorldClockRequest(application,timeZoneModelList));
@@ -371,9 +382,9 @@ public class SyncControllerImpl implements  SyncController{
                     {
                         SpUtils.printAllConstants(application);
                         SpUtils.putBoolean(application,CacheConstants.TODAY_RESET,true);
-                        sendRequest(new SetSystemConfig(application,1,0, 0, 0, Constants.SystemConfigID.ClockFormat));
-                        sendRequest(new SetSystemConfig(application,1,0, 0, 0, Constants.SystemConfigID.Enabled));
-                        sendRequest(new SetSystemConfig(application,1,0, 0, 0, Constants.SystemConfigID.SleepConfig));
+                        sendRequest(new SetSystemConfig(application,SpUtils.get24HourFormat(application)?(byte)1:0, Constants.SystemConfigID.ClockFormat));
+                        sendRequest(new SetSystemConfig(application,Constants.SystemConfigID.Enabled));
+                        sendRequest(new SetSystemConfig(application,0, 0, 0, Constants.SystemConfigID.SleepConfig));
                         if(getFirmwareVersion()!=null&&Float.valueOf(getFirmwareVersion())>=0.04f) {
                             sendRequest(new SetSystemConfig(application, (short) SpUtils.getIntMethod(application,CacheConstants.COMPASS_AUTO_ON_DURATION,CacheConstants.COMPASS_AUTO_ON_DURATION_DEFAULT),Constants.SystemConfigID.CompassAutoOnDuration));
                         }
@@ -387,11 +398,6 @@ public class SyncControllerImpl implements  SyncController{
                         sendRequest(new SetUserProfileRequest(application,application.getUser()));
                         //set goal to watch
                         sendRequest(new SetGoalRequest(application, SpUtils.getIntMethod(application, CacheConstants.GOAL_STEP, 10000)));
-                        //if the cached date is today,use the cached steps to set watch
-                        //set world clock to watch
-
-                        setWorldClock(application.getSelectedCities());
-
 
                         if(SpUtils.getBoolean(application, CacheConstants.TODAY_RESET,false)){
                             List<Optional<Steps>> steps = application.getStepsDatabaseHelper().get(application.getUser().getUserID(),new Date());
@@ -513,6 +519,14 @@ public class SyncControllerImpl implements  SyncController{
                         sendRequest(new GetActivityRequest(application));
                     }
                 }
+                else if (FindPhonePacket.HEADER == packet.getHeader()) {
+                    FindPhonePacket findPhonePacket = new FindPhonePacket(packet.getPackets());
+                    if (localBinder != null) {
+                        if(findPhonePacket.getFindPhoneOperation()==1) {
+                            localBinder.findCellPhone();
+                        }
+                    }
+                }
                 //process done current cmd's response, request next cmd
                 packetsBuffer.clear();
                 QueuedMainThreadHandler.getInstance(QueuedMainThreadHandler.QueueType.SyncController).next();
@@ -544,7 +558,7 @@ public class SyncControllerImpl implements  SyncController{
 
     @Subscribe
     public void onEvent(WorldClockChangedEvent worldClockChangedEvent) {
-        setWorldClock(application.getSelectedCities());
+        setWorldClock(application.getWorldClockDatabaseHelper().getSelect());
     }
     @Subscribe
     public void onEvent(StepsGoalChangedEvent stepsGoalChangedEvent) {
@@ -713,8 +727,29 @@ public class SyncControllerImpl implements  SyncController{
             unregisterReceiver(myReceiver);
         }
 
+        private void findCellPhone() {
+            Vibrator vibrator = (Vibrator) LocalService.this.getSystemService(Context.VIBRATOR_SERVICE);
+            long[] pattern = {1, 2000, 1000, 2000, 1000, 2000, 1000};
+            if (vibrator.hasVibrator()) {
+                vibrator.cancel();
+            }
+            vibrator.vibrate(pattern, -1);
+
+            PowerManager pm = (PowerManager) LocalService.this.getSystemService(Context.POWER_SERVICE);
+            PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP
+                    | PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "bright");
+            wl.acquire();
+            wl.release();
+
+            //play ring bell to alert user that phone is here
+            new SoundPlayer(this).startPlayer(R.raw.bell);
+        }
+
         public class LocalBinder extends Binder {
             //you can add some functions here
+            public void findCellPhone() {
+                LocalService.this.findCellPhone();
+            }
         }
 
     }

@@ -1,5 +1,6 @@
 package com.dayton.drone.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
@@ -26,9 +27,12 @@ public class CompassActivity extends BaseActivity {
 
     private boolean enableCompass;
     private int compassAutoOnDuration;
+    private int compassScreenTimeout;
 
     @Bind(R.id.activity_compass_auto_on_duration_textview)
     TextView compassAutoOnDurationTextView;
+    @Bind(R.id.activity_compass_screen_timeout_textview)
+    TextView compassScreenTimeoutTextView;
 
     @Bind(R.id.activity_compass_enable_switch)
     SwitchCompat compassEnableSwitch;
@@ -44,8 +48,10 @@ public class CompassActivity extends BaseActivity {
         initToolbar();
         enableCompass = SpUtils.getBoolean(this,CacheConstants.ENABLE_COMPASS,false);
         compassAutoOnDuration = SpUtils.getIntMethod(this, CacheConstants.COMPASS_AUTO_ON_DURATION,CacheConstants.COMPASS_AUTO_ON_DURATION_DEFAULT);
+        compassScreenTimeout = SpUtils.getIntMethod(this, CacheConstants.COMPASS_SCREEN_TIMEOUT,CacheConstants.COMPASS_SCREEN_TIMEOUT_DEFAULT);
         compassEnableSwitch.setChecked(enableCompass);
         compassAutoOnDurationTextView.setText(formatMinutes(compassAutoOnDuration +""));
+        compassScreenTimeoutTextView.setText(formatSeconds(compassScreenTimeout +""));
     }
 
     private void initToolbar() {
@@ -70,6 +76,7 @@ public class CompassActivity extends BaseActivity {
                                                     int day, String dateDesc) {
                         compassAutoOnDurationTextView.setText(formatMinutes(dateDesc));
                         int durationMinutes = new Integer(dateDesc).intValue();
+                        compassAutoOnDuration = durationMinutes;
                         SpUtils.putIntMethod(CompassActivity.this,CacheConstants.COMPASS_AUTO_ON_DURATION,durationMinutes);
                         getModel().getSyncController().setCompassAutoOnDuration(durationMinutes);
                     }
@@ -78,6 +85,31 @@ public class CompassActivity extends BaseActivity {
                 .dateChose(""+ compassAutoOnDuration)
                 .build();
         pickerPopWin.showPopWin(CompassActivity.this);
+    }
+
+    @OnClick(R.id.activity_compass_screen_timeout_setting_layout)
+    public void editScreenTimeout(){
+        DatePickerPopWin pickerPopWin = new DatePickerPopWin.Builder(CompassActivity.this,
+                new DatePickerPopWin.OnDatePickedListener() {
+                    @Override
+                    public void onDatePickCompleted(int year, int month,
+                                                    int day, String dateDesc) {
+                        compassScreenTimeoutTextView.setText(formatSeconds(dateDesc));
+                        int screenTimeoutInSeconds = new Integer(dateDesc).intValue();
+                        compassScreenTimeout = screenTimeoutInSeconds;
+                        SpUtils.putIntMethod(CompassActivity.this,CacheConstants.COMPASS_SCREEN_TIMEOUT,screenTimeoutInSeconds);
+                        getModel().getSyncController().setCompassTimeout(screenTimeoutInSeconds);
+                    }
+                }).viewStyle(6)
+                .viewTextSize(20)
+                .dateChose(""+ compassScreenTimeout)
+                .build();
+        pickerPopWin.showPopWin(CompassActivity.this);
+    }
+
+    @OnClick(R.id.activity_compass_start_compass_calibration_layout)
+    public void startCompassCalibration(){
+        startActivity(new Intent(CompassActivity.this ,CalibrateCompassActivity.class));
     }
 
     @OnCheckedChanged(R.id.activity_compass_enable_switch)
@@ -92,11 +124,26 @@ public class CompassActivity extends BaseActivity {
         }
         else {
            if(theMinute<60) {
-               return theMinute + "m";
+               return theMinute + "mins";
            }
            else {
                return theMinute/60 + "h " + theMinute%60 + "m";
            }
+        }
+    }
+
+    private String formatSeconds(String seconds){
+        int theSecond = new Integer(seconds).intValue();
+        if(theSecond%60==0) {
+            return theSecond/60 + "mins";
+        }
+        else {
+            if(theSecond<60) {
+                return theSecond + "secs";
+            }
+            else {
+                return theSecond/60 + "m " + theSecond%60 + "s";
+            }
         }
     }
 }

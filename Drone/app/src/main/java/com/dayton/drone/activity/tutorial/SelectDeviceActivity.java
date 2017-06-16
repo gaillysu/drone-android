@@ -35,8 +35,7 @@ public class SelectDeviceActivity extends BaseActivity {
     private int addWatchType = 5;
 
     private String[] watchNameArray;
-    private int[] droneImagesIdArray = new int[]{R.mipmap.welcome_logo_1, R.mipmap.welcome_logo_2,
-            R.mipmap.welcome_logo_3, R.mipmap.welcome_logo_4, R.mipmap.welcome_logo_5, R.mipmap.welcome_logo_6};
+    private int[] droneImagesIdArray = new int[]{R.mipmap.welcome_logo_1, R.mipmap.welcome_logo_2};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

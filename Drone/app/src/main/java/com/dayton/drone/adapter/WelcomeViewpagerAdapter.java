@@ -21,7 +21,7 @@ public class WelcomeViewpagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return Integer.MAX_VALUE;
+        return imageIdArray.size();
     }
 
     @Override

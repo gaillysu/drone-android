@@ -85,4 +85,80 @@
     </RelativeLayout>
 
 
+
+    <RelativeLayout
+        android:id = "@+id/activity_compass_screen_timeout_setting_layout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/activity_compass_setting_layout"
+        android:background="@color/colorPrimaryDark"
+        android:orientation="vertical">
+        <View
+            android:id="@+id/line_view"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="20dp"
+            android:background="@android:color/white"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/compass_screen_timeout_title"
+            android:layout_marginLeft="20dp"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"/>
+        <TextView
+            android:id="@+id/activity_compass_screen_timeout_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/screen_timeout_arrow_image"
+            android:layout_marginRight="10dp"
+            android:text="@string/compass_screen_timeout_time"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"/>
+        <ImageButton
+            android:id="@+id/screen_timeout_arrow_image"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:scaleType="fitXY"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:background="@android:color/transparent"
+            android:src="@mipmap/right_arrow_1"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id = "@+id/activity_compass_start_compass_calibration_layout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/activity_compass_screen_timeout_setting_layout"
+        android:background="@color/colorPrimaryDark"
+        android:orientation="vertical">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="20dp"
+            android:background="@android:color/white"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/compass_start_compass_calibration_title"
+            android:layout_marginLeft="20dp"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"/>
+        <ImageButton
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:scaleType="fitXY"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:background="@android:color/transparent"
+            android:src="@mipmap/right_arrow_1"/>
+    </RelativeLayout>
+
+
 </RelativeLayout>
