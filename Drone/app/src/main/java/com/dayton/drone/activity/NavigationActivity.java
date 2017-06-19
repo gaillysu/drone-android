@@ -1,34 +1,50 @@
 package com.dayton.drone.activity;
 
+import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
-import android.view.KeyEvent;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.adapter.MapSearchAdapter;
+import com.dayton.drone.adapter.PlaceAutocompleteAdapter;
+import com.dayton.drone.event.PlaceChangedEvent;
 import com.dayton.drone.map.BaseMap;
 import com.dayton.drone.map.builder.MapBuilder;
-import com.dayton.drone.network.request.GetGeocodeRequest;
 import com.dayton.drone.network.request.GetRouteMapRequest;
 import com.dayton.drone.network.response.model.GeocodeResult;
-import com.dayton.drone.network.response.model.GetGeocodeModel;
+import com.dayton.drone.network.response.model.Geometry;
 import com.dayton.drone.network.response.model.GetRouteMapModel;
+import com.dayton.drone.network.response.model.Location;
 import com.dayton.drone.network.response.model.Route;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceBuffer;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,13 +60,15 @@ import butterknife.OnClick;
  * Created by med on 17/5/15.
  */
 
-public class NavigationActivity extends BaseActivity {
+public class NavigationActivity extends BaseActivity implements GoogleApiClient.OnConnectionFailedListener{
+
+    private static final String TAG = "NavigationActivity";
 
     @Bind(R.id.map_content)
     RelativeLayout mapLayout;
 
     @Bind(R.id.address_search_edit_text)
-    EditText searchEditText;
+    AutoCompleteTextView searchEditText;
 
     @Bind(R.id.address_search_list_view)
     ListView searchListView;
@@ -91,6 +109,10 @@ public class NavigationActivity extends BaseActivity {
 
     private BaseMap map;
 
+    private static final int GOOGLE_API_CLIENT_ID = 0;
+    protected GoogleApiClient mGoogleApiClient;
+    private PlaceAutocompleteAdapter mAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,35 +120,6 @@ public class NavigationActivity extends BaseActivity {
         ButterKnife.bind(this);
         initToolbar();
         map = new MapBuilder(mapLayout,this).build(savedInstanceState);
-        searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                final GetGeocodeRequest getGeocodeRequest = new GetGeocodeRequest(v.getText() + "",getModel().getRetrofitManager().getGoogleMapApiKey());
-                getModel().getRetrofitManager().executeGoogleMapApi(getGeocodeRequest, new RequestListener<GetGeocodeModel>() {
-                    @Override
-                    public void onRequestFailure(final SpiceException spiceException) {
-                        searchListView.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                searchListView.removeAllViews();
-                                Toast.makeText(NavigationActivity.this,spiceException.getLocalizedMessage(),Toast.LENGTH_LONG).show();
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onRequestSuccess(final GetGeocodeModel getGeocodeModel) {
-                        geocodeResults = Arrays.asList(getGeocodeModel.getResults());
-                        for(GeocodeResult result:geocodeResults) {
-                            requestRouteMap(result.getGeometry().getLocation().getLat(),
-                                    result.getGeometry().getLocation().getLng(),true);
-                        }
-                    }
-                });
-                return false;
-            }
-        });
-
         searchListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -137,6 +130,17 @@ public class NavigationActivity extends BaseActivity {
                         geocodeResults.get(position).getGeometry().getLocation().getLng(),false);
             }
         });
+
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, GOOGLE_API_CLIENT_ID,this)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .build();
+        searchEditText.setOnItemClickListener(autocompleteClickListener);
+        mAdapter = new PlaceAutocompleteAdapter(this, android.R.layout.simple_list_item_1,
+                mGoogleApiClient, null, null);
+        searchEditText.setAdapter(mAdapter);
      }
 
     private void initToolbar() {
@@ -280,4 +284,73 @@ public class NavigationActivity extends BaseActivity {
         view.startAnimation(trans);
     }
 
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.e(TAG, "onConnectionFailed: ConnectionResult.getErrorCode() = "
+                + connectionResult.getErrorCode() + "," + connectionResult.getErrorMessage());
+    }
+    private AdapterView.OnItemClickListener autocompleteClickListener
+            = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            /*
+             Retrieve the place ID of the selected item from the Adapter.
+             The adapter stores each Place suggestion in a PlaceAutocomplete object from which we
+             read the place ID.
+              */
+            final PlaceAutocompleteAdapter.PlaceAutocomplete item = mAdapter.getItem(position);
+            final String placeId = String.valueOf(item.placeId);
+            Log.i(TAG, "Autocomplete item selected: " + item.description);
+
+            /*
+             Issue a request to the Places Geo Data API to retrieve a Place object with additional
+              details about the place.
+              */
+            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
+                    .getPlaceById(mGoogleApiClient, placeId);
+            placeResult.setResultCallback(updatePlaceDetailsCallback);
+            Log.i(TAG, "Called getPlaceById to get Place details for " + item.placeId);
+        }
+    };
+
+    private ResultCallback<PlaceBuffer> updatePlaceDetailsCallback
+            = new ResultCallback<PlaceBuffer>() {
+        @Override
+        public void onResult(PlaceBuffer places) {
+            if (!places.getStatus().isSuccess()) {
+                // Request did not complete successfully
+                Log.e(TAG, "Place query did not complete. Error: " + places.getStatus().toString());
+                places.release();
+                return;
+            }
+            // Get the Place object from the buffer.
+            final Place place = places.get(0);
+            Log.i(TAG, "Place details received,name: " + place.getName() + ",id: " + place.getId() + ",address: "+ place.getAddress() + ",latlng: " + place.getLatLng());
+            Location location = new Location();
+            location.setLat(place.getLatLng().latitude);
+            location.setLng(place.getLatLng().longitude);
+            EventBus.getDefault().post(new PlaceChangedEvent(location,place.getAddress()+"",place.getName()+""));
+            places.release();
+        }
+    };
+
+    @Subscribe
+    public void onEvent(PlaceChangedEvent event)
+    {
+        hideKeyboard(searchEditText);
+        geocodeResults.clear();
+        GeocodeResult geocodeResult = new GeocodeResult();
+        Geometry geometry = new Geometry();
+        geometry.setLocation(event.getLocation());
+        geocodeResult.setGeometry(geometry);
+        geocodeResult.setFormattedCityRegion(event.getAddress());
+        geocodeResult.setFormattedRoad(event.getName());
+        geocodeResults.add(geocodeResult);
+        requestRouteMap(event.getLocation().getLat(),event.getLocation().getLng(),true);
+    }
+
+    private void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
 }

@@ -8,7 +8,7 @@
     android:layout_alignParentBottom="true"
     android:background="#f2f7fa"
     android:orientation="vertical">
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/address_search_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
