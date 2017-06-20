@@ -53,10 +53,60 @@ public class MapSearchAdapter extends BaseAdapter {
             convertView.setTag(new ViewHolder(convertView));
         }
         ViewHolder viewHolder = (ViewHolder) convertView.getTag();
+        formatAddress(geocodeResultList.get(position));
         viewHolder.address.setText(geocodeResultList.get(position).getFormattedCityRegion());
         viewHolder.road.setText(geocodeResultList.get(position).getFormattedRoad());
         viewHolder.distance.setText(geocodeResultList.get(position).getFormattedDistance());
         return convertView;
+    }
+
+    private String getComponentAddress(AddressComponent[] addressComponents, String type)
+    {
+        if(addressComponents==null) {
+            return null;
+        }
+        for(AddressComponent address_component:addressComponents)
+        {
+            if(Arrays.asList(address_component.getTypes()).contains(type))
+            {
+                return address_component.getLongName();
+            }
+        }
+        return null;
+    }
+    private void formatAddress(GeocodeResult geocodeResult)
+    {
+        String  address = null;
+        //city region address
+        if((address = getComponentAddress(geocodeResult.getAddressComponents(),context.getString(R.string.address_type_1)))!=null)
+        {
+            geocodeResult.setFormattedCityRegion(address);
+        }
+        if((address = getComponentAddress(geocodeResult.getAddressComponents(),context.getString(R.string.address_type_2)))!=null)
+        {
+            geocodeResult.setFormattedCityRegion(geocodeResult.getFormattedCityRegion()+","+address);
+        }
+        if((address = getComponentAddress(geocodeResult.getAddressComponents(),context.getString(R.string.address_type_3)))!=null)
+        {
+            geocodeResult.setFormattedCityRegion(geocodeResult.getFormattedCityRegion()+","+address);
+        }
+        if((address = getComponentAddress(geocodeResult.getAddressComponents(),context.getString(R.string.address_type_4)))!=null)
+        {
+            geocodeResult.setFormattedCityRegion(geocodeResult.getFormattedCityRegion()+","+address);
+        }
+        //road address
+        if((address = getComponentAddress(geocodeResult.getAddressComponents(),context.getString(R.string.address_type_5)))!=null)
+        {
+            geocodeResult.setFormattedRoad(address);
+        }
+        if((address = getComponentAddress(geocodeResult.getAddressComponents(),context.getString(R.string.address_type_6)))!=null)
+        {
+            geocodeResult.setFormattedRoad(geocodeResult.getFormattedRoad()+" "+address);
+        }
+        if((address = getComponentAddress(geocodeResult.getAddressComponents(),context.getString(R.string.address_type_7)))!=null)
+        {
+            geocodeResult.setFormattedRoad(geocodeResult.getFormattedRoad()+","+address);
+        }
     }
 
     class ViewHolder{

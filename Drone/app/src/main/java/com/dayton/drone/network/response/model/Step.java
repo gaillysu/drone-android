@@ -27,4 +27,8 @@ public class Step {
     public Location getStartLocation() {
         return startLocation;
     }
+
+    public Polyline getPolyline() {
+        return polyline;
+    }
 }

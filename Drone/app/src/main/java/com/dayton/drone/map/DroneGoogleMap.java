@@ -9,6 +9,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 
@@ -24,6 +25,8 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+
+import java.util.ArrayList;
 
 /**
  * Created by med on 17/5/16.
@@ -85,7 +88,7 @@ public class DroneGoogleMap implements BaseMap, OnMapReadyCallback, LocationList
         googleMap.clear();
         PolylineOptions polylineOptions = new PolylineOptions();
         polylineOptions.width(12);
-        polylineOptions.color(Color.BLUE);
+        polylineOptions.color(ContextCompat.getColor(context,R.color.colorPrimaryDark));
         for (Route route : routes) {
             if (route.getLegs().length > 0) {
                 //only select the first Leg for every route
@@ -103,6 +106,13 @@ public class DroneGoogleMap implements BaseMap, OnMapReadyCallback, LocationList
                                     .icon(BitmapDescriptorFactory.fromResource(R.mipmap.map_icon_map_stop)));
                         }
                         polylineOptions.add(new LatLng(steps[i].getStartLocation().getLat(), steps[i].getStartLocation().getLng()));
+                        //add more geo points in this step line
+                        if(steps[i].getPolyline()!=null && steps[i].getPolyline().getPoints()!=null) {
+                            ArrayList<LatLng> points = decodePolyPoints(steps[i].getPolyline().getPoints());
+                            for(LatLng latLng:points) {
+                                polylineOptions.add(latLng);
+                            }
+                        }
                         polylineOptions.add(new LatLng(steps[i].getEndLocation().getLat(), steps[i].getEndLocation().getLng()));
                     }
                     googleMap.addPolyline(polylineOptions);
@@ -143,5 +153,39 @@ public class DroneGoogleMap implements BaseMap, OnMapReadyCallback, LocationList
     @Override
     public void onProviderDisabled(String provider) {
 
+    }
+
+    private ArrayList<LatLng> decodePolyPoints(String encodedPath){
+        int len = encodedPath.length();
+
+        final ArrayList<LatLng> path = new ArrayList<LatLng>();
+        int index = 0;
+        int lat = 0;
+        int lng = 0;
+
+        while (index < len) {
+            int result = 1;
+            int shift = 0;
+            int b;
+            do {
+                b = encodedPath.charAt(index++) - 63 - 1;
+                result += b << shift;
+                shift += 5;
+            } while (b >= 0x1f);
+            lat += (result & 1) != 0 ? ~(result >> 1) : (result >> 1);
+
+            result = 1;
+            shift = 0;
+            do {
+                b = encodedPath.charAt(index++) - 63 - 1;
+                result += b << shift;
+                shift += 5;
+            } while (b >= 0x1f);
+            lng += (result & 1) != 0 ? ~(result >> 1) : (result >> 1);
+
+            path.add(new LatLng(lat * 1e-5, lng * 1e-5));
+        }
+
+        return path;
     }
 }
