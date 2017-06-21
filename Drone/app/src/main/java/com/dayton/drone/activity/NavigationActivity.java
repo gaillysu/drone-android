@@ -53,6 +53,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -123,7 +124,7 @@ public class NavigationActivity extends BaseActivity implements GoogleApiClient.
         searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                final GetGeocodeRequest getGeocodeRequest = new GetGeocodeRequest(v.getText() + "",getModel().getRetrofitManager().getGoogleMapApiKey());
+                final GetGeocodeRequest getGeocodeRequest = new GetGeocodeRequest(v.getText() + "",getModel().getRetrofitManager().getGoogleMapApiKey(), Locale.getDefault().getLanguage());
                 getModel().getRetrofitManager().executeGoogleMapApi(getGeocodeRequest, new RequestListener<GetGeocodeModel>() {
                     @Override
                     public void onRequestFailure(final SpiceException spiceException) {

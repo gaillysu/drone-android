@@ -1,9 +1,7 @@
 package com.dayton.drone.network.request;
 
-import com.dayton.drone.network.response.model.GetForecastModel;
 import com.dayton.drone.network.response.model.GetGeocodeModel;
 import com.dayton.drone.network.restapi.GoogleMap;
-import com.dayton.drone.network.restapi.Weather;
 import com.octo.android.robospice.request.retrofit.RetrofitSpiceRequest;
 
 /**
@@ -13,15 +11,17 @@ import com.octo.android.robospice.request.retrofit.RetrofitSpiceRequest;
 public class GetGeocodeRequest extends RetrofitSpiceRequest<GetGeocodeModel,GoogleMap> {
     private String address;
     private String apiKey;
+    private String language;
 
-    public GetGeocodeRequest(String address, String apiKey) {
+    public GetGeocodeRequest(String address, String apiKey,String language) {
         super(GetGeocodeModel.class, GoogleMap.class);
         this.address = address;
         this.apiKey = apiKey;
+        this.language = language;
     }
 
     @Override
     public GetGeocodeModel loadDataFromNetwork() throws Exception {
-        return getService().getGeocode(address,apiKey);
+        return getService().getGeocode(address,apiKey, language);
     }
 }
