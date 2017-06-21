@@ -64,4 +64,6 @@ right position. Each press represents one second.</string>
     <string name="route_mode_driving">Driving</string>
     <string name="route_map_transit">Transit</string>
 
+    <string name="route_no_found_message">No found route</string>
+
 </resources>

@@ -58,7 +58,6 @@ import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 
 /**
@@ -252,6 +251,7 @@ public class NavigationActivity extends BaseActivity implements GoogleApiClient.
             public void onRequestSuccess(GetRouteMapModel getRouteMapModel) {
                 routeMap = getRouteMapModel.getRoutes();
                 if(getRouteMapModel.getRoutes().length==0) {
+                    Toast.makeText(NavigationActivity.this,R.string.route_no_found_message,Toast.LENGTH_LONG).show();
                     return;
                 }
                 if(getDistance) {
@@ -345,24 +345,23 @@ public class NavigationActivity extends BaseActivity implements GoogleApiClient.
             Location location = new Location();
             location.setLat(place.getLatLng().latitude);
             location.setLng(place.getLatLng().longitude);
-            EventBus.getDefault().post(new PlaceChangedEvent(location,place.getAddress()+"",place.getName()+""));
+            startRoute(location,place.getAddress()+"",place.getName()+"");
             places.release();
         }
     };
 
-    @Subscribe
-    public void onEvent(PlaceChangedEvent event)
+    private void startRoute(Location location,String address,String name)
     {
         hideKeyboard(searchEditText);
-        geocodeResults.clear();
+        geocodeResults = new ArrayList<>();
         GeocodeResult geocodeResult = new GeocodeResult();
         Geometry geometry = new Geometry();
-        geometry.setLocation(event.getLocation());
+        geometry.setLocation(location);
         geocodeResult.setGeometry(geometry);
-        geocodeResult.setFormattedCityRegion(event.getAddress());
-        geocodeResult.setFormattedRoad(event.getName());
+        geocodeResult.setFormattedCityRegion(address);
+        geocodeResult.setFormattedRoad(name);
         geocodeResults.add(geocodeResult);
-        requestRouteMap(event.getLocation().getLat(),event.getLocation().getLng(),true,getString(R.string.map_navigation_mode_walking));
+        requestRouteMap(location.getLat(),location.getLng(),true,getString(R.string.map_navigation_mode_walking));
     }
 
     private void hideKeyboard(View view) {
