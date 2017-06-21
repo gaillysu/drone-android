@@ -1,6 +1,8 @@
 package com.dayton.drone.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
@@ -26,7 +28,6 @@ import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.adapter.MapSearchAdapter;
 import com.dayton.drone.adapter.PlaceAutocompleteAdapter;
-import com.dayton.drone.event.PlaceChangedEvent;
 import com.dayton.drone.map.BaseMap;
 import com.dayton.drone.map.builder.MapBuilder;
 import com.dayton.drone.network.request.GetGeocodeRequest;
@@ -46,9 +47,6 @@ import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -111,8 +109,8 @@ public class NavigationActivity extends BaseActivity implements GoogleApiClient.
     private BaseMap map;
 
     private static final int GOOGLE_API_CLIENT_ID = 0;
-    protected GoogleApiClient mGoogleApiClient;
-    private PlaceAutocompleteAdapter mAdapter;
+    protected GoogleApiClient googleApiClient;
+    private PlaceAutocompleteAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,7 +129,8 @@ public class NavigationActivity extends BaseActivity implements GoogleApiClient.
                         searchListView.post(new Runnable() {
                             @Override
                             public void run() {
-                                searchListView.removeAllViews();
+                                //!!!!DONOT INVOKE searchListView.removeAllViews(), that will lead to crash in message "removeAllViews() is not supported in AdapterView"
+                                searchListView.setAdapter(new MapSearchAdapter(NavigationActivity.this, new ArrayList<GeocodeResult>()));
                                 Toast.makeText(NavigationActivity.this,spiceException.getLocalizedMessage(),Toast.LENGTH_LONG).show();
                             }
                         });
@@ -166,16 +165,19 @@ public class NavigationActivity extends BaseActivity implements GoogleApiClient.
         });
 
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
+        googleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, GOOGLE_API_CLIENT_ID,this)
                 .addApi(Places.GEO_DATA_API)
                 .addApi(Places.PLACE_DETECTION_API)
                 .build();
         searchEditText.setOnItemClickListener(autocompleteClickListener);
-        mAdapter = new PlaceAutocompleteAdapter(this, android.R.layout.simple_list_item_1,
-                mGoogleApiClient, null, null);
-        searchEditText.setAdapter(mAdapter);
+        adapter = new PlaceAutocompleteAdapter(this, android.R.layout.simple_list_item_1,
+                googleApiClient, null, null);
+        searchEditText.setAdapter(adapter);
         navigation_mode_radiogroup.setOnCheckedChangeListener(this);
+        Drawable drawable = getResources().getDrawable(R.mipmap.world_clock_search_city);
+        drawable.setBounds(0,0,40,40);
+        searchEditText.setCompoundDrawables(drawable,null,null,null);
      }
 
     private void initToolbar() {
@@ -217,7 +219,7 @@ public class NavigationActivity extends BaseActivity implements GoogleApiClient.
                         public void run() {
                             navigationDurationInSeconds = navigationDurationInSeconds + 1;
                             navigation_timer_tv.setText(formatNavigationDuration(navigationDurationInSeconds));
-                            if(navigationDurationInSeconds%5==0) {
+                            if(navigationDurationInSeconds%5==0 && routeMap.length>0 && routeMap[0].getLegs().length>0) {
                                 getModel().getSyncController().updateNavigation(map.getLocalLocation().getLatitude(),map.getLocalLocation().getLongitude(),routeMap[0].getLegs()[0].getDistance().getValue());
                             }
                         }
@@ -237,6 +239,11 @@ public class NavigationActivity extends BaseActivity implements GoogleApiClient.
     }
 
     private void requestRouteMap(final double destinationLatitude,final double destinationLongitude,final boolean getDistance,String mode) {
+        final ProgressDialog progressDialog = new ProgressDialog(NavigationActivity.this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage(getString(R.string.route_loading_message));
+        progressDialog.show();
         GetRouteMapRequest getRouteMapRequest = new GetRouteMapRequest(map.getLocalLocation().getLatitude(),
                 map.getLocalLocation().getLongitude(),
                 destinationLatitude,destinationLongitude,
@@ -246,12 +253,15 @@ public class NavigationActivity extends BaseActivity implements GoogleApiClient.
         getModel().getRetrofitManager().executeGoogleMapApi(getRouteMapRequest, new RequestListener<GetRouteMapModel>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
-
+                progressDialog.dismiss();
             }
             @Override
             public void onRequestSuccess(GetRouteMapModel getRouteMapModel) {
+                progressDialog.dismiss();
                 routeMap = getRouteMapModel.getRoutes();
-                if(getRouteMapModel.getRoutes().length==0) {
+                if(routeMap.length==0) {
+                    //!!!!DONOT INVOKE searchListView.removeAllViews(), that will lead to crash in message "removeAllViews() is not supported in AdapterView"
+                    searchListView.setAdapter(new MapSearchAdapter(NavigationActivity.this, new ArrayList<GeocodeResult>()));
                     Toast.makeText(NavigationActivity.this,R.string.route_no_found_message,Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -315,7 +325,7 @@ public class NavigationActivity extends BaseActivity implements GoogleApiClient.
              The adapter stores each Place suggestion in a PlaceAutocomplete object from which we
              read the place ID.
               */
-            final PlaceAutocompleteAdapter.PlaceAutocomplete item = mAdapter.getItem(position);
+            final PlaceAutocompleteAdapter.PlaceAutocomplete item = adapter.getItem(position);
             final String placeId = String.valueOf(item.placeId);
             Log.i(TAG, "Autocomplete item selected: " + item.description);
 
@@ -324,7 +334,7 @@ public class NavigationActivity extends BaseActivity implements GoogleApiClient.
               details about the place.
               */
             PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
-                    .getPlaceById(mGoogleApiClient, placeId);
+                    .getPlaceById(googleApiClient, placeId);
             placeResult.setResultCallback(updatePlaceDetailsCallback);
             Log.i(TAG, "Called getPlaceById to get Place details for " + item.placeId);
         }

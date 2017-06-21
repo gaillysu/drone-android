@@ -21,8 +21,8 @@
             android:id="@+id/navigation_back_to_search_image_button"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:background="@color/colorPrimary"
-            android:src="@mipmap/left_arrpw_1"/>
+            android:background="@android:color/transparent"
+            android:src="@mipmap/navigation_back_image"/>
 
         <RadioGroup
             android:id="@+id/navigation_mode_radiogroup"
@@ -62,7 +62,7 @@
                 android:background="@android:color/transparent"
                 android:textColor="@android:color/black"
                 android:textSize="12sp"
-                android:visibility="visible"/>
+                android:visibility="invisible"/>
 
         </RadioGroup>
 
@@ -73,7 +73,8 @@
         android:id="@+id/navigation_infomation_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp">
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
         <TextView
             android:id="@+id/navigation_duration_tv"
             android:layout_width="wrap_content"
@@ -106,12 +107,12 @@
             android:layout_height="wrap_content"
             android:text=""
             android:textColor="@android:color/darker_gray"
-            android:textSize="10sp"
+            android:textSize="16sp"
             android:background="@null"
-            android:layout_below="@id/navigation_duration_tv"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"/>
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/navigation_duration_tv"
+            android:layout_marginLeft="10dp"/>
 
         <Button
             android:id="@+id/navigation_start_stop_button"
