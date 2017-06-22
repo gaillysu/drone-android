@@ -1,6 +1,10 @@
 package com.dayton.drone.ble.controller;
 
 
+import com.dayton.drone.ble.model.DailyAlarmModel;
+
+import java.util.List;
+
 /**
  * Created by med on 16/4/11.
  * this  interface give all functions that communication with watch.
@@ -53,4 +57,6 @@ public interface SyncController {
     void setCompassTimeout(int timeoutInseconds);
     void calibrateCompass(int operation);
     void setClockFormat(boolean format24Hour);
+    void setCountdownTimer(int countdownInMinutes);
+    void setDailyAlarm(List<DailyAlarmModel> dailyAlarmModels);
 }
