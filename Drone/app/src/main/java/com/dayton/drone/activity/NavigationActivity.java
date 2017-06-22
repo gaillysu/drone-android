@@ -391,10 +391,6 @@ public class NavigationActivity extends BaseActivity implements GoogleApiClient.
         {
             mode = getString(R.string.map_navigation_mode_driving);
         }
-        if(checkedId == R.id.navigation_transit_button)
-        {
-            mode = getString(R.string.map_navigation_mode_transit);
-        }
         requestRouteMap(geocodeResults.get(0).getGeometry().getLocation().getLat(),
                 geocodeResults.get(0).getGeometry().getLocation().getLng(),false,mode);
     }

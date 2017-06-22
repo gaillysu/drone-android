@@ -53,16 +53,6 @@
                 android:textColor="@android:color/black"
                 android:textSize="12sp"
                 android:visibility="visible"/>
-            <RadioButton
-                android:id="@+id/navigation_transit_button"
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:layout_marginStart="10dp"
-                android:text="@string/route_map_transit"
-                android:background="@android:color/transparent"
-                android:textColor="@android:color/black"
-                android:textSize="12sp"
-                android:visibility="invisible"/>
 
         </RadioGroup>
 
