@@ -32,6 +32,10 @@ public class GeocodeResult {
         return addressComponents;
     }
 
+    public void setGeometry(Geometry geometry) {
+        this.geometry = geometry;
+    }
+
     public Geometry getGeometry() {
         return geometry;
     }

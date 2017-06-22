@@ -4,38 +4,39 @@
               android:layout_height="wrap_content"
               android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/map_search_address_item_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
-        android:text="Guangdong Shenzhen Nanshan "
-        android:singleLine="true"
-        android:ellipsize="end"
-        android:layout_alignParentTop="true"
-        android:textColor="@android:color/black"
-        android:textSize="16sp"/>
 
     <TextView
         android:id="@+id/map_search_road_item_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="18dp"
-        android:text="Shen nan Road 1553."
-        android:layout_below="@id/map_search_address_item_tv"
-        android:paddingTop="3dp"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="12sp"/>
+        android:layout_alignParentTop="true"
+        android:paddingTop="5dp"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"/>
 
     <TextView
         android:id="@+id/map_search_distance_item_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
-        android:text="100.23 km"
-        android:layout_below="@id/map_search_road_item_tv"
-        android:paddingTop="10dp"
+        android:layout_alignParentTop="true"
+        android:paddingTop="5dp"
+        android:layout_toRightOf="@id/map_search_road_item_tv"
+        android:paddingLeft="20dp"
         android:textColor="@android:color/darker_gray"
-        android:textSize="10sp"/>
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/map_search_address_item_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:paddingTop="5dp"
+        android:paddingBottom="10dp"
+        android:layout_below="@id/map_search_road_item_tv"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="12sp"/>
 
 </RelativeLayout>

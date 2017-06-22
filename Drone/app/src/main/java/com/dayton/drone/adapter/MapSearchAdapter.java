@@ -62,6 +62,9 @@ public class MapSearchAdapter extends BaseAdapter {
 
     private String getComponentAddress(AddressComponent[] addressComponents, String type)
     {
+        if(addressComponents==null) {
+            return null;
+        }
         for(AddressComponent address_component:addressComponents)
         {
             if(Arrays.asList(address_component.getTypes()).contains(type))

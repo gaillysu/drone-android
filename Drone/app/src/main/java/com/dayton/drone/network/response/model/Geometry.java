@@ -12,6 +12,10 @@ public class Geometry {
     @JsonProperty
     Viewport viewport;
 
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
     public Location getLocation() {
         return location;
     }

@@ -6,4 +6,8 @@ package com.dayton.drone.network.response.model;
 
 public class Polyline {
     String points;
+
+    public String getPoints() {
+        return points;
+    }
 }
