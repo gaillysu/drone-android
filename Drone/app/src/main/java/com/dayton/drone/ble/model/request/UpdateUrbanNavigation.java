@@ -27,6 +27,7 @@ public class UpdateUrbanNavigation extends RequestBase {
     @Override
     public byte[][] getRawDataEx() {
         return new byte[][]{{(byte) 0x80,HEADER,2,
+                12,
                 (byte) (latitude&0xFF),
                 (byte) (latitude>>8&0xFF),
                 (byte) (latitude>>16&0xFF),
@@ -39,7 +40,7 @@ public class UpdateUrbanNavigation extends RequestBase {
                 (byte) (distance>>8&0xFF),
                 (byte) (distance>>16&0xFF),
                 (byte) (distance>>24&0xFF),
-                0,0,0,0,0}};
+                0,0,0,0}};
     }
 
     @Override
