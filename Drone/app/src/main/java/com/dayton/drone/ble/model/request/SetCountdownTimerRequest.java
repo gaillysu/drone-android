@@ -7,11 +7,12 @@ import com.dayton.drone.ble.model.request.base.RequestBase;
 
 public class SetCountdownTimerRequest extends RequestBase {
     public final static byte HEADER = (byte)0x39;
+    private final static short COUNT_LIMITED = 1439;
     private final short countdownInMinutes; //0~1439 in "minutes"
 
     public SetCountdownTimerRequest(Context context, short countdownInMinutes) {
         super(context);
-        this.countdownInMinutes = countdownInMinutes;
+        this.countdownInMinutes = (countdownInMinutes>COUNT_LIMITED?COUNT_LIMITED:countdownInMinutes);
     }
 
     @Override
