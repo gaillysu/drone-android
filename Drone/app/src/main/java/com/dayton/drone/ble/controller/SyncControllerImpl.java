@@ -21,6 +21,7 @@ import android.util.Log;
 import com.dayton.drone.R;
 import com.dayton.drone.application.ApplicationModel;
 import com.dayton.drone.ble.datasource.GattAttributesDataSourceImpl;
+import com.dayton.drone.ble.model.DailyAlarmModel;
 import com.dayton.drone.ble.model.TimeZoneModel;
 import com.dayton.drone.ble.model.WeatherLocationModel;
 import com.dayton.drone.ble.model.WeatherUpdateModel;
@@ -33,6 +34,8 @@ import com.dayton.drone.ble.model.packet.SystemStatusPacket;
 import com.dayton.drone.ble.model.packet.base.DronePacket;
 import com.dayton.drone.ble.model.request.DisableUrbanNavigation;
 import com.dayton.drone.ble.model.request.EnableUrbanNavigation;
+import com.dayton.drone.ble.model.request.SetCountdownTimerRequest;
+import com.dayton.drone.ble.model.request.SetDailyAlarmRequest;
 import com.dayton.drone.ble.model.request.SetWeatherLocationsRequest;
 import com.dayton.drone.ble.model.request.StartSystemSettingRequest;
 import com.dayton.drone.ble.model.request.UpdateUrbanNavigation;
@@ -307,6 +310,16 @@ public class SyncControllerImpl implements  SyncController{
         sendRequest(new SetSystemConfig(application,format24Hour?(byte)1:0, Constants.SystemConfigID.ClockFormat));
     }
 
+    @Override
+    public void setCountdownTimer(int countdownInMinutes) {
+        sendRequest(new SetCountdownTimerRequest(application,(short)countdownInMinutes));
+    }
+
+    @Override
+    public void setDailyAlarm(List<DailyAlarmModel> dailyAlarmModels) {
+        sendRequest(new SetDailyAlarmRequest(application,dailyAlarmModels));
+    }
+
     /**
      * send request  package to watch by using a queue
      * @param request
@@ -394,6 +407,8 @@ public class SyncControllerImpl implements  SyncController{
                         if(getFirmwareVersion()!=null&&Float.valueOf(getFirmwareVersion())>=0.04f) {
                             sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Weather, (byte)1));
                             sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Compass, SpUtils.getBoolean(application,CacheConstants.ENABLE_COMPASS,true)?(byte)1:(byte)0));
+                            sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Timer, (byte)1));
+                            sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Stopwatch, (byte)1));
                         }
                         sendRequest(new SetUserProfileRequest(application,application.getUser()));
                         //set goal to watch
@@ -424,6 +439,8 @@ public class SyncControllerImpl implements  SyncController{
                         if(getFirmwareVersion()!=null&&Float.valueOf(getFirmwareVersion())>=0.04f) {
                             sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Weather, (byte)1));
                             sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Compass, SpUtils.getBoolean(application,CacheConstants.ENABLE_COMPASS,true)?(byte)1:(byte)0));
+                            sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Timer, (byte)1));
+                            sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Stopwatch, (byte)1));
                         }
                         sendRequest(new SetUserProfileRequest(application,application.getUser()));
                     }

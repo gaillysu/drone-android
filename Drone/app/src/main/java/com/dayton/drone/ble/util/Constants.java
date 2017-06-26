@@ -58,7 +58,7 @@ public class Constants {
     }
 
     public enum ApplicationID {
-        WorldClock(1),ActivityTracking(2),Weather(3),Compass(0x10);
+        WorldClock(1),ActivityTracking(2),Weather(3),Compass(0x10),Timer(0x11),Stopwatch(0x12);
         final int id;
         ApplicationID(int id) {
             this.id = id;
