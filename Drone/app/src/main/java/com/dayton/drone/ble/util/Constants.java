@@ -2,6 +2,8 @@ package com.dayton.drone.ble.util;
 
 /**
  * Created by med on 16/4/14.
+ * changed history:
+ * by Gailly,2017.6.27 add weather data event by referring to R7
  */
 public class Constants {
 
@@ -13,7 +15,8 @@ public class Constants {
         GoalCompleted(1<<4),
         ActivityDataAvailable(1<<5),
         SubscribedToNotifications(1<<7),
-        SystemReset(1<<8);
+        SystemReset(1<<8),
+        WeatherDataNeeded(1<<9);
         private int status;
         SystemStatus(int status) {this.status = status;}
         public  int rawValue() {return status;}
@@ -23,7 +26,8 @@ public class Constants {
          GoalCompleted(1),
          LowMemory(2),
          ActivityDataAvailable(3),
-         BatteryStatusChanged(5);
+         BatteryStatusChanged(5),
+         WeatherDataExpired(9);
         SystemEvent(int event) {
             this.event = event;
         }
