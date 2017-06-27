@@ -24,6 +24,8 @@
 
     <array name="world_clock_tab_menu">
         <item>World Clock</item>
+        <item>Alarm</item>
+        <item>Timer</item>
         <item>Settings</item>
     </array>
 </resources>
