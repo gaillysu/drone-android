@@ -1,8 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
+              android:layout_height="wrap_content"
               android:background="@color/notification_bg_color"
               android:orientation="vertical">
+    <LinearLayout
+        android:id="@+id/repeat_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <LinearLayout
+            style="@style/edit_alarm_clock_repeat_days_layout">
+            <CheckBox
+                android:id="@+id/tag_btn_sunday"
+                style="@style/new_alarm_clock_repeat_days_tag_btn"
+                android:text="@string/sunday">
+            </CheckBox>
+        </LinearLayout>
+        <LinearLayout
+            style="@style/edit_alarm_clock_repeat_days_layout">
+            <CheckBox
+                android:id="@+id/tag_btn_monday"
+                style="@style/new_alarm_clock_repeat_days_tag_btn"
+                android:text="@string/monday">
+            </CheckBox>
+        </LinearLayout>
+        <LinearLayout
+            style="@style/edit_alarm_clock_repeat_days_layout">
+            <CheckBox
+                android:id="@+id/tag_btn_tuesday"
+                style="@style/new_alarm_clock_repeat_days_tag_btn"
+                android:text="@string/tuesday">
+            </CheckBox>
+        </LinearLayout>
+        <LinearLayout
+            style="@style/edit_alarm_clock_repeat_days_layout">
+            <CheckBox
+                android:id="@+id/tag_btn_wednesday"
+                style="@style/new_alarm_clock_repeat_days_tag_btn"
+                android:text="@string/wednesday">
+            </CheckBox>
+        </LinearLayout>
+        <LinearLayout
+            style="@style/edit_alarm_clock_repeat_days_layout">
+            <CheckBox
+                android:id="@+id/tag_btn_thursday"
+                style="@style/new_alarm_clock_repeat_days_tag_btn"
+                android:text="@string/thursday">
+            </CheckBox>
+        </LinearLayout>
+        <LinearLayout
+            style="@style/edit_alarm_clock_repeat_days_layout">
+            <CheckBox
+                android:id="@+id/tag_btn_friday"
+                style="@style/new_alarm_clock_repeat_days_tag_btn"
+                android:text="@string/friday">
+            </CheckBox>
+        </LinearLayout>
+        <LinearLayout
+            style="@style/edit_alarm_clock_repeat_days_layout">
+            <CheckBox
+                android:id="@+id/tag_btn_saturday"
+                style="@style/new_alarm_clock_repeat_days_tag_btn"
+                android:text="@string/saturday">
+            </CheckBox>
+        </LinearLayout>
+    </LinearLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp">
+        <EditText
+            android:id="@+id/input_alarm_name_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
+            android:layout_centerVertical="true"
+            android:hint="@string/alarm_name"
+            android:maxLines="1"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/darker_gray"
+            />
+
+        <CheckBox
+            android:id="@+id/alarm_snooze_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:textColor="@android:color/white"
+            android:text="@string/snooze" />
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/white"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingLeft="10dp">
+
+        <ImageView
+            android:id="@+id/fragment_alarm_list_item_delete_image_view"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/delete"/>
+
+        <ImageView
+            android:id="@+id/fragment_alarm_list_view_up_item_image_view"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/up"/>
+
+    </RelativeLayout>
 </LinearLayout>

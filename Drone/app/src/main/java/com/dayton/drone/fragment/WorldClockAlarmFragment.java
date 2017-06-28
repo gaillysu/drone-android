@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListView;
 import android.widget.TimePicker;
 
 import com.dayton.drone.R;
@@ -24,7 +25,7 @@ import butterknife.ButterKnife;
 
 public class WorldClockAlarmFragment extends Fragment implements TimePickerDialog.OnTimeSetListener {
     @Bind(R.id.world_clock_alarm_expandableListView)
-    ExpandableListActivity expandableListView;
+    ExpandableListView expandableListView;
 
     private MyExpandableListViewAdapter myExpandableListViewAdapter;
 
