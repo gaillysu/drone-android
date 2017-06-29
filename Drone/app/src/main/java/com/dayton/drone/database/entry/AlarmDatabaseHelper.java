@@ -34,10 +34,12 @@ public class AlarmDatabaseHelper {
     /**
      *
      * @param object: this is a query object from database
+     *                all setXXXX function must be invoked in realm.beginTransaction()/commitTransaction() block
      *
      */
-    public void update(AlarmBean object) {
+    public void update(AlarmBean object,String label) {
         realm.beginTransaction();
+        object.setLabel(label);
         realm.insertOrUpdate(object);
         realm.commitTransaction();
     }
@@ -45,7 +47,47 @@ public class AlarmDatabaseHelper {
     /**
      *
      * @param object: this is a query object from database
-     * @return
+     *                all setXXXX function must be invoked in realm.beginTransaction()/commitTransaction() block
+     *
+     */
+    public void update(AlarmBean object,boolean enable) {
+        realm.beginTransaction();
+        object.setEnable(enable);
+        realm.insertOrUpdate(object);
+        realm.commitTransaction();
+    }
+
+    /**
+     * @param object: this is a query object from database
+     *                all setXXXX function must be invoked in realm.beginTransaction()/commitTransaction() block
+     * @param status: b0~b6, save repeat weekday; bit7, save snooze enable/disable
+     */
+    public void update(AlarmBean object,byte status) {
+        realm.beginTransaction();
+        object.setStatus(status);
+        realm.insertOrUpdate(object);
+        realm.commitTransaction();
+    }
+
+    /**
+     *
+     * @param object: this is a query object from database
+     *                all setXXXX function must be invoked in realm.beginTransaction()/commitTransaction() block
+     *
+     */
+    public void update(AlarmBean object,int hour,int minute) {
+        realm.beginTransaction();
+        object.setHour((byte) hour);
+        object.setMinute((byte)minute);
+        realm.insertOrUpdate(object);
+        realm.commitTransaction();
+    }
+
+    /**
+     *
+     * @param object: this is a query object from database
+     *                all setXXXX function must be invoked in realm.beginTransaction()/commitTransaction() block
+     *
      */
     public void remove(AlarmBean object) {
         realm.beginTransaction();

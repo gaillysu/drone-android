@@ -209,6 +209,7 @@
     <string name="hot_key_control_music">Control Music</string>
     <string name="hot_key_bottom_describe">If your Dayton watch is not connected, it will sync as soon as it gets connected.</string>
 
+    <string name="no_repeat">No repeat</string>
     <string name="repeat">Repeat</string>
     <string name="monday">Mon</string>
     <string name="tuesday">Tue</string>
@@ -220,6 +221,6 @@
     <string name="disable">Disable</string>
     <string name="every_day">Every day</string>
     <string name="snooze">Snooze</string>
-    <string name="alarm_name">Alarm name</string>
+    <string name="alarm_label">Alarm label</string>
 
 </resources>

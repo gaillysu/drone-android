@@ -3,5 +3,5 @@
     <item android:drawable="@drawable/shape_circle_week_on_normal" android:state_checked="true"></item>
     <item android:drawable="@drawable/shape_circle_week_on_normal" android:state_selected="true"></item>
     <item android:drawable="@drawable/shape_circle_week_on_normal" android:state_pressed="true"></item>
-    <item android:drawable="@android:color/transparent"></item>
+    <item android:drawable="@drawable/shape_circle_week_off_normal"></item>
 </selector>
