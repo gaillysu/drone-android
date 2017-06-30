@@ -156,70 +156,69 @@ public class MyExpandableListViewAdapter extends BaseExpandableListAdapter{
 
     private void setWeekdayAndSnooze(View convertView,final AlarmBean alarmBean)
     {
-        final byte status = alarmBean.getStatus();
         CheckBox weekdayCheckbox = (CheckBox)  convertView.findViewById(R.id.tag_btn_sunday);
-        weekdayCheckbox.setChecked(((int)status&maskWeekdays[0])>0);
+        weekdayCheckbox.setChecked(((int)alarmBean.getStatus()&maskWeekdays[0])>0);
         weekdayCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                onEditAlarmListener.onAlarmStatus(alarmBean,(byte)(isChecked?(int)status|maskWeekdays[0]:(int)status&~maskWeekdays[0]));
+                onEditAlarmListener.onAlarmStatus(alarmBean,(byte)(isChecked?(int)alarmBean.getStatus()|maskWeekdays[0]:(int)alarmBean.getStatus()&~maskWeekdays[0]));
             }
         });
         weekdayCheckbox = (CheckBox)  convertView.findViewById(R.id.tag_btn_monday);
-        weekdayCheckbox.setChecked(((int)status&maskWeekdays[1])>0);
+        weekdayCheckbox.setChecked(((int)alarmBean.getStatus()&maskWeekdays[1])>0);
         weekdayCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                onEditAlarmListener.onAlarmStatus(alarmBean,(byte)(isChecked?(int)status|maskWeekdays[1]:(int)status&~maskWeekdays[1]));
+                onEditAlarmListener.onAlarmStatus(alarmBean,(byte)(isChecked?(int)alarmBean.getStatus()|maskWeekdays[1]:(int)alarmBean.getStatus()&~maskWeekdays[1]));
             }
         });
         weekdayCheckbox = (CheckBox)  convertView.findViewById(R.id.tag_btn_tuesday);
-        weekdayCheckbox.setChecked(((int)status&maskWeekdays[2])>0);
+        weekdayCheckbox.setChecked(((int)alarmBean.getStatus()&maskWeekdays[2])>0);
         weekdayCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                onEditAlarmListener.onAlarmStatus(alarmBean,(byte)(isChecked?(int)status|maskWeekdays[2]:(int)status&~maskWeekdays[2]));
+                onEditAlarmListener.onAlarmStatus(alarmBean,(byte)(isChecked?(int)alarmBean.getStatus()|maskWeekdays[2]:(int)alarmBean.getStatus()&~maskWeekdays[2]));
             }
         });
         weekdayCheckbox = (CheckBox)  convertView.findViewById(R.id.tag_btn_wednesday);
-        weekdayCheckbox.setChecked(((int)status&maskWeekdays[3])>0);
+        weekdayCheckbox.setChecked(((int)alarmBean.getStatus()&maskWeekdays[3])>0);
         weekdayCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                onEditAlarmListener.onAlarmStatus(alarmBean,(byte)(isChecked?(int)status|maskWeekdays[3]:(int)status&~maskWeekdays[3]));
+                onEditAlarmListener.onAlarmStatus(alarmBean,(byte)(isChecked?(int)alarmBean.getStatus()|maskWeekdays[3]:(int)alarmBean.getStatus()&~maskWeekdays[3]));
             }
         });
         weekdayCheckbox = (CheckBox)  convertView.findViewById(R.id.tag_btn_thursday);
-        weekdayCheckbox.setChecked(((int)status&maskWeekdays[4])>0);
+        weekdayCheckbox.setChecked(((int)alarmBean.getStatus()&maskWeekdays[4])>0);
         weekdayCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                onEditAlarmListener.onAlarmStatus(alarmBean,(byte)(isChecked?(int)status|maskWeekdays[4]:(int)status&~maskWeekdays[4]));
+                onEditAlarmListener.onAlarmStatus(alarmBean,(byte)(isChecked?(int)alarmBean.getStatus()|maskWeekdays[4]:(int)alarmBean.getStatus()&~maskWeekdays[4]));
             }
         });
         weekdayCheckbox = (CheckBox)  convertView.findViewById(R.id.tag_btn_friday);
-        weekdayCheckbox.setChecked(((int)status&maskWeekdays[5])>0);
+        weekdayCheckbox.setChecked(((int)alarmBean.getStatus()&maskWeekdays[5])>0);
         weekdayCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                onEditAlarmListener.onAlarmStatus(alarmBean,(byte)(isChecked?(int)status|maskWeekdays[5]:(int)status&~maskWeekdays[5]));
+                onEditAlarmListener.onAlarmStatus(alarmBean,(byte)(isChecked?(int)alarmBean.getStatus()|maskWeekdays[5]:(int)alarmBean.getStatus()&~maskWeekdays[5]));
             }
         });
         weekdayCheckbox = (CheckBox)  convertView.findViewById(R.id.tag_btn_saturday);
-        weekdayCheckbox.setChecked(((int)status&maskWeekdays[6])>0);
+        weekdayCheckbox.setChecked(((int)alarmBean.getStatus()&maskWeekdays[6])>0);
         weekdayCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                onEditAlarmListener.onAlarmStatus(alarmBean,(byte)(isChecked?(int)status|maskWeekdays[6]:(int)status&~maskWeekdays[6]));
+                onEditAlarmListener.onAlarmStatus(alarmBean,(byte)(isChecked?(int)alarmBean.getStatus()|maskWeekdays[6]:(int)alarmBean.getStatus()&~maskWeekdays[6]));
             }
         });
 
         CheckBox snoozeCheckBox = (CheckBox) convertView.findViewById(R.id.alarm_snooze_checkbox);
-        snoozeCheckBox.setChecked(((int)status&maskWeekdays[7])>0);
+        snoozeCheckBox.setChecked(((int)alarmBean.getStatus()&maskWeekdays[7])>0);
         snoozeCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                onEditAlarmListener.onAlarmStatus(alarmBean,(byte)(isChecked?(int)status|maskWeekdays[7]:(int)status&~maskWeekdays[7]));
+                onEditAlarmListener.onAlarmStatus(alarmBean,(byte)(isChecked?(int)alarmBean.getStatus()|maskWeekdays[7]:(int)alarmBean.getStatus()&~maskWeekdays[7]));
             }
         });
 
