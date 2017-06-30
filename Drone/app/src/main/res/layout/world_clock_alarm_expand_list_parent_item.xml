@@ -14,7 +14,6 @@
             android:id="@+id/fragment_alarmm_list_view_item_alarm_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="08:00"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@android:color/white"
             android:textSize="40sp"
@@ -44,7 +43,6 @@
             android:id="@+id/fragment_alarmm_list_view_item_alarm_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="meeting"
             android:textColor="@android:color/white"
             android:textSize="18sp"
             />
@@ -55,7 +53,6 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/fragment_alarmm_list_view_item_alarm_label"
             android:layout_marginLeft="20dp"
-            android:text="Mon,Tue"
             android:textColor="@android:color/white"
             android:textSize="18sp"
             />
