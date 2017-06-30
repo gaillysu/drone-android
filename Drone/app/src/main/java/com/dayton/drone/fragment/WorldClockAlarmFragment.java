@@ -17,6 +17,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.dayton.drone.R;
 import com.dayton.drone.adapter.MyExpandableListViewAdapter;
 import com.dayton.drone.application.ApplicationModel;
+import com.dayton.drone.ble.model.DailyAlarmModel;
 import com.dayton.drone.database.bean.AlarmBean;
 import com.dayton.drone.fragment.listener.OnEditAlarmListener;
 
@@ -24,6 +25,7 @@ import net.medcorp.library.ble.util.Optional;
 
 import org.joda.time.DateTime;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -50,13 +52,31 @@ public class WorldClockAlarmFragment extends Fragment implements OnEditAlarmList
         return view;
     }
 
-
-    public void refreshAlarmListView() {
+    private void refreshAlarmListView() {
         expandableListView.setGroupIndicator(null);
         expandableListView.setChildIndicator(null);
         List<AlarmBean> alarmBeanList = getModel().getAlarmDatabaseHelper().get();
         myExpandableListViewAdapter = new MyExpandableListViewAdapter(getContext(),alarmBeanList,this);
         expandableListView.setAdapter(myExpandableListViewAdapter);
+    }
+
+    /**
+     * here these situations to need sync alarm with watch
+     * 1:remove or disable
+     * 2:enable
+     * 3:alarm time got changed (edit or add alarm)
+     * 4:alarm status got changed (repeat weekday or snooze enable/disable)
+     */
+    private void syncAlarm2Watch() {
+        List<AlarmBean> alarmBeanList = getModel().getAlarmDatabaseHelper().get();
+        List<DailyAlarmModel> dailyAlarmModels = new ArrayList<>();
+        for(AlarmBean alarmBean:alarmBeanList)
+        {
+            if(alarmBean.isEnable()) {
+                dailyAlarmModels.add(new DailyAlarmModel(alarmBean.getHour(),alarmBean.getMinute(),alarmBean.getStatus()));
+            }
+        }
+        getModel().getSyncController().setDailyAlarm(dailyAlarmModels);
     }
 
     @Override
@@ -75,7 +95,7 @@ public class WorldClockAlarmFragment extends Fragment implements OnEditAlarmList
                     AlarmBean alarmBean = new AlarmBean();
                     alarmBean.setHour((byte) hourOfDay);
                     alarmBean.setMinute((byte)minute);
-                    alarmBean.setLabel("default");
+                    alarmBean.setLabel("Alarm");
                     alarmBean.setEnable(true);
                     alarmBean.setStatus((byte)0xFF);
                     Optional<AlarmBean> result = getModel().getAlarmDatabaseHelper().add(alarmBean);
@@ -96,6 +116,7 @@ public class WorldClockAlarmFragment extends Fragment implements OnEditAlarmList
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 getModel().getAlarmDatabaseHelper().update(alarmBean,hourOfDay,minute);
                 refreshAlarmListView();
+                syncAlarm2Watch();
             }
         }, hour, minute, true).show();
     }
@@ -119,17 +140,20 @@ public class WorldClockAlarmFragment extends Fragment implements OnEditAlarmList
     @Override
     public void onAlarmEnable(AlarmBean alarmBean, boolean enable) {
         getModel().getAlarmDatabaseHelper().update(alarmBean,enable);
+        syncAlarm2Watch();
     }
 
     @Override
     public void onAlarmStatus(AlarmBean alarmBean, byte status) {
         getModel().getAlarmDatabaseHelper().update(alarmBean,status);
+        syncAlarm2Watch();
     }
 
     @Override
     public void onAlarmRemove(AlarmBean alarmBean) {
         getModel().getAlarmDatabaseHelper().remove(alarmBean);
         refreshAlarmListView();
+        syncAlarm2Watch();
     }
 
     @Override
