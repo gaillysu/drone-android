@@ -35,7 +35,7 @@ public class WorldClockActivity extends BaseActivity {
 
     private String[] tabName;
     private Class mFragmentArray[] = {WorldClockMainFragment.class, WorldClockAlarmFragment.class, WorldClockTimerFragment.class, WorldClockSettingFragment.class};
-    private int[] mImageArray = {R.drawable.tab_assistant,R.drawable.tab_setting_select,R.drawable.tab_assistant,
+    private int[] mImageArray = {R.drawable.tab_assistant,R.drawable.tab_alarm,R.drawable.tab_stopwatch,
             R.drawable.tab_setting_select};
     private TextView mToolbarTitle;
 
