@@ -459,6 +459,10 @@ public class SyncControllerImpl implements  SyncController{
                     {
                         Log.d(TAG,"Subscribed to notifications success.");
                     }
+                    if((systemStatusPacket.getStatus() & Constants.SystemStatus.WeatherDataNeeded.rawValue())==Constants.SystemStatus.WeatherDataNeeded.rawValue())
+                    {
+                        initWeatherLocation();
+                    }
                     //here sync weather
                     updateCitiesWeather();
                     //here start ANCS service
@@ -534,6 +538,9 @@ public class SyncControllerImpl implements  SyncController{
                         theBigSyncStartDate = new Optional<>(new Date());
                         EventBus.getDefault().post(new BigSyncEvent(theBigSyncStartDate.get(), BigSyncEvent.BIG_SYNC_EVENT.STARTED));
                         sendRequest(new GetActivityRequest(application));
+                    }
+                    else if(systemEventPacket.getEvent() == Constants.SystemEvent.WeatherDataExpired.rawValue()) {
+                        updateCitiesWeather();
                     }
                 }
                 else if (FindPhonePacket.HEADER == packet.getHeader()) {
@@ -654,6 +661,27 @@ public class SyncControllerImpl implements  SyncController{
         }
     }
 
+    /**
+     * when city number added/removed, or receive status 'ON', invoke this function
+     */
+    private void initWeatherLocation()
+    {
+        int index = 0;
+        List<String> cities = WeatherUtils.getWeatherCities(application);
+        //at least one city weather location is set
+        if(cities.size()==0) {
+            String localCity = Calendar.getInstance().getTimeZone().getID().split("/")[1].replace("_", " ");
+            WeatherUtils.addWeatherCity(application, localCity);
+            cities.add(localCity);
+        }
+        List<WeatherLocationModel> weatherLocationModelList = new ArrayList<>();
+        for(String city:cities){
+            weatherLocationModelList.add(new WeatherLocationModel((byte) (index), (byte) city.length(), city));
+            index++;
+        }
+        SetWeatherLocationsRequest setWeatherLocations = new SetWeatherLocationsRequest(application,weatherLocationModelList);
+        sendRequest(setWeatherLocations);
+    }
     @Subscribe
     public void onEvent(Timer10sEvent timer10sEvent) {
         if ((new Date().getTime() - SpUtils.getLongMethod(application, CacheConstants.LAST_CONNECTED_TIMESTAMP, new Date().getTime())) >= 60*60*1000l) {
@@ -663,15 +691,7 @@ public class SyncControllerImpl implements  SyncController{
     }
     @Subscribe
     public void onEvent(CityNumberChangedEvent cityNumberChangedEvent) {
-        int index = 0;
-        List<String> cities = WeatherUtils.getWeatherCities(application);
-        List<WeatherLocationModel> weatherLocationModelList = new ArrayList<>();
-        for(String city:cities){
-            weatherLocationModelList.add(new WeatherLocationModel((byte) (index), (byte) city.length(), city));
-            index++;
-        }
-        SetWeatherLocationsRequest setWeatherLocations = new SetWeatherLocationsRequest(application,weatherLocationModelList);
-        sendRequest(setWeatherLocations);
+        initWeatherLocation();
         updateCitiesWeather();
     }
 

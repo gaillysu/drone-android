@@ -13,8 +13,10 @@ import android.widget.TextView;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
+import com.dayton.drone.fragment.WorldClockAlarmFragment;
 import com.dayton.drone.fragment.WorldClockMainFragment;
 import com.dayton.drone.fragment.WorldClockSettingFragment;
+import com.dayton.drone.fragment.WorldClockTimerFragment;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import butterknife.Bind;
@@ -32,8 +34,8 @@ public class WorldClockActivity extends BaseActivity {
     Toolbar toolbar;
 
     private String[] tabName;
-    private Class mFragmentArray[] = {WorldClockMainFragment.class, WorldClockSettingFragment.class};
-    private int[] mImageArray = {R.drawable.tab_assistant,
+    private Class mFragmentArray[] = {WorldClockMainFragment.class, WorldClockAlarmFragment.class, WorldClockTimerFragment.class, WorldClockSettingFragment.class};
+    private int[] mImageArray = {R.drawable.tab_assistant,R.drawable.tab_alarm,R.drawable.tab_stopwatch,
             R.drawable.tab_setting_select};
     private TextView mToolbarTitle;
 
@@ -84,7 +86,12 @@ public class WorldClockActivity extends BaseActivity {
                     public void onTabChanged(String tabId) {
                         if (tabId.equals(getString(R.string.world_clock_title_text))) {
                             mToolbarTitle.setText(R.string.world_clock_title_text);
-                        } else {
+                        }else if (tabId.equals(tabName[1])) {
+                            mToolbarTitle.setText(tabName[1]);
+                        }else if (tabId.equals(tabName[2])) {
+                            mToolbarTitle.setText(tabName[2]);
+                        }
+                        else {
                             mToolbarTitle.setText(getString(R.string.world_clock_setting_title));
                         }
                     }

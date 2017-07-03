@@ -11,6 +11,7 @@ import com.dayton.drone.ble.notification.PackageFilterHelper;
 import com.dayton.drone.ble.util.NotificationPermission;
 import com.dayton.drone.cloud.SyncActivityManager;
 import com.dayton.drone.database.DroneDatabaseModule;
+import com.dayton.drone.database.entry.AlarmDatabaseHelper;
 import com.dayton.drone.database.entry.NotificationDatabaseHelper;
 import com.dayton.drone.database.entry.StepsDatabaseHelper;
 import com.dayton.drone.database.entry.UserDatabaseHelper;
@@ -64,6 +65,7 @@ public class ApplicationModel extends Application {
     private NotificationDatabaseHelper notificationDatabaseHelper;
     private WatchesDatabaseHelper watchesDatabaseHelper;
     private WorldClockDatabaseHelper worldClockDatabaseHelper;
+    private AlarmDatabaseHelper alarmDatabaseHelper;
     private ApplicationModel mApplicationModel;
 
     @Override
@@ -88,6 +90,7 @@ public class ApplicationModel extends Application {
         stepsDatabaseHelper = new StepsDatabaseHelper(this);
         notificationDatabaseHelper = new NotificationDatabaseHelper(this);
         watchesDatabaseHelper = new WatchesDatabaseHelper(this);
+        alarmDatabaseHelper = new AlarmDatabaseHelper(this);
         Optional<User> loginUser = userDatabaseHelper.getLoginUser();
         if(loginUser.notEmpty()) {
             user = loginUser.get();
@@ -128,6 +131,10 @@ public class ApplicationModel extends Application {
 
     public WatchesDatabaseHelper getWatchesDatabaseHelper(){
         return watchesDatabaseHelper;
+    }
+
+    public AlarmDatabaseHelper getAlarmDatabaseHelper() {
+        return alarmDatabaseHelper;
     }
 
     public void initializeNotifications(){
