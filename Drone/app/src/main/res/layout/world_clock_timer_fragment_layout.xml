@@ -4,4 +4,82 @@
               android:layout_height="match_parent"
               android:background="@color/notification_bg_color"
               android:orientation="vertical">
+
+    <RelativeLayout
+        android:id = "@+id/world_clock_timer_duration_layout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="50dp"
+        android:background="@color/colorPrimaryDark"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/timer_duration"
+            android:layout_marginLeft="20dp"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"/>
+        <TextView
+            android:id="@+id/world_clock_timer_duration_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/arrow_image"
+            android:layout_marginEnd="10dp"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"/>
+        <ImageButton
+            android:id="@+id/arrow_image"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:scaleType="fitXY"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"
+            android:background="@android:color/transparent"
+            android:src="@mipmap/right_arrow_1"/>
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/world_clock_sync_timer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="150dp"
+        android:background="@color/colorPrimaryDark"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/world_clock_sync_timer_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/timer_sync"
+            android:layout_marginStart="20dp"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/world_clock_reset_timer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/colorPrimaryDark"
+        android:orientation="vertical">
+        <View
+            android:id="@+id/line_view"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginStart="20dp"
+            android:background="@android:color/white"/>
+        <TextView
+            android:id="@+id/world_clock_reset_timer_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/timer_reset"
+            android:layout_marginStart="20dp"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"/>
+    </RelativeLayout>
 </LinearLayout>
