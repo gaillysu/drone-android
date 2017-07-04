@@ -1,23 +1,24 @@
 package com.dayton.drone.fragment;
 
 
-import android.app.TimePickerDialog;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
-
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.LayoutInflater;
-import android.widget.TextView;
+import android.widget.NumberPicker;
 import android.widget.TimePicker;
 
 import com.dayton.drone.R;
 import com.dayton.drone.application.ApplicationModel;
 import com.dayton.drone.utils.SpUtils;
+
+import java.lang.reflect.Field;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -25,8 +26,8 @@ import butterknife.OnClick;
 
 public class WorldClockTimerFragment extends Fragment {
 
-    @Bind(R.id.world_clock_timer_duration_textview)
-    TextView duration;
+    @Bind(R.id.time_picker)
+    TimePicker timePicker;
 
     private int countdownInMinutes;
 
@@ -36,7 +37,17 @@ public class WorldClockTimerFragment extends Fragment {
         View view = inflater.inflate(R.layout.world_clock_timer_fragment_layout, container, false);
         ButterKnife.bind(this, view);
         countdownInMinutes = SpUtils.getIntMethod(getContext(),getString(R.string.timer_duration),60);
-        duration.setText(String.format("%02d:%02d",countdownInMinutes/60,countdownInMinutes%60));
+        timePicker.setIs24HourView(true);
+        setTimePickerDividerColor();
+        timePicker.setCurrentHour(countdownInMinutes/60);
+        timePicker.setCurrentMinute(countdownInMinutes%60);
+        timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            @Override
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                countdownInMinutes = hourOfDay*60+minute;
+                SpUtils.putIntMethod(getContext(),getString(R.string.timer_duration),countdownInMinutes);
+            }
+        });
         return view;
     }
 
@@ -58,17 +69,45 @@ public class WorldClockTimerFragment extends Fragment {
         getModel().getSyncController().setCountdownTimer(countdownInMinutes);
     }
 
-    @OnClick(R.id.world_clock_timer_duration_layout)
-    public void editCountdownTimer()
+    public void setTimePickerDividerColor()
     {
-        new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                duration.setText(String.format("%02d:%02d",hourOfDay,minute));
-                countdownInMinutes = hourOfDay*60+minute;
-                SpUtils.putIntMethod(getContext(),getString(R.string.timer_duration),countdownInMinutes);
-            }
-        },countdownInMinutes/60,countdownInMinutes%60,true).show();
+        Resources system = Resources.getSystem();
+        int hour_numberpicker_id = system.getIdentifier("hour", "id", "android");
+        int minute_numberpicker_id = system.getIdentifier("minute", "id", "android");
+        NumberPicker hour_numberpicker = (NumberPicker) timePicker.findViewById(hour_numberpicker_id);
+        NumberPicker minute_numberpicker = (NumberPicker) timePicker.findViewById(minute_numberpicker_id);
+        setDividerColor(hour_numberpicker);
+        setDividerColor(minute_numberpicker);
     }
 
+    private void setDividerColor(NumberPicker picker) {
+        Field[] pickerFields = NumberPicker.class.getDeclaredFields();
+        for (java.lang.reflect.Field pf : pickerFields)
+        {
+            if (pf.getName().equals("mSelectionDivider"))
+            {
+                pf.setAccessible(true);
+                try
+                {
+                    ColorDrawable colorDrawable = new ColorDrawable();
+                    colorDrawable.setColor(Color.WHITE);
+                    pf.set(picker, colorDrawable);
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+                break;
+            }
+            if (pf.getName().equals("mSelectionDividerHeight"))
+            {
+                pf.setAccessible(true);
+                try {
+                    pf.setInt(picker,1);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }
