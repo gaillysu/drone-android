@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
+              android:gravity="center"
               android:orientation="vertical" >
 
     <ImageView
@@ -20,7 +21,7 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@id/world_clock_tab_host_image"
         android:text="@string/world_clock_title_text"
-        android:textSize="15sp"
+        android:textSize="8sp"
         android:textColor="@drawable/home_list_adapter_item_text_selected">
     </TextView>
 
