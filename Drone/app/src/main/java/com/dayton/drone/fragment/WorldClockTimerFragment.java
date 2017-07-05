@@ -72,12 +72,12 @@ public class WorldClockTimerFragment extends Fragment {
     public void setTimePickerDividerColor()
     {
         Resources system = Resources.getSystem();
-        int hour_numberpicker_id = system.getIdentifier("hour", "id", "android");
-        int minute_numberpicker_id = system.getIdentifier("minute", "id", "android");
-        NumberPicker hour_numberpicker = (NumberPicker) timePicker.findViewById(hour_numberpicker_id);
-        NumberPicker minute_numberpicker = (NumberPicker) timePicker.findViewById(minute_numberpicker_id);
-        setDividerColor(hour_numberpicker);
-        setDividerColor(minute_numberpicker);
+        int hourNumberPickerId = system.getIdentifier("hour", "id", "android");
+        int minuteNumberPickerId = system.getIdentifier("minute", "id", "android");
+        NumberPicker hourNumberPicker = (NumberPicker) timePicker.findViewById(hourNumberPickerId);
+        NumberPicker minuteNumberPicker = (NumberPicker) timePicker.findViewById(minuteNumberPickerId);
+        setDividerColor(hourNumberPicker);
+        setDividerColor(minuteNumberPicker);
     }
 
     private void setDividerColor(NumberPicker picker) {
