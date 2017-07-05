@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.dayton.drone.R;
 import com.dayton.drone.database.bean.AlarmBean;
 import com.dayton.drone.fragment.listener.OnEditAlarmListener;
+import com.dayton.drone.view.AnimatedExpandableListView;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ import java.util.List;
  * Created by med on 17/6/27.
  */
 
-public class MyExpandableListViewAdapter extends BaseExpandableListAdapter{
+public class MyExpandableListViewAdapter extends AnimatedExpandableListView.AnimatedExpandableListAdapter {
     private List<AlarmBean> alarmBeanList;
     private Context context;
     private int maskWeekdays[];
@@ -46,11 +47,6 @@ public class MyExpandableListViewAdapter extends BaseExpandableListAdapter{
     @Override
     public int getGroupCount() {
         return alarmBeanList.size();
-    }
-
-    @Override
-    public int getChildrenCount(int groupPosition) {
-        return 1;
     }
 
     @Override
@@ -112,11 +108,17 @@ public class MyExpandableListViewAdapter extends BaseExpandableListAdapter{
         weekdays.setText(ConvertStatus2WeekdayString(alarmBeanList.get(groupPosition).getStatus()));
         ImageView imageView = (ImageView)convertView.findViewById(R.id.fragment_alarm_list_view_item_down_image_view);
         imageView.setVisibility(isExpanded?View.INVISIBLE:View.VISIBLE);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onEditAlarmListener.onViewMode2EditMode(groupPosition);
+            }
+        });
         return convertView;
     }
 
     @Override
-    public View getChildView(final int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+    public View getRealChildView(final int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -142,11 +144,16 @@ public class MyExpandableListViewAdapter extends BaseExpandableListAdapter{
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onEditAlarmListener.onEditMode2ViewMode();
+                onEditAlarmListener.onEditMode2ViewMode(groupPosition);
             }
         });
 
         return convertView;
+    }
+
+    @Override
+    public int getRealChildrenCount(int groupPosition) {
+        return 1;
     }
 
     @Override

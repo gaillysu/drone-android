@@ -20,6 +20,7 @@ import com.dayton.drone.application.ApplicationModel;
 import com.dayton.drone.ble.model.DailyAlarmModel;
 import com.dayton.drone.database.bean.AlarmBean;
 import com.dayton.drone.fragment.listener.OnEditAlarmListener;
+import com.dayton.drone.view.AnimatedExpandableListView;
 
 import net.medcorp.library.ble.util.Optional;
 
@@ -34,7 +35,7 @@ import butterknife.ButterKnife;
 
 public class WorldClockAlarmFragment extends Fragment implements OnEditAlarmListener {
     @Bind(R.id.world_clock_alarm_expandableListView)
-    ExpandableListView expandableListView;
+    AnimatedExpandableListView expandableListView;
 
     private MyExpandableListViewAdapter myExpandableListViewAdapter;
 
@@ -55,6 +56,13 @@ public class WorldClockAlarmFragment extends Fragment implements OnEditAlarmList
     private void refreshAlarmListView() {
         expandableListView.setGroupIndicator(null);
         expandableListView.setChildIndicator(null);
+        expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                toggleGroupExpanded(groupPosition);
+                return true;
+            }
+        });
         List<AlarmBean> alarmBeanList = getModel().getAlarmDatabaseHelper().get();
         myExpandableListViewAdapter = new MyExpandableListViewAdapter(getContext(),alarmBeanList,this);
         expandableListView.setAdapter(myExpandableListViewAdapter);
@@ -157,8 +165,22 @@ public class WorldClockAlarmFragment extends Fragment implements OnEditAlarmList
     }
 
     @Override
-    public void onEditMode2ViewMode() {
-        refreshAlarmListView();
+    public void onEditMode2ViewMode(int groupPosition) {
+        toggleGroupExpanded(groupPosition);
+    }
+
+    @Override
+    public void onViewMode2EditMode(int groupPosition) {
+        toggleGroupExpanded(groupPosition);
+    }
+
+    private void toggleGroupExpanded(int groupPosition)
+    {
+        if (expandableListView.isGroupExpanded(groupPosition)) {
+            expandableListView.collapseGroupWithAnimation(groupPosition);
+        } else {
+            expandableListView.expandGroupWithAnimation(groupPosition);
+        }
     }
 
 }
