@@ -111,8 +111,8 @@
 
         <ImageView
             android:id="@+id/fragment_alarm_list_item_delete_image_view"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:src="@mipmap/delete"/>
