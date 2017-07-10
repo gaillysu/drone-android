@@ -222,5 +222,8 @@
     <string name="every_day">Every day</string>
     <string name="snooze">Snooze</string>
     <string name="alarm_label">Alarm label</string>
+    <string name="timer_sync">Sync Timer</string>
+    <string name="timer_reset">Reset Timer</string>
+    <string name="timer_duration">Duration</string>
 
 </resources>
