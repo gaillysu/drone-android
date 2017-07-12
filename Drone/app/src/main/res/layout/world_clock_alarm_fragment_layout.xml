@@ -4,10 +4,9 @@
               android:layout_height="match_parent"
               android:background="@color/notification_bg_color"
               android:orientation="vertical">
-    <com.dayton.drone.view.AnimatedExpandableListView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/world_clock_alarm_expandableListView"
         android:layout_margin="5dp"
-        android:animateLayoutChanges="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 </LinearLayout>

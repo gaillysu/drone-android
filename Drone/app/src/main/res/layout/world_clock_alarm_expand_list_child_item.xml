@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/edit_alarm_clock_detail_layout"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:background="@color/notification_bg_color"
@@ -104,6 +105,7 @@
         />
 
     <RelativeLayout
+        android:id="@+id/fragment_alarm_list_item_operation_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="10dp"
@@ -111,16 +113,17 @@
 
         <ImageView
             android:id="@+id/fragment_alarm_list_item_delete_image_view"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="20dp"
+            android:layout_height="24dp"
+            android:scaleType="fitXY"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:src="@mipmap/delete"/>
 
         <ImageView
             android:id="@+id/fragment_alarm_list_view_up_item_image_view"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
             android:layout_marginRight="10dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:background="@color/notification_bg_color"
               android:paddingLeft="10dp"
+              android:paddingRight="10dp"
               android:orientation="vertical">
     <RelativeLayout
         android:id="@+id/fragment_alarm_list_view_item_alarm_time_wrapper"
@@ -16,7 +17,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@android:color/white"
-            android:textSize="40sp"
+            android:textSize="45sp"
             />
 
         <android.support.v7.widget.SwitchCompat
@@ -32,10 +33,10 @@
 
 
     <RelativeLayout
+        android:id="@+id/fragment_alarmm_list_view_item_alarm_repeat_wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/fragment_alarm_list_view_item_alarm_time_wrapper"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="0dp"
         android:orientation="horizontal"
         >
 
@@ -58,11 +59,20 @@
             />
         <ImageView
             android:id="@+id/fragment_alarm_list_view_item_down_image_view"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
             android:layout_marginRight="10dp"
+            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:src="@mipmap/down"/>
 
     </RelativeLayout>
-</RelativeLayout>
+    <include layout="@layout/world_clock_alarm_expand_list_child_item"
+         android:visibility="gone"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/line_color"
+        />
+</LinearLayout>

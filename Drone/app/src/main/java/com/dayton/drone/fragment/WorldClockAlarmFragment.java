@@ -4,6 +4,8 @@ import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -35,7 +37,7 @@ import butterknife.ButterKnife;
 
 public class WorldClockAlarmFragment extends Fragment implements OnEditAlarmListener {
     @Bind(R.id.world_clock_alarm_expandableListView)
-    AnimatedExpandableListView expandableListView;
+    RecyclerView expandableListView;
 
     private MyExpandableListViewAdapter myExpandableListViewAdapter;
 
@@ -49,23 +51,18 @@ public class WorldClockAlarmFragment extends Fragment implements OnEditAlarmList
         View view = inflater.inflate(R.layout.world_clock_alarm_fragment_layout, container, false);
         ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
-        refreshAlarmListView();
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        expandableListView.setLayoutManager(layoutManager);
+        List<AlarmBean> alarmBeanList = getModel().getAlarmDatabaseHelper().get();
+        myExpandableListViewAdapter = new MyExpandableListViewAdapter(getContext(),alarmBeanList,this);
+        expandableListView.setAdapter(myExpandableListViewAdapter);
         return view;
     }
 
     private void refreshAlarmListView() {
-        expandableListView.setGroupIndicator(null);
-        expandableListView.setChildIndicator(null);
-        expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-            @Override
-            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                toggleGroupExpanded(groupPosition);
-                return true;
-            }
-        });
         List<AlarmBean> alarmBeanList = getModel().getAlarmDatabaseHelper().get();
-        myExpandableListViewAdapter = new MyExpandableListViewAdapter(getContext(),alarmBeanList,this);
-        expandableListView.setAdapter(myExpandableListViewAdapter);
+        myExpandableListViewAdapter.setAlarmBeanList(alarmBeanList);
+        myExpandableListViewAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -140,6 +137,7 @@ public class WorldClockAlarmFragment extends Fragment implements OnEditAlarmList
                         if (input.length() == 0)
                             return;
                         getModel().getAlarmDatabaseHelper().update(alarmBean,input.toString());
+                        refreshAlarmListView();
                     }
                 }).negativeText(R.string.profile_dialog_negative_button_text)
                 .show();
@@ -165,22 +163,7 @@ public class WorldClockAlarmFragment extends Fragment implements OnEditAlarmList
     }
 
     @Override
-    public void onEditMode2ViewMode(int groupPosition) {
-        toggleGroupExpanded(groupPosition);
+    public void onEditMode2ViewMode() {
+        refreshAlarmListView();
     }
-
-    @Override
-    public void onViewMode2EditMode(int groupPosition) {
-        toggleGroupExpanded(groupPosition);
-    }
-
-    private void toggleGroupExpanded(int groupPosition)
-    {
-        if (expandableListView.isGroupExpanded(groupPosition)) {
-            expandableListView.collapseGroupWithAnimation(groupPosition);
-        } else {
-            expandableListView.expandGroupWithAnimation(groupPosition);
-        }
-    }
-
 }

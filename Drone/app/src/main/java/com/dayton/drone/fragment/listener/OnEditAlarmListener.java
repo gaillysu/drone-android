@@ -15,6 +15,5 @@ public interface OnEditAlarmListener {
     public void onAlarmEnable(AlarmBean alarmBean,boolean enable);
     public void onAlarmStatus(AlarmBean alarmBean,byte status);
     public void onAlarmRemove(AlarmBean alarmBean);
-    public void onEditMode2ViewMode(int groupPosition);
-    public void onViewMode2EditMode(int groupPosition);
+    public void onEditMode2ViewMode();
 }
