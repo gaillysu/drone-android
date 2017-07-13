@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:background="@color/notification_bg_color"
               android:paddingLeft="10dp"
-              android:paddingRight="10dp"
+              android:paddingRight="18dp"
+              android:background="@color/notification_bg_color"
               android:orientation="vertical">
     <RelativeLayout
         android:id="@+id/fragment_alarm_list_view_item_alarm_time_wrapper"
@@ -15,9 +15,10 @@
             android:id="@+id/fragment_alarmm_list_view_item_alarm_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@android:color/white"
-            android:textSize="45sp"
+            android:textSize="55sp"
             />
 
         <android.support.v7.widget.SwitchCompat
@@ -36,7 +37,7 @@
         android:id="@+id/fragment_alarmm_list_view_item_alarm_repeat_wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
+        android:layout_marginLeft="10dp"
         android:orientation="horizontal"
         >
 
@@ -73,6 +74,7 @@
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
         android:background="@color/line_color"
         />
 </LinearLayout>

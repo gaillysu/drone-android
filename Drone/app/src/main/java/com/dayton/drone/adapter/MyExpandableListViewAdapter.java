@@ -185,24 +185,41 @@ public class MyExpandableListViewAdapter extends RecyclerView.Adapter<MyExpandab
         TextView alarmTime;
         @Bind(R.id.fragment_alarmm_list_view_item_alarm_repeat_wrapper)
         View alarmRepeatLayout;
-        
+        @Bind(R.id.fragment_alarmm_list_view_item_alarm_label)
         TextView alarmLabel;
+        @Bind(R.id.fragment_alarm_list_view_item_alarm_repeat_weekdays)
         TextView weekdays;
+        @Bind(R.id.fragment_alarmm_list_view_item_alarm_switch)
         SwitchCompat switchCompat;
+        @Bind(R.id.fragment_alarm_list_view_item_down_image_view)
         ImageView downImageView;
+
         //extand views
+        @Bind(R.id.edit_alarm_clock_detail_layout)
         View extandView;
+        @Bind(R.id.input_alarm_label_text_view)
         TextView alarmInputLabel;
+        @Bind(R.id.tag_btn_sunday)
         CheckBox sundayCheckbox;
+        @Bind(R.id.tag_btn_monday)
         CheckBox mondayCheckbox;
+        @Bind(R.id.tag_btn_tuesday)
         CheckBox tuesdayCheckbox;
+        @Bind(R.id.tag_btn_wednesday)
         CheckBox wednesdayCheckbox;
+        @Bind(R.id.tag_btn_thursday)
         CheckBox thursdayCheckbox;
+        @Bind(R.id.tag_btn_friday)
         CheckBox fridayCheckbox;
+        @Bind(R.id.tag_btn_saturday)
         CheckBox saturdayCheckbox;
+        @Bind(R.id.alarm_snooze_checkbox)
         CheckBox snoozeCheckbox;
+        @Bind(R.id.fragment_alarm_list_item_operation_layout)
         View operationLayout;
+        @Bind(R.id.fragment_alarm_list_item_delete_image_view)
         ImageView deleteImageView;
+        @Bind(R.id.fragment_alarm_list_view_up_item_image_view)
         ImageView upImageView;
 
         int originalHeight = 0;
@@ -212,29 +229,8 @@ public class MyExpandableListViewAdapter extends RecyclerView.Adapter<MyExpandab
         {
             super(view);
             ButterKnife.bind(this, view);
-            //origin views
             originView = view;
-            alarmTime = (TextView) view.findViewById(R.id.fragment_alarmm_list_view_item_alarm_time);
-            alarmLabel = (TextView) view.findViewById(R.id.fragment_alarmm_list_view_item_alarm_label);
-            weekdays = (TextView) view.findViewById(R.id.fragment_alarm_list_view_item_alarm_repeat_weekdays);
-            switchCompat = (SwitchCompat)view.findViewById(R.id.fragment_alarmm_list_view_item_alarm_switch);
-            downImageView = (ImageView)view.findViewById(R.id.fragment_alarm_list_view_item_down_image_view);
-            alarmRepeatLayout = view.findViewById(R.id.fragment_alarmm_list_view_item_alarm_repeat_wrapper);
             alarmRepeatLayout.setOnClickListener(this);
-            //extand views
-            extandView =  view.findViewById(R.id.edit_alarm_clock_detail_layout);
-            alarmInputLabel = (TextView) view.findViewById(R.id.input_alarm_label_text_view);
-            sundayCheckbox = (CheckBox)  view.findViewById(R.id.tag_btn_sunday);
-            mondayCheckbox = (CheckBox)  view.findViewById(R.id.tag_btn_monday);
-            tuesdayCheckbox = (CheckBox)  view.findViewById(R.id.tag_btn_tuesday);
-            wednesdayCheckbox = (CheckBox)  view.findViewById(R.id.tag_btn_wednesday);
-            thursdayCheckbox = (CheckBox)  view.findViewById(R.id.tag_btn_thursday);
-            fridayCheckbox = (CheckBox)  view.findViewById(R.id.tag_btn_friday);
-            saturdayCheckbox = (CheckBox)  view.findViewById(R.id.tag_btn_saturday);
-            snoozeCheckbox = (CheckBox)  view.findViewById(R.id.alarm_snooze_checkbox);
-            operationLayout = view.findViewById(R.id.fragment_alarm_list_item_operation_layout);
-            deleteImageView = (ImageView) view.findViewById(R.id.fragment_alarm_list_item_delete_image_view);
-            upImageView = (ImageView)view.findViewById(R.id.fragment_alarm_list_view_up_item_image_view);
             operationLayout.setOnClickListener(this);
         }
 
@@ -254,6 +250,8 @@ public class MyExpandableListViewAdapter extends RecyclerView.Adapter<MyExpandab
                     isViewExpanded = false;
                     valueAnimator = ValueAnimator.ofInt(originalHeight + (int) (originalHeight * 1.5), originalHeight);
                 }
+                originView.setBackgroundResource(isViewExpanded?R.color.choose_adapter_list_item_view_color:R.color.notification_bg_color);
+                extandView.setBackgroundResource(isViewExpanded?R.color.choose_adapter_list_item_view_color:R.color.notification_bg_color);
                 extandView.setVisibility(isViewExpanded?View.VISIBLE:View.GONE);
                 downImageView.setVisibility(isViewExpanded?View.INVISIBLE:View.VISIBLE);
                 upImageView.setVisibility(isViewExpanded?View.VISIBLE:View.INVISIBLE);
