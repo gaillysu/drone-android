@@ -12,7 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ExpandableListView;
 import android.widget.TimePicker;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -22,7 +21,6 @@ import com.dayton.drone.application.ApplicationModel;
 import com.dayton.drone.ble.model.DailyAlarmModel;
 import com.dayton.drone.database.bean.AlarmBean;
 import com.dayton.drone.fragment.listener.OnEditAlarmListener;
-import com.dayton.drone.view.AnimatedExpandableListView;
 
 import net.medcorp.library.ble.util.Optional;
 
@@ -64,14 +62,6 @@ public class WorldClockAlarmFragment extends Fragment implements OnEditAlarmList
         myExpandableListViewAdapter.setAlarmBeanList(alarmBeanList);
         myExpandableListViewAdapter.notifyDataSetChanged();
     }
-
-    /**
-     * here these situations to need sync alarm with watch
-     * 1:remove or disable
-     * 2:enable
-     * 3:alarm time got changed (edit or add alarm)
-     * 4:alarm status got changed (repeat weekday or snooze enable/disable)
-     */
     private void syncAlarm2Watch() {
         List<AlarmBean> alarmBeanList = getModel().getAlarmDatabaseHelper().get();
         List<DailyAlarmModel> dailyAlarmModels = new ArrayList<>();

@@ -179,7 +179,6 @@ public class MyExpandableListViewAdapter extends RecyclerView.Adapter<MyExpandab
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
-        //origin views
         View originView;
         @Bind(R.id.fragment_alarmm_list_view_item_alarm_time)
         TextView alarmTime;
@@ -193,8 +192,6 @@ public class MyExpandableListViewAdapter extends RecyclerView.Adapter<MyExpandab
         SwitchCompat switchCompat;
         @Bind(R.id.fragment_alarm_list_view_item_down_image_view)
         ImageView downImageView;
-
-        //extand views
         @Bind(R.id.edit_alarm_clock_detail_layout)
         View extandView;
         @Bind(R.id.input_alarm_label_text_view)
