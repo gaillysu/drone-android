@@ -230,6 +230,7 @@ public class MyExpandableListViewAdapter extends RecyclerView.Adapter<MyExpandab
             super(view);
             ButterKnife.bind(this, view);
             originView = view;
+            originView.setOnClickListener(this);
             alarmRepeatLayout.setOnClickListener(this);
             operationLayout.setOnClickListener(this);
         }
@@ -237,7 +238,8 @@ public class MyExpandableListViewAdapter extends RecyclerView.Adapter<MyExpandab
         @Override
         public void onClick(final View view) {
             if(view.getId() == R.id.fragment_alarmm_list_view_item_alarm_repeat_wrapper
-                    || view.getId() == R.id.fragment_alarm_list_item_operation_layout)
+                    || view.getId() == R.id.fragment_alarm_list_item_operation_layout
+                    || view.getId() == R.id.fragment_alarm_list_view_item_origin_layout)
             {
                 if (originalHeight == 0) {
                     originalHeight = originView.getHeight();
