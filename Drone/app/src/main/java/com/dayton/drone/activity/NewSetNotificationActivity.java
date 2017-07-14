@@ -2,8 +2,10 @@ package com.dayton.drone.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -11,6 +13,7 @@ import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.adapter.NotificationAllAppsAdapter;
 import com.dayton.drone.ble.notification.PackageFilterHelper;
+import com.dayton.drone.event.NotificationPackagesChangedEvent;
 import com.dayton.drone.model.CalendarNotification;
 import com.dayton.drone.model.EmailNotification;
 import com.dayton.drone.model.FacebookMessengerNotification;
@@ -30,6 +33,9 @@ import com.dayton.drone.model.TelephoneNotification;
 import com.dayton.drone.model.TwitterNotification;
 import com.dayton.drone.model.WeChatNotification;
 import com.dayton.drone.model.WhatsappNotification;
+import com.dayton.drone.utils.SpUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,9 +50,12 @@ import butterknife.ButterKnife;
 public class NewSetNotificationActivity extends BaseActivity{
 
     @Bind(R.id.notification_all_app_listView)
-    ListView allNotificationApps;
+    ListView allAppListView;
     @Bind(R.id.my_toolbar)
     Toolbar mToolbar;
+
+    @Bind(R.id.notification_all_app_switch)
+    SwitchCompat enableAllAppSwitch;
 
     private NotificationAllAppsAdapter adapter;
     private List<NotificationModel> notificationBean;
@@ -74,6 +83,16 @@ public class NewSetNotificationActivity extends BaseActivity{
     }
 
     private void initView() {
+        enableAllAppSwitch.setChecked(PackageFilterHelper.getAllApplicationsFilterEnable(this));
+        enableAllAppSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                PackageFilterHelper.setAllApplicationsFilterEnable(NewSetNotificationActivity.this,isChecked);
+                allAppListView.setVisibility(isChecked?View.INVISIBLE:View.VISIBLE);
+                EventBus.getDefault().post(new NotificationPackagesChangedEvent());
+            }
+        });
+        allAppListView.setVisibility(PackageFilterHelper.getAllApplicationsFilterEnable(this)?View.INVISIBLE:View.VISIBLE);
         notificationBean = new ArrayList<>();
         notificationBean.add(new TelephoneNotification(PackageFilterHelper.getCallFilterEnable(this)));
         notificationBean.add(new FacebookMessengerNotification(PackageFilterHelper.getMessengerFacebookFilterEnable(this)));
@@ -96,7 +115,6 @@ public class NewSetNotificationActivity extends BaseActivity{
         notificationBean.add(new OutlookNotification(PackageFilterHelper.getOutlookFilterEnable(this)));
 
         adapter = new NotificationAllAppsAdapter(this, notificationBean);
-        allNotificationApps.setAdapter(adapter);
+        allAppListView.setAdapter(adapter);
     }
-
 }
