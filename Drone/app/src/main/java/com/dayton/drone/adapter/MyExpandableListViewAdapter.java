@@ -218,6 +218,8 @@ public class MyExpandableListViewAdapter extends RecyclerView.Adapter<MyExpandab
         ImageView deleteImageView;
         @Bind(R.id.fragment_alarm_list_view_up_item_image_view)
         ImageView upImageView;
+        @Bind(R.id.fragment_alarm_list_view_item_divider_view)
+        View dividerView;
 
         int originalHeight = 0;
         boolean isViewExpanded = false;
@@ -244,10 +246,10 @@ public class MyExpandableListViewAdapter extends RecyclerView.Adapter<MyExpandab
                 ValueAnimator valueAnimator;
                 if (!isViewExpanded) {
                     isViewExpanded = true;
-                    valueAnimator = ValueAnimator.ofInt(originalHeight, originalHeight + (int) (originalHeight * 1.5));
+                    valueAnimator = ValueAnimator.ofInt(originalHeight, originalHeight + (int) (originalHeight * 1.15));
                 } else {
                     isViewExpanded = false;
-                    valueAnimator = ValueAnimator.ofInt(originalHeight + (int) (originalHeight * 1.5), originalHeight);
+                    valueAnimator = ValueAnimator.ofInt(originalHeight + (int) (originalHeight * 1.15), originalHeight);
                 }
                 originView.setBackgroundResource(isViewExpanded?R.color.choose_adapter_list_item_view_color:R.color.notification_bg_color);
                 extandView.setBackgroundResource(isViewExpanded?R.color.choose_adapter_list_item_view_color:R.color.notification_bg_color);
@@ -256,6 +258,7 @@ public class MyExpandableListViewAdapter extends RecyclerView.Adapter<MyExpandab
                 upImageView.setVisibility(isViewExpanded?View.VISIBLE:View.INVISIBLE);
                 alarmLabel.setVisibility(isViewExpanded?View.INVISIBLE:View.VISIBLE);
                 weekdays.setVisibility(isViewExpanded?View.INVISIBLE:View.VISIBLE);
+                dividerView.setVisibility(isViewExpanded?View.INVISIBLE:View.VISIBLE);
                 if(!isViewExpanded) {
                     onEditAlarmListener.onEditMode2ViewMode();
                 }

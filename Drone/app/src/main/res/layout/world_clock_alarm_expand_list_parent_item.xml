@@ -19,7 +19,8 @@
             android:layout_marginLeft="20dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@android:color/white"
-            android:textSize="55sp"
+            android:textSize="60sp"
+            android:fontFamily="sans-serif-thin"
             />
 
         <android.support.v7.widget.SwitchCompat
@@ -38,6 +39,7 @@
         android:id="@+id/fragment_alarmm_list_view_item_alarm_repeat_wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:layout_marginLeft="10dp"
         android:orientation="horizontal"
         >
@@ -58,6 +60,7 @@
             android:layout_marginLeft="20dp"
             android:textColor="@android:color/white"
             android:textSize="18sp"
+            android:textStyle="bold"
             />
         <ImageView
             android:id="@+id/fragment_alarm_list_view_item_down_image_view"
@@ -72,9 +75,10 @@
     <include layout="@layout/world_clock_alarm_expand_list_child_item"
          android:visibility="gone"/>
     <View
+        android:id="@+id/fragment_alarm_list_view_item_divider_view"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="8dp"
         android:layout_marginLeft="10dp"
         android:background="@color/line_color"
         />
