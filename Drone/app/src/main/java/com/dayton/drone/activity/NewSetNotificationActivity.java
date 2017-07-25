@@ -116,8 +116,7 @@ public class NewSetNotificationActivity extends BaseActivity{
         notificationBean.add(new SkypeNotification(PackageFilterHelper.getSkypeFilterEnable(this)));
         notificationBean.add(new EmailNotification(PackageFilterHelper.getEmailFilterEnable(this)));
         notificationBean.add(new OutlookNotification(PackageFilterHelper.getOutlookFilterEnable(this)));
-
-        adapter = new NotificationAllAppsAdapter(this, notificationBean);
+        adapter = new NotificationAllAppsAdapter(NewSetNotificationActivity.this, notificationBean);
         allAppListView.setAdapter(adapter);
     }
 }
