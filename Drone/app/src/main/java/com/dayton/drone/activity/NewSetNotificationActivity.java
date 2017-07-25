@@ -87,16 +87,12 @@ public class NewSetNotificationActivity extends BaseActivity{
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 PackageFilterHelper.setAllApplicationsFilterEnable(NewSetNotificationActivity.this,isChecked);
-                allAppListView.setBackgroundColor(isChecked?getResources().getColor(R.color.disable_gray_color):getResources().getColor(R.color.notification_bg_color));
-                allAppListView.setEnabled(!isChecked);
+                initNotificationBean();
                 EventBus.getDefault().post(new NotificationPackagesChangedEvent());
             }
         });
         allAppListView.addHeaderView(headerView);
-        allAppListView.setEnabled(!PackageFilterHelper.getAllApplicationsFilterEnable(this));
         initNotificationBean();
-        adapter = new NotificationAllAppsAdapter(this, notificationBean);
-        allAppListView.setAdapter(adapter);
     }
 
     private void initNotificationBean() {
@@ -120,5 +116,8 @@ public class NewSetNotificationActivity extends BaseActivity{
         notificationBean.add(new SkypeNotification(PackageFilterHelper.getSkypeFilterEnable(this)));
         notificationBean.add(new EmailNotification(PackageFilterHelper.getEmailFilterEnable(this)));
         notificationBean.add(new OutlookNotification(PackageFilterHelper.getOutlookFilterEnable(this)));
+
+        adapter = new NotificationAllAppsAdapter(this, notificationBean);
+        allAppListView.setAdapter(adapter);
     }
 }

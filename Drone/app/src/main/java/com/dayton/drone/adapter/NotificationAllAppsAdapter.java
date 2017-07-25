@@ -19,6 +19,9 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by Jason on 2016/11/21.
  */
@@ -53,11 +56,8 @@ public class NotificationAllAppsAdapter extends BaseAdapter {
         ViewHolder viewHolder = null;
         if (convertView == null) {
             convertView = View.inflate(context,R.layout.notification_adapter_item,null);
-            viewHolder = new ViewHolder();
+            viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
-            viewHolder.appIcon = (ImageView) convertView.findViewById(R.id.notification_app_icon);
-            viewHolder.table = (TextView) convertView.findViewById(R.id.notification_app_name);
-            viewHolder.mSwitch = (SwitchCompat) convertView.findViewById(R.id.notification_is_on_off);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
@@ -65,6 +65,7 @@ public class NotificationAllAppsAdapter extends BaseAdapter {
         if (bean != null) {
             viewHolder.appIcon.setImageDrawable(ContextCompat.getDrawable(context, bean.getImageResource()));
             viewHolder.table.setText(bean.getNameStringResource());
+            viewHolder.table.setTextColor(PackageFilterHelper.getAllApplicationsFilterEnable(context)?context.getResources().getColor(R.color.disable_gray_color):context.getResources().getColor(android.R.color.black));
             viewHolder.mSwitch.setEnabled(!PackageFilterHelper.getAllApplicationsFilterEnable(context));
             viewHolder.mSwitch.setChecked(bean.getSwitchSign());
             viewHolder.mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -131,10 +132,17 @@ public class NotificationAllAppsAdapter extends BaseAdapter {
         return convertView;
     }
 
-    static class ViewHolder {
+     class ViewHolder {
+        @Bind(R.id.notification_app_icon)
         ImageView appIcon;
+        @Bind(R.id.notification_app_name)
         TextView table;
+        @Bind(R.id.notification_is_on_off)
         SwitchCompat mSwitch;
+
+         public ViewHolder(View view) {
+             ButterKnife.bind(this, view);
+         }
     }
 
 }
