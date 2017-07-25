@@ -56,6 +56,7 @@ import com.dayton.drone.ble.model.request.worldclock.SetWorldClockRequest;
 import com.dayton.drone.ble.notification.ListenerService;
 import com.dayton.drone.ble.util.Constants;
 import com.dayton.drone.ble.util.WeatherIcon;
+import com.dayton.drone.database.bean.HourlyForecastBean;
 import com.dayton.drone.event.BatteryStatusChangedEvent;
 import com.dayton.drone.event.BigSyncEvent;
 import com.dayton.drone.event.CityForecastChangedEvent;
@@ -94,6 +95,7 @@ import net.medcorp.library.worldclock.City;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -621,25 +623,44 @@ public class SyncControllerImpl implements  SyncController{
             cities.add(0,localCity);
             for (final City city : cities)
             {
+                long currentStampInSeconds = new DateTime().getMillis()/1000;
+                List<HourlyForecastBean> hourlyForecastBeanList = application.getCityWeatherDatabaseHelper().get(city.getName());
+                boolean found = false;
+                if(hourlyForecastBeanList.size()>0)
+                {
+                    if(currentStampInSeconds>=hourlyForecastBeanList.get(0).getTime() && currentStampInSeconds<=hourlyForecastBeanList.get(hourlyForecastBeanList.size()-1).getTime())
+                    {
+                        found = true;
+                    }
+                }
                 //from network
-                final GetForecastRequest request = new GetForecastRequest(city.getLat() + "," + city.getLng(), application.getRetrofitManager().getWeatherApiKey());
-                application.getRetrofitManager().requestWeather(request, new RequestListener<GetForecastModel>() {
-                    @Override
-                    public void onRequestFailure(SpiceException spiceException) {
-                        Log.e("weather", "failed by " + spiceException.getCause().getMessage());
-                    }
-                    @Override
-                    public void onRequestSuccess(GetForecastModel getForecastModel) {
-                        Log.i(city.getName(), "" + new Gson().toJson(getForecastModel));
-                        if(getForecastModel.getHourly().getData().length>0) {
-                            float temp = getForecastModel.getHourly().getData()[0].getTemperature();
-                            String icon = getForecastModel.getHourly().getData()[0].getIcon();
-                            int locationId = cities.indexOf(city);
-                            EventBus.getDefault().post(new CityForecastChangedEvent(city.getName(), temp, icon, locationId));
+                if(!found) {
+                    final GetForecastRequest request = new GetForecastRequest(city.getLat() + "," + city.getLng(), application.getRetrofitManager().getWeatherApiKey());
+                    application.getRetrofitManager().requestWeather(request, new RequestListener<GetForecastModel>() {
+                        @Override
+                        public void onRequestFailure(SpiceException spiceException) {
+                            Log.e("weather", "failed by " + spiceException.getCause().getMessage());
                         }
-                    }
-                });
+
+                        @Override
+                        public void onRequestSuccess(GetForecastModel getForecastModel) {
+                            Log.i(city.getName(), "" + new Gson().toJson(getForecastModel));
+                            if (getForecastModel.getHourly().getData().length > 0) {
+                                float temp = getForecastModel.getHourly().getData()[0].getTemperature();
+                                String icon = getForecastModel.getHourly().getData()[0].getIcon();
+                                int locationId = cities.indexOf(city);
+                                EventBus.getDefault().post(new CityForecastChangedEvent(city.getName(), temp, icon, locationId));
+                                application.getCityWeatherDatabaseHelper().addOrUpdate(city.getName(), getForecastModel.getHourly().getData());
+                            }
+                        }
+                    });
+                }
                 //from cache
+                else {
+                    int index = (int) ((currentStampInSeconds-hourlyForecastBeanList.get(0).getTime())/3600);
+                    EventBus.getDefault().post(new CityForecastChangedEvent(city.getName(), hourlyForecastBeanList.get(index).getTemperature(), hourlyForecastBeanList.get(index).getIcon(), cities.indexOf(city)));
+                }
+
 
 
             }

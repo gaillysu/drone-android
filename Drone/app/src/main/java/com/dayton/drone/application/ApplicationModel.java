@@ -12,6 +12,7 @@ import com.dayton.drone.ble.util.NotificationPermission;
 import com.dayton.drone.cloud.SyncActivityManager;
 import com.dayton.drone.database.DroneDatabaseModule;
 import com.dayton.drone.database.entry.AlarmDatabaseHelper;
+import com.dayton.drone.database.entry.CityWeatherDatabaseHelper;
 import com.dayton.drone.database.entry.NotificationDatabaseHelper;
 import com.dayton.drone.database.entry.StepsDatabaseHelper;
 import com.dayton.drone.database.entry.UserDatabaseHelper;
@@ -66,6 +67,7 @@ public class ApplicationModel extends Application {
     private WatchesDatabaseHelper watchesDatabaseHelper;
     private WorldClockDatabaseHelper worldClockDatabaseHelper;
     private AlarmDatabaseHelper alarmDatabaseHelper;
+    private CityWeatherDatabaseHelper cityWeatherDatabaseHelper;
     private ApplicationModel mApplicationModel;
 
     @Override
@@ -91,6 +93,7 @@ public class ApplicationModel extends Application {
         notificationDatabaseHelper = new NotificationDatabaseHelper(this);
         watchesDatabaseHelper = new WatchesDatabaseHelper(this);
         alarmDatabaseHelper = new AlarmDatabaseHelper(this);
+        cityWeatherDatabaseHelper = new CityWeatherDatabaseHelper(this);
         Optional<User> loginUser = userDatabaseHelper.getLoginUser();
         if(loginUser.notEmpty()) {
             user = loginUser.get();
@@ -135,6 +138,10 @@ public class ApplicationModel extends Application {
 
     public AlarmDatabaseHelper getAlarmDatabaseHelper() {
         return alarmDatabaseHelper;
+    }
+
+    public CityWeatherDatabaseHelper getCityWeatherDatabaseHelper() {
+        return cityWeatherDatabaseHelper;
     }
 
     public void initializeNotifications(){
