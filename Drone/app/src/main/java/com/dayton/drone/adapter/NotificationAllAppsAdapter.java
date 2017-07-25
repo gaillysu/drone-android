@@ -65,6 +65,7 @@ public class NotificationAllAppsAdapter extends BaseAdapter {
         if (bean != null) {
             viewHolder.appIcon.setImageDrawable(ContextCompat.getDrawable(context, bean.getImageResource()));
             viewHolder.table.setText(bean.getNameStringResource());
+            viewHolder.mSwitch.setEnabled(!PackageFilterHelper.getAllApplicationsFilterEnable(context));
             viewHolder.mSwitch.setChecked(bean.getSwitchSign());
             viewHolder.mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override

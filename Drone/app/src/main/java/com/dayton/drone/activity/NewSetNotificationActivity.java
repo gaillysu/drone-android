@@ -53,10 +53,7 @@ public class NewSetNotificationActivity extends BaseActivity{
     ListView allAppListView;
     @Bind(R.id.my_toolbar)
     Toolbar mToolbar;
-
-    @Bind(R.id.notification_all_app_switch)
     SwitchCompat enableAllAppSwitch;
-
     private NotificationAllAppsAdapter adapter;
     private List<NotificationModel> notificationBean;
 
@@ -83,16 +80,26 @@ public class NewSetNotificationActivity extends BaseActivity{
     }
 
     private void initView() {
+        View headerView = getLayoutInflater().inflate(R.layout.notification_all_header, null);
+        enableAllAppSwitch = (SwitchCompat) headerView.findViewById(R.id.notification_all_app_switch);
         enableAllAppSwitch.setChecked(PackageFilterHelper.getAllApplicationsFilterEnable(this));
         enableAllAppSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 PackageFilterHelper.setAllApplicationsFilterEnable(NewSetNotificationActivity.this,isChecked);
-                allAppListView.setVisibility(isChecked?View.INVISIBLE:View.VISIBLE);
+                allAppListView.setBackgroundColor(isChecked?getResources().getColor(R.color.disable_gray_color):getResources().getColor(R.color.notification_bg_color));
+                allAppListView.setEnabled(!isChecked);
                 EventBus.getDefault().post(new NotificationPackagesChangedEvent());
             }
         });
-        allAppListView.setVisibility(PackageFilterHelper.getAllApplicationsFilterEnable(this)?View.INVISIBLE:View.VISIBLE);
+        allAppListView.addHeaderView(headerView);
+        allAppListView.setEnabled(!PackageFilterHelper.getAllApplicationsFilterEnable(this));
+        initNotificationBean();
+        adapter = new NotificationAllAppsAdapter(this, notificationBean);
+        allAppListView.setAdapter(adapter);
+    }
+
+    private void initNotificationBean() {
         notificationBean = new ArrayList<>();
         notificationBean.add(new TelephoneNotification(PackageFilterHelper.getCallFilterEnable(this)));
         notificationBean.add(new FacebookMessengerNotification(PackageFilterHelper.getMessengerFacebookFilterEnable(this)));
@@ -113,8 +120,5 @@ public class NewSetNotificationActivity extends BaseActivity{
         notificationBean.add(new SkypeNotification(PackageFilterHelper.getSkypeFilterEnable(this)));
         notificationBean.add(new EmailNotification(PackageFilterHelper.getEmailFilterEnable(this)));
         notificationBean.add(new OutlookNotification(PackageFilterHelper.getOutlookFilterEnable(this)));
-
-        adapter = new NotificationAllAppsAdapter(this, notificationBean);
-        allAppListView.setAdapter(adapter);
     }
 }
