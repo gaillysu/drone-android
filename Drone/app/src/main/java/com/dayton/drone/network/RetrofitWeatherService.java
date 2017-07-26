@@ -10,7 +10,7 @@ import retrofit.RestAdapter;
  */
 public class RetrofitWeatherService extends RetrofitGsonSpiceService {
 
-    private final static String BASE_URL = "http://api.openweathermap.org";
+    private final static String BASE_URL = "https://api.darksky.net";
 
     @Override
     protected String getServerUrl() {

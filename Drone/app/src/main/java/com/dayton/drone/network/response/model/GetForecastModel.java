@@ -7,68 +7,50 @@ import java.util.Comparator;
  */
 
 public class GetForecastModel {
-    //pls refer to  http://openweathermap.org/forecast5
-    private City city;
-    private Coordinate coord;
-    private String country;
-    private String cod;
-    private float message;
-    private int cnt;
-    private Forecast[] list;
+    //pls refer to  https://darksky.net/dev/docs/forecast
+    private float latitude;
+    private float longitude;
+    private String timezone;
+    private int offset;
+    private HourlyWeather hourly;
 
-    public City getCity() {
-        return city;
+    public float getLatitude() {
+        return latitude;
     }
 
-    public void setCity(City city) {
-        this.city = city;
+    public void setLatitude(float latitude) {
+        this.latitude = latitude;
     }
 
-    public Coordinate getCoord() {
-        return coord;
+    public float getLongitude() {
+        return longitude;
     }
 
-    public void setCoord(Coordinate coord) {
-        this.coord = coord;
+    public void setLongitude(float longitude) {
+        this.longitude = longitude;
     }
 
-    public String getCountry() {
-        return country;
+    public String getTimezone() {
+        return timezone;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
+    public void setTimezone(String timezone) {
+        this.timezone = timezone;
     }
 
-    public String getCod() {
-        return cod;
+    public int getOffset() {
+        return offset;
     }
 
-    public void setCod(String cod) {
-        this.cod = cod;
+    public void setOffset(int offset) {
+        this.offset = offset;
     }
 
-    public float getMessage() {
-        return message;
+    public HourlyWeather getHourly() {
+        return hourly;
     }
 
-    public void setMessage(float message) {
-        this.message = message;
-    }
-
-    public int getCnt() {
-        return cnt;
-    }
-
-    public void setCnt(int cnt) {
-        this.cnt = cnt;
-    }
-
-    public Forecast[] getList() {
-        return list;
-    }
-
-    public void setList(Forecast[] list) {
-        this.list = list;
+    public void setHourly(HourlyWeather hourly) {
+        this.hourly = hourly;
     }
 }

@@ -161,7 +161,6 @@ public class WorldClockMainFragment extends Fragment {
                         mApplicationModel.getWorldClockDatabaseHelper().update(city);
                         mDragListView.getAdapter().removeItem(pos);
                         worldClockAdapter.notifyDataSetChanged();
-                        WeatherUtils.removeWeatherCity(mApplicationModel,city.getName());
                         EventBus.getDefault().post(new CityNumberChangedEvent());
                         EventBus.getDefault().post(new WorldClockChangedEvent());
                     }
@@ -228,16 +227,10 @@ public class WorldClockMainFragment extends Fragment {
 
     private void refreshList() {
         listData.clear();
-        WeatherUtils.removeAllCities(WorldClockMainFragment.this.getActivity());
         List<City> selectedCities = mApplicationModel.getWorldClockDatabaseHelper().getSelect();
         addLocalCity();
         addCity(selectedCities);
-        WeatherUtils.addWeatherCity(WorldClockMainFragment.this.getActivity(), Calendar.getInstance().getTimeZone().getID().split("/")[1].replace("_", " "));
-        for(City city:selectedCities) {
-            WeatherUtils.addWeatherCity(WorldClockMainFragment.this.getActivity(), city.getName());
-        }
         worldClockAdapter.notifyDataSetChanged();
-        Log.w("weather", "city list: " + WeatherUtils.getWeatherCities(WorldClockMainFragment.this.getActivity()).toString());
         EventBus.getDefault().post(new CityNumberChangedEvent());
         EventBus.getDefault().post(new WorldClockChangedEvent());
     }

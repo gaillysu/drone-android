@@ -7,14 +7,14 @@ package com.dayton.drone.event;
 public class CityForecastChangedEvent {
     private final String name;
     private final float temp;
-    private final int weatherId;
-    private final String main;
+    private final String icon;
+    private final int locationId;
 
-    public CityForecastChangedEvent(String name, float temp, int weatherId,String main) {
+    public CityForecastChangedEvent(String name, float temp, String icon,int locationId) {
         this.name = name;
         this.temp = temp;
-        this.weatherId = weatherId;
-        this.main = main;
+        this.icon = icon;
+        this.locationId = locationId;
     }
 
     public String getName() {
@@ -25,11 +25,11 @@ public class CityForecastChangedEvent {
         return temp;
     }
 
-    public int getWeatherId() {
-        return weatherId;
+    public String getIcon() {
+        return icon;
     }
 
-    public String getMain() {
-        return main;
+    public int getLocationId() {
+        return locationId;
     }
 }

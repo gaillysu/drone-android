@@ -3,6 +3,7 @@ package com.dayton.drone.network.restapi;
 import com.dayton.drone.network.response.model.GetForecastModel;
 
 import retrofit.http.GET;
+import retrofit.http.Path;
 import retrofit.http.Query;
 
 /**
@@ -10,6 +11,7 @@ import retrofit.http.Query;
  */
 public interface Weather {
 
-    @GET("/data/2.5/forecast")
-    GetForecastModel getForecast(@Query("q") String cityName, @Query("appid") String apiKey);
+    @GET("/forecast/{apiKey}/{location}")
+    GetForecastModel getForecast(@Path("apiKey") String apiKey, @Path("location") String location, @Query("lang") String language,@Query("exclude") String exclude,@Query("units") String units);
+
 }
