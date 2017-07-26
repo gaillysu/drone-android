@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             app:thumbTint="@color/colorPrimaryDark"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp"
+            android:layout_marginRight="16dp"
             android:layout_centerVertical="true"/>
     </RelativeLayout>
 </LinearLayout>
