@@ -58,7 +58,7 @@ import java.util.Set;
 
 public class ListenerService extends NotificationListenerService
 {
-    private final String TAG = "ListenerService";
+    private final String TAG = "Karl";
     private static boolean mRunning;
     private Map<String, NotificationAdapter> mArtificialMap;
     private CallReceiver mCallReceiver;
@@ -486,7 +486,7 @@ public class ListenerService extends NotificationListenerService
     }
 
     public void onListenerConnected() {
-        Log.d(TAG, "Listener connected");
+        Log.w(TAG, "Listener connected>>>>>>>>>>>>>>>>>>>");
         final StatusBarNotification[] activeNotifications = ListenerService.this.getActiveNotifications();
         for (int length = activeNotifications.length, i = 0; i < length; ++i) {
             this.onNotificationPosted(activeNotifications[i]);

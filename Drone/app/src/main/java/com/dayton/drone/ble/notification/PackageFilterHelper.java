@@ -39,8 +39,7 @@ public class PackageFilterHelper {
     final static String SOCIAL_WHATSAPP_ENABLE = "whatsapp_filter_enable";
     final static String SOCIAL_QQ_ENABLE = "qq_filter_enable";
     final static String SOCIAL_SKYPE_ENABLE = "skype_filter_enable";
-
-
+    final static String ALL_APPLICATIONS_ENABLE = "all_applications_enable";
 
     private static HashSet<String> initAppList(Context context,int resID)
     {
@@ -176,9 +175,16 @@ public class PackageFilterHelper {
         return SpUtils.getBoolean(context,SOCIAL_SKYPE_ENABLE,defaultEnable);
     }
 
+    public static void setAllApplicationsFilterEnable(Context context,boolean value){
+        SpUtils.putBoolean(context,ALL_APPLICATIONS_ENABLE,value);
+    }
+    public static Boolean getAllApplicationsFilterEnable(Context context){
+        return SpUtils.getBoolean(context,ALL_APPLICATIONS_ENABLE,false);
+    }
+
     public static Set<String> getCallPackages(Boolean isEnable,Context context,int resID) {
         HashSet<String> set = new HashSet<String>();
-        if(isEnable){
+        if(isEnable||getAllApplicationsFilterEnable(context)){
             set.addAll(initAppList(context,resID));
             set.addAll(ConfigHelper.getANSCallPackages());
         }
@@ -186,22 +192,22 @@ public class PackageFilterHelper {
     }
     public static Set<String> getSmsPackages(Boolean isEnable,Context context,int resID) {
         HashSet<String> set = new HashSet<String>();
-        if(isEnable){
+        if(isEnable||getAllApplicationsFilterEnable(context)){
             set.addAll(initAppList(context,resID));
             set.addAll(ConfigHelper.getANSSMSPackages());
         }
         return set;
     }
     public static Set<String> getEmailPackages(Boolean isEnable,Context context,int resID) {
-        return isEnable?initAppList(context,resID):new HashSet<String>();
+        return (isEnable||getAllApplicationsFilterEnable(context))?initAppList(context,resID):new HashSet<String>();
     }
     public static Set<String> getCalendarPackages(Boolean isEnable,Context context,int resID) {
-        return isEnable?initAppList(context,resID):new HashSet<String>();
+        return (isEnable||getAllApplicationsFilterEnable(context))?initAppList(context,resID):new HashSet<String>();
     }
     public static Set<String> getSocialPackages(Boolean isEnable,Context context,int resID) {
-        return isEnable?initAppList(context,resID):new HashSet<String>();
+        return (isEnable||getAllApplicationsFilterEnable(context))?initAppList(context,resID):new HashSet<String>();
     }
     public static Set<String> getMessengerPackages(Boolean isEnable, Context context, int resID) {
-        return isEnable?initAppList(context,resID):new HashSet<String>();
+        return (isEnable||getAllApplicationsFilterEnable(context))?initAppList(context,resID):new HashSet<String>();
     }
 }

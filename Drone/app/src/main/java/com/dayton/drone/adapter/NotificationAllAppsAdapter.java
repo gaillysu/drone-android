@@ -3,6 +3,7 @@ package com.dayton.drone.adapter;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.SwitchCompat;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -19,6 +20,11 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
+import butterknife.OnClick;
+
 /**
  * Created by Jason on 2016/11/21.
  */
@@ -31,6 +37,10 @@ public class NotificationAllAppsAdapter extends BaseAdapter {
     public NotificationAllAppsAdapter(Context context, List<NotificationModel> notificationBean) {
         this.notificationApps = notificationBean;
         this.context = context;
+    }
+
+    public void setNotificationApps(List<NotificationModel> notificationApps) {
+        this.notificationApps = notificationApps;
     }
 
     @Override
@@ -49,15 +59,12 @@ public class NotificationAllAppsAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
         if (convertView == null) {
             convertView = View.inflate(context,R.layout.notification_adapter_item,null);
-            viewHolder = new ViewHolder();
+            viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
-            viewHolder.appIcon = (ImageView) convertView.findViewById(R.id.notification_app_icon);
-            viewHolder.table = (TextView) convertView.findViewById(R.id.notification_app_name);
-            viewHolder.mSwitch = (SwitchCompat) convertView.findViewById(R.id.notification_is_on_off);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
@@ -65,6 +72,8 @@ public class NotificationAllAppsAdapter extends BaseAdapter {
         if (bean != null) {
             viewHolder.appIcon.setImageDrawable(ContextCompat.getDrawable(context, bean.getImageResource()));
             viewHolder.table.setText(bean.getNameStringResource());
+            viewHolder.table.setTextColor(PackageFilterHelper.getAllApplicationsFilterEnable(context)?context.getResources().getColor(R.color.disable_gray_color):context.getResources().getColor(android.R.color.black));
+            viewHolder.mSwitch.setOnCheckedChangeListener(null);
             viewHolder.mSwitch.setChecked(bean.getSwitchSign());
             viewHolder.mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -126,14 +135,21 @@ public class NotificationAllAppsAdapter extends BaseAdapter {
                     EventBus.getDefault().post(new NotificationPackagesChangedEvent());
                 }
             });
+            viewHolder.mSwitch.setEnabled(!PackageFilterHelper.getAllApplicationsFilterEnable(context));
         }
         return convertView;
     }
 
-    static class ViewHolder {
+    class ViewHolder {
+        @Bind(R.id.notification_app_icon)
         ImageView appIcon;
+        @Bind(R.id.notification_app_name)
         TextView table;
+        @Bind(R.id.notification_is_on_off)
         SwitchCompat mSwitch;
+         public ViewHolder(View view) {
+             ButterKnife.bind(this, view);
+         }
     }
 
 }
