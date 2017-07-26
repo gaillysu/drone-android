@@ -88,11 +88,15 @@ public class NewSetNotificationActivity extends BaseActivity{
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 PackageFilterHelper.setAllApplicationsFilterEnable(NewSetNotificationActivity.this,isChecked);
                 initNotificationBean();
+                adapter.setNotificationApps(notificationBean);
+                adapter.notifyDataSetChanged();
                 EventBus.getDefault().post(new NotificationPackagesChangedEvent());
             }
         });
         allAppListView.addHeaderView(headerView);
         initNotificationBean();
+        adapter = new NotificationAllAppsAdapter(NewSetNotificationActivity.this, notificationBean);
+        allAppListView.setAdapter(adapter);
     }
 
     private void initNotificationBean() {
@@ -116,7 +120,5 @@ public class NewSetNotificationActivity extends BaseActivity{
         notificationBean.add(new SkypeNotification(PackageFilterHelper.getSkypeFilterEnable(this)));
         notificationBean.add(new EmailNotification(PackageFilterHelper.getEmailFilterEnable(this)));
         notificationBean.add(new OutlookNotification(PackageFilterHelper.getOutlookFilterEnable(this)));
-        adapter = new NotificationAllAppsAdapter(NewSetNotificationActivity.this, notificationBean);
-        allAppListView.setAdapter(adapter);
     }
 }
