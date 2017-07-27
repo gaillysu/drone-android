@@ -39,40 +39,72 @@
                     android:layout_marginBottom="8dp"
                     android:orientation="horizontal"/>
             </RelativeLayout>
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/add_watch_activity_view_bg"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/add_watch_activity_content_bg"
+                android:weightSum="2"
                 android:orientation="vertical">
+                <RelativeLayout
+                    android:id="@+id/activity_add_watch_ota_upgrade_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:orientation="vertical">
+                <TextView
+                    android:id="@+id/activity_add_watch_ota_upgrade"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_centerInParent="true"
+                    android:text="@string/watch_ota_upgrade"
+                    android:textSize="25sp"/>
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scaleType="fitXY"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="16dp"
+                        android:background="@android:color/transparent"
+                        android:src="@mipmap/more"/>
+                </RelativeLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
-                    android:background="@color/add_watch_activity_view_bg"/>
+                    android:background="@color/add_watch_activity_view_bg_color"/>
 
-                <TextView
-                    android:id="@+id/activity_add_watch_contacts_notifications"
+                <RelativeLayout
+                    android:id="@+id/activity_add_watch_forget_watch_layout"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/notifications_notifications"
-                    android:textSize="25sp"/>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/add_watch_activity_view_bg_color"/>
-
+                    android:background="@android:color/transparent"
+                    android:orientation="vertical">
                 <TextView
                     android:id="@+id/activity_add_watch_forget_watch"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:layout_centerInParent="true"
                     android:text="@string/add_watch_activity_content_forget_watch"
                     android:textSize="25sp"/>
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scaleType="fitXY"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="16dp"
+                        android:background="@android:color/transparent"
+                        android:src="@mipmap/more"/>
+                </RelativeLayout>
             </LinearLayout>
         </LinearLayout>
 

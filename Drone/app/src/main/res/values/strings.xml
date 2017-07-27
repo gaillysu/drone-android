@@ -226,4 +226,6 @@
     <string name="timer_reset">Reset Timer</string>
     <string name="timer_duration">Duration</string>
     <string name="enable_all_applications">Enable All Applications</string>
+    <string name="watch_ota_upgrade">OTA Upgrade</string>
+    <string name="ota">OTA</string>
 </resources>

@@ -133,13 +133,12 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
         });
     }
 
-    @OnClick(R.id.activity_add_watch_contacts_notifications)
-    public void ContactsNotifications() {
-        //        startActivity(SetNotificationActivity.class);
-        startActivity(NewSetNotificationActivity.class);
+    @OnClick(R.id.activity_add_watch_ota_upgrade_layout)
+    public void startOTA() {
+        startActivity(OTAActivity.class);
     }
 
-    @OnClick(R.id.activity_add_watch_forget_watch)
+    @OnClick(R.id.activity_add_watch_forget_watch_layout)
     public void forgetNotification() {
         getModel().getSyncController().forgetDevice();
         SpUtils.putBoolean(this, CacheConstants.MUST_SYNC_STEPS, true);
