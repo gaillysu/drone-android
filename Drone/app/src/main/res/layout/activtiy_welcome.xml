@@ -5,6 +5,17 @@
                 android:layout_height="match_parent"
                 android:paddingTop="25dp"
                 android:orientation="vertical">
+    <Button
+        android:id="@+id/tutorial_skip_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:textSize="16sp"
+        android:layout_marginTop="16dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="16dp"
+        android:textColor="@color/app_text_color_criterion"
+        android:text="@string/tutorial_skip"/>
 
     <ImageView
         android:id="@+id/tutorial_drone_logo"

@@ -226,4 +226,5 @@
     <string name="timer_reset">Reset Timer</string>
     <string name="timer_duration">Duration</string>
     <string name="enable_all_applications">Enable All Applications</string>
+    <string name="tutorial_skip">Skip Login</string>
 </resources>

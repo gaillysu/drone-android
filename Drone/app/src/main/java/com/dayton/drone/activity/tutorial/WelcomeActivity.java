@@ -131,6 +131,11 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         startActivity(ForgetPasswordActivity.class);
         finish();
     }
+    @OnClick(R.id.tutorial_skip_button)
+    public void startHome() {
+        startActivity(HomeActivity.class);
+        finish();
+    }
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
