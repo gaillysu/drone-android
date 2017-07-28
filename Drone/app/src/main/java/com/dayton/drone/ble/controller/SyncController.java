@@ -59,4 +59,6 @@ public interface SyncController {
     void setClockFormat(boolean format24Hour);
     void setCountdownTimer(int countdownInMinutes);
     void setDailyAlarm(List<DailyAlarmModel> dailyAlarmModels);
+
+    public void setHoldRequest(boolean holdRequest);
 }

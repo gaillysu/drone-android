@@ -123,6 +123,7 @@ public class SyncControllerImpl implements  SyncController{
     private final long BIG_SYNC_INTERVAL = 5*60* 1000L; //5minutes
     private boolean bigSyncFirst = true;
     private final Object lockObject = new Object();
+    private boolean isHoldRequest = false;
     /**
      * Wait for given number of milliseconds.
      * @param millis waiting period
@@ -317,6 +318,11 @@ public class SyncControllerImpl implements  SyncController{
         sendRequest(new SetDailyAlarmRequest(application,dailyAlarmModels));
     }
 
+    @Override
+    public void setHoldRequest(boolean holdRequest) {
+        isHoldRequest = holdRequest;
+    }
+
     /**
      * send request  package to watch by using a queue
      * @param request
@@ -326,6 +332,10 @@ public class SyncControllerImpl implements  SyncController{
             return;
         }
         if(!isConnected()) {
+            return;
+        }
+        //when OTA mode, disable syncController send any request command to BLE
+        if (isHoldRequest) {
             return;
         }
         QueuedMainThreadHandler.getInstance(QueuedMainThreadHandler.QueueType.SyncController).post(new Runnable() {

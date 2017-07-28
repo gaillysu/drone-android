@@ -135,7 +135,7 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
 
     @OnClick(R.id.activity_add_watch_ota_upgrade_layout)
     public void startOTA() {
-        startActivity(OTAActivity.class);
+        startActivity(OtaActivity.class);
     }
 
     @OnClick(R.id.activity_add_watch_forget_watch_layout)
