@@ -228,4 +228,8 @@
     <string name="enable_all_applications">Enable All Applications</string>
     <string name="watch_ota_upgrade">OTA Upgrade</string>
     <string name="ota">OTA</string>
+    <string name="ota_tip_infomation">Hold the watch close to the phone,don\'t\nclose the app and be patience.</string>
+    <string name="ota_version">Current: %1$s, New: %2$s</string>
+    <string name="ota_status_ready">Ready to perform.</string>
+    <string name="ota_status_start">Start</string>
 </resources>
