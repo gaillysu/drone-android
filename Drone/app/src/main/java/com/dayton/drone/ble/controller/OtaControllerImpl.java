@@ -59,24 +59,18 @@ public class OtaControllerImpl implements OtaController {
         public void run() {
             //add timeout process when use Nordic dfu library,check the state value to judge OTA is doing or not
             if(dfuFirmwareType == Constants.DfuFirmwareTypes.DISTRIBUTION_ZIP
-                    && (state == Constants.DFUControllerState.SEND_FIRMWARE_DATA||state == Constants.DFUControllerState.INIT)) {
+                    && (state == Constants.DFUControllerState.SEND_FIRMWARE_DATA)) {
                 return;
             }
             if (lastprogress == progress) //when no change happened, timeout
             {
                 Log.e(TAG, "* * * OTA timeout * * *" + "state = " + state + ",connected:" + isConnected() + ",lastprogress = " + lastprogress + ",progress = " + progress);
                 ERRORCODE errorcode = ERRORCODE.TIMEOUT;
-                if (state == Constants.DFUControllerState.SEND_START_COMMAND
-                        && dfuFirmwareType == Constants.DfuFirmwareTypes.BLUETOOTH
-                        && isConnected()) {
-                    Log.e(TAG, "* * * BLE OTA timeout by start command not get disconnected from watch* * *");
-                }
                 //when start Scan DFU service, perhaps get nothing with 20s, here need again scan it?
-                else if (state == Constants.DFUControllerState.DISCOVERING && dfuFirmwareType == Constants.DfuFirmwareTypes.BLUETOOTH) {
+                if (state == Constants.DFUControllerState.DISCOVERING && dfuFirmwareType == Constants.DfuFirmwareTypes.DISTRIBUTION_ZIP) {
                     Log.e(TAG, "* * * BLE OTA timeout by no found DFU service * * *");
                     errorcode = ERRORCODE.NODFUSERVICE;
                 }
-                Log.e(TAG, "* * * call OTA timeout function * * * OTA type = " + (dfuFirmwareType == Constants.DfuFirmwareTypes.BLUETOOTH ?"BLE":"MCU") + ",ErrorCode = " + errorcode);
                 if (mOnOtaControllerListener.notEmpty()) {
                     mOnOtaControllerListener.get().onError(errorcode);
                 }
@@ -115,9 +109,10 @@ public class OtaControllerImpl implements OtaController {
         mTimeoutTimer = new Timer();
         mTimeoutTimer.schedule(new myOTATimerTask(),MAX_TIME, MAX_TIME);
         dfuFirmwareType = firmwareType;
-        state = Constants.DFUControllerState.IDLE;
-        connectionController.setOTAMode(false, true);
         applicationModel.getSyncController().setHoldRequest(true);
+        Log.i(TAG,"***********send OTA command*******");
+        state = Constants.DFUControllerState.SEND_START_COMMAND;
+        connectionController.sendRequest(new SetDFUModeRequest(applicationModel, (byte) 1));
         if(mOnOtaControllerListener.notEmpty()){
             mOnOtaControllerListener.get().onPrepareOTA(firmwareType);
         }
@@ -208,93 +203,39 @@ public class OtaControllerImpl implements OtaController {
         if(mOnOtaControllerListener.notEmpty()) {
             mOnOtaControllerListener.get().connectionStateChanged(event.isConnected());
         }
-        //use distribution firmware (zip file)
-        if(dfuFirmwareType == Constants.DfuFirmwareTypes.DISTRIBUTION_ZIP)
+
+        if (event.isConnected())
         {
-            if (event.isConnected())
+           if (state == Constants.DFUControllerState.DISCOVERING)
             {
-                if (state == Constants.DFUControllerState.SEND_RECONNECT)
-                {
-                    state = Constants.DFUControllerState.SEND_START_COMMAND;
-
-                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            connectionController.sendRequest(new SetDFUModeRequest(applicationModel, (byte) 1));
-                        }
-                    },1000);
-                }
-                else if (state == Constants.DFUControllerState.DISCOVERING)
-                {
-                    state = Constants.DFUControllerState.SEND_FIRMWARE_DATA;
-                    //kill connectionController and med-library BT service and use dfu library service
-                    Log.i(TAG,"***********connectionController has found DFU service,disconnect it and dfu library will take over the OTA*******");
-                    connectionController.restoreSavedAddress();
-                    connectionController.disconnect();
-                    if(mOnOtaControllerListener.notEmpty()) mOnOtaControllerListener.get().onDFUServiceStarted(event.getAddress());
-                }
+                state = Constants.DFUControllerState.OTA_SERVICE_FOUND;
+                //kill connectionController and med-library BT service and use dfu library service
+                Log.i(TAG,"***********DFU service found,disconnect it,prepare for dfu library*******");
+                connectionController.restoreSavedAddress();
+                connectionController.disconnect();
             }
-            else
+        }
+        else
+        {
+            //by BLE peer disconnect when normal mode to ota mode
+            if (state == Constants.DFUControllerState.SEND_START_COMMAND)
             {
-                if (state == Constants.DFUControllerState.IDLE)
-                {
-                    state = Constants.DFUControllerState.SEND_RECONNECT;
-
-                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            connectionController.reconnect();
-                        }
-                    },1000);
-                }
-
-                //by BLE peer disconnect when normal mode to ota mode
-                else if (state == Constants.DFUControllerState.SEND_START_COMMAND)
-                {
-                    final boolean needSearchDFUservice = true;
-                    if(needSearchDFUservice) {
-                        state = Constants.DFUControllerState.DISCOVERING;
-                        connectionController.setOTAMode(true, true);
-                        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                Log.i(TAG,"***********set OTA mode,forget it firstly,and scan DFU service*******");
-                                //when switch to DFU mode, the MAC address has changed to another one
-                                connectionController.forgetSavedAddress();
-                                connectionController.connect();
-                            }
-                        },1000);
-                    }
-                    //we let DFU library take over the OTA process directly without verify DFU service,
-                    // but here we must calculate the new device address changed by DFU mode
-                    else {
-                        String newDeviceAdress = getMacAdd(event.getAddress());
-                        state = Constants.DFUControllerState.SEND_FIRMWARE_DATA;
-                        connectionController.disconnect();
-                        if (mOnOtaControllerListener.notEmpty())
-                            mOnOtaControllerListener.get().onDFUServiceStarted(newDeviceAdress);
-                    }
+                state = Constants.DFUControllerState.DISCOVERING;
+                Log.i(TAG,"***********set OTA mode,forget it firstly,and scan DFU service*******");
+                connectionController.setOTAMode(true, true);
+                //when switch to DFU mode, the MAC address has changed to another one
+                connectionController.forgetSavedAddress();
+                connectionController.connect();
+            }
+            else if (state == Constants.DFUControllerState.OTA_SERVICE_FOUND)
+            {
+                Log.i(TAG,"***********dfu library is taking over the OTA*******");
+                state = Constants.DFUControllerState.SEND_FIRMWARE_DATA;
+                if(mOnOtaControllerListener.notEmpty()) {
+                    mOnOtaControllerListener.get().onDFUServiceStarted(event.getAddress());
                 }
             }
         }
 
-    }
-
-    /**
-     * Mac add 1
-     * @param macAddress Mac address，eg: AB:CD:EF:56:BF:D0
-     * @return macAddress + 1,eg: AB:CD:EF:56:BF:D1
-     */
-    private String getMacAdd(String macAddress) {
-        String hexMacAddress = macAddress.toUpperCase().replaceAll(":","");
-        String newHexMacAddress = Long.toHexString(Long.parseLong(hexMacAddress, 16) + 1).toUpperCase();
-        StringBuilder stringBuilder = new StringBuilder();
-        for(int i=0;i<12;i++) {
-            if(i==2||i==4||i==6||i==8||i==10){
-                stringBuilder.append(":");
-            }
-            stringBuilder.append(newHexMacAddress.substring(i,i+1));
-        }
-        return stringBuilder.toString();
     }
 }

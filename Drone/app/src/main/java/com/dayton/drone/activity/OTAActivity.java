@@ -54,6 +54,8 @@ public class OtaActivity extends BaseActivity implements OnOtaControllerListener
     Toolbar mToolbar;
     @Bind(R.id.activity_ota_status_textview)
     TextView otaStatus;
+    @Bind(R.id.activity_ota_version_textview)
+    TextView version;
     @Bind(R.id.activity_ota_progressBar)
     ProgressBar progressBar;
 
@@ -160,7 +162,6 @@ public class OtaActivity extends BaseActivity implements OnOtaControllerListener
         context = this;
         this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         initOta();
-
     }
     public List<String> getFirmwareURLs()
     {
@@ -192,6 +193,7 @@ public class OtaActivity extends BaseActivity implements OnOtaControllerListener
         firmwareURLs = getFirmwareURLs();
         otaController = new OtaControllerImpl(getModel());
         otaController.setOnOtaControllerListener(this);
+        version.setText(String.format(getString(R.string.ota_version),""+otaController.getFirmwareVersion(),""+otaController.getSoftwareVersion()));
     }
 
     private void showAlertDialog() {
@@ -342,19 +344,14 @@ public class OtaActivity extends BaseActivity implements OnOtaControllerListener
     @Override
     public void onDFUServiceStarted(final String dfuAddress) {
         Log.i(TAG, "onDFUServiceStarted");
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                final DfuServiceInitiator starter = new DfuServiceInitiator(dfuAddress)
-                        .setKeepBond(false)
-                        .setForceDfu(false)
-                        .setPacketsReceiptNotificationsEnabled(true)
-                        .setPacketsReceiptNotificationsValue(DfuServiceInitiator.DEFAULT_PRN_VALUE);
-                starter.setZip(getLocalFirmwareRawResID());
-                Log.i(TAG, "***********dfu library starts OtaService*******" + "address = " + dfuAddress);
-                starter.start(context, OtaService.class);
-            }
-        }, 2000);
+        final DfuServiceInitiator starter = new DfuServiceInitiator(dfuAddress)
+                .setKeepBond(false)
+                .setForceDfu(false)
+                .setPacketsReceiptNotificationsEnabled(true)
+                .setPacketsReceiptNotificationsValue(DfuServiceInitiator.DEFAULT_PRN_VALUE);
+        starter.setZip(getLocalFirmwareRawResID());
+        Log.i(TAG, "***********dfu library starts OtaService*******" + "address = " + dfuAddress);
+        starter.start(context, OtaService.class);
     }
     @Override
     public void firmwareVersionReceived(Constants.DfuFirmwareTypes whichfirmware, String version) {

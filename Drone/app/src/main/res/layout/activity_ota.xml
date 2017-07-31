@@ -17,6 +17,7 @@
         android:textColor="@color/add_watch_activity_watch_dec_text_color"
         android:textSize="15sp"/>
     <TextView
+        android:id="@+id/activity_ota_version_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
