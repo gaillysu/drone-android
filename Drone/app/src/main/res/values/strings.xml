@@ -226,4 +226,22 @@
     <string name="timer_reset">Reset Timer</string>
     <string name="timer_duration">Duration</string>
     <string name="enable_all_applications">Enable All Applications</string>
+    <string name="watch_ota_upgrade">OTA Upgrade</string>
+    <string name="ota">OTA</string>
+    <string name="ota_tip_infomation">Hold the watch close to the phone,don\'t\nclose the app and be patience.</string>
+    <string name="ota_version">Current: %1$s, New: %2$s</string>
+    <string name="ota_status_ready">Ready to perform.</string>
+    <string name="ota_status_start">Start</string>
+    <string name="ota_status_performing">Performing OTA</string>
+    <string name="ota_connect_error_not_do_ota">watch isn\'t connected, can\'t perform OTA update</string>
+    <string name="ota_checking_firmware">Checking firmware version, please wait...</string>
+    <string name="ota_error_timeout">Connection timed out</string>
+    <string name="ota_error_other">Failed</string>
+    <string name="ota_sucess">Finished OTA</string>
+
+    <string name="ota_error_nofounDFUservice">No OTA service found, please wait for few minutes and try again.</string>
+    <string name="ota_update_available">You already got the newest version, do you wish to proceed?</string>
+    <string name="ota_alert_title">Newest version</string>
+
+
 </resources>

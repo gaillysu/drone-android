@@ -119,6 +119,30 @@ public class SpUtils {
         return sharedPreferences.getInt(CacheConstants.HOT_KEY, 0);
     }
 
+    public static void saveBleVersion(Context context, String version) {
+        SharedPreferences sharedPreferences =
+                context.getSharedPreferences(CacheConstants.SP_Name, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(CacheConstants.BLE_VERSION, version).apply();
+    }
+
+    public static String getBleVersion(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CacheConstants.SP_Name, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(CacheConstants.BLE_VERSION, "");
+    }
+
+    public static void saveBleNewVersion(Context context, String version) {
+        SharedPreferences sharedPreferences =
+                context.getSharedPreferences(CacheConstants.SP_Name, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(CacheConstants.BLE_NEW_VERSION, version).apply();
+    }
+
+    public static String getBleNewVersion(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CacheConstants.SP_Name, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(CacheConstants.BLE_NEW_VERSION, "");
+    }
+
 
     public static void printAllConstants(Context context) {
         Log.w("Karl", "Base steps = " + getIntMethod(context, CacheConstants.TODAY_BASESTEP, -1));

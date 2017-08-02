@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/notification_bg_color"
+              android:orientation="vertical">
+    <!-- header-->
+    <include
+        android:id="@+id/activity_add_watch_header_layout"
+        layout="@layout/toolbar"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="30dp"
+        android:text="@string/ota_tip_infomation"
+        android:textColor="@color/add_watch_activity_watch_dec_text_color"
+        android:textSize="15sp"/>
+    <TextView
+        android:id="@+id/activity_ota_version_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:text="@string/ota_version"
+        android:textColor="@android:color/white"
+        android:textSize="15sp"/>
+    <TextView
+        android:id="@+id/activity_ota_status_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="25dp"
+        android:text="@string/ota_status_ready"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"/>
+
+    <ProgressBar
+        android:id="@+id/activity_ota_progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_marginTop="25dp"
+        android:layout_gravity="center"
+        android:progressDrawable="@drawable/barcolor"
+        android:layout_width="200dp"
+        android:layout_height="2dp" />
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:src="@mipmap/welcome_logo_1"/>
+
+    <Button
+        android:id="@+id/activity_ota_start_imageButton"
+        android:layout_width="200dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:textSize="18sp"
+        android:text="@string/ota_status_start"
+        android:textColor="@android:color/white"
+        android:background="@drawable/outline_fill_button"
+        />
+</LinearLayout>

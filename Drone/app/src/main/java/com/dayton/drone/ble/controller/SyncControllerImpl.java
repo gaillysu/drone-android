@@ -123,6 +123,7 @@ public class SyncControllerImpl implements  SyncController{
     private final long BIG_SYNC_INTERVAL = 5*60* 1000L; //5minutes
     private boolean bigSyncFirst = true;
     private final Object lockObject = new Object();
+    private boolean isHoldRequest = false;
     /**
      * Wait for given number of milliseconds.
      * @param millis waiting period
@@ -317,6 +318,11 @@ public class SyncControllerImpl implements  SyncController{
         sendRequest(new SetDailyAlarmRequest(application,dailyAlarmModels));
     }
 
+    @Override
+    public void setHoldRequest(boolean holdRequest) {
+        isHoldRequest = holdRequest;
+    }
+
     /**
      * send request  package to watch by using a queue
      * @param request
@@ -326,6 +332,10 @@ public class SyncControllerImpl implements  SyncController{
             return;
         }
         if(!isConnected()) {
+            return;
+        }
+        //when OTA mode, disable syncController send any request command to BLE
+        if (isHoldRequest) {
             return;
         }
         QueuedMainThreadHandler.getInstance(QueuedMainThreadHandler.QueueType.SyncController).post(new Runnable() {
@@ -598,73 +608,75 @@ public class SyncControllerImpl implements  SyncController{
      */
     private void updateCitiesWeather()
     {
-        if(getFirmwareVersion()!=null&&Float.valueOf(getFirmwareVersion())>=0.04f)
-        {
-            City localCity = new City();
-            localCity.setName(WeatherUtils.getLocalCityName());
-            Location location = WeatherUtils.getLocalCityLocation(application);
-            if(location!=null) {
-                localCity.setLat(location.getLatitude());
-                localCity.setLng(location.getLongitude());
-            }
-            else {
-                List<City> allCities = application.getWorldClockDatabaseHelper().getAll();
-                for(City city:allCities)
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                if(getFirmwareVersion()!=null&&Float.valueOf(getFirmwareVersion())>=0.04f)
                 {
-                    if(city.getName().equals(localCity.getName()))
-                    {
-                        localCity.setLat(city.getLat());
-                        localCity.setLng(city.getLng());
-                        break;
+                    City localCity = new City();
+                    localCity.setName(WeatherUtils.getLocalCityName());
+                    Location location = WeatherUtils.getLocalCityLocation(application);
+                    if(location!=null) {
+                        localCity.setLat(location.getLatitude());
+                        localCity.setLng(location.getLongitude());
                     }
-                }
-            }
-            final List<City> cities = application.getWorldClockDatabaseHelper().getSelect();
-            cities.add(0,localCity);
-            for (final City city : cities)
-            {
-                long currentStampInSeconds = new DateTime().getMillis()/1000;
-                List<HourlyForecastBean> hourlyForecastBeanList = application.getCityWeatherDatabaseHelper().get(city.getName());
-                boolean found = false;
-                if(hourlyForecastBeanList.size()>0)
-                {
-                    if(currentStampInSeconds>=hourlyForecastBeanList.get(0).getTime() && currentStampInSeconds<=hourlyForecastBeanList.get(hourlyForecastBeanList.size()-1).getTime())
-                    {
-                        found = true;
-                    }
-                }
-                //from network
-                if(!found) {
-                    final GetForecastRequest request = new GetForecastRequest(city.getLat() + "," + city.getLng(), application.getRetrofitManager().getWeatherApiKey());
-                    application.getRetrofitManager().requestWeather(request, new RequestListener<GetForecastModel>() {
-                        @Override
-                        public void onRequestFailure(SpiceException spiceException) {
-                            Log.e("weather", "failed by " + spiceException.getCause().getMessage());
-                        }
-
-                        @Override
-                        public void onRequestSuccess(GetForecastModel getForecastModel) {
-                            Log.i(city.getName(), "" + new Gson().toJson(getForecastModel));
-                            if (getForecastModel.getHourly().getData().length > 0) {
-                                float temp = getForecastModel.getHourly().getData()[0].getTemperature();
-                                String icon = getForecastModel.getHourly().getData()[0].getIcon();
-                                int locationId = cities.indexOf(city);
-                                EventBus.getDefault().post(new CityForecastChangedEvent(city.getName(), temp, icon, locationId));
-                                application.getCityWeatherDatabaseHelper().addOrUpdate(city.getName(), getForecastModel.getHourly().getData());
+                    else {
+                        List<City> allCities = application.getWorldClockDatabaseHelper().getAll();
+                        for(City city:allCities)
+                        {
+                            if(city.getName().equals(localCity.getName()))
+                            {
+                                localCity.setLat(city.getLat());
+                                localCity.setLng(city.getLng());
+                                break;
                             }
                         }
-                    });
+                    }
+                    final List<City> cities = application.getWorldClockDatabaseHelper().getSelect();
+                    cities.add(0,localCity);
+                    for (final City city : cities)
+                    {
+                        long currentStampInSeconds = new DateTime().getMillis()/1000;
+                        List<HourlyForecastBean> hourlyForecastBeanList = application.getCityWeatherDatabaseHelper().get(city.getName());
+                        boolean found = false;
+                        if(hourlyForecastBeanList.size()>0)
+                        {
+                            if(currentStampInSeconds>=hourlyForecastBeanList.get(0).getTime() && currentStampInSeconds<=hourlyForecastBeanList.get(hourlyForecastBeanList.size()-1).getTime())
+                            {
+                                found = true;
+                            }
+                        }
+                        //from network
+                        if(!found) {
+                            final GetForecastRequest request = new GetForecastRequest(city.getLat() + "," + city.getLng(), application.getRetrofitManager().getWeatherApiKey());
+                            application.getRetrofitManager().requestWeather(request, new RequestListener<GetForecastModel>() {
+                                @Override
+                                public void onRequestFailure(SpiceException spiceException) {
+                                    Log.e("weather", "failed by " + spiceException.getCause().getMessage());
+                                }
+
+                                @Override
+                                public void onRequestSuccess(GetForecastModel getForecastModel) {
+                                    Log.i(city.getName(), "" + new Gson().toJson(getForecastModel));
+                                    if (getForecastModel.getHourly().getData().length > 0) {
+                                        float temp = getForecastModel.getHourly().getData()[0].getTemperature();
+                                        String icon = getForecastModel.getHourly().getData()[0].getIcon();
+                                        int locationId = cities.indexOf(city);
+                                        EventBus.getDefault().post(new CityForecastChangedEvent(city.getName(), temp, icon, locationId));
+                                        application.getCityWeatherDatabaseHelper().addOrUpdate(city.getName(), getForecastModel.getHourly().getData());
+                                    }
+                                }
+                            });
+                        }
+                        //from cache
+                        else {
+                            int index = (int) ((currentStampInSeconds-hourlyForecastBeanList.get(0).getTime())/3600);
+                            EventBus.getDefault().post(new CityForecastChangedEvent(city.getName(), hourlyForecastBeanList.get(index).getTemperature(), hourlyForecastBeanList.get(index).getIcon(), cities.indexOf(city)));
+                        }
+                    }
                 }
-                //from cache
-                else {
-                    int index = (int) ((currentStampInSeconds-hourlyForecastBeanList.get(0).getTime())/3600);
-                    EventBus.getDefault().post(new CityForecastChangedEvent(city.getName(), hourlyForecastBeanList.get(index).getTemperature(), hourlyForecastBeanList.get(index).getIcon(), cities.indexOf(city)));
-                }
-
-
-
             }
-        }
+        });
     }
 
     /**
