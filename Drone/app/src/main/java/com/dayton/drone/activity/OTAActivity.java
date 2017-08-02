@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +22,7 @@ import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.ble.controller.OtaControllerImpl;
 import com.dayton.drone.ble.ota.OtaService;
+import com.dayton.drone.utils.SpUtils;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import net.medcorp.library.ble.controller.OtaController;
@@ -58,6 +60,9 @@ public class OtaActivity extends BaseActivity implements OnOtaControllerListener
     TextView version;
     @Bind(R.id.activity_ota_progressBar)
     ProgressBar progressBar;
+
+    @Bind(R.id.activity_ota_start_imageButton)
+    Button startButton;
 
 
     private final DfuProgressListener dfuProgressListener = new DfuProgressListenerAdapter() {
@@ -165,9 +170,12 @@ public class OtaActivity extends BaseActivity implements OnOtaControllerListener
     }
     public List<String> getFirmwareURLs()
     {
+        //TODO: the final firmware version should be checked and download form network
+        // here only use local firmware to test
         String localFirmware = "smwatch2_r4.zip";
         ArrayList<String> buildinZipFirmware = new ArrayList<>();
         buildinZipFirmware.add(localFirmware);
+        SpUtils.saveBleNewVersion(this,"0.04");
         return  buildinZipFirmware;
     }
 
@@ -193,7 +201,7 @@ public class OtaActivity extends BaseActivity implements OnOtaControllerListener
         firmwareURLs = getFirmwareURLs();
         otaController = new OtaControllerImpl(getModel());
         otaController.setOnOtaControllerListener(this);
-        version.setText(String.format(getString(R.string.ota_version),""+otaController.getFirmwareVersion(),""+otaController.getSoftwareVersion()));
+        version.setText(String.format(getString(R.string.ota_version),SpUtils.getBleVersion(this),SpUtils.getBleNewVersion(this)));
     }
 
     private void showAlertDialog() {
@@ -229,6 +237,26 @@ public class OtaActivity extends BaseActivity implements OnOtaControllerListener
         progressBar.setProgress(0);
         otaStatus.setText(R.string.ota_status_ready);
         otaController.performDFUOnFile(firmware, enumFirmwareType);
+    }
+
+    private void enableButton(boolean enable) {
+        //here enable/disable action and navigation buttons
+        startButton.setEnabled(enable);
+        if(!enable) {
+            startButton.setTextColor(getResources().getColor(R.color.disable_gray_color));
+            mToolbar.setNavigationIcon(null);
+            mToolbar.setNavigationOnClickListener(null);
+        }
+        else {
+            startButton.setTextColor(getResources().getColor(android.R.color.white));
+            mToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.md_nav_back));
+            mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+        }
     }
 
     @OnClick(R.id.activity_ota_start_imageButton)
@@ -268,6 +296,7 @@ public class OtaActivity extends BaseActivity implements OnOtaControllerListener
             @Override
             public void run() {
                 otaStatus.setText(R.string.ota_status_ready);
+                enableButton(false);
             }
         });
     }
@@ -279,7 +308,16 @@ public class OtaActivity extends BaseActivity implements OnOtaControllerListener
 
     @Override
     public void connectionStateChanged(boolean isConnected) {
-        //do nothing
+        if(isConnected) {
+            ((Activity) context).runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (otaController.getState() == Constants.DFUControllerState.INIT) {
+                        otaStatus.setText(R.string.ota_status_ready);
+                    }
+                }
+            });
+        }
     }
 
     @Override
@@ -316,6 +354,7 @@ public class OtaActivity extends BaseActivity implements OnOtaControllerListener
                 otaController.forGetDevice();
                 otaStatus.setText(R.string.ota_sucess);
                 otaController.reset(false);
+                enableButton(true);
             }
         });
     }
@@ -327,6 +366,7 @@ public class OtaActivity extends BaseActivity implements OnOtaControllerListener
             public void run() {
                 String errorMsg = "";
                 otaController.reset(false);
+                enableButton(true);
                 if (errorCode == OtaController.ERRORCODE.TIMEOUT)
                     errorMsg = getString(R.string.ota_error_timeout);
                 else if (errorCode == OtaController.ERRORCODE.NOCONNECTION)
@@ -344,6 +384,12 @@ public class OtaActivity extends BaseActivity implements OnOtaControllerListener
     @Override
     public void onDFUServiceStarted(final String dfuAddress) {
         Log.i(TAG, "onDFUServiceStarted");
+        ((Activity) context).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                otaStatus.setText(R.string.ota_status_performing);
+            }
+        });
         final DfuServiceInitiator starter = new DfuServiceInitiator(dfuAddress)
                 .setKeepBond(false)
                 .setForceDfu(false)

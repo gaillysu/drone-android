@@ -25,5 +25,6 @@ public class CacheConstants {
     public static String IS_24_HOUR_FORMAT = "is_24_hour_format";
     public static String HOT_KEY_ENABLE = "hot_key_enable";
     public static String HOT_KEY = "hot_key";
-
+    public static String BLE_VERSION = "ble_version";
+    public static String BLE_NEW_VERSION = "ble_new_version";
 }

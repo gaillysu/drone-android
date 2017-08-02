@@ -191,6 +191,7 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
     }
 
     private String formatFirmwareVersion(String bleVersion, String mcuVersion) {
+        SpUtils.saveBleVersion(AddWatchActivity.this,bleVersion);
         return bleVersion + "/" + mcuVersion;
     }
 
