@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.dayton.drone.view.SquareLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
+              android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:background="@android:color/white"
               android:orientation="vertical">
@@ -16,14 +16,15 @@
         />
     <TextView
         android:id="@+id/home_adapter_menu_tv"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/home_adapter_menu_icon"
         android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
         android:gravity="center_horizontal"
         android:background="@android:color/transparent"
         android:lines="1"
         android:text ="@string/home_menu_name_activities"
         android:textColor="@drawable/home_list_adapter_item_text_selected"
         android:textSize="15sp"/>
-</com.dayton.drone.view.SquareLayout>
+</RelativeLayout>
