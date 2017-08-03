@@ -46,8 +46,11 @@ public class HomeActivity extends BaseActivity {
     private List<HomeMenuItem> listData;
     private HomeMenuItem[] mHomeMenuItemList;
 
-    private int cellWidth = 100;
-    private int cellHeight = 100;
+    private int cellWidth;
+    private int cellHeight;
+    private final int countX = 4;
+    private final int countY = 2;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,12 +78,12 @@ public class HomeActivity extends BaseActivity {
         cellWidth = (dm.widthPixels - getResources().getDimensionPixelSize(R.dimen.mainmenu_margin_left)
                    - getResources().getDimensionPixelSize(R.dimen.mainmenu_margin_right)
                    - 2*getResources().getDimensionPixelSize(R.dimen.mainmenu_padding)
-                   - getResources().getDimensionPixelSize(R.dimen.mainmenu_cell_space))/2;
+                   - getResources().getDimensionPixelSize(R.dimen.mainmenu_cell_space))/countY;
         cellHeight = (dm.heightPixels
                 - getResources().getDimensionPixelSize(R.dimen.mainmenu_margin_top)
                 - 2*getResources().getDimensionPixelSize(R.dimen.mainmenu_padding)
                 - 3*getResources().getDimensionPixelSize(R.dimen.mainmenu_cell_space)
-                - getResources().getDimensionPixelSize(R.dimen.mainmenu_margin_bottom))/4;
+                - getResources().getDimensionPixelSize(R.dimen.mainmenu_margin_bottom))/countX;
 
         int marginLeftRight = (dm.widthPixels
                 - 2*Math.max(cellWidth,cellHeight)
