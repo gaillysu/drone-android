@@ -14,7 +14,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -23,6 +22,10 @@ import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.ble.controller.OtaControllerImpl;
 import com.dayton.drone.ble.ota.OtaService;
 import com.dayton.drone.utils.SpUtils;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import net.medcorp.library.ble.controller.OtaController;
@@ -30,12 +33,20 @@ import net.medcorp.library.ble.listener.OnOtaControllerListener;
 import net.medcorp.library.ble.model.response.BLEResponseData;
 import net.medcorp.library.ble.util.Constants;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cz.msebera.android.httpclient.Header;
 import no.nordicsemi.android.dfu.DfuProgressListener;
 import no.nordicsemi.android.dfu.DfuProgressListenerAdapter;
 import no.nordicsemi.android.dfu.DfuServiceInitiator;
@@ -64,6 +75,10 @@ public class OtaActivity extends BaseActivity implements OnOtaControllerListener
     @Bind(R.id.activity_ota_start_imageButton)
     Button startButton;
 
+    private String firmwareName;
+    private String savedFirmwareFullName;
+    //TODO the final version will set it true, here set it false for matching current watch hardware
+    private final boolean networkOta = false;
 
     private final DfuProgressListener dfuProgressListener = new DfuProgressListenerAdapter() {
         @Override
@@ -168,15 +183,81 @@ public class OtaActivity extends BaseActivity implements OnOtaControllerListener
         this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         initOta();
     }
+    void checkFirmware()
+    {
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.get(context.getString(R.string.firmware_version_url), new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                try {
+                    SpUtils.saveBleNewVersion(OtaActivity.this, ""+response.getDouble("version"));
+                    firmwareName = response.getString("filename");
+                    if(response.getDouble("version")>Float.parseFloat(SpUtils.getBleVersion(OtaActivity.this)))
+                    {
+                        showAlertDialog();
+                    }
+                    else
+                    {
+                        startButton.setEnabled(false);
+                        startButton.setTextColor(getResources().getColor(R.color.disable_gray_color));
+                        version.setText(String.format(getString(R.string.ota_version),SpUtils.getBleVersion(OtaActivity.this),SpUtils.getBleNewVersion(OtaActivity.this)));
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+            }
+        });
+    }
+
+    void downloadFirmware(final String networkFirmwareName)
+    {
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+        params.put("name", "java");
+        client.get(String.format(context.getString(R.string.firmware_download_url), networkFirmwareName),params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] binaryData) {
+                Log.i(TAG,"onSuccess");
+                FileOutputStream fos = null;
+                savedFirmwareFullName = "/data/data/"+OtaActivity.this.getPackageName()+"/" + networkFirmwareName;
+                try {
+                    fos = new FileOutputStream(new File(savedFirmwareFullName));
+                    fos.write(binaryData);
+                    fos.close();
+                    firmwareURLs.add(savedFirmwareFullName);
+                    uploadPressed();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] binaryData, Throwable error) {
+                Log.i(TAG,"onFailure");
+            }
+        });
+    }
+
     public List<String> getFirmwareURLs()
     {
-        //TODO: the final firmware version should be checked and download form network
-        // here only use local firmware to test
-        String localFirmware = "smwatch2_r4.zip";
-        ArrayList<String> buildinZipFirmware = new ArrayList<>();
-        buildinZipFirmware.add(localFirmware);
-        SpUtils.saveBleNewVersion(this,"0.04");
-        return  buildinZipFirmware;
+        firmwareURLs = new ArrayList<>();
+        if(networkOta) {
+            checkFirmware();
+        }
+        else {
+            String localFirmware = "smwatch2_r4.zip";
+            firmwareURLs.add(localFirmware);
+            SpUtils.saveBleNewVersion(this, "0.04");
+        }
+        return  firmwareURLs;
     }
 
     public int getLocalFirmwareRawResID()
@@ -198,7 +279,7 @@ public class OtaActivity extends BaseActivity implements OnOtaControllerListener
     }
     private void initOta()
     {
-        firmwareURLs = getFirmwareURLs();
+        getFirmwareURLs();
         otaController = new OtaControllerImpl(getModel());
         otaController.setOnOtaControllerListener(this);
         version.setText(String.format(getString(R.string.ota_version),SpUtils.getBleVersion(this),SpUtils.getBleNewVersion(this)));
@@ -230,6 +311,11 @@ public class OtaActivity extends BaseActivity implements OnOtaControllerListener
         if (!otaController.isConnected()) {
             Log.e(TAG, context.getString(R.string.ota_connect_error_not_do_ota));
             onError(OtaController.ERRORCODE.NOCONNECTION);
+            return;
+        }
+        if(firmwareURLs.size()==0) {
+            Log.e(TAG, "firmware is not ready,please wait...");
+            downloadFirmware(firmwareName);
             return;
         }
         String firmware = firmwareURLs.get(0);
@@ -395,7 +481,12 @@ public class OtaActivity extends BaseActivity implements OnOtaControllerListener
                 .setForceDfu(false)
                 .setPacketsReceiptNotificationsEnabled(true)
                 .setPacketsReceiptNotificationsValue(DfuServiceInitiator.DEFAULT_PRN_VALUE);
-        starter.setZip(getLocalFirmwareRawResID());
+        if(networkOta){
+            starter.setZip(savedFirmwareFullName);
+        }
+        else {
+            starter.setZip(getLocalFirmwareRawResID());
+        }
         Log.i(TAG, "***********dfu library starts OtaService*******" + "address = " + dfuAddress);
         starter.start(context, OtaService.class);
     }
