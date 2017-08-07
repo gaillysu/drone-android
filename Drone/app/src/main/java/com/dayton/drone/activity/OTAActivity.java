@@ -78,7 +78,7 @@ public class OtaActivity extends BaseActivity implements OnOtaControllerListener
     private String firmwareName;
     private String savedFirmwareFullName;
     //TODO the final version will set it true, here set it false for matching current watch hardware
-    private final boolean networkOta = false;
+    private final boolean networkOta = true;
 
     private final DfuProgressListener dfuProgressListener = new DfuProgressListenerAdapter() {
         @Override
