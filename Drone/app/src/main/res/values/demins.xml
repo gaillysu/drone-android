@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="mainmenu_padding">3dp</dimen>
+    <dimen name="mainmenu_logo_height">100dp</dimen>
+    <dimen name="mainmenu_margin_top">120dp</dimen>
+    <dimen name="mainmenu_margin_bottom">24dp</dimen>
+    <dimen name="mainmenu_margin_left">68dp</dimen>
+    <dimen name="mainmenu_margin_right">68dp</dimen>
+    <dimen name="mainmenu_cell_space">3dp</dimen>
+</resources>
