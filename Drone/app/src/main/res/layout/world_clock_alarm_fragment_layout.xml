@@ -4,7 +4,7 @@
               android:layout_height="match_parent"
               android:background="@color/notification_bg_color"
               android:orientation="vertical">
-    <ExpandableListView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/world_clock_alarm_expandableListView"
         android:layout_margin="5dp"
         android:layout_width="match_parent"
