@@ -105,6 +105,12 @@
             android:name=".activity.AddWatchActivity"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".activity.OtaActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.OtaNotificationActivity"
+            android:label="Dfu"/>
+        <activity
             android:name=".activity.ProfileActivity"
             android:screenOrientation="portrait"/>
         <activity
@@ -167,6 +173,15 @@
         <service
             android:name=".network.RetrofitGoogleMapService"
             android:exported="false"/>
+        <service
+            android:name=".ble.ota.OtaService"
+            android:exported="true"
+            android:label="Dfu">
+            <intent-filter>
+                <action android:name="no.nordicsemi.android.action.DFU_UPLOAD"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </service>
 
         <meta-data
             android:name="com.google.android.gms.version"

@@ -54,4 +54,5 @@ dependencies {
         transitive = true
     }
     compile 'com.android.support:multidex:1.0.1'
+    compile 'no.nordicsemi.android:dfu:1.0.4'
 }

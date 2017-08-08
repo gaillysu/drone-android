@@ -4,13 +4,14 @@ import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ExpandableListView;
 import android.widget.TimePicker;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -34,7 +35,7 @@ import butterknife.ButterKnife;
 
 public class WorldClockAlarmFragment extends Fragment implements OnEditAlarmListener {
     @Bind(R.id.world_clock_alarm_expandableListView)
-    ExpandableListView expandableListView;
+    RecyclerView expandableListView;
 
     private MyExpandableListViewAdapter myExpandableListViewAdapter;
 
@@ -48,25 +49,19 @@ public class WorldClockAlarmFragment extends Fragment implements OnEditAlarmList
         View view = inflater.inflate(R.layout.world_clock_alarm_fragment_layout, container, false);
         ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
-        refreshAlarmListView();
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        expandableListView.setLayoutManager(layoutManager);
+        List<AlarmBean> alarmBeanList = getModel().getAlarmDatabaseHelper().get();
+        myExpandableListViewAdapter = new MyExpandableListViewAdapter(getContext(),alarmBeanList,this);
+        expandableListView.setAdapter(myExpandableListViewAdapter);
         return view;
     }
 
     private void refreshAlarmListView() {
-        expandableListView.setGroupIndicator(null);
-        expandableListView.setChildIndicator(null);
         List<AlarmBean> alarmBeanList = getModel().getAlarmDatabaseHelper().get();
-        myExpandableListViewAdapter = new MyExpandableListViewAdapter(getContext(),alarmBeanList,this);
-        expandableListView.setAdapter(myExpandableListViewAdapter);
+        myExpandableListViewAdapter.setAlarmBeanList(alarmBeanList);
+        myExpandableListViewAdapter.notifyDataSetChanged();
     }
-
-    /**
-     * here these situations to need sync alarm with watch
-     * 1:remove or disable
-     * 2:enable
-     * 3:alarm time got changed (edit or add alarm)
-     * 4:alarm status got changed (repeat weekday or snooze enable/disable)
-     */
     private void syncAlarm2Watch() {
         List<AlarmBean> alarmBeanList = getModel().getAlarmDatabaseHelper().get();
         List<DailyAlarmModel> dailyAlarmModels = new ArrayList<>();
@@ -132,6 +127,7 @@ public class WorldClockAlarmFragment extends Fragment implements OnEditAlarmList
                         if (input.length() == 0)
                             return;
                         getModel().getAlarmDatabaseHelper().update(alarmBean,input.toString());
+                        refreshAlarmListView();
                     }
                 }).negativeText(R.string.profile_dialog_negative_button_text)
                 .show();
@@ -160,5 +156,4 @@ public class WorldClockAlarmFragment extends Fragment implements OnEditAlarmList
     public void onEditMode2ViewMode() {
         refreshAlarmListView();
     }
-
 }
