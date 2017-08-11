@@ -68,6 +68,9 @@ public class WorldClockSettingFragment extends Fragment {
         syncingTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!isSyncing.isChecked()){
+                    return;
+                }
                 int viewType = 5;
                 DatePickerPopWin pickerPopWin = new DatePickerPopWin
                         .Builder(WorldClockSettingFragment.this.getActivity(),
@@ -75,7 +78,7 @@ public class WorldClockSettingFragment extends Fragment {
                             @Override
                             public void onDatePickCompleted(int year, int month, int day, String dateDesc) {
                                 SpUtils.saveSyncTime(WorldClockSettingFragment.this.getActivity(), month);
-                                setSyncingText(month + 1);
+                                setSyncingText(month);
                             }
                         }).viewStyle(viewType)
                         .dateChose(getString(R.string.world_clock_adapter_world_time))
@@ -86,9 +89,9 @@ public class WorldClockSettingFragment extends Fragment {
         });
     }
 
-    public void setSyncingText(int syncingText) {
-        if (syncingText == 1) {
-            syncingTime.setText(getString(R.string.world_clock_adapter_world_time));
+    public void setSyncingText(int locationId) {
+        if (locationId == 0) {
+            syncingTime.setText(getString(R.string.world_clock_local_time));
         } else {
             syncingTime.setText(getString(R.string.world_clock_adapter_home_time));
         }

@@ -326,8 +326,8 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
                 middleLoopView.setInitPosition(middlePos);
                 break;
             case 5:
-                middleList.add("World Clock");
-                middleList.add("Home Time");
+                middleList.add(mContext.getResources().getString(R.string.world_clock_sync_local_time));
+                middleList.add(mContext.getResources().getString(R.string.world_clock_sync_home_time));
                 middleLoopView.setArrayList((ArrayList) middleList);
                 break;
             case 6://compass auto off minutes

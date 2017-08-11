@@ -68,7 +68,7 @@ public class SpUtils {
 
     public static int getSyncTime(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(CacheConstants.SP_Name, Context.MODE_PRIVATE);
-        return sharedPreferences.getInt(CacheConstants.SYNC_TIME, 1);
+        return sharedPreferences.getInt(CacheConstants.SYNC_TIME, 0);
     }
 
     public static void setIsSyncTime(Context context,boolean isSync) {
