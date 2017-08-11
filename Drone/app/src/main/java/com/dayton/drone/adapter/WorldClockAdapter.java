@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.dayton.drone.R;
 import com.dayton.drone.application.ApplicationModel;
+import com.dayton.drone.utils.SpUtils;
 import com.dayton.drone.viewmodel.DragListViewItem;
 import com.dayton.drone.viewmodel.WorldClockCityItemModel;
 import com.dayton.drone.viewmodel.WorldClockTitleModel;
@@ -113,8 +114,8 @@ public class WorldClockAdapter extends DragItemAdapter<Pair<Integer, DragListVie
         String am_pm = calendar.get(Calendar.HOUR_OF_DAY) <= 12 ?
                 mApplicationModel.getString(R.string.world_clock_am) : mApplicationModel.getString(R.string.world_clock_pm);
         String minute = calendar.get(Calendar.MINUTE) >= 10 ? calendar.get(Calendar.MINUTE) + "" : "0" + calendar.get(Calendar.MINUTE);
-        int hour = calendar.get(Calendar.HOUR);
-        return hour + ":" + minute + am_pm;
+        int hour = SpUtils.get24HourFormat(mApplicationModel)?calendar.get(Calendar.HOUR_OF_DAY):calendar.get(Calendar.HOUR);
+        return hour + ":" + minute + (SpUtils.get24HourFormat(mApplicationModel)?"":am_pm);
     }
 
     private void setWorldClockData(ViewHolder holder, int position) {

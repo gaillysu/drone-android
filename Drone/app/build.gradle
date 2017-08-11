@@ -14,7 +14,8 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -27,6 +28,9 @@ android {
         exclude 'META-INF/ASL2.0'
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/NOTICE'
+    }
+    configurations {
+        all*.exclude group: 'org.apache.commons'
     }
 }
 
