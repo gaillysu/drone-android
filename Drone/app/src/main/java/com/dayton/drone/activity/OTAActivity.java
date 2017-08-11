@@ -45,7 +45,7 @@ import no.nordicsemi.android.dfu.DfuServiceListenerHelper;
  * Created by med on 17/7/27.
  */
 
-public class OtaActivity extends BaseActivity implements OnOtaControllerListener {
+public class OTAActivity extends BaseActivity implements OnOtaControllerListener {
     private static final String TAG = "OtaActivity";
     private Context context;
     private OtaController otaController;
@@ -98,7 +98,7 @@ public class OtaActivity extends BaseActivity implements OnOtaControllerListener
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    OtaActivity.this.onSuccessfulFileTranfered();
+                    OTAActivity.this.onSuccessfulFileTranfered();
                     // if this activity is still open and upload process was completed, cancel the notification
                     final NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                     manager.cancel(OtaService.NOTIFICATION_ID);
@@ -113,7 +113,7 @@ public class OtaActivity extends BaseActivity implements OnOtaControllerListener
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    OtaActivity.this.onDFUCancelled();
+                    OTAActivity.this.onDFUCancelled();
                     // if this activity is still open and upload process was completed, cancel the notification
                     final NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                     manager.cancel(OtaService.NOTIFICATION_ID);
@@ -128,7 +128,7 @@ public class OtaActivity extends BaseActivity implements OnOtaControllerListener
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    OtaActivity.this.onTransferPercentage(percent);
+                    OTAActivity.this.onTransferPercentage(percent);
                     // if this activity is still open and upload process was completed, cancel the notification
                     final NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                     manager.cancel(OtaService.NOTIFICATION_ID);
@@ -143,7 +143,7 @@ public class OtaActivity extends BaseActivity implements OnOtaControllerListener
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    OtaActivity.this.onError(OtaController.ERRORCODE.EXCEPTION);
+                    OTAActivity.this.onError(OtaController.ERRORCODE.EXCEPTION);
                     // if this activity is still open and upload process was completed, cancel the notification
                     final NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                     manager.cancel(OtaService.NOTIFICATION_ID);

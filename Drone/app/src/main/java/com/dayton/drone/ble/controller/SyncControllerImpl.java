@@ -652,7 +652,9 @@ public class SyncControllerImpl implements  SyncController{
                             application.getRetrofitManager().requestWeather(request, new RequestListener<GetForecastModel>() {
                                 @Override
                                 public void onRequestFailure(SpiceException spiceException) {
-                                    Log.e("weather", "failed by " + spiceException.getCause().getMessage());
+                                    if(spiceException.getCause() != null) {
+                                        Log.e("weather", "failed by " + spiceException.getCause().getMessage());
+                                    }
                                 }
 
                                 @Override
