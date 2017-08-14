@@ -319,6 +319,11 @@ public class SyncControllerImpl implements  SyncController{
     }
 
     @Override
+    public void setAnalogHandsTime(byte timeId) {
+        sendRequest(new SetSystemConfig(application,timeId,Constants.SystemConfigID.AnalogHandsConfig));
+    }
+
+    @Override
     public void setHoldRequest(boolean holdRequest) {
         isHoldRequest = holdRequest;
     }
@@ -402,8 +407,8 @@ public class SyncControllerImpl implements  SyncController{
                     {
                         SpUtils.printAllConstants(application);
                         SpUtils.putBoolean(application,CacheConstants.TODAY_RESET,true);
-                        sendRequest(new SetSystemConfig(application,SpUtils.get24HourFormat(application)?(byte)1:0, Constants.SystemConfigID.ClockFormat));
                         sendRequest(new SetSystemConfig(application,Constants.SystemConfigID.Enabled));
+                        sendRequest(new SetSystemConfig(application,SpUtils.get24HourFormat(application)?(byte)1:0, Constants.SystemConfigID.ClockFormat));
                         sendRequest(new SetSystemConfig(application,0, 0, 0, Constants.SystemConfigID.SleepConfig));
                         if(getFirmwareVersion()!=null&&Float.valueOf(getFirmwareVersion())>=0.04f) {
                             sendRequest(new SetSystemConfig(application, (short) SpUtils.getIntMethod(application,CacheConstants.COMPASS_AUTO_ON_DURATION,CacheConstants.COMPASS_AUTO_ON_DURATION_DEFAULT),Constants.SystemConfigID.CompassAutoOnDuration));

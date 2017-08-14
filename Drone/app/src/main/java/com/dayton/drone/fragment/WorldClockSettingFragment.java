@@ -52,6 +52,9 @@ public class WorldClockSettingFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SpUtils.setIsSyncTime(WorldClockSettingFragment.this.getContext(), isChecked);
+                if(isChecked) {
+                    ((ApplicationModel) getActivity().getApplication()).getSyncController().setAnalogHandsTime((byte) SpUtils.getSyncTime(getActivity()));
+                }
                 setTextColor(isChecked);
             }
         });
@@ -78,10 +81,11 @@ public class WorldClockSettingFragment extends Fragment {
                             @Override
                             public void onDatePickCompleted(int year, int month, int day, String dateDesc) {
                                 SpUtils.saveSyncTime(WorldClockSettingFragment.this.getActivity(), month);
+                                ((ApplicationModel) getActivity().getApplication()).getSyncController().setAnalogHandsTime((byte) SpUtils.getSyncTime(getActivity()));
                                 setSyncingText(month);
                             }
                         }).viewStyle(viewType)
-                        .dateChose(getString(R.string.world_clock_adapter_world_time))
+                        .dateChose(syncingTime.getText()+"")
                         .viewTextSize(20)
                         .build();
                 pickerPopWin.showPopWin(WorldClockSettingFragment.this.getActivity());
