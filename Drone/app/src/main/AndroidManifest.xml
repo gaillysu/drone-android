@@ -105,7 +105,7 @@
             android:name=".activity.AddWatchActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activity.OtaActivity"
+            android:name=".activity.OTAActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.OtaNotificationActivity"
