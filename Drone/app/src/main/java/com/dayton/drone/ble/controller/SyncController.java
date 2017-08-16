@@ -61,4 +61,6 @@ public interface SyncController {
     void setDailyAlarm(List<DailyAlarmModel> dailyAlarmModels);
     void setAnalogHandsTime(byte timeId);
     void setHoldRequest(boolean holdRequest);
+    void enableTimer(boolean enable);
+    void enableStopwatch(boolean enable);
 }

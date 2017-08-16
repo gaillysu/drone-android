@@ -35,6 +35,12 @@ public class WorldClockSettingFragment extends Fragment {
     @Bind(R.id.world_clock_setting_24h_format_switch)
     SwitchCompat is24HourFormat;
 
+    @Bind(R.id.world_clock_setting_timer_switch)
+    SwitchCompat timerSwitch;
+
+    @Bind(R.id.world_clock_setting_stopwatch_switch)
+    SwitchCompat stopWatchSwitch;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.world_clock_setting_fragment, container, false);
@@ -65,6 +71,24 @@ public class WorldClockSettingFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SpUtils.set24HourFormat(WorldClockSettingFragment.this.getContext(), isChecked);
                 ((ApplicationModel) getActivity().getApplication()).getSyncController().setClockFormat(isChecked);
+            }
+        });
+
+        timerSwitch.setChecked(SpUtils.getTimerEnable(WorldClockSettingFragment.this.getActivity()));
+        timerSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SpUtils.setTimerEnable(WorldClockSettingFragment.this.getContext(), isChecked);
+                ((ApplicationModel) getActivity().getApplication()).getSyncController().enableTimer(isChecked);
+            }
+        });
+
+        stopWatchSwitch.setChecked(SpUtils.getStopwatchEnable(WorldClockSettingFragment.this.getActivity()));
+        stopWatchSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SpUtils.setStopwatchEnable(WorldClockSettingFragment.this.getContext(), isChecked);
+                ((ApplicationModel) getActivity().getApplication()).getSyncController().enableStopwatch(isChecked);
             }
         });
 

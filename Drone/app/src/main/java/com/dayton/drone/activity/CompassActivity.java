@@ -46,7 +46,7 @@ public class CompassActivity extends BaseActivity {
         setContentView(R.layout.activity_compass);
         ButterKnife.bind(this);
         initToolbar();
-        enableCompass = SpUtils.getBoolean(this,CacheConstants.ENABLE_COMPASS,false);
+        enableCompass = SpUtils.getCompassEnable(this);
         compassAutoOnDuration = SpUtils.getIntMethod(this, CacheConstants.COMPASS_AUTO_ON_DURATION,CacheConstants.COMPASS_AUTO_ON_DURATION_DEFAULT);
         compassScreenTimeout = SpUtils.getIntMethod(this, CacheConstants.COMPASS_SCREEN_TIMEOUT,CacheConstants.COMPASS_SCREEN_TIMEOUT_DEFAULT);
         compassEnableSwitch.setChecked(enableCompass);
@@ -114,7 +114,7 @@ public class CompassActivity extends BaseActivity {
 
     @OnCheckedChanged(R.id.activity_compass_enable_switch)
     public void enableCompass(CompoundButton buttonView, boolean isChecked){
-        SpUtils.putBoolean(this,CacheConstants.ENABLE_COMPASS,isChecked);
+        SpUtils.setCompassEnable(this,isChecked);
         getModel().getSyncController().enableCompass(isChecked);
     }
     private String formatMinutes(String minutes){

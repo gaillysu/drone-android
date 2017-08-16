@@ -95,6 +95,42 @@ public class SpUtils {
         return sharedPreferences.getBoolean(CacheConstants.IS_24_HOUR_FORMAT, true);
     }
 
+    public static void setTimerEnable(Context context,boolean enable) {
+        SharedPreferences sharedPreferences =
+                context.getSharedPreferences(CacheConstants.SP_Name, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(CacheConstants.TIMER_ENABLE, enable).apply();
+    }
+
+    public static boolean getTimerEnable(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CacheConstants.SP_Name, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(CacheConstants.TIMER_ENABLE, false);
+    }
+
+    public static void setStopwatchEnable(Context context,boolean enable) {
+        SharedPreferences sharedPreferences =
+                context.getSharedPreferences(CacheConstants.SP_Name, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(CacheConstants.STOPWATCH_ENABLE, enable).apply();
+    }
+
+    public static void setCompassEnable(Context context,boolean enable) {
+        SharedPreferences sharedPreferences =
+                context.getSharedPreferences(CacheConstants.SP_Name, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(CacheConstants.ENABLE_COMPASS, enable).apply();
+    }
+
+    public static boolean getCompassEnable(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CacheConstants.SP_Name, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(CacheConstants.ENABLE_COMPASS, false);
+    }
+
+    public static boolean getStopwatchEnable(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CacheConstants.SP_Name, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(CacheConstants.STOPWATCH_ENABLE, false);
+    }
+
     public static void saveHotKeyEnable(Context context,boolean isEnable) {
         SharedPreferences sharedPreferences =
                 context.getSharedPreferences(CacheConstants.SP_Name, Context.MODE_PRIVATE);
