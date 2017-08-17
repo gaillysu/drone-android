@@ -338,6 +338,17 @@ public class SyncControllerImpl implements  SyncController{
         sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Stopwatch, enable?(byte)1:(byte)0));
     }
 
+    @Override
+    public void startBigSync() {
+        theBigSyncStartDate = new Optional<>(new Date());
+        EventBus.getDefault().post(new BigSyncEvent(theBigSyncStartDate.get(), BigSyncEvent.BIG_SYNC_EVENT.STARTED));
+        sendRequest(new GetActivityRequest(application));
+    }
+
+    private void bigSyncFinish() {
+        EventBus.getDefault().post(new BigSyncEvent(theBigSyncStartDate.get(), BigSyncEvent.BIG_SYNC_EVENT.STOPPED));
+        SpUtils.putLongMethod(application, CacheConstants.LAST_BIG_SYNC_TIMESTAMP, new Date().getTime());
+    }
     /**
      * send request  package to watch by using a queue
      * @param request
@@ -473,9 +484,7 @@ public class SyncControllerImpl implements  SyncController{
                     }
                     if((systemStatusPacket.getStatus() & Constants.SystemStatus.ActivityDataAvailable.rawValue())==Constants.SystemStatus.ActivityDataAvailable.rawValue())
                     {
-                        theBigSyncStartDate = new Optional<>(new Date());
-                        EventBus.getDefault().post(new BigSyncEvent(theBigSyncStartDate.get(), BigSyncEvent.BIG_SYNC_EVENT.STARTED));
-                        sendRequest(new GetActivityRequest(application));
+                        startBigSync();
                     }
                     if((systemStatusPacket.getStatus() & Constants.SystemStatus.SubscribedToNotifications.rawValue())==Constants.SystemStatus.SubscribedToNotifications.rawValue())
                     {
@@ -512,8 +521,7 @@ public class SyncControllerImpl implements  SyncController{
                     }
                     else
                     {
-                        EventBus.getDefault().post(new BigSyncEvent(theBigSyncStartDate.get(), BigSyncEvent.BIG_SYNC_EVENT.STOPPED));
-                        SpUtils.putLongMethod(application, CacheConstants.LAST_BIG_SYNC_TIMESTAMP, new Date().getTime());
+                        bigSyncFinish();
                         StepsHandler stepsHandler = new StepsHandler(application.getStepsDatabaseHelper(), application.getUser());
                         DailySteps dailySteps= stepsHandler.getDailySteps(new Date());
                         Log.w("Karl","Set today steps =" + dailySteps.getDailySteps());

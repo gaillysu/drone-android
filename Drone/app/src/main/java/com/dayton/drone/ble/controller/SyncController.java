@@ -63,4 +63,5 @@ public interface SyncController {
     void setHoldRequest(boolean holdRequest);
     void enableTimer(boolean enable);
     void enableStopwatch(boolean enable);
+    void startBigSync();
 }
