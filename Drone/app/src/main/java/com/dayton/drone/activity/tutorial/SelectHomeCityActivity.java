@@ -8,9 +8,13 @@ import android.widget.TextView;
 import com.dayton.drone.R;
 import com.dayton.drone.activity.ChooseCityActivity;
 import com.dayton.drone.activity.base.BaseActivity;
+import com.dayton.drone.event.CityNumberChangedEvent;
+import com.dayton.drone.event.WorldClockChangedEvent;
 import com.dayton.drone.utils.SpUtils;
 
 import net.medcorp.library.worldclock.City;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -97,6 +101,8 @@ public class SelectHomeCityActivity extends BaseActivity {
                             city.setSelected(false);
                             getModel().getWorldClockDatabaseHelper().update(city);
                         }
+                        EventBus.getDefault().post(new CityNumberChangedEvent());
+                        EventBus.getDefault().post(new WorldClockChangedEvent());
                     }
                 }
             }
