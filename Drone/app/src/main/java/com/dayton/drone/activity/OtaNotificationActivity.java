@@ -18,7 +18,7 @@ public class OtaNotificationActivity extends Activity {
             // Start the app before finishing
             final Intent parentIntent = new Intent(this, HomeActivity.class);
             parentIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            final Intent startAppIntent = new Intent(this, OtaActivity.class);
+            final Intent startAppIntent = new Intent(this, OTAActivity.class);
             startAppIntent.putExtras(getIntent().getExtras());
             startActivities(new Intent[] { parentIntent, startAppIntent });
         }

@@ -56,8 +56,8 @@ import no.nordicsemi.android.dfu.DfuServiceListenerHelper;
  * Created by med on 17/7/27.
  */
 
-public class OtaActivity extends BaseActivity implements OnOtaControllerListener {
-    private static final String TAG = "OtaActivity";
+public class OTAActivity extends BaseActivity implements OnOtaControllerListener {
+    private static final String TAG = "OTAActivity";
     private Context context;
     private OtaController otaController;
     private Constants.DfuFirmwareTypes enumFirmwareType = Constants.DfuFirmwareTypes.BLUETOOTH;
@@ -77,8 +77,6 @@ public class OtaActivity extends BaseActivity implements OnOtaControllerListener
 
     private String firmwareName;
     private String savedFirmwareFullName;
-    //TODO the final version will set it true, here set it false for matching current watch hardware
-    private final boolean networkOta = true;
 
     private final DfuProgressListener dfuProgressListener = new DfuProgressListenerAdapter() {
         @Override
@@ -113,7 +111,7 @@ public class OtaActivity extends BaseActivity implements OnOtaControllerListener
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    OtaActivity.this.onSuccessfulFileTranfered();
+                    OTAActivity.this.onSuccessfulFileTranfered();
                     // if this activity is still open and upload process was completed, cancel the notification
                     final NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                     manager.cancel(OtaService.NOTIFICATION_ID);
@@ -128,7 +126,7 @@ public class OtaActivity extends BaseActivity implements OnOtaControllerListener
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    OtaActivity.this.onDFUCancelled();
+                    OTAActivity.this.onDFUCancelled();
                     // if this activity is still open and upload process was completed, cancel the notification
                     final NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                     manager.cancel(OtaService.NOTIFICATION_ID);
@@ -143,7 +141,7 @@ public class OtaActivity extends BaseActivity implements OnOtaControllerListener
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    OtaActivity.this.onTransferPercentage(percent);
+                    OTAActivity.this.onTransferPercentage(percent);
                     // if this activity is still open and upload process was completed, cancel the notification
                     final NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                     manager.cancel(OtaService.NOTIFICATION_ID);
@@ -158,7 +156,7 @@ public class OtaActivity extends BaseActivity implements OnOtaControllerListener
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    OtaActivity.this.onError(OtaController.ERRORCODE.EXCEPTION);
+                    OTAActivity.this.onError(OtaController.ERRORCODE.EXCEPTION);
                     // if this activity is still open and upload process was completed, cancel the notification
                     final NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                     manager.cancel(OtaService.NOTIFICATION_ID);
@@ -191,9 +189,9 @@ public class OtaActivity extends BaseActivity implements OnOtaControllerListener
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
                 try {
-                    SpUtils.saveBleNewVersion(OtaActivity.this, ""+response.getDouble("version"));
+                    SpUtils.saveBleNewVersion(OTAActivity.this, ""+response.getDouble("version"));
                     firmwareName = response.getString("filename");
-                    if(response.getDouble("version")>Float.parseFloat(SpUtils.getBleVersion(OtaActivity.this)))
+                    if(response.getDouble("version")>Float.parseFloat(SpUtils.getBleVersion(OTAActivity.this)))
                     {
                         showAlertDialog();
                     }
@@ -201,7 +199,7 @@ public class OtaActivity extends BaseActivity implements OnOtaControllerListener
                     {
                         startButton.setEnabled(false);
                         startButton.setTextColor(getResources().getColor(R.color.disable_gray_color));
-                        version.setText(String.format(getString(R.string.ota_version),SpUtils.getBleVersion(OtaActivity.this),SpUtils.getBleNewVersion(OtaActivity.this)));
+                        version.setText(String.format(getString(R.string.ota_version),SpUtils.getBleVersion(OTAActivity.this),SpUtils.getBleNewVersion(OTAActivity.this)));
                     }
 
                 } catch (JSONException e) {
@@ -225,7 +223,7 @@ public class OtaActivity extends BaseActivity implements OnOtaControllerListener
             public void onSuccess(int statusCode, Header[] headers, byte[] binaryData) {
                 Log.i(TAG,"onSuccess");
                 FileOutputStream fos = null;
-                savedFirmwareFullName = "/data/data/"+OtaActivity.this.getPackageName()+"/" + networkFirmwareName;
+                savedFirmwareFullName = "/data/data/"+OTAActivity.this.getPackageName()+"/" + networkFirmwareName;
                 try {
                     fos = new FileOutputStream(new File(savedFirmwareFullName));
                     fos.write(binaryData);
@@ -246,25 +244,6 @@ public class OtaActivity extends BaseActivity implements OnOtaControllerListener
         });
     }
 
-    public List<String> getFirmwareURLs()
-    {
-        firmwareURLs = new ArrayList<>();
-        if(networkOta) {
-            checkFirmware();
-        }
-        else {
-            String localFirmware = "smwatch2_r4.zip";
-            firmwareURLs.add(localFirmware);
-            SpUtils.saveBleNewVersion(this, "0.04");
-        }
-        return  firmwareURLs;
-    }
-
-    public int getLocalFirmwareRawResID()
-    {
-        return  R.raw.smwatch2_r4;
-    }
-
     private void initToolbar() {
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
@@ -279,7 +258,8 @@ public class OtaActivity extends BaseActivity implements OnOtaControllerListener
     }
     private void initOta()
     {
-        getFirmwareURLs();
+        firmwareURLs = new ArrayList<>();
+        checkFirmware();
         otaController = new OtaControllerImpl(getModel());
         otaController.setOnOtaControllerListener(this);
         version.setText(String.format(getString(R.string.ota_version),SpUtils.getBleVersion(this),SpUtils.getBleNewVersion(this)));
@@ -481,12 +461,7 @@ public class OtaActivity extends BaseActivity implements OnOtaControllerListener
                 .setForceDfu(false)
                 .setPacketsReceiptNotificationsEnabled(true)
                 .setPacketsReceiptNotificationsValue(DfuServiceInitiator.DEFAULT_PRN_VALUE);
-        if(networkOta){
-            starter.setZip(savedFirmwareFullName);
-        }
-        else {
-            starter.setZip(getLocalFirmwareRawResID());
-        }
+        starter.setZip(savedFirmwareFullName);
         Log.i(TAG, "***********dfu library starts OtaService*******" + "address = " + dfuAddress);
         starter.start(context, OtaService.class);
     }
