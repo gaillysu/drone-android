@@ -13,7 +13,7 @@ import com.dayton.drone.viewmodel.DragListViewItem;
 import com.dayton.drone.viewmodel.WorldClockCityItemModel;
 import com.dayton.drone.viewmodel.WorldClockTitleModel;
 import com.woxthebox.draglistview.DragItemAdapter;
-
+import com.dayton.drone.fragment.WorldClockMainFragment;
 import net.medcorp.library.worldclock.City;
 
 import java.util.Calendar;
@@ -30,15 +30,17 @@ public class WorldClockAdapter extends DragItemAdapter<Pair<Integer, DragListVie
     private Calendar localCalendar;
     private List<Pair<Integer, DragListViewItem>> list;
     private int itemId;
+    private WorldClockAdapterCallback callback;
     public static final int VIEW_TYPE_TITLE = 0X01;
     public static final int VIEW_TYPE_ITEM = 0X02;
 
-    public WorldClockAdapter(ApplicationModel applicationModel, int itemId, List<Pair<Integer, DragListViewItem>> list, boolean dragOnLongPress) {
+    public WorldClockAdapter(ApplicationModel applicationModel, int itemId, List<Pair<Integer, DragListViewItem>> list, boolean dragOnLongPress,WorldClockAdapterCallback callback) {
         mDragOnLongPress = dragOnLongPress;
         this.itemId = itemId;
         this.mApplicationModel = applicationModel;
         this.list = list;
         localCalendar = Calendar.getInstance();
+        this.callback = callback;
         setHasStableIds(true);
         setItemList(list);
     }
@@ -63,6 +65,14 @@ public class WorldClockAdapter extends DragItemAdapter<Pair<Integer, DragListVie
             setTitle(holder, position);
         }
         holder.itemView.setTag(mItemList.get(position));
+        if(position == 3) {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    callback.clickHomeCity();
+                }
+            });
+        }
     }
 
     private void setTitle(ViewHolder holder, int position) {
@@ -190,5 +200,9 @@ public class WorldClockAdapter extends DragItemAdapter<Pair<Integer, DragListVie
                 return mApplicationModel.getString(R.string.world_clock_today_tv);
             }
         }
+    }
+
+    public interface WorldClockAdapterCallback {
+        void clickHomeCity();
     }
 }

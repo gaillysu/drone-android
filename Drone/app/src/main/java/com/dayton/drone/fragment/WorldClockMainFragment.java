@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.dayton.drone.R;
 import com.dayton.drone.activity.ChooseCityActivity;
+import com.dayton.drone.activity.tutorial.SelectHomeCityActivity;
 import com.dayton.drone.adapter.WorldClockAdapter;
 import com.dayton.drone.application.ApplicationModel;
 import com.dayton.drone.event.CityNumberChangedEvent;
@@ -25,6 +26,7 @@ import com.dayton.drone.event.Timer10sEvent;
 import com.dayton.drone.event.WorldClockChangedEvent;
 import com.dayton.drone.utils.SpUtils;
 import com.dayton.drone.utils.WeatherUtils;
+import com.dayton.drone.view.CalendarView;
 import com.dayton.drone.viewmodel.DragListViewItem;
 import com.dayton.drone.viewmodel.WorldClockCityItemModel;
 import com.dayton.drone.viewmodel.WorldClockTitleModel;
@@ -53,7 +55,7 @@ import butterknife.ButterKnife;
  * Created by Jason on 2017/4/27.
  */
 
-public class WorldClockMainFragment extends Fragment {
+public class WorldClockMainFragment extends Fragment implements WorldClockAdapter.WorldClockAdapterCallback {
 
     @Bind(R.id.world_clock_date_tv)
     TextView dateTv;
@@ -106,7 +108,7 @@ public class WorldClockMainFragment extends Fragment {
 
 
     private void setData() {
-        worldClockAdapter = new WorldClockAdapter(mApplicationModel, R.id.drag_item, listData, false);
+        worldClockAdapter = new WorldClockAdapter(mApplicationModel, R.id.drag_item, listData, false,this);
         mDragListView.setLayoutManager(new LinearLayoutManager(WorldClockMainFragment.this.getActivity()));
         mDragListView.getRecyclerView().setVerticalScrollBarEnabled(true);
         mDragListView.setCanNotDragBelowBottomItem(false);
@@ -114,11 +116,7 @@ public class WorldClockMainFragment extends Fragment {
         mDragListView.setDragListCallback(new DragListView.DragListCallback() {
             @Override
             public boolean canDragItemAtPosition(int dragPosition) {
-                int itemViewType = worldClockAdapter.getItemViewType(dragPosition);
-                if (dragPosition == 1) {
-                    return false;
-                }
-                if (itemViewType == WorldClockAdapter.VIEW_TYPE_TITLE) {
+                if (dragPosition <=4) {
                     return false;
                 }
                 return true;
@@ -126,15 +124,8 @@ public class WorldClockMainFragment extends Fragment {
 
             @Override
             public boolean canDropItemAtPosition(int dropPosition) {
-                int itemViewType = worldClockAdapter.getItemViewType(3);
-                if (itemViewType == WorldClockAdapter.VIEW_TYPE_TITLE) {
-                    if (dropPosition == 0 | dropPosition == 1 | dropPosition == 2) {
-                        return false;
-                    }
-                } else {
-                    if (dropPosition == 0 | dropPosition == 1 | dropPosition == 2 | dropPosition == 3 | dropPosition == 4) {
-                        return false;
-                    }
+                if (dropPosition <=4 ) {
+                    return false;
                 }
                 return true;
             }
@@ -151,11 +142,8 @@ public class WorldClockMainFragment extends Fragment {
                 if (swipedDirection == ListSwipeItem.SwipeDirection.LEFT|swipedDirection==ListSwipeItem.SwipeDirection.RIGHT) {
                     Pair<Integer, DragListViewItem> adapterItem = (Pair<Integer, DragListViewItem>) item.getTag();
                     int pos = mDragListView.getAdapter().getPositionForItem(adapterItem);
-                    if (pos != 1) {
+                    if (pos != 1 && pos!=3) {
                         int cityId = adapterItem.second.getItem().getCityId();
-                        if (pos == 3) {
-                            SpUtils.saveHomeCityId(WorldClockMainFragment.this.getActivity(), -1);
-                        }
                         City city = mApplicationModel.getWorldClockDatabaseHelper().get(cityId);
                         city.setSelected(false);
                         mApplicationModel.getWorldClockDatabaseHelper().update(city);
@@ -164,29 +152,6 @@ public class WorldClockMainFragment extends Fragment {
                         EventBus.getDefault().post(new CityNumberChangedEvent());
                         EventBus.getDefault().post(new WorldClockChangedEvent());
                     }
-                }
-            }
-        });
-
-        mDragListView.setDragListListener(new DragListView.DragListListener() {
-            @Override
-            public void onItemDragStarted(int position) {
-
-            }
-
-            @Override
-            public void onItemDragging(int itemPosition, float x, float y) {
-            }
-
-            @Override
-            public void onItemDragEnded(int fromPosition, int toPosition) {
-                int itemViewType = worldClockAdapter.getItemViewType(3);
-                if (itemViewType == WorldClockAdapter.VIEW_TYPE_ITEM) {
-                    DragListViewItem second = listData.get(3).second;
-                    SpUtils.saveHomeCityId(WorldClockMainFragment.this.getActivity(),
-                            second.getItem().getCityId());
-                }else{
-                    SpUtils.saveHomeCityId(WorldClockMainFragment.this.getActivity(),-1);
                 }
             }
         });
@@ -219,6 +184,18 @@ public class WorldClockMainFragment extends Fragment {
             if (data != null) {
                 boolean flag = data.getBooleanExtra(getString(R.string.is_choose_flag), false);
                 if (flag) {
+                    if(data.getBooleanExtra(getString(R.string.is_select_home_city), false))
+                    {
+                        int newCityId = data.getIntExtra(getString(R.string.select_city_id),-1);
+                        int oldCityId = SpUtils.getHomeCityId(getActivity());
+                        SpUtils.saveHomeCityId(getActivity(), newCityId);
+                        if(oldCityId!=-1)
+                        {
+                            City city = mApplicationModel.getWorldClockDatabaseHelper().get(oldCityId);
+                            city.setSelected(false);
+                            mApplicationModel.getWorldClockDatabaseHelper().update(city);
+                        }
+                    }
                     refreshList();
                 }
             }
@@ -278,5 +255,12 @@ public class WorldClockMainFragment extends Fragment {
         if (event.getStatus() == WorldClockInitializeEvent.STATUS.FINISHED) {
             refreshList();
         }
+    }
+
+    @Override
+    public void clickHomeCity() {
+        Intent intent = new Intent(WorldClockMainFragment.this.getActivity(), ChooseCityActivity.class);
+        intent.putExtra(getString(R.string.is_select_home_city), true);
+        startActivityForResult(intent, requestCode);
     }
 }
