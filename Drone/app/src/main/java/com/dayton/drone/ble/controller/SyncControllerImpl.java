@@ -686,20 +686,25 @@ public class SyncControllerImpl implements  SyncController{
      */
     private void initWeatherLocation()
     {
-        int index = 0;
-        List<City> select = application.getWorldClockDatabaseHelper().getSelect();
-        List<String> cities = new ArrayList<>();
-        cities.add(WeatherUtils.getLocalCityName());
-        for(City city:select) {
-            cities.add(city.getName());
-        }
-        List<WeatherLocationModel> weatherLocationModelList = new ArrayList<>();
-        for(String city:cities){
-            weatherLocationModelList.add(new WeatherLocationModel((byte) (index), (byte) city.length(), city));
-            index++;
-        }
-        SetWeatherLocationsRequest setWeatherLocations = new SetWeatherLocationsRequest(application,weatherLocationModelList);
-        sendRequest(setWeatherLocations);
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                int index = 0;
+                List<City> select = application.getWorldClockDatabaseHelper().getSelect();
+                List<String> cities = new ArrayList<>();
+                cities.add(WeatherUtils.getLocalCityName());
+                for(City city:select) {
+                    cities.add(city.getName());
+                }
+                List<WeatherLocationModel> weatherLocationModelList = new ArrayList<>();
+                for(String city:cities){
+                    weatherLocationModelList.add(new WeatherLocationModel((byte) (index), (byte) city.length(), city));
+                    index++;
+                }
+                SetWeatherLocationsRequest setWeatherLocations = new SetWeatherLocationsRequest(application,weatherLocationModelList);
+                sendRequest(setWeatherLocations);
+            }
+        });
     }
     @Subscribe
     public void onEvent(Timer10sEvent timer10sEvent) {
