@@ -88,6 +88,18 @@ public class Constants {
         public  int rawValue() {return function;}
     }
 
+    /*
+    SystemAttributeCode can be supported from v0.09+
+     */
+    public enum SystemAttributeID {
+        FirmwareVersion(0x04),ServiceData(0x05);
+        final int value;
+        private SystemAttributeID(int value) {
+            this.value = value;
+        }
+        public  byte rawValue() {return (byte)value;}
+    }
+
     //below used by android notification server
     public enum NotificationCommand {
         ReadAttributes(0x01),TriggerAction(0x03),ReadExtendAttributes(0x05);
@@ -107,5 +119,4 @@ public class Constants {
         }
         public  byte rawValue() {return (byte)value;}
     }
-
 }
