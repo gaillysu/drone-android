@@ -14,7 +14,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.dayton.drone.R;
 import com.dayton.drone.activity.base.BaseActivity;
 import com.dayton.drone.activity.tutorial.SelectDeviceActivity;
@@ -24,6 +27,8 @@ import com.dayton.drone.event.BatteryStatusChangedEvent;
 import com.dayton.drone.model.Watches;
 import com.dayton.drone.utils.CacheConstants;
 import com.dayton.drone.utils.SpUtils;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import net.medcorp.library.ble.event.BLEConnectionStateChangedEvent;
@@ -31,6 +36,8 @@ import net.medcorp.library.ble.event.BLEFirmwareVersionReceivedEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +45,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by med on 16/5/17.
@@ -62,6 +70,7 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
     private TextView connectionStateTextView;
 
     private List<String> firmwareVersion = new ArrayList<>();
+    private String firmwareName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,9 +142,57 @@ public class AddWatchActivity extends BaseActivity implements ViewPager.OnPageCh
         });
     }
 
+    void checkFirmware()
+    {
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.get(getString(R.string.firmware_version_url), new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                try {
+                    SpUtils.saveBleNewVersion(AddWatchActivity.this, response.getDouble("version")+"");
+                    firmwareName = response.getString("filename");
+                    boolean update = response.getDouble("version")>Double.parseDouble(SpUtils.getBleVersion(AddWatchActivity.this));
+                    if(update) {
+                        showAlertDialog();
+                    }
+                    else {
+                        Toast.makeText(AddWatchActivity.this,R.string.ota_update_no_available,Toast.LENGTH_LONG).show();
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+                Toast.makeText(AddWatchActivity.this,R.string.ota_firmware_check_failed,Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void showAlertDialog() {
+        new MaterialDialog.Builder(this)
+                .title(R.string.ota_alert_title)
+                .content(R.string.ota_update_available)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(MaterialDialog dialog, DialogAction which) {
+                        Intent intent = new Intent(AddWatchActivity.this, OTAActivity.class);
+                        intent.putExtra(AddWatchActivity.this.getString(R.string.ota_update_filename_key),firmwareName);
+                        startActivity(intent);
+                    }
+                })
+                .positiveText(android.R.string.yes)
+                .negativeText(android.R.string.no)
+                .cancelable(false)
+                .show();
+    }
+
     @OnClick(R.id.activity_add_watch_ota_upgrade_layout)
     public void startOTA() {
-        startActivity(OTAActivity.class);
+        checkFirmware();
     }
 
     @OnClick(R.id.activity_add_watch_forget_watch_layout)

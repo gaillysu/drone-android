@@ -14,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -75,6 +76,7 @@ public class OTAActivity extends BaseActivity implements OnOtaControllerListener
     @Bind(R.id.activity_ota_start_imageButton)
     Button startButton;
 
+    boolean success;
     private String firmwareName;
     private String savedFirmwareFullName;
 
@@ -181,37 +183,6 @@ public class OTAActivity extends BaseActivity implements OnOtaControllerListener
         this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         initOta();
     }
-    void checkFirmware()
-    {
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.get(context.getString(R.string.firmware_version_url), new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                super.onSuccess(statusCode, headers, response);
-                try {
-                    SpUtils.saveBleNewVersion(OTAActivity.this, ""+response.getDouble("version"));
-                    firmwareName = response.getString("filename");
-                    if(response.getDouble("version")>Float.parseFloat(SpUtils.getBleVersion(OTAActivity.this)))
-                    {
-                        showAlertDialog();
-                    }
-                    else
-                    {
-                        startButton.setEnabled(false);
-                        startButton.setTextColor(getResources().getColor(R.color.disable_gray_color));
-                        version.setText(String.format(getString(R.string.ota_version),SpUtils.getBleVersion(OTAActivity.this),SpUtils.getBleNewVersion(OTAActivity.this)));
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                super.onFailure(statusCode, headers, responseString, throwable);
-            }
-        });
-    }
 
     void downloadFirmware(final String networkFirmwareName)
     {
@@ -240,6 +211,7 @@ public class OTAActivity extends BaseActivity implements OnOtaControllerListener
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] binaryData, Throwable error) {
                 Log.i(TAG,"onFailure");
+                otaStatus.setText(R.string.ota_firmware_download_failed);
             }
         });
     }
@@ -258,35 +230,14 @@ public class OTAActivity extends BaseActivity implements OnOtaControllerListener
     }
     private void initOta()
     {
+        success = false;
         firmwareURLs = new ArrayList<>();
-        checkFirmware();
+        firmwareName = getIntent().getStringExtra(getString(R.string.ota_update_filename_key));
         otaController = new OtaControllerImpl(getModel());
         otaController.setOnOtaControllerListener(this);
         version.setText(String.format(getString(R.string.ota_version),SpUtils.getBleVersion(this),SpUtils.getBleNewVersion(this)));
     }
 
-    private void showAlertDialog() {
-        new MaterialDialog.Builder(this)
-                .title(R.string.ota_alert_title)
-                .content(R.string.ota_update_available)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(MaterialDialog dialog, DialogAction which) {
-                        uploadPressed();
-                    }
-                })
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(MaterialDialog dialog, DialogAction which) {
-                        finish();
-                    }
-                })
-                .positiveText(android.R.string.yes)
-                .negativeText(android.R.string.no)
-                .cancelable(false)
-                .show();
-
-    }
     private void uploadPressed() {
         if (!otaController.isConnected()) {
             Log.e(TAG, context.getString(R.string.ota_connect_error_not_do_ota));
@@ -294,7 +245,7 @@ public class OTAActivity extends BaseActivity implements OnOtaControllerListener
             return;
         }
         if(firmwareURLs.size()==0) {
-            Log.e(TAG, "firmware is not ready,please wait...");
+            Log.e(TAG, "firmware is not ready,please download it form network");
             downloadFirmware(firmwareName);
             return;
         }
@@ -328,7 +279,11 @@ public class OTAActivity extends BaseActivity implements OnOtaControllerListener
     @OnClick(R.id.activity_ota_start_imageButton)
     public void startOta()
     {
-        showAlertDialog();
+        if(success) {
+            finish();
+            return;
+        }
+        uploadPressed();
     }
     @Override
     protected void onResume() {
@@ -421,6 +376,8 @@ public class OTAActivity extends BaseActivity implements OnOtaControllerListener
                 otaStatus.setText(R.string.ota_sucess);
                 otaController.reset(false);
                 enableButton(true);
+                success = true;
+                startButton.setText(R.string.ota_sucess_back);
             }
         });
     }
