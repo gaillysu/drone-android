@@ -1,6 +1,7 @@
 package com.dayton.drone.ble.controller;
 
 import android.app.Activity;
+import android.app.Instrumentation;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -18,6 +19,8 @@ import android.os.PowerManager;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 
 import com.dayton.drone.R;
 import com.dayton.drone.application.ApplicationModel;
@@ -804,10 +807,48 @@ public class SyncControllerImpl implements  SyncController{
             new SoundPlayer(this).startPlayer(R.raw.bell);
         }
 
+        /**
+         *
+         * @param keyCode: KeyEvent.KEYCODE_VOLUME_DOWN,KeyEvent.KEYCODE_VOLUME_UP
+         */
+        void sendHardKey(final int keyCode) {
+            Instrumentation inst = new Instrumentation();
+            inst.sendKeySync(new KeyEvent(KeyEvent.ACTION_DOWN, keyCode));
+        }
+
+        private void takePhoto() {
+            sendHardKey(KeyEvent.KEYCODE_VOLUME_DOWN);
+        }
+
+        private void playPauseMusic() {
+            sendHardKey(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+        }
+
+        private void nextMusic() {
+            sendHardKey(KeyEvent.KEYCODE_MEDIA_NEXT);
+        }
+        private void preMusic() {
+            sendHardKey(KeyEvent.KEYCODE_MEDIA_PREVIOUS);
+        }
+
         public class LocalBinder extends Binder {
             //you can add some functions here
             public void findCellPhone() {
                 LocalService.this.findCellPhone();
+            }
+            public void takePhoto() {
+                LocalService.this.takePhoto();
+            }
+
+            public void playPauseMusic() {
+                LocalService.this.playPauseMusic();
+            }
+
+            public void nextMusic() {
+                LocalService.this.nextMusic();
+            }
+            public void preMusic() {
+                LocalService.this.preMusic();
             }
         }
 
