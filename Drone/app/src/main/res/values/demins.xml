@@ -7,4 +7,6 @@
     <dimen name="mainmenu_margin_left">68dp</dimen>
     <dimen name="mainmenu_margin_right">68dp</dimen>
     <dimen name="mainmenu_cell_space">3dp</dimen>
+    <dimen name="world_clock_setting_title_height">52dp</dimen>
+    <dimen name="world_clock_setting_item_height">42dp</dimen>
 </resources>

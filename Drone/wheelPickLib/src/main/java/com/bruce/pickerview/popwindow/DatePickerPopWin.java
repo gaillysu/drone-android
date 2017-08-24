@@ -326,9 +326,9 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
                 middleLoopView.setInitPosition(middlePos);
                 break;
             case 5:
-                middleList.add("World Clock");
-                middleList.add("Home Time");
+                middleList.addAll(Arrays.asList(mContext.getResources().getStringArray(R.array.analog_hands_time_array)));
                 middleLoopView.setArrayList((ArrayList) middleList);
+                middleLoopView.setInitPosition(middlePos);
                 break;
             case 6://compass auto off minutes
                 compassSreenTimeoutList.addAll(Arrays.asList(mContext.getResources().getStringArray(R.array.compass_screen_timeout_seconds_array)));
@@ -369,10 +369,10 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
      */
     public void setSelectedDate(String dateStr) {
         if (!TextUtils.isEmpty(dateStr)) {
-            long milliseconds = getLongFromyyyyMMdd(dateStr);
-            Calendar calendar = Calendar.getInstance(Locale.CHINA);
             switch (viewStyle) {
                 case 1:
+                    long milliseconds = getLongFromyyyyMMdd(dateStr);
+                    Calendar calendar = Calendar.getInstance(Locale.CHINA);
                     if (milliseconds != -1) {
                         calendar.setTimeInMillis(milliseconds);
                         leftPos = calendar.get(Calendar.YEAR) - minYear;
@@ -391,11 +391,8 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
                     middlePos = minutes.indexOf(dateStr);
                     break;
                 case 5:
-                    if (dateStr.equals("World Time")) {
-                        middlePos = 1;
-                    } else {
-                        middlePos = 2;
-                    }
+                    List<String> hands = Arrays.asList(mContext.getResources().getStringArray(R.array.analog_hands_time_array));
+                    middlePos = hands.indexOf(dateStr);
                     break;
                 case 6:
                     List<String> seconds = Arrays.asList(mContext.getResources().getStringArray(R.array.compass_screen_timeout_seconds_array));

@@ -27,4 +27,6 @@ public class CacheConstants {
     public static String HOT_KEY = "hot_key";
     public static String BLE_VERSION = "ble_version";
     public static String BLE_NEW_VERSION = "ble_new_version";
+    public static String TIMER_ENABLE = "timer_enable";
+    public static String STOPWATCH_ENABLE = "stopwatch_enable";
 }

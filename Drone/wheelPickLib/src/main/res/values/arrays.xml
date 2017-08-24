@@ -20,4 +20,8 @@
         <item>"90"</item>
         <item>"120"</item>
     </array>
+    <array name="analog_hands_time_array">
+        <item>Local Time</item>
+        <item>Home Time</item>
+    </array>
 </resources>

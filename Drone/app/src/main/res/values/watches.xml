@@ -63,4 +63,12 @@ right position. Each press represents one second.</string>
 
     <string name="route_no_found_message">No found route</string>
     <string name="route_loading_message">Loading route...</string>
+
+    <string name="select_home_time_title">Home Time</string>
+    <string name="select_home_time_message">Select the city where you live and\nwe determine the time for you.</string>
+    <string name="select_home_city_message">Your Home City:</string>
+    <string name="select_home_city_title">Select your Home City</string>
+
+    <string name="is_select_home_city">isSelectHomeCity</string>
+    <string name="select_city_id">SelectCityId</string>
 </resources>

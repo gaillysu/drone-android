@@ -59,6 +59,9 @@ public interface SyncController {
     void setClockFormat(boolean format24Hour);
     void setCountdownTimer(int countdownInMinutes);
     void setDailyAlarm(List<DailyAlarmModel> dailyAlarmModels);
-
-    public void setHoldRequest(boolean holdRequest);
+    void setAnalogHandsTime(byte timeId);
+    void setHoldRequest(boolean holdRequest);
+    void enableTimer(boolean enable);
+    void enableStopwatch(boolean enable);
+    void startBigSync();
 }

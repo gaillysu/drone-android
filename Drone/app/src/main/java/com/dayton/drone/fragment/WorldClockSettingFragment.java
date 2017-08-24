@@ -35,6 +35,12 @@ public class WorldClockSettingFragment extends Fragment {
     @Bind(R.id.world_clock_setting_24h_format_switch)
     SwitchCompat is24HourFormat;
 
+    @Bind(R.id.world_clock_setting_timer_switch)
+    SwitchCompat timerSwitch;
+
+    @Bind(R.id.world_clock_setting_stopwatch_switch)
+    SwitchCompat stopWatchSwitch;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.world_clock_setting_fragment, container, false);
@@ -52,6 +58,9 @@ public class WorldClockSettingFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SpUtils.setIsSyncTime(WorldClockSettingFragment.this.getContext(), isChecked);
+                if(isChecked) {
+                    ((ApplicationModel) getActivity().getApplication()).getSyncController().setAnalogHandsTime((byte) SpUtils.getSyncTime(getActivity()));
+                }
                 setTextColor(isChecked);
             }
         });
@@ -65,9 +74,30 @@ public class WorldClockSettingFragment extends Fragment {
             }
         });
 
+        timerSwitch.setChecked(SpUtils.getTimerEnable(WorldClockSettingFragment.this.getActivity()));
+        timerSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SpUtils.setTimerEnable(WorldClockSettingFragment.this.getContext(), isChecked);
+                ((ApplicationModel) getActivity().getApplication()).getSyncController().enableTimer(isChecked);
+            }
+        });
+
+        stopWatchSwitch.setChecked(SpUtils.getStopwatchEnable(WorldClockSettingFragment.this.getActivity()));
+        stopWatchSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SpUtils.setStopwatchEnable(WorldClockSettingFragment.this.getContext(), isChecked);
+                ((ApplicationModel) getActivity().getApplication()).getSyncController().enableStopwatch(isChecked);
+            }
+        });
+
         syncingTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!isSyncing.isChecked()){
+                    return;
+                }
                 int viewType = 5;
                 DatePickerPopWin pickerPopWin = new DatePickerPopWin
                         .Builder(WorldClockSettingFragment.this.getActivity(),
@@ -75,10 +105,11 @@ public class WorldClockSettingFragment extends Fragment {
                             @Override
                             public void onDatePickCompleted(int year, int month, int day, String dateDesc) {
                                 SpUtils.saveSyncTime(WorldClockSettingFragment.this.getActivity(), month);
-                                setSyncingText(month + 1);
+                                ((ApplicationModel) getActivity().getApplication()).getSyncController().setAnalogHandsTime((byte) SpUtils.getSyncTime(getActivity()));
+                                setSyncingText(month);
                             }
                         }).viewStyle(viewType)
-                        .dateChose(getString(R.string.world_clock_adapter_world_time))
+                        .dateChose(syncingTime.getText()+"")
                         .viewTextSize(20)
                         .build();
                 pickerPopWin.showPopWin(WorldClockSettingFragment.this.getActivity());
@@ -86,9 +117,9 @@ public class WorldClockSettingFragment extends Fragment {
         });
     }
 
-    public void setSyncingText(int syncingText) {
-        if (syncingText == 1) {
-            syncingTime.setText(getString(R.string.world_clock_adapter_world_time));
+    public void setSyncingText(int locationId) {
+        if (locationId == 0) {
+            syncingTime.setText(getString(R.string.world_clock_local_time));
         } else {
             syncingTime.setText(getString(R.string.world_clock_adapter_home_time));
         }
