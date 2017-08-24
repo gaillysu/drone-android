@@ -75,9 +75,9 @@ public class ConnectWatchSuccessActivity extends BaseActivity  {
         watchVersion.setText(formatFirmwareVersion(getModel().getSyncController().getSoftwareVersion(),getModel().getSyncController().getFirmwareVersion()));
         watchAddress.setText("MAC: "+intent.getStringExtra("address"));
     }
-    @OnClick(R.id.calibrate_watch_button)
-    public void calibrateWatch(){
-        Intent intent  = new Intent(ConnectWatchSuccessActivity.this ,CalibrateWatchHourActivity.class);
+    @OnClick(R.id.select_home_time_button)
+    public void selectHomeCity(){
+        Intent intent  = new Intent(ConnectWatchSuccessActivity.this ,SelectHomeCityActivity.class);
         startActivity(intent);
         finish();
     }

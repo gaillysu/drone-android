@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dayton.drone.R;
@@ -17,9 +18,11 @@ public class MyHomeMenuAdapter extends BaseAdapter {
 
     private List<HomeMenuItem> mData;
     private Context mContext;
-    public MyHomeMenuAdapter(List<HomeMenuItem> data, Context context) {
+    private RelativeLayout.LayoutParams layoutParams;
+    public MyHomeMenuAdapter(List<HomeMenuItem> data, Context context,int cellWidth,int cellHeight) {
         this.mData = data;
         mContext = context;
+        layoutParams = new RelativeLayout.LayoutParams(cellWidth, cellHeight);
     }
 
 
@@ -66,6 +69,7 @@ public class MyHomeMenuAdapter extends BaseAdapter {
             holder.mMenuIv.setImageDrawable(mContext.getResources().getDrawable(bean.getMenuItemIcon()));
             holder.mMenuTv.setText(mContext.getResources().getString(bean.getMenuItemName()));
         }
+        convertView.setLayoutParams(layoutParams);
         return convertView;
     }
 

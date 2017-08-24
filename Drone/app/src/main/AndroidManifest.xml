@@ -123,6 +123,9 @@
             android:name=".activity.ChangePasswordActivity"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".activity.tutorial.SelectHomeCityActivity"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".activity.tutorial.CalibrateWatchHourActivity"
             android:screenOrientation="portrait"/>
         <activity

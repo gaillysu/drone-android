@@ -80,7 +80,13 @@ public class ChooseCityActivity extends BaseActivity {
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
         TextView titleTv = (TextView) mToolbar.findViewById(R.id.toolbar_title_tv);
-        titleTv.setText(getString(R.string.choose_activity_title_choose_city_tv));
+        if(getIntent().getBooleanExtra(getString(R.string.is_select_home_city), false))
+        {
+            titleTv.setText(getString(R.string.select_home_city_title));
+        }
+        else {
+            titleTv.setText(getString(R.string.choose_activity_title_choose_city_tv));
+        }
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -201,6 +207,7 @@ public class ChooseCityActivity extends BaseActivity {
                 city.setSelected(true);
                 getModel().getWorldClockDatabaseHelper().update(city);
                 Intent intent = getIntent();
+                intent.putExtra(getString(R.string.select_city_id),cityId);
                 intent.putExtra(getString(R.string.is_choose_flag), true);
                 setResult(0, intent);
                 finish();

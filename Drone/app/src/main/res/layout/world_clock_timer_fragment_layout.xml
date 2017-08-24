@@ -25,9 +25,9 @@
     <RelativeLayout
         android:id="@+id/world_clock_sync_timer_layout"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="@dimen/world_clock_setting_item_height"
         android:layout_marginTop="50dp"
-        android:background="@color/colorPrimaryDark"
+        android:background="@drawable/world_clock_setting_menu_select"
         android:orientation="vertical">
         <TextView
             android:id="@+id/world_clock_sync_timer_textview"
@@ -42,8 +42,8 @@
     <RelativeLayout
         android:id="@+id/world_clock_reset_timer_layout"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@color/colorPrimaryDark"
+        android:layout_height="@dimen/world_clock_setting_item_height"
+        android:background="@drawable/world_clock_setting_menu_select"
         android:orientation="vertical">
         <View
             android:id="@+id/line_view"

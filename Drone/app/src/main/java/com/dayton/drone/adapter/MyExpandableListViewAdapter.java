@@ -1,11 +1,13 @@
 package com.dayton.drone.adapter;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseExpandableListAdapter;
+import android.view.animation.LinearInterpolator;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -17,11 +19,14 @@ import com.dayton.drone.fragment.listener.OnEditAlarmListener;
 
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by med on 17/6/27.
  */
 
-public class MyExpandableListViewAdapter extends BaseExpandableListAdapter{
+public class MyExpandableListViewAdapter extends RecyclerView.Adapter<MyExpandableListViewAdapter.MyViewHolder> {
     private List<AlarmBean> alarmBeanList;
     private Context context;
     private int maskWeekdays[];
@@ -43,186 +48,11 @@ public class MyExpandableListViewAdapter extends BaseExpandableListAdapter{
 
         this.onEditAlarmListener = onEditAlarmListener;
     }
-    @Override
-    public int getGroupCount() {
-        return alarmBeanList.size();
+
+    public void setAlarmBeanList(List<AlarmBean> alarmBeanList) {
+        this.alarmBeanList = alarmBeanList;
     }
 
-    @Override
-    public int getChildrenCount(int groupPosition) {
-        return 1;
-    }
-
-    @Override
-    public Object getGroup(int groupPosition) {
-        return alarmBeanList.get(groupPosition);
-    }
-
-    @Override
-    public Object getChild(int groupPosition, int childPosition) {
-        return alarmBeanList.get(groupPosition);
-    }
-
-    @Override
-    public long getGroupId(int groupPosition) {
-        return groupPosition;
-    }
-
-    @Override
-    public long getChildId(int groupPosition, int childPosition) {
-        return childPosition;
-    }
-
-    @Override
-    public boolean hasStableIds() {
-        return false;
-    }
-
-    @Override
-    public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.world_clock_alarm_expand_list_parent_item, null);
-        }
-
-        TextView alarmTime = (TextView) convertView.findViewById(R.id.fragment_alarmm_list_view_item_alarm_time);
-        alarmTime.setText(String.format("%02d:%02d",alarmBeanList.get(groupPosition).getHour(),alarmBeanList.get(groupPosition).getMinute()));
-        alarmTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onEditAlarmListener.onAlarmTime(alarmBeanList.get(groupPosition),alarmBeanList.get(groupPosition).getHour(),alarmBeanList.get(groupPosition).getMinute());
-            }
-        });
-
-        SwitchCompat switchCompat = (SwitchCompat)convertView.findViewById(R.id.fragment_alarmm_list_view_item_alarm_switch);
-        switchCompat.setOnCheckedChangeListener(null);
-        switchCompat.setChecked(alarmBeanList.get(groupPosition).isEnable());
-        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                onEditAlarmListener.onAlarmEnable(alarmBeanList.get(groupPosition),isChecked);
-            }
-        });
-        TextView alarmLabel = (TextView) convertView.findViewById(R.id.fragment_alarmm_list_view_item_alarm_label);
-        alarmLabel.setVisibility(isExpanded?View.INVISIBLE:View.VISIBLE);
-        alarmLabel.setText(alarmBeanList.get(groupPosition).getLabel());
-        TextView weekdays = (TextView) convertView.findViewById(R.id.fragment_alarm_list_view_item_alarm_repeat_weekdays);
-        weekdays.setVisibility(isExpanded?View.INVISIBLE:View.VISIBLE);
-        weekdays.setText(ConvertStatus2WeekdayString(alarmBeanList.get(groupPosition).getStatus()));
-        ImageView imageView = (ImageView)convertView.findViewById(R.id.fragment_alarm_list_view_item_down_image_view);
-        imageView.setVisibility(isExpanded?View.INVISIBLE:View.VISIBLE);
-        return convertView;
-    }
-
-    @Override
-    public View getChildView(final int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.world_clock_alarm_expand_list_child_item, null);
-        }
-        setWeekdayAndSnooze(convertView,alarmBeanList.get(groupPosition));
-        TextView textView =  (TextView) convertView.findViewById(R.id.input_alarm_label_text_view);
-        textView.setText(alarmBeanList.get(groupPosition).getLabel());
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onEditAlarmListener.onAlarmLabel(alarmBeanList.get(groupPosition));
-            }
-        });
-        ImageView imageView = (ImageView) convertView.findViewById(R.id.fragment_alarm_list_item_delete_image_view);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onEditAlarmListener.onAlarmRemove(alarmBeanList.get(groupPosition));
-            }
-        });
-        imageView = (ImageView)convertView.findViewById(R.id.fragment_alarm_list_view_up_item_image_view);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onEditAlarmListener.onEditMode2ViewMode();
-            }
-        });
-
-        return convertView;
-    }
-
-    @Override
-    public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return true;
-    }
-
-    private void setWeekdayAndSnooze(View convertView,final AlarmBean alarmBean)
-    {
-        CheckBox weekdayCheckbox = (CheckBox)  convertView.findViewById(R.id.tag_btn_sunday);
-        weekdayCheckbox.setChecked(((int)alarmBean.getStatus()&maskWeekdays[0])>0);
-        weekdayCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                onEditAlarmListener.onAlarmStatus(alarmBean,(byte)(isChecked?(int)alarmBean.getStatus()|maskWeekdays[0]:(int)alarmBean.getStatus()&~maskWeekdays[0]));
-            }
-        });
-        weekdayCheckbox = (CheckBox)  convertView.findViewById(R.id.tag_btn_monday);
-        weekdayCheckbox.setChecked(((int)alarmBean.getStatus()&maskWeekdays[1])>0);
-        weekdayCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                onEditAlarmListener.onAlarmStatus(alarmBean,(byte)(isChecked?(int)alarmBean.getStatus()|maskWeekdays[1]:(int)alarmBean.getStatus()&~maskWeekdays[1]));
-            }
-        });
-        weekdayCheckbox = (CheckBox)  convertView.findViewById(R.id.tag_btn_tuesday);
-        weekdayCheckbox.setChecked(((int)alarmBean.getStatus()&maskWeekdays[2])>0);
-        weekdayCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                onEditAlarmListener.onAlarmStatus(alarmBean,(byte)(isChecked?(int)alarmBean.getStatus()|maskWeekdays[2]:(int)alarmBean.getStatus()&~maskWeekdays[2]));
-            }
-        });
-        weekdayCheckbox = (CheckBox)  convertView.findViewById(R.id.tag_btn_wednesday);
-        weekdayCheckbox.setChecked(((int)alarmBean.getStatus()&maskWeekdays[3])>0);
-        weekdayCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                onEditAlarmListener.onAlarmStatus(alarmBean,(byte)(isChecked?(int)alarmBean.getStatus()|maskWeekdays[3]:(int)alarmBean.getStatus()&~maskWeekdays[3]));
-            }
-        });
-        weekdayCheckbox = (CheckBox)  convertView.findViewById(R.id.tag_btn_thursday);
-        weekdayCheckbox.setChecked(((int)alarmBean.getStatus()&maskWeekdays[4])>0);
-        weekdayCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                onEditAlarmListener.onAlarmStatus(alarmBean,(byte)(isChecked?(int)alarmBean.getStatus()|maskWeekdays[4]:(int)alarmBean.getStatus()&~maskWeekdays[4]));
-            }
-        });
-        weekdayCheckbox = (CheckBox)  convertView.findViewById(R.id.tag_btn_friday);
-        weekdayCheckbox.setChecked(((int)alarmBean.getStatus()&maskWeekdays[5])>0);
-        weekdayCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                onEditAlarmListener.onAlarmStatus(alarmBean,(byte)(isChecked?(int)alarmBean.getStatus()|maskWeekdays[5]:(int)alarmBean.getStatus()&~maskWeekdays[5]));
-            }
-        });
-        weekdayCheckbox = (CheckBox)  convertView.findViewById(R.id.tag_btn_saturday);
-        weekdayCheckbox.setChecked(((int)alarmBean.getStatus()&maskWeekdays[6])>0);
-        weekdayCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                onEditAlarmListener.onAlarmStatus(alarmBean,(byte)(isChecked?(int)alarmBean.getStatus()|maskWeekdays[6]:(int)alarmBean.getStatus()&~maskWeekdays[6]));
-            }
-        });
-
-        CheckBox snoozeCheckBox = (CheckBox) convertView.findViewById(R.id.alarm_snooze_checkbox);
-        snoozeCheckBox.setChecked(((int)alarmBean.getStatus()&maskWeekdays[7])>0);
-        snoozeCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                onEditAlarmListener.onAlarmStatus(alarmBean,(byte)(isChecked?(int)alarmBean.getStatus()|maskWeekdays[7]:(int)alarmBean.getStatus()&~maskWeekdays[7]));
-            }
-        });
-
-    }
     private String ConvertStatus2WeekdayString(byte status)
     {
         int count = 0;
@@ -242,5 +72,207 @@ public class MyExpandableListViewAdapter extends BaseExpandableListAdapter{
             repeatString = context.getString(R.string.no_repeat);
         }
         return repeatString;
+    }
+
+    @Override
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        LayoutInflater inflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.world_clock_alarm_expand_list_parent_item, null);
+        return new MyViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(MyViewHolder holder, final int position) {
+        holder.alarmTime.setText(String.format("%02d:%02d",alarmBeanList.get(position).getHour(),alarmBeanList.get(position).getMinute()));
+        holder.alarmLabel.setText(alarmBeanList.get(position).getLabel());
+        holder.weekdays.setText(ConvertStatus2WeekdayString(alarmBeanList.get(position).getStatus()));
+        holder.switchCompat.setChecked(alarmBeanList.get(position).isEnable());
+        holder.alarmInputLabel.setText(alarmBeanList.get(position).getLabel());
+        holder.switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                onEditAlarmListener.onAlarmEnable(alarmBeanList.get(position),isChecked);
+            }
+        });
+        holder.alarmTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onEditAlarmListener.onAlarmTime(alarmBeanList.get(position),alarmBeanList.get(position).getHour(),alarmBeanList.get(position).getMinute());
+            }
+        });
+        final AlarmBean alarmBean = alarmBeanList.get(position);
+        holder.sundayCheckbox.setChecked(((int)alarmBean.getStatus()&maskWeekdays[0])>0);
+        holder.sundayCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                onEditAlarmListener.onAlarmStatus(alarmBean,(byte)(isChecked?(int)alarmBean.getStatus()|maskWeekdays[0]:(int)alarmBean.getStatus()&~maskWeekdays[0]));
+            }
+        });
+        holder.mondayCheckbox.setChecked(((int)alarmBean.getStatus()&maskWeekdays[1])>0);
+        holder.mondayCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                onEditAlarmListener.onAlarmStatus(alarmBean,(byte)(isChecked?(int)alarmBean.getStatus()|maskWeekdays[1]:(int)alarmBean.getStatus()&~maskWeekdays[1]));
+            }
+        });
+        holder.tuesdayCheckbox.setChecked(((int)alarmBean.getStatus()&maskWeekdays[2])>0);
+        holder.tuesdayCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                onEditAlarmListener.onAlarmStatus(alarmBean,(byte)(isChecked?(int)alarmBean.getStatus()|maskWeekdays[2]:(int)alarmBean.getStatus()&~maskWeekdays[2]));
+            }
+        });
+        holder.wednesdayCheckbox.setChecked(((int)alarmBean.getStatus()&maskWeekdays[3])>0);
+        holder.wednesdayCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                onEditAlarmListener.onAlarmStatus(alarmBean,(byte)(isChecked?(int)alarmBean.getStatus()|maskWeekdays[3]:(int)alarmBean.getStatus()&~maskWeekdays[3]));
+            }
+        });
+        holder.thursdayCheckbox.setChecked(((int)alarmBean.getStatus()&maskWeekdays[4])>0);
+        holder.thursdayCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                onEditAlarmListener.onAlarmStatus(alarmBean,(byte)(isChecked?(int)alarmBean.getStatus()|maskWeekdays[4]:(int)alarmBean.getStatus()&~maskWeekdays[4]));
+            }
+        });
+        holder.fridayCheckbox.setChecked(((int)alarmBean.getStatus()&maskWeekdays[5])>0);
+        holder.fridayCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                onEditAlarmListener.onAlarmStatus(alarmBean,(byte)(isChecked?(int)alarmBean.getStatus()|maskWeekdays[5]:(int)alarmBean.getStatus()&~maskWeekdays[5]));
+            }
+        });
+        holder.saturdayCheckbox.setChecked(((int)alarmBean.getStatus()&maskWeekdays[6])>0);
+        holder.saturdayCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                onEditAlarmListener.onAlarmStatus(alarmBean,(byte)(isChecked?(int)alarmBean.getStatus()|maskWeekdays[6]:(int)alarmBean.getStatus()&~maskWeekdays[6]));
+            }
+        });
+        holder.snoozeCheckbox.setChecked(((int)alarmBean.getStatus()&maskWeekdays[7])>0);
+        holder.snoozeCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                onEditAlarmListener.onAlarmStatus(alarmBean,(byte)(isChecked?(int)alarmBean.getStatus()|maskWeekdays[7]:(int)alarmBean.getStatus()&~maskWeekdays[7]));
+            }
+        });
+        holder.alarmInputLabel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onEditAlarmListener.onAlarmLabel(alarmBeanList.get(position));
+            }
+        });
+        holder.deleteImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onEditAlarmListener.onAlarmRemove(alarmBeanList.get(position));
+            }
+        });
+    }
+
+    @Override
+    public int getItemCount() {
+        return alarmBeanList.size();
+    }
+
+    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
+    {
+        View originView;
+        @Bind(R.id.fragment_alarmm_list_view_item_alarm_time)
+        TextView alarmTime;
+        @Bind(R.id.fragment_alarmm_list_view_item_alarm_repeat_wrapper)
+        View alarmRepeatLayout;
+        @Bind(R.id.fragment_alarmm_list_view_item_alarm_label)
+        TextView alarmLabel;
+        @Bind(R.id.fragment_alarm_list_view_item_alarm_repeat_weekdays)
+        TextView weekdays;
+        @Bind(R.id.fragment_alarmm_list_view_item_alarm_switch)
+        SwitchCompat switchCompat;
+        @Bind(R.id.fragment_alarm_list_view_item_down_image_view)
+        ImageView downImageView;
+        @Bind(R.id.edit_alarm_clock_detail_layout)
+        View extandView;
+        @Bind(R.id.input_alarm_label_text_view)
+        TextView alarmInputLabel;
+        @Bind(R.id.tag_btn_sunday)
+        CheckBox sundayCheckbox;
+        @Bind(R.id.tag_btn_monday)
+        CheckBox mondayCheckbox;
+        @Bind(R.id.tag_btn_tuesday)
+        CheckBox tuesdayCheckbox;
+        @Bind(R.id.tag_btn_wednesday)
+        CheckBox wednesdayCheckbox;
+        @Bind(R.id.tag_btn_thursday)
+        CheckBox thursdayCheckbox;
+        @Bind(R.id.tag_btn_friday)
+        CheckBox fridayCheckbox;
+        @Bind(R.id.tag_btn_saturday)
+        CheckBox saturdayCheckbox;
+        @Bind(R.id.alarm_snooze_checkbox)
+        CheckBox snoozeCheckbox;
+        @Bind(R.id.fragment_alarm_list_item_operation_layout)
+        View operationLayout;
+        @Bind(R.id.fragment_alarm_list_item_delete_image_view)
+        ImageView deleteImageView;
+        @Bind(R.id.fragment_alarm_list_view_up_item_image_view)
+        ImageView upImageView;
+        @Bind(R.id.fragment_alarm_list_view_item_divider_view)
+        View dividerView;
+
+        int originalHeight = 0;
+        boolean isViewExpanded = false;
+
+        public MyViewHolder(View view)
+        {
+            super(view);
+            ButterKnife.bind(this, view);
+            originView = view;
+            originView.setOnClickListener(this);
+            alarmRepeatLayout.setOnClickListener(this);
+            operationLayout.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(final View view) {
+            if(view.getId() == R.id.fragment_alarmm_list_view_item_alarm_repeat_wrapper
+                    || view.getId() == R.id.fragment_alarm_list_item_operation_layout
+                    || view.getId() == R.id.fragment_alarm_list_view_item_origin_layout)
+            {
+                if (originalHeight == 0) {
+                    originalHeight = originView.getHeight();
+                }
+                ValueAnimator valueAnimator;
+                if (!isViewExpanded) {
+                    isViewExpanded = true;
+                    valueAnimator = ValueAnimator.ofInt(originalHeight, originalHeight + (int) (originalHeight * 1.15));
+                } else {
+                    isViewExpanded = false;
+                    valueAnimator = ValueAnimator.ofInt(originalHeight + (int) (originalHeight * 1.15), originalHeight);
+                }
+                originView.setBackgroundResource(isViewExpanded?R.color.choose_adapter_list_item_view_color:R.color.notification_bg_color);
+                extandView.setBackgroundResource(isViewExpanded?R.color.choose_adapter_list_item_view_color:R.color.notification_bg_color);
+                extandView.setVisibility(isViewExpanded?View.VISIBLE:View.GONE);
+                downImageView.setVisibility(isViewExpanded?View.INVISIBLE:View.VISIBLE);
+                upImageView.setVisibility(isViewExpanded?View.VISIBLE:View.INVISIBLE);
+                alarmLabel.setVisibility(isViewExpanded?View.INVISIBLE:View.VISIBLE);
+                weekdays.setVisibility(isViewExpanded?View.INVISIBLE:View.VISIBLE);
+                dividerView.setVisibility(isViewExpanded?View.INVISIBLE:View.VISIBLE);
+                if(!isViewExpanded) {
+                    onEditAlarmListener.onEditMode2ViewMode();
+                }
+                valueAnimator.setDuration(100);
+                valueAnimator.setInterpolator(new LinearInterpolator());
+                valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        Integer value = (Integer) animation.getAnimatedValue();
+                        originView.getLayoutParams().height = value.intValue();
+                        originView.requestLayout();
+                    }
+                });
+                valueAnimator.start();
+            }
+        }
     }
 }

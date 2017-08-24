@@ -319,10 +319,36 @@ public class SyncControllerImpl implements  SyncController{
     }
 
     @Override
+    public void setAnalogHandsTime(byte timeId) {
+        sendRequest(new SetSystemConfig(application,timeId,Constants.SystemConfigID.AnalogHandsConfig));
+    }
+
+    @Override
     public void setHoldRequest(boolean holdRequest) {
         isHoldRequest = holdRequest;
     }
 
+    @Override
+    public void enableTimer(boolean enable) {
+        sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Timer, enable?(byte)1:(byte)0));
+    }
+
+    @Override
+    public void enableStopwatch(boolean enable) {
+        sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Stopwatch, enable?(byte)1:(byte)0));
+    }
+
+    @Override
+    public void startBigSync() {
+        theBigSyncStartDate = new Optional<>(new Date());
+        EventBus.getDefault().post(new BigSyncEvent(theBigSyncStartDate.get(), BigSyncEvent.BIG_SYNC_EVENT.STARTED));
+        sendRequest(new GetActivityRequest(application));
+    }
+
+    private void bigSyncFinish() {
+        EventBus.getDefault().post(new BigSyncEvent(theBigSyncStartDate.get(), BigSyncEvent.BIG_SYNC_EVENT.STOPPED));
+        SpUtils.putLongMethod(application, CacheConstants.LAST_BIG_SYNC_TIMESTAMP, new Date().getTime());
+    }
     /**
      * send request  package to watch by using a queue
      * @param request
@@ -402,8 +428,8 @@ public class SyncControllerImpl implements  SyncController{
                     {
                         SpUtils.printAllConstants(application);
                         SpUtils.putBoolean(application,CacheConstants.TODAY_RESET,true);
-                        sendRequest(new SetSystemConfig(application,SpUtils.get24HourFormat(application)?(byte)1:0, Constants.SystemConfigID.ClockFormat));
                         sendRequest(new SetSystemConfig(application,Constants.SystemConfigID.Enabled));
+                        sendRequest(new SetSystemConfig(application,SpUtils.get24HourFormat(application)?(byte)1:0, Constants.SystemConfigID.ClockFormat));
                         sendRequest(new SetSystemConfig(application,0, 0, 0, Constants.SystemConfigID.SleepConfig));
                         if(getFirmwareVersion()!=null&&Float.valueOf(getFirmwareVersion())>=0.04f) {
                             sendRequest(new SetSystemConfig(application, (short) SpUtils.getIntMethod(application,CacheConstants.COMPASS_AUTO_ON_DURATION,CacheConstants.COMPASS_AUTO_ON_DURATION_DEFAULT),Constants.SystemConfigID.CompassAutoOnDuration));
@@ -413,9 +439,9 @@ public class SyncControllerImpl implements  SyncController{
                         sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.ActivityTracking, (byte)1));
                         if(getFirmwareVersion()!=null&&Float.valueOf(getFirmwareVersion())>=0.04f) {
                             sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Weather, (byte)1));
-                            sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Compass, SpUtils.getBoolean(application,CacheConstants.ENABLE_COMPASS,true)?(byte)1:(byte)0));
-                            sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Timer, (byte)1));
-                            sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Stopwatch, (byte)1));
+                            sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Compass, SpUtils.getCompassEnable(application)?(byte)1:(byte)0));
+                            sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Timer, SpUtils.getTimerEnable(application)?(byte)1:(byte)0));
+                            sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Stopwatch, SpUtils.getStopwatchEnable(application)?(byte)1:(byte)0));
                         }
                         sendRequest(new SetUserProfileRequest(application,application.getUser()));
                         //set goal to watch
@@ -445,9 +471,9 @@ public class SyncControllerImpl implements  SyncController{
                         sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.ActivityTracking, (byte)1));
                         if(getFirmwareVersion()!=null&&Float.valueOf(getFirmwareVersion())>=0.04f) {
                             sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Weather, (byte)1));
-                            sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Compass, SpUtils.getBoolean(application,CacheConstants.ENABLE_COMPASS,true)?(byte)1:(byte)0));
-                            sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Timer, (byte)1));
-                            sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Stopwatch, (byte)1));
+                            sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Compass, SpUtils.getCompassEnable(application)?(byte)1:(byte)0));
+                            sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Timer, SpUtils.getTimerEnable(application)?(byte)1:(byte)0));
+                            sendRequest(new SetAppConfigRequest(application, Constants.ApplicationID.Stopwatch, SpUtils.getStopwatchEnable(application)?(byte)1:(byte)0));
                         }
                         sendRequest(new SetUserProfileRequest(application,application.getUser()));
                     }
@@ -458,9 +484,7 @@ public class SyncControllerImpl implements  SyncController{
                     }
                     if((systemStatusPacket.getStatus() & Constants.SystemStatus.ActivityDataAvailable.rawValue())==Constants.SystemStatus.ActivityDataAvailable.rawValue())
                     {
-                        theBigSyncStartDate = new Optional<>(new Date());
-                        EventBus.getDefault().post(new BigSyncEvent(theBigSyncStartDate.get(), BigSyncEvent.BIG_SYNC_EVENT.STARTED));
-                        sendRequest(new GetActivityRequest(application));
+                        startBigSync();
                     }
                     if((systemStatusPacket.getStatus() & Constants.SystemStatus.SubscribedToNotifications.rawValue())==Constants.SystemStatus.SubscribedToNotifications.rawValue())
                     {
@@ -497,8 +521,7 @@ public class SyncControllerImpl implements  SyncController{
                     }
                     else
                     {
-                        EventBus.getDefault().post(new BigSyncEvent(theBigSyncStartDate.get(), BigSyncEvent.BIG_SYNC_EVENT.STOPPED));
-                        SpUtils.putLongMethod(application, CacheConstants.LAST_BIG_SYNC_TIMESTAMP, new Date().getTime());
+                        bigSyncFinish();
                         StepsHandler stepsHandler = new StepsHandler(application.getStepsDatabaseHelper(), application.getUser());
                         DailySteps dailySteps= stepsHandler.getDailySteps(new Date());
                         Log.w("Karl","Set today steps =" + dailySteps.getDailySteps());
@@ -652,7 +675,9 @@ public class SyncControllerImpl implements  SyncController{
                             application.getRetrofitManager().requestWeather(request, new RequestListener<GetForecastModel>() {
                                 @Override
                                 public void onRequestFailure(SpiceException spiceException) {
-                                    Log.e("weather", "failed by " + spiceException.getCause().getMessage());
+                                    if(spiceException.getCause() != null) {
+                                        Log.e("weather", "failed by " + spiceException.getCause().getMessage());
+                                    }
                                 }
 
                                 @Override

@@ -583,6 +583,11 @@ public class ActivitiesActivity extends BaseActivity implements OnChartValueSele
         });
     }
 
+    @OnClick(R.id.activities_dashboard_layout)
+    public void startBigSync()
+    {
+        getModel().getSyncController().startBigSync();
+    }
     public void setGoal() {
         final String[] goals = getResources().getStringArray(R.array.steps_goal_array);
         List<String> stringList = new ArrayList<>(Arrays.asList(goals));
