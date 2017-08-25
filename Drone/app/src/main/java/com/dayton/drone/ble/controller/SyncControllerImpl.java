@@ -10,17 +10,21 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.hardware.camera2.CameraManager;
 import android.location.Location;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.ToneGenerator;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.PowerManager;
 import android.os.Vibrator;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 
 import com.dayton.drone.R;
 import com.dayton.drone.application.ApplicationModel;
@@ -69,6 +73,7 @@ import com.dayton.drone.event.GoalCompletedEvent;
 import com.dayton.drone.event.LittleSyncEvent;
 import com.dayton.drone.event.LowMemoryEvent;
 import com.dayton.drone.event.ProfileChangedEvent;
+import com.dayton.drone.event.RunForegroundEvent;
 import com.dayton.drone.event.StepsGoalChangedEvent;
 import com.dayton.drone.event.Timer10sEvent;
 import com.dayton.drone.event.WorldClockChangedEvent;
@@ -76,6 +81,7 @@ import com.dayton.drone.model.DailySteps;
 import com.dayton.drone.model.Steps;
 import com.dayton.drone.network.request.GetForecastRequest;
 import com.dayton.drone.network.response.model.GetForecastModel;
+import com.dayton.drone.shell.Shell;
 import com.dayton.drone.utils.CacheConstants;
 import com.dayton.drone.utils.Common;
 import com.dayton.drone.utils.SoundPlayer;
@@ -127,6 +133,7 @@ public class SyncControllerImpl implements  SyncController{
     private boolean bigSyncFirst = true;
     private final Object lockObject = new Object();
     private boolean isHoldRequest = false;
+
     /**
      * Wait for given number of milliseconds.
      * @param millis waiting period
@@ -754,9 +761,14 @@ public class SyncControllerImpl implements  SyncController{
             }
         });
     }
+    @Subscribe
+    public void onEvent(RunForegroundEvent event) {
+        localBinder.resetRunningForeground();
+    }
     //local service
     static public class LocalService extends Service
     {
+        boolean runningForeground = false;
         BroadcastReceiver myReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -811,12 +823,37 @@ public class SyncControllerImpl implements  SyncController{
          *
          * @param keyCode: KeyEvent.KEYCODE_VOLUME_DOWN,KeyEvent.KEYCODE_VOLUME_UP
          */
-        void sendHardKey(final int keyCode) {
-            Instrumentation inst = new Instrumentation();
-            inst.sendKeySync(new KeyEvent(KeyEvent.ACTION_DOWN, keyCode));
+        void sendHardKey(int keyCode) {
+            //if(Shell.isSuAvailable())
+            //{
+            //    Shell.runCommand(Shell.KEY_INPUT_COMMAND + keyCode);
+            //}
+            //else
+            {
+                int action = KeyEvent.ACTION_DOWN;
+                if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
+                {
+                    action = KeyEvent.ACTION_UP;
+                    //TODO audioManager.dispatchMediaKeyEvent can't work fine to take photo
+                    CameraManager cameraManager = (CameraManager) getApplicationContext().getSystemService(Context.CAMERA_SERVICE);
+                    //perhaps cameraManager hide some functions
+                }
+                AudioManager audioManager = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
+                if(keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)
+                {
+                    if(audioManager.isMusicActive()) {
+                        keyCode = KeyEvent.KEYCODE_MEDIA_PAUSE;
+                    }
+                    else {
+                        keyCode = KeyEvent.KEYCODE_MEDIA_PLAY;
+                    }
+                }
+                audioManager.dispatchMediaKeyEvent(new KeyEvent(action, keyCode));
+            }
         }
 
         private void takePhoto() {
+            new ToneGenerator(AudioManager.STREAM_MUSIC,ToneGenerator.MAX_VOLUME).startTone(ToneGenerator.TONE_PROP_BEEP);
             sendHardKey(KeyEvent.KEYCODE_VOLUME_DOWN);
         }
 
@@ -834,7 +871,25 @@ public class SyncControllerImpl implements  SyncController{
         public class LocalBinder extends Binder {
             //you can add some functions here
             public void findCellPhone() {
-                LocalService.this.findCellPhone();
+                //LocalService.this.findCellPhone();
+                //TODO test code, due to remote camera and music control has no any packets sent from watch when press the hot key
+                // case 1: remote camera
+                if(!runningForeground) {
+                    startActivity(new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    runningForeground = true;
+                }
+                else {
+                    takePhoto();
+                }
+
+                //case 2: music control
+                //playPauseMusic();
+
+                //case 3: next music
+                //nextMusic();
+
+                //case 4: previous music
+                //preMusic();
             }
             public void takePhoto() {
                 LocalService.this.takePhoto();
@@ -849,6 +904,9 @@ public class SyncControllerImpl implements  SyncController{
             }
             public void preMusic() {
                 LocalService.this.preMusic();
+            }
+            public void resetRunningForeground() {
+                runningForeground = false;
             }
         }
 

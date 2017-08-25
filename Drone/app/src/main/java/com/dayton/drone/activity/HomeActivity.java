@@ -25,7 +25,10 @@ import com.dayton.drone.bean.menu.NotificationMenuItem;
 import com.dayton.drone.bean.menu.ProfileMenuItem;
 import com.dayton.drone.bean.menu.TimeMenuItem;
 import com.dayton.drone.ble.util.NotificationPermission;
+import com.dayton.drone.event.RunForegroundEvent;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -143,6 +146,7 @@ public class HomeActivity extends BaseActivity {
         if (!getModel().getSyncController().isConnected()) {
             getModel().getSyncController().startConnect(false);
         }
+        EventBus.getDefault().post(new RunForegroundEvent());
     }
 
     @Override
