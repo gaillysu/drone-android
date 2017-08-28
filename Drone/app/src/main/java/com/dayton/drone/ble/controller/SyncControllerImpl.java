@@ -11,6 +11,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.hardware.camera2.CameraManager;
+import android.hardware.input.InputManager;
 import android.location.Location;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -20,11 +21,15 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.PowerManager;
+import android.os.RemoteException;
+import android.os.SystemClock;
 import android.os.Vibrator;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.InputEvent;
 import android.view.KeyEvent;
+import android.view.WindowManager;
 
 import com.dayton.drone.R;
 import com.dayton.drone.application.ApplicationModel;
@@ -106,6 +111,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.joda.time.DateTime;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -824,22 +831,49 @@ public class SyncControllerImpl implements  SyncController{
          * @param keyCode: KeyEvent.KEYCODE_VOLUME_DOWN,KeyEvent.KEYCODE_VOLUME_UP
          */
         void sendHardKey(int keyCode) {
-            //if(Shell.isSuAvailable())
-            //{
-            //    Shell.runCommand(Shell.KEY_INPUT_COMMAND + keyCode);
-            //}
-            //else
+            if(Shell.isSuAvailable())
             {
-                int action = KeyEvent.ACTION_DOWN;
-                if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
-                {
-                    action = KeyEvent.ACTION_UP;
-                    //TODO audioManager.dispatchMediaKeyEvent can't work fine to take photo
-                    CameraManager cameraManager = (CameraManager) getApplicationContext().getSystemService(Context.CAMERA_SERVICE);
-                    //perhaps cameraManager hide some functions
-                }
+                Shell.runCommand(Shell.KEY_INPUT_COMMAND + keyCode);
+            }
+            else
+            {
                 AudioManager audioManager = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
-                if(keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)
+                if(keyCode == KeyEvent.KEYCODE_VOLUME_UP)
+                {
+                    audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC,AudioManager.ADJUST_RAISE,AudioManager.FLAG_SHOW_UI);
+                    return;
+                }
+                else if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
+                {
+                    audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC,AudioManager.ADJUST_LOWER,AudioManager.FLAG_SHOW_UI);
+                    return;
+                }
+                else if(keyCode == KeyEvent.KEYCODE_CAMERA)
+                {
+                    final int cameraKeyCode = keyCode;
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            InputManager inputManager = (InputManager) getApplicationContext().getSystemService(Context.INPUT_SERVICE);
+                            try {
+                                long now = SystemClock.uptimeMillis();
+                                KeyEvent down =  new KeyEvent(now, now,KeyEvent.ACTION_DOWN, cameraKeyCode, 2);
+                                KeyEvent up = new KeyEvent(now, now,KeyEvent.ACTION_UP, cameraKeyCode, 2);
+                                Method injectInputEvent = inputManager.getClass().getMethod("injectInputEvent",InputEvent.class,int.class);
+                                injectInputEvent.invoke(down,0);
+                                injectInputEvent.invoke(up,0);
+                            } catch (NoSuchMethodException e) {
+                                e.printStackTrace();
+                            } catch (InvocationTargetException e) {
+                                e.printStackTrace();
+                            } catch (IllegalAccessException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).start();
+                    return;
+                }
+                else if(keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)
                 {
                     if(audioManager.isMusicActive()) {
                         keyCode = KeyEvent.KEYCODE_MEDIA_PAUSE;
@@ -848,13 +882,13 @@ public class SyncControllerImpl implements  SyncController{
                         keyCode = KeyEvent.KEYCODE_MEDIA_PLAY;
                     }
                 }
-                audioManager.dispatchMediaKeyEvent(new KeyEvent(action, keyCode));
+                audioManager.dispatchMediaKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, keyCode));
             }
         }
 
         private void takePhoto() {
             new ToneGenerator(AudioManager.STREAM_MUSIC,ToneGenerator.MAX_VOLUME).startTone(ToneGenerator.TONE_PROP_BEEP);
-            sendHardKey(KeyEvent.KEYCODE_VOLUME_DOWN);
+            sendHardKey(KeyEvent.KEYCODE_CAMERA);
         }
 
         private void playPauseMusic() {
@@ -866,6 +900,12 @@ public class SyncControllerImpl implements  SyncController{
         }
         private void preMusic() {
             sendHardKey(KeyEvent.KEYCODE_MEDIA_PREVIOUS);
+        }
+        private void volumeUp() {
+            sendHardKey(KeyEvent.KEYCODE_VOLUME_UP);
+        }
+        private void volumeDown() {
+            sendHardKey(KeyEvent.KEYCODE_VOLUME_DOWN);
         }
 
         public class LocalBinder extends Binder {
@@ -890,6 +930,12 @@ public class SyncControllerImpl implements  SyncController{
 
                 //case 4: previous music
                 //preMusic();
+
+                //case 5: volume up
+                //volumeUp();
+
+                //case 6:volume down
+                //volumeDown();
             }
             public void takePhoto() {
                 LocalService.this.takePhoto();
@@ -904,6 +950,12 @@ public class SyncControllerImpl implements  SyncController{
             }
             public void preMusic() {
                 LocalService.this.preMusic();
+            }
+            public void volumeUp() {
+                LocalService.this.volumeUp();
+            }
+            public void volumeDown() {
+                LocalService.this.volumeDown();
             }
             public void resetRunningForeground() {
                 runningForeground = false;
