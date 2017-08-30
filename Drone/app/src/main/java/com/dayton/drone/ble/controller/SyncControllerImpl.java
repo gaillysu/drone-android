@@ -1,7 +1,6 @@
 package com.dayton.drone.ble.controller;
 
 import android.app.Activity;
-import android.app.Instrumentation;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -10,18 +9,15 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
-import android.hardware.camera2.CameraManager;
 import android.hardware.input.InputManager;
 import android.location.Location;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.media.ToneGenerator;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.PowerManager;
-import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.Vibrator;
 import android.provider.MediaStore;
@@ -29,7 +25,6 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.InputEvent;
 import android.view.KeyEvent;
-import android.view.WindowManager;
 
 import com.dayton.drone.R;
 import com.dayton.drone.application.ApplicationModel;
@@ -570,8 +565,24 @@ public class SyncControllerImpl implements  SyncController{
                 else if (FindPhonePacket.HEADER == packet.getHeader()) {
                     FindPhonePacket findPhonePacket = new FindPhonePacket(packet.getPackets());
                     if (localBinder != null) {
+                        //TODO 'function' should not get from local, it should be in this packet 'function' field
+                        int function = SpUtils.getHotKey(application);
                         if(findPhonePacket.getFindPhoneOperation()==1) {
-                            localBinder.findCellPhone();
+                            //press hot key
+                            if(SystemClock.uptimeMillis()-localBinder.getLastPressHotkeyTime()>500) {
+                                localBinder.pressHotkey(function);
+                            }
+                            //double press hot key
+                            else {
+                                localBinder.doublePressHotkey(function);
+                            }
+                            localBinder.setLastPressHotkeyTime(SystemClock.uptimeMillis());
+                        }
+                        else if(findPhonePacket.getFindPhoneOperation()==0) {
+                            //long press hot key
+                            if(SystemClock.uptimeMillis()-localBinder.getLastPressHotkeyTime()>1000) {
+                                localBinder.longPressHotkey(function);
+                            }
                         }
                     }
                 }
@@ -776,6 +787,7 @@ public class SyncControllerImpl implements  SyncController{
     static public class LocalService extends Service
     {
         boolean runningForeground = false;
+        long lastPressHotkeyTime = 0;
         BroadcastReceiver myReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -850,27 +862,7 @@ public class SyncControllerImpl implements  SyncController{
                 }
                 else if(keyCode == KeyEvent.KEYCODE_CAMERA)
                 {
-                    final int cameraKeyCode = keyCode;
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            InputManager inputManager = (InputManager) getApplicationContext().getSystemService(Context.INPUT_SERVICE);
-                            try {
-                                long now = SystemClock.uptimeMillis();
-                                KeyEvent down =  new KeyEvent(now, now,KeyEvent.ACTION_DOWN, cameraKeyCode, 2);
-                                KeyEvent up = new KeyEvent(now, now,KeyEvent.ACTION_UP, cameraKeyCode, 2);
-                                Method injectInputEvent = inputManager.getClass().getMethod("injectInputEvent",InputEvent.class,int.class);
-                                injectInputEvent.invoke(down,0);
-                                injectInputEvent.invoke(up,0);
-                            } catch (NoSuchMethodException e) {
-                                e.printStackTrace();
-                            } catch (InvocationTargetException e) {
-                                e.printStackTrace();
-                            } catch (IllegalAccessException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }).start();
+                    audioManager.dispatchMediaKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, keyCode));
                     return;
                 }
                 else if(keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)
@@ -884,6 +876,7 @@ public class SyncControllerImpl implements  SyncController{
                 }
                 audioManager.dispatchMediaKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, keyCode));
             }
+
         }
 
         private void takePhoto() {
@@ -910,55 +903,71 @@ public class SyncControllerImpl implements  SyncController{
 
         public class LocalBinder extends Binder {
             //you can add some functions here
-            public void findCellPhone() {
-                //LocalService.this.findCellPhone();
-                //TODO test code, due to remote camera and music control has no any packets sent from watch when press the hot key
-                // case 1: remote camera
+            public void pressHotkey(int function){
+                if(function == Constants.TopKeyFunction.FindMyPhone.rawValue())
+                {
+                    findCellPhone();
+                }
+                else if(function == Constants.TopKeyFunction.RemoteCamera.rawValue())
+                {
+                    takePhoto();
+                }
+                else if(function == Constants.TopKeyFunction.MusicControl.rawValue())
+                {
+                    playPauseMusic();
+                }
+            }
+            public void doublePressHotkey(int function){
+                if(function == Constants.TopKeyFunction.MusicControl.rawValue())
+                {
+                    nextMusic();
+                }
+            }
+            public void longPressHotkey(int function){
+                if(function == Constants.TopKeyFunction.MusicControl.rawValue())
+                {
+                    volumeUp();
+                }
+            }
+
+            private void findCellPhone() {
+                LocalService.this.findCellPhone();
+            }
+            private void takePhoto() {
                 if(!runningForeground) {
                     startActivity(new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                     runningForeground = true;
                 }
                 else {
-                    takePhoto();
+                    LocalService.this.takePhoto();
                 }
-
-                //case 2: music control
-                //playPauseMusic();
-
-                //case 3: next music
-                //nextMusic();
-
-                //case 4: previous music
-                //preMusic();
-
-                //case 5: volume up
-                //volumeUp();
-
-                //case 6:volume down
-                //volumeDown();
             }
-            public void takePhoto() {
-                LocalService.this.takePhoto();
-            }
-
-            public void playPauseMusic() {
+            private void playPauseMusic() {
                 LocalService.this.playPauseMusic();
             }
 
-            public void nextMusic() {
+            private void nextMusic() {
                 LocalService.this.nextMusic();
             }
-            public void preMusic() {
+            private void preMusic() {
                 LocalService.this.preMusic();
             }
-            public void volumeUp() {
+            private void volumeUp() {
                 LocalService.this.volumeUp();
             }
-            public void volumeDown() {
+            private void volumeDown() {
                 LocalService.this.volumeDown();
             }
             public void resetRunningForeground() {
                 runningForeground = false;
+            }
+            public void setLastPressHotkeyTime(long time)
+            {
+                lastPressHotkeyTime = time;
+            }
+            public  long getLastPressHotkeyTime()
+            {
+                return lastPressHotkeyTime;
             }
         }
 
